@@ -1,7 +1,12 @@
 aid: jp-morgan-chase
-url: https://raw.githubusercontent.com/api-evangelist/jp-morgan-chase/refs/heads/main/apis.yml
+url: 
+  https://raw.githubusercontent.com/api-evangelist/jp-morgan-chase/refs/heads/main/apis.yml
 modified: '2026-03-24'
 apis: []
 common:
   - type: Website
     url: https://www.jp-morgan-chase.com
+description: >-
+  JPMorgan Chase is a leading global financial services firm and one of the largest
+  banking institutions in the United States, with operations across investment banking,
+  financial services, asset management, and private equity.
