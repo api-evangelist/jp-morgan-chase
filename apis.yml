@@ -30,6 +30,10 @@ apis:
       - type: SignUp
         url: https://developer.payments.jpmorgan.com/register
 common:
+  - type: GitHubOrganization
+    url: https://github.com/jpmorganchase
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/jpmorganchase
   - type: Website
     url: https://www.jpmorganchase.com
   - type: Developer
