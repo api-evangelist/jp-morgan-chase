@@ -38,6 +38,8 @@ common:
     url: https://www.jpmorganchase.com
   - type: Developer
     url: https://developer.payments.jpmorgan.com/
+  - type: LLMsTxt
+    url: https://developer.payments.jpmorgan.com/llms.txt
 description: >-
   JPMorgan Chase is a leading global financial services firm and one of the largest
   banking institutions in the United States, with operations across investment banking,
