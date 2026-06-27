@@ -28,7 +28,7 @@ apis:
     properties:
       - type: Documentation
         url: https://developer.payments.jpmorgan.com/
-      - type: SignUp
+      - type: Signup
         url: https://developer.payments.jpmorgan.com/register
 common:
   - type: GitHubOrganization
@@ -39,7 +39,7 @@ common:
     url: https://www.jpmorganchase.com
   - type: Developer
     url: https://developer.payments.jpmorgan.com/
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://developer.payments.jpmorgan.com/llms.txt
 description: >-
   JPMorgan Chase is a leading global financial services firm and one of the largest
