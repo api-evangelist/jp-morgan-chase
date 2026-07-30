@@ -2,52 +2,567 @@ aid: jp-morgan-chase
 name: JPMorgan Chase
 url: https://raw.githubusercontent.com/api-evangelist/jp-morgan-chase/refs/heads/main/apis.yml
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
 tags:
-  - Banking
-  - Financial Services
-  - Payments
-  - Treasury
-  - Fortune 100
+- Banking
+- Financial Services
+- Payments
+- Treasury
+- Fortune 100
 created: '2026-03-24'
-modified: '2026-04-28'
-specificationVersion: '0.19'
+modified: '2026-07-28'
+specificationVersion: '0.21'
 apis:
-  - aid: jp-morgan-chase:payments
-    name: J.P. Morgan Payments APIs
-    description: >-
-      J.P. Morgan Payments offers a suite of APIs covering ACH, real-time payments,
-      wires, FX, virtual accounts, account services, and treasury management for
-      enterprise clients. APIs are accessed through the Payments Developer Portal
-      after onboarding.
-    humanURL: https://developer.payments.jpmorgan.com/
-    tags:
-      - Payments
-      - Banking
-      - Treasury
-    properties:
-      - type: Documentation
-        url: https://developer.payments.jpmorgan.com/
-      - type: Signup
-        url: https://developer.payments.jpmorgan.com/register
+- aid: jp-morgan-chase:digital-onboarding-api
+  name: Digital Onboarding API
+  description: >-
+    Streamline your client onboarding process to create, update, and manage clients, parties, documents,
+    and due diligence requirements in a fully digital workflow so you can automate Know Your Customer
+    (KYC), document collection, and compliance tasks directly from your own platform.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/onboarding/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Clients
+  - Document requests
+  - Documents
+  - Party
+  - Questions
+  - Recommendations
+  - Session
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-digital-onboarding-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fembedded-finance-solutions%2Fembedded-payments%2Fonboarding-oas.md
+- aid: jp-morgan-chase:consumer-profile-management-api
+  name: Consumer Profile Management API
+  description: >-
+    The consumer profile management API provides merchant functionality to create, store, update, and
+    maintain customer or consumer profiles.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://profiles-api.merchant.jpmorgan.com/api/v2/mmp
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Addresses
+  - Bulk Import
+  - Communication
+  - Consumer Profiles
+  - Health Check
+  - Payment Methods
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-consumer-profile-management-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fconsumer-profile%2Fconsumer-profile-oas.md
+- aid: jp-morgan-chase:tokenization-api
+  name: Tokenization API
+  description: >-
+    Merchant Services Tokenization APIs enable merchants to secure their cards on file by replacing the
+    sensitive Primary Account Number (PAN) with a token. Currently supports network tokenization via Mastercard,
+    Visa & Amex.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.merchant.jpmorgan.com/payments/v1/
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Bulk Key Management
+  - Bulk Operation
+  - Cryptograms Request
+  - Health Check
+  - Token Lifecycle Management
+  - Token Processing
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-tokenization-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Ftokenization%2Ftokenization-oas.md
+- aid: jp-morgan-chase:reporting-api
+  name: Reporting API
+  description: >-
+    Data Reports API enables easy access to build consumable data sets. It is designed for merchants or
+    system integrators looking for transaction-level payment data.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.reports.jpmorgan.com/api/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Health Check
+  - Report Configurations
+  - Report Files
+  - Report Types
+  - Reporting Groups
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-reporting-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Freporting%2Freporting-oas.md
+- aid: jp-morgan-chase:notifications-api
+  name: Notifications API
+  description: >-
+    Notification API enables merchants to subscribe to and receive notifications in real-time.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://mns-aws.jpmchase.com/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Health Check
+  - Notifications
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-notifications-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fnotifications%2Fnotifications-oas.md
+- aid: jp-morgan-chase:request-to-pay-via-qr-code-api
+  name: Request to Pay via QR Code API
+  description: >-
+    Streamline your digital payment experience to create, update, and manage payment requests and payment
+    links, letting your customers pay instantly via shareable QR codes or payment URLs. You can easily
+    track payment status, retrieve payment details, and handle bulk requests, all while integrating with
+    your customers’ financial institutions for secure, real-time transactions.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/receivables/request-to-pay/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Payment Link
+  - Payment Request
+  - Payment Request - Bulk
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-request-to-pay-via-qr-code-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Ftreasury%2Freceivables%2Frequest-to-pay-api.md
+- aid: jp-morgan-chase:checkout-api
+  name: Checkout API
+  description: >-
+    The Checkout API provides a unified interface for merchants to enable consumer checkout and accept
+    payments within their overall commerce experience.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://merchant-api.checkout.merchant.jpmorgan.com/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Checkout Intent
+  - Health Check
+  - Merchant Catalog
+  - Merchant Notification
+  - Payment Links
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-checkout-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Fonline-payments%2Fcheckout%2Fcheckout-oas.md
+- aid: jp-morgan-chase:dispute-management-api
+  name: Dispute Management API
+  description: End to end disputes management interface.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/commerce/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Disputes Actions
+  - Disputes Data Retrieval
+  - Health Check
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-dispute-management-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Fdispute-management%2Fdispute-management-oas.md
+- aid: jp-morgan-chase:accounts-api
+  name: Accounts API
+  description: >-
+    Manage your accounts programmatically. Create new accounts, retrieve details and balances, and organize
+    all your client accounts in one place. This allows you to automate account operations and keep your
+    financial data up to date with ease.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/embedded/v2
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Account Restrictions
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fembedded-finance-solutions%2Fembedded-payments%2Fembedded-payments%2Faccounts.md
+- aid: jp-morgan-chase:alerts-and-decisioning-api
+  name: Alerts and Decisioning API
+  description: >-
+    Programmatically receives and decisions Payment Holds, automating your fraud review and hold resolution
+    workflow to minimize operational delays while adhering to corporate IT standards.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/trust-safety/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Health
+  - Payment Holds
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-alerts-and-decisioning-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Ffraud-solutions%2Falerts-and-decisioning%2Foas.md
+- aid: jp-morgan-chase:product-configuration-api
+  name: Product Configuration API
+  description: >-
+    Product configuration APIs that can be used to create, configure and maintain Commerce platform accounts.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/commerce/configuration/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Health
+  - Merchant
+  - Merchant Onboarding
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-product-configuration-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Fproduct-configuration%2Fproduct-configuration-oas.md
+- aid: jp-morgan-chase:recipients-api
+  name: Recipients API
+  description: >-
+    Streamline how you set up, manage, and verify payees by creating, updating, listing, and validating
+    recipients for your payment transactions. This helps keep your payment workflows organized and secure
+    without manual tracking.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/embedded/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Recipients
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-recipients-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fembedded-finance-solutions%2Fembedded-payments%2Fembedded-payments%2Frecipients.md
+- aid: jp-morgan-chase:webhooks-api
+  name: Webhooks API
+  description: >-
+    Set up and manage webhook subscriptions to receive real-time notifications about key events, like
+    transactions, account changes, or client onboarding, directly to your platform, so you can automate
+    workflows and respond instantly as events happen. This API lets you create, update, and monitor your
+    webhook endpoints, giving you fine-grained control over which events you track and how you handle
+    them.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/embedded/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fembedded-finance-solutions%2Fembedded-payments%2Fembedded-payments%2Fwebhooks.md
+- aid: jp-morgan-chase:3-d-secure-api
+  name: 3-D Secure API
+  description: Standalone authentication API for processing consumer payments
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api-ms.payments.jpmorgan.com/api/v2
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-3-d-secure-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2F3-d-secure%2F3-d-secure-1.md
+- aid: jp-morgan-chase:account-updater-api
+  name: Account Updater API
+  description: >-
+    The Account Updater API provides recurring and stored payment merchants with their customers latest
+    card account credentials.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api-ms.payments.jpmorgan.com/api/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Account Updates
+  - Health Check
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-account-updater-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Faccount-updater%2Faccount-updater-oas.md
+- aid: jp-morgan-chase:global-payments-api
+  name: Global Payments API
+  description: >-
+    Streamline your global payment operations by initiating, tracking, and managing multiple payment types
+    across international markets through a single, unified interface, so you can handle everything from
+    real-time payments to ACH and card payouts without juggling different systems.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://apigateway.jpmorgan.com/tsapi/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Payment Information Retrieval
+  - Payment Initiation
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-global-payments-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Ftreasury%2Fglobal-payments%2Fglobal-payments%2Fglobal-payments-oas.md
+- aid: jp-morgan-chase:transactions-api
+  name: Transactions API
+  description: >-
+    Create, track, and manage payments, such as ACH, wire, and real-time transfers, while easily filtering
+    and retrieving transaction details by type, status, account, or date. This lets you automate fund
+    movement and gain real-time visibility into your payment activity, all through a secure and flexible
+    interface.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/embedded/v2
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fembedded-finance-solutions%2Fembedded-payments%2Fembedded-payments%2Ftransactions.md
+- aid: jp-morgan-chase:blockchain-deposit-account-balances-api
+  name: Blockchain Deposit Account Balances API
+  description: >-
+    Access real-time and historical balances for your eligible J.P. Morgan accounts, so you can easily
+    track cash positions and reconcile transactions across up to 100 accounts per request. This API lets
+    you retrieve both current-day and up to 45 days of balance history, helping you streamline your treasury
+    operations and reporting.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/account/v2
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Balances
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-blockchain-deposit-account-balances-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fliquidity-account-solutions%2Fbda-balances%2Faccounts-oas.md
+- aid: jp-morgan-chase:documents-api
+  name: Documents API
+  description: >-
+    Manage your documents programmatically. Generate new documents and retrieve documents relevant to
+    your accounts. This allows you to obtain important documentation with ease.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api.payments.jpmorgan.com/embedded/v1
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-documents-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fembedded-finance-solutions%2Fembedded-payments%2Fembedded-payments%2Fdocuments.md
+- aid: jp-morgan-chase:validation-services-api
+  name: Validation Services API
+  description: >-
+    Verify accounts and identities for individuals and organizations in real time, so you can confidently
+    onboard customers, reduce fraud, and meet compliance requirements with a single, streamlined integration.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://apigateway.jpmorgan.com/tsapi/v2
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Account Validation
+  - Entity Validation
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-validation-services-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Ffraud-solutions%2Fvalidation-services%2Fvalidation-services-oas.md
+- aid: jp-morgan-chase:wallet-decryption-api
+  name: Wallet Decryption API
+  description: >-
+    The Wallet Decryption API decrypts the Apple Pay, Google Pay, and Paze wallet encrypted payment bundles
+    to obtain network tokens, cryptograms, electronic commerce indicators (ECIs), and other payment instrument
+    data.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
+  baseURL: https://api-ms.payments.jpmorgan.com/api/v2
+  humanURL: https://developer.payments.jpmorgan.com/api
+  tags:
+  - Health Check
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-wallet-decryption-api-openapi.yml
+  - type: Documentation
+    url: https://developer.payments.jpmorgan.com/api
+  - type: APIReference
+    url: >-
+      https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fwallet-decryption%2Fwallet-decryption-oas.md
+- aid: jp-morgan-chase:jp-morgan-chase-account-information-services-openapi
+  name: JPMorgan Chase Account Information Services
+  description: >-
+    JPMorgan Chase Account Information Services from JPMorgan Chase — 7 path(s) described in OpenAPI.
+  humanURL: https://developer.payments.jpmorgan.com/api
+  baseURL: https://api.payments.jpmorgan.com/onboarding/v1
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-account-information-services-openapi.yml
+- aid: jp-morgan-chase:jp-morgan-chase-global-payments-openapi
+  name: JPMorgan Chase Global Payments
+  description: JPMorgan Chase Global Payments from JPMorgan Chase — 4 path(s) described in OpenAPI.
+  humanURL: https://developer.payments.jpmorgan.com/api
+  baseURL: https://api.payments.jpmorgan.com/onboarding/v1
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-global-payments-openapi.yml
+- aid: jp-morgan-chase:jp-morgan-chase-j-p-morgan-business-direct-connect-openapi
+  name: JPMorgan Chase J.P. Morgan Business Direct Connect
+  description: >-
+    JPMorgan Chase J.P. Morgan Business Direct Connect from JPMorgan Chase — 7 path(s) described in OpenAPI.
+  humanURL: https://developer.payments.jpmorgan.com/api
+  baseURL: https://api.payments.jpmorgan.com/onboarding/v1
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-j-p-morgan-business-direct-connect-openapi.yml
+- aid: jp-morgan-chase:jp-morgan-chase-pay-by-bank-pis-openapi
+  name: JPMorgan Chase Pay By Bank PIS
+  description: JPMorgan Chase Pay By Bank PIS from JPMorgan Chase — 12 path(s) described in OpenAPI.
+  humanURL: https://developer.payments.jpmorgan.com/api
+  baseURL: https://api.payments.jpmorgan.com/onboarding/v1
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-pay-by-bank-pis-openapi.yml
+- aid: jp-morgan-chase:jp-morgan-chase-payment-initiation-service-openapi
+  name: JPMorgan Chase Payment Initiation Service
+  description: >-
+    JPMorgan Chase Payment Initiation Service from JPMorgan Chase — 6 path(s) described in OpenAPI.
+  humanURL: https://developer.payments.jpmorgan.com/api
+  baseURL: https://api.payments.jpmorgan.com/onboarding/v1
+  properties:
+  - type: OpenAPI
+    url: openapi/jp-morgan-chase-payment-initiation-service-openapi.yml
 common:
-  - type: DomainSecurity
-    url: security/jp-morgan-chase-domain-security.yml
-  - type: GitHubOrganization
-    url: https://github.com/jpmorganchase
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/jpmorganchase
-  - type: Website
-    url: https://www.jpmorganchase.com
-  - type: Developer
-    url: https://developer.payments.jpmorgan.com/
-  - type: LlmsText
-    url: https://developer.payments.jpmorgan.com/llms.txt
-description: >-
-  JPMorgan Chase is a leading global financial services firm and one of the largest
-  banking institutions in the United States, with operations across investment banking,
-  financial services, asset management, and private equity. J.P. Morgan publishes a
-  Payments Developer Portal exposing APIs for payments, treasury, and account services.
+- type: DomainSecurity
+  url: security/jp-morgan-chase-domain-security.yml
+- type: GitHubOrganization
+  url: https://github.com/jpmorganchase
+- type: LinkedIn
+  url: https://www.linkedin.com/company/jpmorganchase
+- type: Website
+  url: https://www.jpmorganchase.com
+- type: Developer
+  url: https://developer.payments.jpmorgan.com/
+- type: LlmsText
+  url: https://developer.payments.jpmorgan.com/llms.txt
+- type: DeveloperPortal
+  url: https://developer.payments.jpmorgan.com
+- type: Documentation
+  url: https://developer.payments.jpmorgan.com/docs
+- type: APIReference
+  url: https://developer.payments.jpmorgan.com/api
+- type: GettingStarted
+  url: https://developer.payments.jpmorgan.com/docs/quick-start
+- type: Authentication
+  url: authentication/jp-morgan-chase-authentication.yml
+- type: Versioning
+  url: https://developer.payments.jpmorgan.com/api/versioning
+- type: ErrorCodes
+  url: errors/jp-morgan-chase-error-catalog.yml
+- type: ChangeLog
+  url: changelog/jp-morgan-chase-changelog-index.yml
+- type: Blog
+  url: https://developer.payments.jpmorgan.com/blog
+- type: SignUp
+  url: https://developer.payments.jpmorgan.com/docs/become-a-client
+- type: Sandbox
+  url: https://developer.payments.jpmorgan.com/api/environments
+  name: Mock environment
+- type: Plans
+  url: plans/jp-morgan-chase-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/jp-morgan-chase-rate-limits.yml
+- type: FinOps
+  url: finops/jp-morgan-chase-finops.yml
+- type: Security
+  url: security/jp-morgan-chase-domain-security.yml
+- type: TermsOfService
+  url: https://www.jpmorgan.com/terms
+- type: PrivacyPolicy
+  url: https://www.jpmorganchase.com/privacy
+- type: Examples
+  url: examples/jp-morgan-chase-examples.yml
+- type: Idempotency
+  url: conventions/jp-morgan-chase-idempotency.yml
+- type: Webhooks
+  url: asyncapi/jp-morgan-chase-webhooks.yml
+- type: Portal
+  url: https://developer.jpmorgan.com/
+  name: Legacy J.P. Morgan Developer Portal (login-gated)
+- type: About
+  url: https://www.jpmorganchase.com/about
+- type: Newsroom
+  url: https://www.jpmorganchase.com/news-stories
+- type: InvestorRelations
+  url: https://www.jpmorganchase.com/ir
+description: JPMorgan Chase is a leading global financial services firm and one of the largest banking
+  institutions in the United States, with operations across investment banking, financial services, asset
+  management, and private equity. Its J.P. Morgan Payments Developer Portal publishes 26 API definitions
+  covering 194 operations across payments, treasury, onboarding, tokenization, disputes, reporting and
+  blockchain deposit accounts, with OAuth 2.0, mTLS and digital-signature authentication and a Mock environment
+  for client testing.
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
