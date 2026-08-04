@@ -1,0 +1,4888 @@
+# Harvested verbatim from the J.P. Morgan Payments Developer Portal.
+# method: searched
+# source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fconsumer-profile%2Fconsumer-profile-oas.md
+# generated: '2026-07-28'
+openapi: 3.0.1
+info:
+  title: Consumer Profile Management API
+  description: The consumer profile management API provides merchant functionality to create, store, update,
+    and maintain customer or consumer profiles.
+  version: 2.4.2
+  contact:
+    name: Consumer Profile Management API Support
+    url: https://developer.payments.jpmorgan.com/contact
+servers:
+- url: https://profiles-api.merchant.jpmorgan.com/api/v2/mmp
+  description: PRODUCTION - OAUTH
+- url: https://cat-profiles-api.merchant.jpmorgan.com/api/v2/mmp
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/api/v2/mmp
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Consumer Profiles
+  description: Consumer Profiles API
+- name: Addresses
+  description: Addresses API
+- name: Payment Methods
+  description: Payment Methods API
+- name: Communication
+  description: Communication Update
+- name: Health Check
+  description: Validate the health of the service.
+paths:
+  /healthcheck:
+    get:
+      summary: Health check for CPM API
+      operationId: v1GetHealth
+      tags:
+      - Health Check
+      description: Healthcheck endpoint to validate that the service is running.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/healthCheckResource'
+              examples:
+                Create Consumer profile:
+                  value:
+                    status: UP
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles:
+    post:
+      summary: Create a consumer profile
+      operationId: v1PostConsumerProfiles
+      tags:
+      - Consumer Profiles
+      description: Create a consumer profile using the consumer details.
+      parameters:
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Create Consumer profile:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Create Consumer profile:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Create Consumer profile:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Create a Consumer Profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/consumerProfile'
+            examples:
+              Create Consumer profile:
+                value:
+                  externalConsumerProfileIdentifier: 3456789fghuj
+                  cardOnFileReferenceNumber: '123'
+                  profileStatus: ACTIVE
+                  consumerProfileAddresses:
+                  - firstName: John
+                    lastName: Doe
+                    consumerAssignedAddressName: Work
+                    primaryAddressIndicator: true
+                    addressType: SHIPPING
+                    line1: 400 Elton Farm
+                    line2: Apt 123
+                    city: Glen Mills
+                    state: PA
+                    postalCode: '19342'
+                    countryCode: USA
+                    addressStatus: ACTIVE
+                  profilePaymentMethod:
+                    cardList:
+                    - cardExpirationMonthYearNumber: 01/2025
+                      accountNumber: '1234561111119999'
+                      accountStatus: ACTIVE
+                      cardType: MC
+                      firstName: TestFirst
+                      lastName: TestLast
+                  communication:
+                    phoneList:
+                    - phoneNumber: '8888888828'
+                      countryCode: '1'
+                      phoneNumberType: Home
+                    emailList:
+                    - emailAddress: john.doe.x@gmail.com
+                      emailAddressType: Home
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}:
+    patch:
+      summary: Update a consumer profile
+      operationId: v1PatchConsumerProfiles
+      tags:
+      - Consumer Profiles
+      description: Update a consumer profile using the consumer profile ID.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Update Consumer profile:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Update Consumer profile:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Update Consumer profile:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Update Consumer profile:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Update a Consumer Profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateConsumerProfile'
+            examples:
+              Update Consumer profile:
+                value:
+                  cardOnFileReferenceNumber: 3456789fghuj
+                  firstName: John
+                  lastName: Doe
+                  profileStatus: ACTIVE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    get:
+      summary: Retrieve a consumer profile
+      operationId: v1GetConsumerProfiles
+      tags:
+      - Consumer Profiles
+      description: Retrieve a consumer profile using the consumer profile ID.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Success:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    delete:
+      summary: Delete a consumer profile
+      operationId: v1DeleteConsumerProfiles
+      tags:
+      - Consumer Profiles
+      description: Delete a consumer profile using the consumer profile ID.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Success:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Success:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+              examples:
+                Success:
+                  value:
+                    responseStatus: SUCCESS
+                    responseCode: ACCEPTED
+                    responseMessage: Request Accepted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/payment-methods:
+    post:
+      summary: Add a new payment method to an existing consumer profile
+      operationId: v1PostConsumerProfilesPymt
+      tags:
+      - Payment Methods
+      description: Add a new payment method to an existing consumer profile.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Create A New Payment Method:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Create A New Payment Method:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Create A New Payment Method:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Create A New Payment Method:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Add a new Payment Method to an existing Consumer Profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createPaymentMethod'
+            examples:
+              Create A New Payment Method:
+                value:
+                  currency: USD
+                  cardList:
+                  - cardExpirationMonthYearNumber: 02/2025
+                    accountNumber: '4234555678990919'
+                    accountStatus: ACTIVE
+                    cardType: DI
+                    firstName: John
+                    lastName: Doe
+                    consumerProfileAddress:
+                      firstName: John
+                      lastName: Doe
+                      consumerAssignedAddressName: Work
+                      primaryAddressIndicator: true
+                      addressType: SHIPPING
+                      line1: 400 Elton Farm
+                      line2: Apt 123
+                      city: Glen Mills
+                      state: PA
+                      postalCode: '19342'
+                      countryCode: USA
+                      addressStatus: ACTIVE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/payment-methods/{payment-method-id}/default:
+    patch:
+      summary: Update a payment method to default on an existing consumer profile
+      operationId: v1PatchConsumerProfilesPymtIdDefault
+      tags:
+      - Payment Methods
+      description: Update a payment method to default on an existing consumer profile.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Update A Payment Method:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Update A Payment Method:
+            value: '993371390059'
+      - name: payment-method-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of the type of payment accepted by a level of the
+          hierarchy of the merchant acquiring account.
+        examples:
+          Update A Payment Method:
+            value: 63aaba29-4857-494a-82bc-2a80e1fa2b1e
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Update A Payment Method:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Update A Payment Method:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerUpdatedProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/payment-methods/{payment-method-id}:
+    patch:
+      summary: Update a payment method on an existing consumer profile
+      operationId: v1PatchConsumerProfilesPymtId
+      tags:
+      - Payment Methods
+      description: Update a payment method on a consumer profile using the payment method ID.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Update A Payment Method:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Update A Payment Method:
+            value: '993371390059'
+      - name: payment-method-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of the type of payment accepted by a level of the
+          hierarchy of the merchant acquiring account.
+        examples:
+          Update A Payment Method:
+            value: 63aaba29-4857-494a-82bc-2a80e1fa2b1e
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Update A Payment Method:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Update A Payment Method:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Update a Payment Method on an existing Consumer Profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updatePaymentMethod'
+            examples:
+              Update A Payment Method:
+                value:
+                  card:
+                    cardExpirationMonthYearNumber: 02/2025
+                    accountStatus: ACTIVE
+                    cardType: MC
+                    firstName: John
+                    lastName: Doe
+                    consumerProfileAddress:
+                      firstName: John
+                      lastName: Doe
+                      consumerAssignedAddressName: Work
+                      primaryAddressIndicator: true
+                      addressType: BILLING
+                      line1: 300 Elton Street
+                      line2: Apt 123
+                      city: Glen Mills
+                      state: PA
+                      postalCode: '19342'
+                      countryCode: USA
+                      addressStatus: ACTIVE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerUpdatedProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    delete:
+      summary: Delete a payment method
+      operationId: v1DeleteConsumerProfilesPymtId
+      tags:
+      - Payment Methods
+      description: Delete a payment method on a consumer profile using the payment method ID.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Success:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '993371390059'
+      - name: payment-method-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of the type of payment accepted by a level of the
+          hierarchy of the merchant acquiring account.
+        examples:
+          Success:
+            value: 77ccba29-4857-494a-82bc-2a80e1fa2b9d
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Success:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/addresses:
+    post:
+      summary: Add a new address to an existing consumer profile
+      operationId: v1PostConsumerProfilesAddresses
+      tags:
+      - Addresses
+      description: Add a new address to an existing consumer profile.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Create Consumer Address:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Create Consumer Address:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Create Consumer Address:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Create Consumer Address:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Add a new Address to an existing Consumer Profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createAddress'
+            examples:
+              Create Consumer Address:
+                value:
+                  firstName: John
+                  lastName: Doe
+                  consumerAssignedAddressName: Work2
+                  primaryAddressIndicator: true
+                  addressType: SHIPPING
+                  line1: 200 Elton Farm
+                  line2: Apt 123
+                  city: Glen Mills
+                  state: PA
+                  postalCode: '19342'
+                  countryCode: USA
+                  addressStatus: ACTIVE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/addresses/{address-id}:
+    patch:
+      summary: Update an address on an existing consumer profile
+      operationId: v1PatchConsumerProfilesAddressesId
+      tags:
+      - Addresses
+      description: Update an address on a consumer profile using the address ID.
+      parameters:
+      - name: address-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies an interaction between a customer and a representative with the Firm within
+          a given application tool.
+        examples:
+          Update Consumer Address:
+            value: 4a599d25-00b9-4a19-af8d-fdae45e034c9
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Update Consumer Address:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Update Consumer Address:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Update Consumer Address:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+        examples:
+          Update Consumer Address:
+            value: test
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Update an Address on an existing Consumer Profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateAddress'
+            examples:
+              Update Consumer Address:
+                value:
+                  firstName: John
+                  lastName: Doe
+                  consumerAssignedAddressName: Work2
+                  primaryAddressIndicator: true
+                  line1: 201 Elton Farm
+                  line2: Apt 123
+                  city: Glen Mills
+                  state: PA
+                  postalCode: '19342'
+                  countryCode: USA
+                  addressStatus: ACTIVE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    delete:
+      summary: Delete an address
+      operationId: v1DeleteConsumerProfilesAddressesId
+      tags:
+      - Addresses
+      description: Delete an address on a consumer profile using the address ID.
+      parameters:
+      - name: address-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies an interaction between a customer and a representative with the Firm within
+          a given application tool.
+        examples:
+          Success:
+            value: e17a1ecd-b177-4c3d-a99b-c72e132b260f
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Success:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Success:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/communication:
+    post:
+      summary: Add a new communication to an existing consumer profile
+      operationId: v1PostConsumerCommunication
+      tags:
+      - Communication
+      description: Add a new communication to an existing consumer profile.
+      parameters:
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Create A New Communication:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Create A New Communication:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Create A New Communication:
+            value: test
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Create A New Communication:
+            value: PACJGQ
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Add a new Payment Method to an existing Consumer Profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/communication'
+            examples:
+              Create A New Communication:
+                value:
+                  phoneList:
+                  - phoneNumber: '8888888828'
+                    countryCode: '1'
+                    phoneNumberType: Home
+                  emailList:
+                  - emailAddress: john.doe.x@gmail.com
+                    emailAddressType: Home
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/communication/{communication-id}/default:
+    patch:
+      summary: Update a communication method to default on an existing consumer profile
+      operationId: v1PatchConsumerCommunicationDefaultById
+      tags:
+      - Communication
+      description: Update default communication for a profile.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Update Existing Communication:
+            value: 80G39P
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Update Existing Communication:
+            value: '993371390059'
+      - name: communication-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of the type of payment accepted by a level of the
+          hierarchy of the merchant acquiring account.
+        examples:
+          Update Existing Communication:
+            value: HH04423498968
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Update Existing Communication:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Update Existing Communication:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/communication/{communication-id}:
+    patch:
+      summary: Update a communication attributes based on communication id provided; either email or phone
+      operationId: v1PatchConsumerCommunicationById
+      tags:
+      - Communication
+      description: Update communication method for a profile.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Update Existing Communication:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Update Existing Communication:
+            value: '993371390059'
+      - name: communication-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of the type of payment accepted by a level of the
+          hierarchy of the merchant acquiring account.
+        examples:
+          Update Existing Communication:
+            value: HH04423498968
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Update Existing Communication:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Update Existing Communication:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Update a communication attributes based on communication id provided; either email
+          or phone
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/communicationUpdate'
+            examples:
+              Update Existing Communication:
+                value:
+                  email:
+                    emailAddress: john.doe.x@gmail.com
+                    emailAddressType: Home
+                  phone:
+                    phoneNumber: '8008887124'
+                    countryCode: '1'
+                    phoneNumberType: Home
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    delete:
+      summary: Delete a communication method
+      operationId: v1DeleteConsumerCommunicationById
+      tags:
+      - Communication
+      description: Delete a communication method on a consumer profile using the communication ID.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Success:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '993371390059'
+      - name: communication-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of the type of payment accepted by a level of the
+          hierarchy of the merchant acquiring account.
+        examples:
+          Success:
+            value: EE8141240230923
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This
+          could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Success:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/payment-methods/{payment-method-id}/status:
+    get:
+      summary: Retrieve 3DS status
+      operationId: v1GetInternalConsumerProfiles
+      tags:
+      - Payment Methods
+      description: This endpoint is to retrieve 3DS status details
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Success:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      - name: payment-method-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileIdResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /bulk-import/status:
+    get:
+      summary: Retrieve the status of a bulk import file
+      operationId: v1GetBulkImportFileStatus
+      tags:
+      - Bulk Import
+      description: Retrieve the status of a bulk import file.
+      parameters:
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the
+          account hierarchy of the backend proprietary merchant acquiring processing platform. This level
+          organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source
+          system, that will provide a linkage between independent events. This will allow events from
+          multiple applications to be linked together to represent a single string of events or a customer
+          contact experience. This field should be considered generic (aka ability to use for document
+          event tracking) to allow correlation of events not specific to customer contacts. This is unique
+          per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API)
+          .
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed
+          software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      - name: merchantFileName
+        in: header
+        required: true
+        schema:
+          type: string
+        description: This is used for specifying FileName of the Bulk Import File.
+        examples:
+          Success:
+            value: M123456789_TransactionData.csv
+      - name: submitterIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: This is used for specifying Submitter Id of the Bulk Import File.
+        examples:
+          Success:
+            value: SUBMITTER001
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bulkImportFileStatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    healthCheckResource:
+      description: Contains health check information about a resource.
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          description: General status of all resources.
+          type: string
+          enum:
+          - PASS
+          - FAIL
+          - WARN
+          example: PASS
+    adfsError:
+      description: Object containing information about the active directory file system error.
+      type: object
+      required:
+      - errorSource
+      - errorCode
+      - errorDescription
+      properties:
+        errorSource:
+          description: The label of the component from where the error or warning originated.
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: Codifies a raised exception encountered by an internal or external system, sub-system,
+            interface, job, module, or system component with which the web service application interfaces.  In
+            this instance it refers to the error raised when reporting job failed.
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: The textual information of the code of the raised exception encountered by an internal
+            or external system, sub-system, interface, job, module, or system component with which the
+            web service application interfaces.
+          type: string
+          example: the signature could not be verified
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: validationErrors
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    validationMessage:
+      description: Object containing information about transaction validation.
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          description: The name given to the module or program where the error was generated.
+          type: string
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    code:
+      description: Codifies a raised exception encountered by an internal or external system, sub-system,
+        interface, job, module, or system component with which the web service application interfaces.
+        In this instance it refers to the error raised when the reporting job failed.
+      type: string
+    message:
+      description: Provides textual description of a problem that has occurred and which is preventing
+        the system from completing a task. Messages can be a  confirmation, warning or notification, and
+        can trigger the system to apply a customized default value or override to a field, record or file,
+        halt or postpone processing, or skip or reject the entry generating the problem. Messages can
+        be displayed on-screen in the user interface or in reporting.
+      type: string
+    consumerProfile:
+      description: Consumer Profile Object
+      type: object
+      properties:
+        externalConsumerProfileIdentifier:
+          $ref: '#/components/schemas/externalConsumerProfileIdentifier'
+        consumerProfileId:
+          description: Identifies a unique occurrence of a consumer maintained in the firm as requested
+            by merchant. Consumer profile contains information relevant to processing transactions such
+            as name, address, account and payment methods information.
+          type: string
+          readOnly: true
+        cardOnFileReferenceNumber:
+          description: Identifies a cardholder account profile which allows cardholder data (including,
+            but not limited to, an account number or payment token) to be stored and subsequently used
+            for transaction processing.
+          type: string
+          maxLength: 32
+          pattern: '[A-Za-z0-9]*'
+          example: 3456789fghuj
+        merchant:
+          $ref: '#/components/schemas/merchant'
+        fullName:
+          $ref: '#/components/schemas/fullName'
+        profileStatus:
+          description: Codifies the current standing of a Party's profile.
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        consumerProfileAddresses:
+          type: array
+          minItems: 0
+          description: List of postal addresses linked with consumer profile.
+          items:
+            $ref: '#/components/schemas/consumerProfileAddress'
+        profilePaymentMethod:
+          $ref: '#/components/schemas/profilePaymentMethod'
+        communication:
+          $ref: '#/components/schemas/communication'
+        browserInfo:
+          $ref: '#/components/schemas/browserInfo'
+        orderOverrideCode:
+          $ref: '#/components/schemas/orderOverrideCode'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+    address:
+      description: Address Object
+      type: object
+      required:
+      - line1
+      - line2
+      properties:
+        addressIdentifier:
+          description: Identifies a classification of a geographic area that is captured for a consumer
+            purchasing goods or services.
+          type: string
+          readOnly: true
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerAssignedAddressName:
+          $ref: '#/components/schemas/consumerAssignedAddressName'
+        primaryAddressIndicator:
+          $ref: '#/components/schemas/primaryAddressIndicator'
+        addressType:
+          $ref: '#/components/schemas/addressType'
+        line1:
+          $ref: '#/components/schemas/line1'
+        line2:
+          $ref: '#/components/schemas/line2'
+        city:
+          $ref: '#/components/schemas/city'
+        state:
+          $ref: '#/components/schemas/state'
+        postalCode:
+          $ref: '#/components/schemas/postalCode'
+        countryCode:
+          $ref: '#/components/schemas/countryCode'
+        addressStatus:
+          $ref: '#/components/schemas/addressStatus'
+        paymentMethodIdList:
+          type: array
+          minItems: 0
+          description: A collection of unique occurrences of the types of payments accepted by a level
+            of the hierarchy of the merchant acquiring account.
+          items:
+            type: string
+    paymentMethodType:
+      description: Payment Method Object
+      type: object
+      properties:
+        cardList:
+          type: array
+          minItems: 0
+          description: List of card payment methods
+          items:
+            $ref: '#/components/schemas/card'
+        sepaList:
+          type: array
+          minItems: 0
+          description: List of SEPA payment methods
+          items:
+            $ref: '#/components/schemas/sepa'
+        achList:
+          type: array
+          minItems: 0
+          description: List of ACH payment methods
+          items:
+            $ref: '#/components/schemas/ach'
+        defaultMOP:
+          $ref: '#/components/schemas/defaultMOP'
+        bacsList:
+          type: array
+          minItems: 0
+          description: List of ACH payment methods
+          items:
+            $ref: '#/components/schemas/bacs'
+    createPaymentMethod:
+      description: Payment Method Information. Atleast one payment method information should be mandatory
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        merchant:
+          $ref: '#/components/schemas/merchant'
+        cardList:
+          type: array
+          minItems: 0
+          description: List of card payment methods
+          items:
+            $ref: '#/components/schemas/createCard'
+        sepaList:
+          type: array
+          minItems: 0
+          description: List of SEPA payment methods
+          items:
+            $ref: '#/components/schemas/createSepa'
+        achList:
+          type: array
+          minItems: 0
+          description: List of ACH payment methods
+          items:
+            $ref: '#/components/schemas/createAch'
+        bacsList:
+          type: array
+          minItems: 0
+          description: List of BACS payment methods
+          items:
+            $ref: '#/components/schemas/createBacs'
+        defaultMOP:
+          $ref: '#/components/schemas/createDefaultMOP'
+        browserInfo:
+          $ref: '#/components/schemas/browserInfo'
+        googlepay:
+          $ref: '#/components/schemas/googlepay'
+        applepay:
+          $ref: '#/components/schemas/applepay'
+        paze:
+          $ref: '#/components/schemas/paze'
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+    createCard:
+      description: Card payment Information
+      type: object
+      required:
+      - accountNumber
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
+        cardExpirationMonthYearNumber:
+          $ref: '#/components/schemas/cardExpirationMonthYearNumber'
+        last4CardNumber:
+          $ref: '#/components/schemas/last4CardNumber'
+        first6CardNumber:
+          $ref: '#/components/schemas/first6CardNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        cardType:
+          $ref: '#/components/schemas/cardType'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+        authenticationRequest:
+          $ref: '#/components/schemas/authenticationRequest'
+        threeDSAuthenticatedData:
+          $ref: '#/components/schemas/threeDSAuthenticatedData'
+        authenticationResult:
+          $ref: '#/components/schemas/authenticationResult'
+        billerDebitCardReferenceNumber:
+          $ref: '#/components/schemas/billerDebitCardReferenceNumber'
+        isBillPayment:
+          $ref: '#/components/schemas/isBillPayment'
+        verificationResult:
+          $ref: '#/components/schemas/verificationResult'
+        profileCardSourceName:
+          $ref: '#/components/schemas/profileCardSourceName'
+        currency:
+          $ref: '#/components/schemas/currency'
+        consumerPreferredPaymentNetwork:
+          $ref: '#/components/schemas/consumerPreferredPaymentNetwork'
+        cardBadgeType:
+          $ref: '#/components/schemas/cardBadgeType'
+    createSepa:
+      description: Sepa Payment Information
+      type: object
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        internationalBankAccountNumber:
+          description: Identifies the International Bank Account Number (IBAN) for the account.  IBAN
+            is an internationally agreed system of identifying bank accounts across national borders to
+            facilitate the communication and processing of cross border transactions with a reduced risk
+            of transcription errors. Based on ISO 13616 standards, the IBAN consists of up to 34 alphanumeric
+            characters, comprising a country code, two check digits and a long and detailed bank account-number.
+            The check digits enable a sanity check of the bank account number to confirm its integrity
+            before submitting a transaction.
+          type: string
+          writeOnly: true
+        internationalBusinessIdentifierCode:
+          description: Codifies the unique value that identifies a particular bank in the worldwide economy.
+            The 8 to 11 digit code is based on ISO 9362 standards. This code has several aliases including
+            SWIFT Code, SWIFT Bank Code and Bank Identification Code (BIC). ISO 9362:2014 specifies the
+            elements and structure of a universal identifier code for financial and non-financial institutions
+            where an international identifier is required to facilitate automated processing of information
+            for financial services.  The BIC is used for addressing messages, routing business transactions
+            and identifying business parties. This Standard applies to organizations and excludes individual
+            persons.
+          type: string
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    createAch:
+      description: ACH payment Information
+      type: object
+      required:
+      - accountNumber
+      - financialInstitutionRoutingNumber
+      properties:
+        paymentMethodId:
+          description: Identifies a unique occurrence of the type of payment accepted by a level of the
+            hierarchy of the merchant acquiring account.
+          type: string
+          readOnly: true
+          minLength: 0
+          maxLength: 32
+          pattern: ^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        financialInstitutionRoutingNumber:
+          $ref: '#/components/schemas/financialInstitutionRoutingNumber'
+        paymentType:
+          $ref: '#/components/schemas/paymentType'
+        accountType:
+          $ref: '#/components/schemas/accountType'
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        isTransactionMicroEntry:
+          $ref: '#/components/schemas/isTransactionMicroEntry'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    createBacs:
+      description: Object for BACS (Bankers' Automated Clearing System) is an electronic system payment
+        method make payments directly from one bank account to another. This payment method mostly used
+        in UK.
+      type: object
+      required:
+      - accountNumber
+      - bankSortCode
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        bankSortCode:
+          description: Identifies the routing and transit number assigned by an administrative body to
+            formally identify a chartered financial institution (bank) within a given country or common
+            financial market for performing domestic transfers of funds to or from that institution's
+            client accounts. Within the United States, this is known as the American Bankers Association
+            Routing Number, and within Australia, this is known as a Bank State Branch Number. This common
+            data element will house those two examples, along with the equivalent for any other country
+            or financial market.
+          type: string
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    createDefaultMOP:
+      description: Default payment method
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/createCard'
+        sepa:
+          $ref: '#/components/schemas/createSepa'
+        ach:
+          $ref: '#/components/schemas/createAch'
+        bacs:
+          $ref: '#/components/schemas/createBacs'
+    updatePaymentMethod:
+      description: Payment Method Object
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/updateCard'
+        sepa:
+          $ref: '#/components/schemas/updateSepa'
+        ach:
+          $ref: '#/components/schemas/updateAch'
+        bacs:
+          $ref: '#/components/schemas/updateBacs'
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+    createAddress:
+      description: Create Address Object
+      type: object
+      properties:
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerAssignedAddressName:
+          description: A short label defined by the consumer that will allow them to refer to the address
+            by name.  E.g Home , Office , JohnDoe_Home
+          type: string
+        primaryAddressIndicator:
+          $ref: '#/components/schemas/primaryAddressIndicator'
+        addressType:
+          $ref: '#/components/schemas/addressType'
+        line1:
+          $ref: '#/components/schemas/line1'
+        line2:
+          $ref: '#/components/schemas/line2'
+        city:
+          description: A portion of a party's address which is the geographic area that is a municipality
+            with legal power granted by a state/province charter.
+          type: string
+          maxLength: 40
+          pattern: '[\p{L}\d\s\-''.,&() ]*$'
+          example: Glen Mills
+        state:
+          description: 'Classifies a geographic area that represents a first level, legal and political
+            subdivision of a country; it should be in the ISO 3166-2 format. For Example: the parish "Andorra
+            la Vella" in Andorra will be represented as 07.   similarly the province "Bengo" in Angola
+            will be represented as "BGO". state Texas in USA is represnted as "TX" etc.,'
+          type: string
+          minLength: 1
+          maxLength: 3
+          pattern: ^[A-Za-z0-9]+([\s-]+[A-Za-z0-9]+)*$
+          example: PA
+        postalCode:
+          description: The portion of a party’s address that is the encoded representation of a geographic
+            area to facilitate mail delivery services.
+          type: string
+          minLength: 3
+          maxLength: 12
+          pattern: ^|([a-zA-Z0-9]+(-|\s?)[a-zA-Z0-9]+)$
+          example: '19342'
+        countryCode:
+          description: 'A code that identifies the Country, a Geographic Area, that is recognized as an
+            independent political unit in world affairs. Note: This data element is a child of the Country
+            Code CDE and valid values are based on ISO standards.'
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[a-zA-Z]{2,3}$
+          example: USA
+        addressStatus:
+          $ref: '#/components/schemas/addressStatus'
+    updateAddress:
+      description: Update Address Object
+      type: object
+      properties:
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerAssignedAddressName:
+          $ref: '#/components/schemas/consumerAssignedAddressName'
+        primaryAddressIndicator:
+          $ref: '#/components/schemas/primaryAddressIndicator'
+        line1:
+          $ref: '#/components/schemas/line1'
+        line2:
+          $ref: '#/components/schemas/line2'
+        city:
+          $ref: '#/components/schemas/city'
+        state:
+          $ref: '#/components/schemas/state'
+        postalCode:
+          $ref: '#/components/schemas/postalCode'
+        countryCode:
+          $ref: '#/components/schemas/countryCode'
+        addressStatus:
+          $ref: '#/components/schemas/addressStatus'
+    communication:
+      description: Communication Object
+      type: object
+      properties:
+        phoneList:
+          type: array
+          minItems: 0
+          description: List of phone information
+          items:
+            $ref: '#/components/schemas/phone'
+        emailList:
+          type: array
+          minItems: 0
+          description: List of email information
+          items:
+            $ref: '#/components/schemas/email'
+        defaultPhone:
+          $ref: '#/components/schemas/phone'
+        defaultEmail:
+          $ref: '#/components/schemas/email'
+    consumerProfileIdResponse:
+      description: Consumer Profile Response Object
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        consumerProfileId:
+          $ref: '#/components/schemas/consumerProfileId'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        cardAuthenticationDetails:
+          $ref: '#/components/schemas/cardAuthenticationDetails'
+    updateConsumerProfile:
+      description: Update Consumer Profile Object
+      type: object
+      properties:
+        externalConsumerProfileIdentifier:
+          $ref: '#/components/schemas/externalConsumerProfileIdentifier'
+        cardOnFileReferenceNumber:
+          description: Identifies a cardholder account profile which allows cardholder data (including,
+            but not limited to, an account number or payment token) to be stored and subsequently used
+            for transaction processing.
+          type: string
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        fullName:
+          $ref: '#/components/schemas/fullName'
+        profileStatus:
+          description: Codifies the current standing of a Party's profile.
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        orderOverrideCode:
+          $ref: '#/components/schemas/orderOverrideCode'
+    addressType:
+      description: 'Codifies the classification given to the various addresses captured for a party, such
+        as Doing Business As Address, Legal Entity Address, and Tax Address.  Valid values:  ''SHIPPING''
+        or ''BILLING'''
+      type: string
+      enum:
+      - SHIPPING
+      - BILLING
+    line1:
+      description: 'A portion of a party''s address which is the line of the unstructured (unparsed) geographic
+        street address containing any of the following: house number, street name, street direction, street
+        type, dwelling type and number, PO Box number, rural delivery route number.'
+      type: string
+      pattern: ^[^<>{}]*$
+      maxLength: 100
+      example: 400 Elton Farm
+    line2:
+      description: 'A portion of a party''s address which is the line of the unstructured (unparsed) geographic
+        street address containing any of the following: house number, street name, street direction, street
+        type, dwelling type and number, PO Box number, rural delivery route number.'
+      type: string
+      pattern: ^[^<>{}]*$
+      maxLength: 100
+      example: Apt 123
+    city:
+      description: A portion of a party's address which is the geographic area that is a municipality
+        with legal power granted by a state/province charter.
+      type: string
+      pattern: '[\p{L}\d\s\-''.,&() ]*$'
+      maxLength: 40
+      example: Glen Mills
+    state:
+      description: 'Classifies a geographic area that represents a first level, legal and political subdivision
+        of a country; it should be in the ISO 3166-2 format. For Example: the parish "Andorra la Vella"
+        in Andorra will be represented as 07.   similarly the province "Bengo" in Angola will be represented
+        as "BGO". state Texas in USA is represnted as "TX" etc.,'
+      type: string
+      pattern: ^[A-Za-z0-9]+([\s-]+[A-Za-z0-9]+)*$
+      minLength: 1
+      maxLength: 3
+      example: PA
+    postalCode:
+      description: The portion of a party’s address that is the encoded representation of a geographic
+        area to facilitate mail delivery services.
+      type: string
+      pattern: ^[a-zA-Z0-9]+([-\s]*)[a-zA-Z0-9]+$
+      minLength: 3
+      maxLength: 12
+      example: '19342'
+    countryCode:
+      description: 'A code that identifies the Country, a Geographic Area, that is recognized as an independent
+        political unit in world affairs. Note: This data element is a child of the Country Code CDE and
+        valid values are based on ISO standards.'
+      type: string
+      pattern: ^[a-zA-Z]{2,3}$
+      minLength: 3
+      maxLength: 3
+      example: USA
+    consumerAssignedAddressName:
+      description: A short label defined by the consumer that will allow them to refer to the address
+        by name.  E.g Home , Office , JohnDoe_Home
+      type: string
+      pattern: ^[^<>]*$
+      maxLength: 75
+    primaryAddressIndicator:
+      description: Indicates the 'TRUE'/'FALSE' value that represents whether or not an address is the
+        primary address for a given owner
+      type: boolean
+      example: true
+    createTimestamp:
+      description: Designates the hour, minute and second in a specific day when the record was created.
+      type: string
+      readOnly: true
+    createUserIdentifier:
+      description: The identifier (id) of the user who created the object or inserted the row. This could
+        be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+      type: string
+      readOnly: true
+    updateTimestamp:
+      description: Designates the hour, minute, and second in a specifc day when the record was last modified.
+      type: string
+      readOnly: true
+    updateUserIdentifier:
+      description: The identifier (id) of the user who last updated the object or the row. This could
+        be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+      type: string
+      readOnly: true
+    cardType:
+      description: Codifies the method used to pay for the exchange of money, goods or services between
+        a merchant and their customer such as VI,MC, AX.
+      type: string
+      pattern: '[A-Za-z]*'
+      minLength: 1
+      maxLength: 50
+      example: VI
+      enum:
+      - VI
+      - MC
+      - AX
+      - HC
+      - EO
+      - DI
+      - JC
+      - DC
+      - CC
+      - CZ
+      - CR
+      - OX
+      - IM
+      - SP
+      - PP
+      - AP
+      - NP
+      - VR
+      - MR
+      - EP
+      - CB
+      - DP
+      - PM
+    cardExpirationMonthYearNumber:
+      description: A number in the form of Month/Year that is displayed on a card (Debit/Credit).  This
+        number is used for the date which is no longer in effect for transactions being processed at the
+        Point of Sale.
+      type: string
+      pattern: (0[1-9]|1[0-2])[/][0-9][0-9][0-9][0-9]
+      example: 02/2024
+    accountNumber:
+      description: The card or token number.
+      type: string
+      pattern: '[0-9]*'
+      minLength: 16
+      maxLength: 16
+      example: '4234555678909099'
+      writeOnly: true
+    consumerProfileAddress:
+      description: Address Information used for consumer profile
+      type: object
+      writeOnly: true
+      properties:
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerAssignedAddressName:
+          $ref: '#/components/schemas/consumerAssignedAddressName'
+        primaryAddressIndicator:
+          $ref: '#/components/schemas/primaryAddressIndicator'
+        addressType:
+          $ref: '#/components/schemas/addressType'
+        line1:
+          $ref: '#/components/schemas/line1'
+        line2:
+          $ref: '#/components/schemas/line2'
+        city:
+          $ref: '#/components/schemas/city'
+        state:
+          $ref: '#/components/schemas/state'
+        postalCode:
+          $ref: '#/components/schemas/postalCode'
+        countryCode:
+          $ref: '#/components/schemas/countryCode'
+        addressStatus:
+          $ref: '#/components/schemas/addressStatus'
+    consumerProfileResponse:
+      description: Consumer Profile Response Object
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        consumerProfileId:
+          description: Identifies a unique occurrence of a consumer maintained in the firm as requested
+            by merchant. Consumer profile contains information relevant to processing transactions such
+            as name, address, account and payment methods information.
+          type: string
+          readOnly: true
+        consumerProfileUniqueId:
+          $ref: '#/components/schemas/consumerProfileUniqueId'
+        cardOnFileReferenceNumber:
+          description: Identifies a cardholder account profile which allows cardholder data (including,
+            but not limited to, an account number or payment token) to be stored and subsequently used
+            for transaction processing.
+          type: string
+        merchant:
+          $ref: '#/components/schemas/merchant'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        fullName:
+          $ref: '#/components/schemas/fullName'
+        communication:
+          $ref: '#/components/schemas/communication'
+        paymentMethodType:
+          $ref: '#/components/schemas/paymentMethodType'
+        addresses:
+          type: array
+          minItems: 0
+          description: This is used for specifying an attribute used on a model for collection object
+            that will contain one or more attributes
+          items:
+            $ref: '#/components/schemas/address'
+        correlationIdentifier:
+          description: A unique key produced by the initial entry of a customer by the originating source
+            system, that will provide a linkage between independent events. This will allow events from
+            multiple applications to be linked together to represent a single string of events or a customer
+            contact experience. This field should be considered generic (aka ability to use for document
+            event tracking) to allow correlation of events not specific to customer contacts. This is
+            unique per customer experience and should be passed between applications.
+          type: string
+        createTimestamp:
+          $ref: '#/components/schemas/createTimestamp'
+        createUserIdentifier:
+          $ref: '#/components/schemas/createUserIdentifier'
+        updateTimestamp:
+          $ref: '#/components/schemas/updateTimestamp'
+        updateUserIdentifier:
+          $ref: '#/components/schemas/updateUserIdentifier'
+        profileStatus:
+          $ref: '#/components/schemas/profileStatus'
+        orderOverrideCode:
+          $ref: '#/components/schemas/orderOverrideCode'
+    addressStatus:
+      description: Codifies the current status of the profile address.
+      type: string
+      example: ACTIVE
+      enum:
+      - ACTIVE
+      - INACTIVE
+    accountStatus:
+      description: Codifies the current status of the card.
+      type: string
+      example: ACTIVE
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - PENDING
+      - ERRORED
+      - SUSPENDED
+      - VERIFICATION_FAILED
+    firstName:
+      description: That part of an individual's full name considered a personal name or given name and
+        generally positioned before the last name or family name.
+      type: string
+      pattern: '[\p{L}\p{P}0-9'' ]*$'
+      maxLength: 70
+      example: John
+    lastName:
+      description: 'That part of an individual’s name generally placed at the end of the given name. The
+        last name is also known as the surname or family name. (Note: name conventions may be different
+        based on practices in different countries. Some countries use two or more last names; in other
+        countries, the family name is placed before a person’s given name; in some countries, it is common
+        for people to have only one name or a mononym.)'
+      type: string
+      pattern: '[\p{L}\p{P}0-9'' ]*$'
+      maxLength: 70
+      example: Babbitt
+    profileStatus:
+      description: Codifies the current standing of a Party's profile.
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - PENDING
+      - ERRORED
+    middleName:
+      description: 'That part of an individual''s name generally positioned between the first and family
+        names, as a second given name or a maternal surname. (NOTE: in some instances, an individual may
+        have multiple middle names)'
+      type: string
+      pattern: '[\p{L}\p{P}0-9'' ]*$'
+      maxLength: 70
+      example: James
+    card:
+      description: Card payment Information
+      type: object
+      required:
+      - accountNumber
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
+        cardExpirationMonthYearNumber:
+          $ref: '#/components/schemas/cardExpirationMonthYearNumber'
+        last4CardNumber:
+          $ref: '#/components/schemas/last4CardNumber'
+        first6CardNumber:
+          $ref: '#/components/schemas/first6CardNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        accountStatus:
+          $ref: '#/components/schemas/accountStatus'
+        cardType:
+          $ref: '#/components/schemas/cardType'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+        authenticationRequest:
+          $ref: '#/components/schemas/authenticationRequest'
+        threeDSAuthenticatedData:
+          $ref: '#/components/schemas/threeDSAuthenticatedData'
+        authenticationResult:
+          $ref: '#/components/schemas/authenticationResult'
+        billerDebitCardReferenceNumber:
+          $ref: '#/components/schemas/billerDebitCardReferenceNumber'
+        isBillPayment:
+          description: Indicates whether or not the transaction is identified by Visa as a bill payment,
+            prearranged between the cardholder and the merchant.
+          type: boolean
+        verificationResult:
+          $ref: '#/components/schemas/verificationResult'
+        profileCardSourceName:
+          description: This attribute is to inform if the card is converted card from safetech token or
+            Apple Pay token or network token
+          type: string
+          enum:
+          - SAFETECH_TOKEN
+        currency:
+          $ref: '#/components/schemas/currency'
+        consumerPreferredPaymentNetwork:
+          $ref: '#/components/schemas/consumerPreferredPaymentNetwork'
+        cardBadgeType:
+          $ref: '#/components/schemas/cardBadgeType'
+    sepa:
+      description: Sepa Payment Information
+      type: object
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        internationalBankAccountNumber:
+          description: Identifies the International Bank Account Number (IBAN) for the account.  IBAN
+            is an internationally agreed system of identifying bank accounts across national borders to
+            facilitate the communication and processing of cross border transactions with a reduced risk
+            of transcription errors. Based on ISO 13616 standards, the IBAN consists of up to 34 alphanumeric
+            characters, comprising a country code, two check digits and a long and detailed bank account-number.
+            The check digits enable a sanity check of the bank account number to confirm its integrity
+            before submitting a transaction.
+          type: string
+          writeOnly: true
+        internationalBusinessIdentifierCode:
+          description: Codifies the unique value that identifies a particular bank in the worldwide economy.
+            The 8 to 11 digit code is based on ISO 9362 standards. This code has several aliases including
+            SWIFT Code, SWIFT Bank Code and Bank Identification Code (BIC). ISO 9362:2014 specifies the
+            elements and structure of a universal identifier code for financial and non-financial institutions
+            where an international identifier is required to facilitate automated processing of information
+            for financial services.  The BIC is used for addressing messages, routing business transactions
+            and identifying business parties. This Standard applies to organizations and excludes individual
+            persons.
+          type: string
+        accountStatus:
+          $ref: '#/components/schemas/accountStatus'
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    ach:
+      description: ACH payment Information
+      type: object
+      required:
+      - accountNumber
+      - financialInstitutionRoutingNumber
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        financialInstitutionRoutingNumber:
+          $ref: '#/components/schemas/financialInstitutionRoutingNumber'
+        paymentType:
+          $ref: '#/components/schemas/paymentType'
+        accountType:
+          $ref: '#/components/schemas/accountType'
+        accountStatus:
+          $ref: '#/components/schemas/accountStatus'
+        isTransactionMicroEntry:
+          $ref: '#/components/schemas/isTransactionMicroEntry'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    defaultMOP:
+      description: Default payment method
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/card'
+        sepa:
+          $ref: '#/components/schemas/sepa'
+        ach:
+          $ref: '#/components/schemas/ach'
+        bacs:
+          $ref: '#/components/schemas/bacs'
+    phone:
+      description: Phone Information
+      type: object
+      required:
+      - phoneNumber
+      - countryCode
+      properties:
+        phoneNumber:
+          description: 'A locator whose value identifies the formatted numeric address for routing voice
+            or data communications via telephony, to reach a party. NOTE: Telephone number formats may
+            vary; this field can include domestic and international telephone numbers.'
+          type: string
+        countryCode:
+          description: The telephone dialing prefix for a member country in the International Telecommunication
+            Union (ITU) that is defined by the ITU-T E.164 standard. The code is a combination of one,
+            two or three digits identifying a specific country, countries in an integrated numbering plan,
+            or a specific geographic area.
+          type: string
+        phoneNumberType:
+          description: Codifies the type of formatted numeric address for routing voice or data communications
+            via telephony to reach a party.
+          type: string
+        communicationIdentifier:
+          description: Internal Identifier generated by firm for each phone information for a consumer
+            stored in the system.
+          type: string
+          readOnly: true
+    email:
+      description: Email information
+      type: object
+      required:
+      - emailAddress
+      properties:
+        emailAddress:
+          description: A mail system that allows a party to send and receive messages electronically.
+            An email address is composed of a local part and a domain part. The local part is unique to
+            the individual while the domain or host name must meet specific standards required by the
+            host that administers the email service.
+          type: string
+        emailAddressType:
+          description: Codifies the type of formatted numeric address for routing electronic message communications
+            via email to reach a party.
+          type: string
+        communicationIdentifier:
+          description: Internal Identifier generated by firm for each email information for a consumer
+            stored in the system.
+          type: string
+          readOnly: true
+    mandate:
+      description: This is used for specifying an attribute used on a model for object that will contain
+        one or more attributes
+      type: object
+      required:
+      - mandateId
+      - mandateType
+      - mandateSignatureDate
+      properties:
+        mandateId:
+          description: Identifies an agreement between the consumer, debtor bank (direct debit account
+            of the consumer) and the merchant. This agreement (mandate) gives the merchant permission
+            to withdraw funds from the consumer's account for some specific financial purpose. Typically
+            mandates are used for recurring or installment payments; that is, a fixed amount to be withdrawn
+            over a specific period of time (defined by the “Mandate Date”). One-time withdrawals are allowed.
+            Mandates are specific to European programs such as Single Euro Payments Area (SEPA) Direct
+            Debit (DD) scheme and Bankers' Automated Clearing System (BACS).
+          type: string
+        mandateType:
+          description: Codifies the category of an agreement between the consumer, debtor bank (direct
+            debit account of the consumer) and the merchant. This agreement (mandate) gives the merchant
+            permission to withdraw funds from the consumer's bank account for some specific financial
+            purpose. Typically mandates are used for recurring or installment payments; that is, a fixed
+            amount to be withdrawn over a specific period of time (defined by the “Mandate Date”). One-time
+            withdrawals are allowed. Mandates are specific to European programs such as Single Euro Payments
+            Area (SEPA) Direct Debit (DD) scheme and Bankers' Automated Clearing System (BACS).
+          type: string
+        mandateSignatureDate:
+          description: Designates the year, month and day when the consumer signs an agreement (mandate)
+            that gives the merchant permission to withdraw funds from the consumer's bank account for
+            some specific financial purpose. Typically mandates are used for recurring or installment
+            payments; that is, a fixed amount to be withdrawn over a specific period of time (defined
+            by the “Mandate Date”). One-time withdrawals are allowed. Mandates are specific to European
+            programs such as Single Euro Payments Area (SEPA) Direct Debit (DD) scheme and Bankers' Automated
+            Clearing System (BACS). mandateSignatureDate should be valid date with format YYYY-MM-DD.
+          type: string
+        mandateReferenceId:
+          description: Identifies an unique reference number generated by the consumer profile system
+            for the agreement between the consumer, debtor bank (direct debit account of the consumer)
+            and the merchant. This agreement (mandate) gives the merchant permission to withdraw funds
+            from the consumer's account for some specific financial purpose.
+          type: string
+          readOnly: true
+    addressIdentifier:
+      description: Identifies a classification of a geographic area that is captured for a consumer purchasing
+        goods or services.
+      type: string
+    last4AccountNumber:
+      description: Identifies the final 4 digits of the Payment Method Account Number. The truncated value
+        is used in place of the full number to protect against exposure of confidential information.
+      type: string
+      readOnly: true
+    paymentMethodId:
+      description: Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy
+        of the merchant acquiring account.
+      type: string
+      readOnly: true
+    updateCard:
+      description: Card payment Information
+      type: object
+      properties:
+        cardExpirationMonthYearNumber:
+          $ref: '#/components/schemas/cardExpirationMonthYearNumber'
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+        threeDSAuthenticatedData:
+          $ref: '#/components/schemas/threeDSAuthenticatedData'
+        billerDebitCardReferenceNumber:
+          $ref: '#/components/schemas/billerDebitCardReferenceNumber'
+        isBillPayment:
+          $ref: '#/components/schemas/isBillPayment'
+        currency:
+          $ref: '#/components/schemas/currency'
+        consumerPreferredPaymentNetwork:
+          $ref: '#/components/schemas/consumerPreferredPaymentNetwork'
+        cardBadgeType:
+          $ref: '#/components/schemas/cardBadgeType'
+        cardType:
+          $ref: '#/components/schemas/cardType'
+    updateSepa:
+      description: Sepa Payment Information
+      type: object
+      properties:
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    updateAch:
+      description: ACH payment Information
+      type: object
+      properties:
+        paymentType:
+          description: Identifies how accountholders  initiated debits to their accounts .
+          type: string
+          enum:
+          - WEB
+          - TEL
+          - RECURRING
+        accountType:
+          description: Codifies a bank account where funds are deposited or stored (e.g., checking and
+            savings account). When shared with a financial institution as the client's primary automated
+            payment mechanism for a debt, it may also be known as a DDA (Demand Deposit Account). A DDA
+            can have funds withdrawn at any time from the depository institution, accessible by a teller,
+            ATM or via online banking.
+          type: string
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    last4CardNumber:
+      description: Identifies the final 4 digits of the 16 digit card number. The truncated value is used
+        in place of the full number to protect against exposure of confidential information.
+      type: string
+      readOnly: true
+    first6CardNumber:
+      description: Identifies the first six digits of the primary account number of a credit, debit or
+        pre-paid card. As of 2017, this does not necessarily align to the Issuer Identification Number
+        (IIN).  IIN is also referred to as Bank Identification Number (BIN).
+      type: string
+      readOnly: true
+    profileCard:
+      description: Card payment Information
+      type: object
+      required:
+      - accountNumber
+      properties:
+        cardExpirationMonthYearNumber:
+          $ref: '#/components/schemas/cardExpirationMonthYearNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        cardType:
+          $ref: '#/components/schemas/cardType'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        last4CardNumber:
+          $ref: '#/components/schemas/last4CardNumber'
+        first6CardNumber:
+          $ref: '#/components/schemas/first6CardNumber'
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        authenticationRequest:
+          $ref: '#/components/schemas/authenticationRequest'
+        threeDSAuthenticatedData:
+          $ref: '#/components/schemas/threeDSAuthenticatedData'
+        authenticationResult:
+          $ref: '#/components/schemas/authenticationResult'
+        billerDebitCardReferenceNumber:
+          $ref: '#/components/schemas/billerDebitCardReferenceNumber'
+        isBillPayment:
+          $ref: '#/components/schemas/isBillPayment'
+        verificationResult:
+          $ref: '#/components/schemas/verificationResult'
+        profileCardSourceName:
+          description: This attribute is to inform if the card is converted card from safetech token or
+            Apple Pay token or network token
+          type: string
+          enum:
+          - SAFETECH_TOKEN
+        currency:
+          $ref: '#/components/schemas/currency'
+        walletProvider:
+          description: Identifies the organization who manages the e-wallet for a consumer. The actual
+            e-wallet management responsibilities may include hosting, accessing, communicating, and/or
+            updating all or some of the customer data associated with the e-wallet.  An E-wallet is an
+            application that is created on the mobile device to interact with the Point of Sale (POS)
+            device as a catalyst for a transaction.  This value may be sent to the Firm (as in Visa Tokenization)
+            or created by the Firm.
+          type: string
+          enum:
+          - APPLE_PAY
+          - GOOGLE_PAY
+          - PAZE
+        consumerPreferredPaymentNetwork:
+          $ref: '#/components/schemas/consumerPreferredPaymentNetwork'
+        cardBadgeType:
+          $ref: '#/components/schemas/cardBadgeType'
+    profileSepa:
+      description: Sepa Payment Information
+      type: object
+      required:
+      - internationalBankAccountNumber
+      - internationalBusinessIdentifierCode
+      properties:
+        internationalBankAccountNumber:
+          description: Identifies the International Bank Account Number (IBAN) for the account.  IBAN
+            is an internationally agreed system of identifying bank accounts across national borders to
+            facilitate the communication and processing of cross border transactions with a reduced risk
+            of transcription errors. Based on ISO 13616 standards, the IBAN consists of up to 34 alphanumeric
+            characters, comprising a country code, two check digits and a long and detailed bank account-number.
+            The check digits enable a sanity check of the bank account number to confirm its integrity
+            before submitting a transaction.
+          type: string
+          writeOnly: true
+        internationalBusinessIdentifierCode:
+          description: Codifies the unique value that identifies a particular bank in the worldwide economy.
+            The 8 to 11 digit code is based on ISO 9362 standards. This code has several aliases including
+            SWIFT Code, SWIFT Bank Code and Bank Identification Code (BIC). ISO 9362:2014 specifies the
+            elements and structure of a universal identifier code for financial and non-financial institutions
+            where an international identifier is required to facilitate automated processing of information
+            for financial services.  The BIC is used for addressing messages, routing business transactions
+            and identifying business parties. This Standard applies to organizations and excludes individual
+            persons.
+          type: string
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+    profileAch:
+      description: ACH payment Information
+      type: object
+      required:
+      - accountNumber
+      - financialInstitutionRoutingNumber
+      properties:
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        financialInstitutionRoutingNumber:
+          $ref: '#/components/schemas/financialInstitutionRoutingNumber'
+        paymentType:
+          $ref: '#/components/schemas/paymentType'
+        accountType:
+          $ref: '#/components/schemas/accountType'
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        isTransactionMicroEntry:
+          $ref: '#/components/schemas/isTransactionMicroEntry'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+    profilePaymentMethod:
+      description: Payment Method Information.Atleast one payment method information should be mandatory
+      type: object
+      properties:
+        cardList:
+          type: array
+          minItems: 0
+          description: List of card payment methods
+          items:
+            $ref: '#/components/schemas/profileCard'
+        sepaList:
+          type: array
+          minItems: 0
+          description: List of SEPA payment methods
+          items:
+            $ref: '#/components/schemas/profileSepa'
+        achList:
+          type: array
+          minItems: 0
+          description: List of ACH payment methods
+          items:
+            $ref: '#/components/schemas/profileAch'
+        bacsList:
+          type: array
+          minItems: 0
+          description: List of ACH payment methods
+          items:
+            $ref: '#/components/schemas/profileBacs'
+        defaultMOP:
+          $ref: '#/components/schemas/profileDefaultMOP'
+        googlepay:
+          $ref: '#/components/schemas/profileGooglepay'
+        applepay:
+          $ref: '#/components/schemas/profileApplepay'
+        paze:
+          $ref: '#/components/schemas/profilePaze'
+    profileDefaultMOP:
+      description: Default payment method
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/profileCard'
+        sepa:
+          $ref: '#/components/schemas/profileSepa'
+        ach:
+          $ref: '#/components/schemas/profileAch'
+        bacs:
+          $ref: '#/components/schemas/profileBacs'
+    financialInstitutionRoutingNumber:
+      description: Identifies the routing and transit number assigned by an administrative body to formally
+        identify a chartered financial institution (bank) within a given country or common financial market
+        for performing domestic transfers of funds to or from that institution's client accounts. Within
+        the United States, this is known as the American Bankers Association Routing Number, and within
+        Australia, this is known as a Bank State Branch Number. This common data element will house those
+        two examples, along with the equivalent for any other country or financial market.
+      type: string
+    paymentType:
+      description: Identifies how accountholders  initiated debits to their accounts .
+      type: string
+      enum:
+      - WEB
+      - TEL
+      - RECURRING
+    accountType:
+      description: Codifies a bank account where funds are deposited or stored (e.g., checking and savings
+        account). When shared with a financial institution as the client's primary automated payment mechanism
+        for a debt, it may also be known as a DDA (Demand Deposit Account). A DDA can have funds withdrawn
+        at any time from the depository institution, accessible by a teller, ATM or via online banking.
+      type: string
+      enum:
+      - CHECKING
+      - SAVING
+      - CORPORATE_CHECKING
+    isTransactionMicroEntry:
+      description: Indicates the current transaction is an Automated Clearing House (ACH) credit or debit
+        Entry used by an Originator for the purpose of verifying a Receiver’s account or an individual's
+        access to an account.
+      type: boolean
+    communicationUpdate:
+      description: Communication Update information
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/email'
+        phone:
+          $ref: '#/components/schemas/phone'
+    consumerProfileUniqueId:
+      description: Identifies a unique occurrence of a consumer's information maintained by the Firm acorss
+        merchant.
+      type: string
+    consumerProfileId:
+      description: Identifies a unique occurrence of a consumer's information maintained by the Firm on
+        behalf of the merchant. The consumer profile contains information relevant to processing transactions
+        such as name, address, account and potentially information for multiple payment methods.
+      type: string
+      readOnly: true
+    cardAuthenticationDetails:
+      description: Card Authentication Details
+      type: object
+      properties:
+        transactionIdentifier:
+          description: Identifies a unique occurrence of a transaction.
+          type: string
+        responseStatus:
+          description: Request result status.
+          type: string
+          readOnly: true
+          enum:
+          - SUCCESS
+          - ERROR
+          - DENIED
+          example: SUCCESS
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        hostMessage:
+          description: Message received from Issuer, network or processor. Can be blank
+          type: string
+        transactionDate:
+          description: Designates the hour, minute, seconds and date (if timestamp) or year, month, and
+            date (if date) when the transaction (monetary or non-monetary) occurred.
+          type: string
+        authenticationId:
+          $ref: '#/components/schemas/authenticationId'
+    merchant:
+      description: Information about the merchant
+      type: object
+      properties:
+        merchantSoftware:
+          $ref: '#/components/schemas/merchantSoftware'
+    merchantSoftware:
+      description: Contains information related to the merchant software
+      type: object
+      properties:
+        companyName:
+          description: Company name of software integrated to this API. If merchant is directly integrated,
+            send "JPMC."
+          type: string
+          example: Payment Company
+        productName:
+          description: The name of the product used for marketing purposes from a customer perspective.
+            I. e. what the customer would recognize.
+          type: string
+          example: Application Name
+        version:
+          description: Designates the unique state of computer software as it is developed and released.
+            The version identifier can be a word, or a number, or both.
+          type: string
+          example: '1.235'
+    authenticationRequest:
+      description: Authentication Request
+      type: object
+      writeOnly: true
+      properties:
+        authenticationReturnUrl:
+          description: Once authentication is complete this is the URL the customer will be sent to.
+          type: string
+        threeDSPurchaseInfo:
+          $ref: '#/components/schemas/threeDSPurchaseInfo'
+        threeDSRequestorAuthenticationInfo:
+          $ref: '#/components/schemas/threeDSRequestorAuthenticationInfo'
+    threeDSPurchaseInfo:
+      description: Three DS Purchase Info
+      type: object
+      properties:
+        purchaseDate:
+          description: Designates the year, month and day of the most recent purchase which occurred on
+            the Cardholder account.
+          type: string
+          format: date-time
+        threeDomainSecureTransactionType:
+          description: Identifies the type of transaction being authenticated. The values are derived
+            from ISO 8583
+          type: string
+          enum:
+          - CHECK
+          - GOODS_SERVICES
+          - ACCOUNT_FUNDING
+          - QUASI_CASH
+          - PREPAID
+    threeDSAuthenticatedData:
+      description: Three DS Authenticated Data
+      type: object
+      properties:
+        threeDSTransactionId:
+          description: Identifies a unique occurrence of a transaction. In this context, this is Universally
+            unique transaction identifier to identify a single transaction. If the value does not exist
+            or it is not a valid UUID, the 3DS Server will generate a new transaction ID. This value has
+            36 characters in a format defined in IETF RFC 4122.
+          type: string
+          writeOnly: true
+        transactionId:
+          description: Identifies a unique occurrence of a transaction.
+          type: string
+          readOnly: true
+        threeDSAuthenticationId:
+          description: Unique identifier for the  Authentication attempt.
+          type: string
+        threeDSTransactionDate:
+          description: Designates the hour, minute, seconds and date (if timestamp) or year, month, and
+            date (if date) when the transaction (monetary or non-monetary) occurred.
+          type: string
+          format: date-time
+    browserInfo:
+      description: Browser Information of the consumer
+      type: object
+      properties:
+        browserAcceptHeader:
+          description: Exact content of the HTTP accept headers from the cardholder browser.
+          type: string
+        browserLanguage:
+          description: Value representing the cardholder browser language as defined in IETF BCP47. This
+            value is limited to 1-8 characters.
+          type: string
+        browserScreenHeight:
+          description: Total height of the cardholder browser screen in pixels.
+          type: string
+        browserColorDepth:
+          description: Value representing the bit depth of the color palette of the cardholder browser
+            for displaying images, in bits per pixel.  The field is limited to 1-2 characters.
+          type: string
+        browserScreenWidth:
+          description: Total width of the cardholder browser screen in pixels.
+          type: string
+        deviceLocalTimeZone:
+          description: Represents a unique code assigned by the firm for a geographical area that observes
+            a uniform standard time for legal, commercial, and social purposes.
+          type: string
+        browserUserAgent:
+          description: Exact content of the HTTP user-agent header. The field is limited to a maximum
+            of 2048 characters.
+          type: string
+        javaEnabled:
+          description: Indicates if the device's application software, used to communicate between users
+            of the Internet's World Wide Web, allows java.
+          type: boolean
+        javaScriptEnabled:
+          description: Indicates if the device's application software, used to communicate between users
+            of the Internet's World Wide Web, allows javascript.
+          type: boolean
+        challengeWindowSize:
+          description: Provides the dimensions of the challenge window in pixels that has been displayed
+            to the consumer. The Acces Control Server (ACS) shall reply with content that is formatted
+            to appropriately render in this window to provide the best possible user experience.
+          type: string
+        deviceIPAddress:
+          description: 'A unique string of numbers separated by periods that identifies each device using
+            the Internet Protocol (IP) to communicate over a network.  An IP address is assigned to every
+            single computer, printer, switch, router or any other device that is part of a TCP/IP-based
+            network which allows users to send and receive data. The numerals in an IP address are divided
+            into two parts:  1) The network part specifies which networks this address belongs to and
+            2) The host part further pinpoints the exact location. In this context, this is the IP address
+            of the devices associated with the transaction.'
+          type: string
+          example: 192.0.2.255
+    threeDSRequestorAuthenticationInfo:
+      description: Three DS Requestor Authentication Info
+      type: object
+      properties:
+        authenticationPurpose:
+          description: Codifies the purpose of the cardholder authentication request.
+          type: string
+          enum:
+          - PAYMENT_TRANSACTION
+          - RECURRING_TRANSACTION
+          - INSTALLMENT_TRANSACTION
+          - ADD_CARD
+          - MAINTAIN_CARD
+          - CARDHOLDER_VERIFICATION
+          - BILLING_AGREEMENT
+        threeDSChallengeType:
+          description: Indicates whether a challenge is requested for this transaction.
+          type: string
+          enum:
+          - NO_PREFERENCE
+          - NO_CHALLENGE
+          - CHALLENGE_REQUESTED
+          - CHALLENGE_MANDATE
+          - NO_CHALLENGE_TRA
+          - NO_CHALLENGE_DATA
+          - NO_CHALLENGE_DA
+          - NO_CHALLENGE_TRUSTED
+    currency:
+      description: Codifies the monetary unit that was associated with the financial transaction (such
+        as sale, returns, chargebacks etc.).
+      type: string
+      enum:
+      - USD
+      - EUR
+      - GBP
+      - AUD
+      - NZD
+      - SGD
+      - CAD
+      - JPY
+      - HKD
+      - KRW
+      - TWD
+      - MXN
+      - BRL
+      - DKK
+      - NOK
+      - ZAR
+      - SEK
+      - CHF
+      - CZK
+      - PLN
+      - TRY
+      - AFN
+      - ALL
+      - DZD
+      - AOA
+      - ARS
+      - AMD
+      - AWG
+      - AZN
+      - BSD
+      - BDT
+      - BBD
+      - BYN
+      - BZD
+      - BMD
+      - BOB
+      - BAM
+      - BWP
+      - BND
+      - BGN
+      - BIF
+      - BTN
+      - XOF
+      - XAF
+      - XPF
+      - KHR
+      - CVE
+      - KYD
+      - CLP
+      - CNY
+      - COP
+      - KMF
+      - CDF
+      - CRC
+      - HRK
+      - DJF
+      - DOP
+      - XCD
+      - EGP
+      - ETB
+      - FKP
+      - FJD
+      - GMD
+      - GEL
+      - GHS
+      - GIP
+      - GTQ
+      - GYD
+      - HTG
+      - HNL
+      - HUF
+      - ISK
+      - INR
+      - IDR
+      - ILS
+      - JMD
+      - KZT
+      - KES
+      - LAK
+      - LBP
+      - LSL
+      - LRD
+      - MOP
+      - MKD
+      - MGA
+      - MWK
+      - MYR
+      - MVR
+      - MRU
+      - MUR
+      - MDL
+      - MNT
+      - MAD
+      - MZN
+      - MMK
+      - NAD
+      - NPR
+      - ANG
+      - PGK
+      - NIO
+      - NGN
+      - PKR
+      - PAB
+      - PYG
+      - PEN
+      - PHP
+      - QAR
+      - RON
+      - RWF
+      - SHP
+      - WST
+      - STN
+      - SAR
+      - RSD
+      - SCR
+      - SLL
+      - SBD
+      - SOS
+      - LKR
+      - SRD
+      - SZL
+      - TJS
+      - TZS
+      - THB
+      - TOP
+      - TTD
+      - UGX
+      - UAH
+      - AED
+      - UYU
+      - UZS
+      - VUV
+      - VND
+      - YER
+      - ZMW
+      - RUB
+      - GNF
+      - VES
+      - XCG
+      - UNKNOWN
+    authenticationId:
+      description: A unique identifier for the card owner authentication provided by a global authentication
+        solution such as Three Domain Secure (3DS) designed to make eCommerce transactions more secure
+        and reduce fraud.
+      type: string
+    authenticationResult:
+      description: Cardholder Authentication Result from the Payment request.
+      type: object
+      readOnly: true
+      properties:
+        authenticationId:
+          $ref: '#/components/schemas/authenticationId'
+        authenticationOrchestrationUrl:
+          description: This is the URL a merchant will need to launch to support 3ds authentication.
+          type: string
+        authenticationReturnUrl:
+          description: Once authentication is complete this is the URL the customer will be sent to.
+          type: string
+    consumerUpdatedProfileResponse:
+      description: This is the response payload returned after an update operation.
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        consumerProfileId:
+          description: Identifies a unique occurrence of a consumer maintained in the firm as requested
+            by merchant. Consumer profile contains information relevant to processing transactions such
+            as name, address, account and payment methods information.
+          type: string
+          readOnly: true
+        cardOnFileReferenceNumber:
+          description: Identifies a cardholder account profile which allows cardholder data (including,
+            but not limited to, an account number or payment token) to be stored and subsequently used
+            for transaction processing.
+          type: string
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        communication:
+          $ref: '#/components/schemas/communication'
+        paymentMethodType:
+          $ref: '#/components/schemas/updatedPaymentMethodType'
+        addresses:
+          type: array
+          minItems: 0
+          description: This is used for specifying an attribute used on a model for collection object
+            that will contain one or more attributes
+          items:
+            $ref: '#/components/schemas/address'
+        correlationIdentifier:
+          description: A unique key produced by the initial entry of a customer by the originating source
+            system, that will provide a linkage between independent events. This will allow events from
+            multiple applications to be linked together to represent a single string of events or a customer
+            contact experience. This field should be considered generic (aka ability to use for document
+            event tracking) to allow correlation of events not specific to customer contacts. This is
+            unique per customer experience and should be passed between applications.
+          type: string
+        createTimestamp:
+          $ref: '#/components/schemas/createTimestamp'
+        createUserIdentifier:
+          $ref: '#/components/schemas/createUserIdentifier'
+        updateTimestamp:
+          $ref: '#/components/schemas/updateTimestamp'
+        updateUserIdentifier:
+          $ref: '#/components/schemas/updateUserIdentifier'
+        profileStatus:
+          $ref: '#/components/schemas/profileStatus'
+        consumerProfileUniqueId:
+          $ref: '#/components/schemas/consumerProfileUniqueId'
+        merchant:
+          $ref: '#/components/schemas/merchant'
+        orderOverrideCode:
+          $ref: '#/components/schemas/orderOverrideCode'
+        fullName:
+          $ref: '#/components/schemas/fullName'
+    updatedCard:
+      description: Updated card information
+      type: object
+      properties:
+        cardExpirationMonthYearNumber:
+          $ref: '#/components/schemas/cardExpirationMonthYearNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        accountStatus:
+          $ref: '#/components/schemas/accountStatus'
+        cardType:
+          $ref: '#/components/schemas/cardType'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+        last4CardNumber:
+          $ref: '#/components/schemas/last4CardNumber'
+        first6CardNumber:
+          $ref: '#/components/schemas/first6CardNumber'
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        authenticationRequest:
+          $ref: '#/components/schemas/authenticationRequest'
+        threeDSAuthenticatedData:
+          $ref: '#/components/schemas/threeDSAuthenticatedData'
+        billerDebitCardReferenceNumber:
+          $ref: '#/components/schemas/billerDebitCardReferenceNumber'
+        isBillPayment:
+          $ref: '#/components/schemas/isBillPayment'
+        profileCardSourceName:
+          $ref: '#/components/schemas/profileCardSourceName'
+        currency:
+          $ref: '#/components/schemas/currency'
+        consumerPreferredPaymentNetwork:
+          $ref: '#/components/schemas/consumerPreferredPaymentNetwork'
+        cardBadgeType:
+          $ref: '#/components/schemas/cardBadgeType'
+    updatedPaymentMethodType:
+      description: Updated Payment Method Type
+      type: object
+      properties:
+        cardList:
+          type: array
+          minItems: 0
+          description: List of card payment methods
+          items:
+            $ref: '#/components/schemas/updatedCard'
+        sepaList:
+          type: array
+          minItems: 0
+          description: List of SEPA payment methods
+          items:
+            $ref: '#/components/schemas/sepa'
+        achList:
+          type: array
+          minItems: 0
+          description: List of ACH payment methods
+          items:
+            $ref: '#/components/schemas/ach'
+        bacsList:
+          type: array
+          minItems: 0
+          description: List of ACH payment methods
+          items:
+            $ref: '#/components/schemas/bacs'
+        defaultMOP:
+          $ref: '#/components/schemas/updatedDefaultMOP'
+    updatedDefaultMOP:
+      description: Updated Default MOP information
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/updatedCard'
+        sepa:
+          $ref: '#/components/schemas/sepa'
+        ach:
+          $ref: '#/components/schemas/ach'
+        bacs:
+          $ref: '#/components/schemas/bacs'
+    externalConsumerProfileIdentifier:
+      description: 'Identifies a unique occurrence of a consumer maintained by the merchant or a vendor.
+        Consumer profile contains information relevant to processing transactions such as name, address,
+        account and payment methods information.Alpha characters are always stored in UPPERCASE. The valid
+        characters include: • abcdefghijklmnopqrstuvwxyz • ABCDEFGHIJKLMNOPQRSTUVWXYZ • 0123456789 • -
+        , $ @ &amp;  and a space character Notes: • A space character cannot be the leading character.
+        • An ampersand must be sent as &amp; • Double ampersands (&amp;&amp;) are not supported.'
+      type: string
+      maxLength: 36
+      writeOnly: true
+    bacs:
+      description: Object for BACS (Bankers' Automated Clearing System) is an electronic system payment
+        method make payments directly from one bank account to another. This payment method mostly used
+        in UK.
+      type: object
+      required:
+      - accountNumber
+      - bankSortCode
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        bankSortCode:
+          description: Identifies the routing and transit number assigned by an administrative body to
+            formally identify a chartered financial institution (bank) within a given country or common
+            financial market for performing domestic transfers of funds to or from that institution's
+            client accounts. Within the United States, this is known as the American Bankers Association
+            Routing Number, and within Australia, this is known as a Bank State Branch Number. This common
+            data element will house those two examples, along with the equivalent for any other country
+            or financial market.
+          type: string
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        accountStatus:
+          $ref: '#/components/schemas/accountStatus'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    profileBacs:
+      description: Object for BACS (Bankers' Automated Clearing System) is an electronic system payment
+        method make payments directly from one bank account to another. This payment method mostly used
+        in UK.
+      type: object
+      required:
+      - accountNumber
+      - bankSortCode
+      properties:
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        bankSortCode:
+          description: Identifies the routing and transit number assigned by an administrative body to
+            formally identify a chartered financial institution (bank) within a given country or common
+            financial market for performing domestic transfers of funds to or from that institution's
+            client accounts. Within the United States, this is known as the American Bankers Association
+            Routing Number, and within Australia, this is known as a Bank State Branch Number. This common
+            data element will house those two examples, along with the equivalent for any other country
+            or financial market.
+          type: string
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+    updateBacs:
+      description: Update BACS information
+      type: object
+      properties:
+        accountStatus:
+          description: Codifies the current status of the card.
+          type: string
+          example: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    requestId:
+      description: Unique request identifier to track the request through application programming interface(API)
+        .
+      type: string
+    softMerchant:
+      description: Soft merchant information is passed to the card association along with the transaction.
+        This soft merchant information may also be used for cases where smaller businesses or franchise
+        outlets are making a sale in which a merchant aggregator or payment facilitatorprocesses the payment
+        transaction on their behalf.
+      type: object
+      properties:
+        name:
+          description: Name of merchant recognizable to account holder intended to be used in the event
+            where the merchant of record is a payment facilitator.
+          type: string
+        city:
+          description: Soft Merchant city name
+          type: string
+        telephone:
+          description: Soft Merchant phone number
+          type: string
+        url:
+          description: Soft merchant URL
+          type: string
+        email:
+          description: Soft merchant email address
+          type: string
+        productDescription:
+          description: Provides textual information supplied by the Primary Applicant on the Merchant
+            Services Application that describes the products or services that the current or prospective
+            client business organization provides to its customers. 
+          type: string
+    billerDebitCardReferenceNumber:
+      description: The Firm identifier assigned to a debit card number at the instantiation of the debit
+        card number that persists over time as the debit card number changes through the lost/stolen/fraud
+        process. It links replacement debit card numbers with the originally assigned card number.
+      type: string
+    fullName:
+      description: Name of accoundholder business name.
+      type: string
+      pattern: '[\p{L}\p{P}0-9'' ]*$'
+      maxLength: 70
+    orderOverrideCode:
+      description: Codifies the option merchant has chosen to perform a non-systemic override on a payment
+        order.
+      type: string
+      enum:
+      - NO_MAPPING
+      - CONSUMER_REFNUM_ORDERID
+      - CONSUMER_REFNUM_COMMENTS
+      - CONSUMER_REFNUM_ORDERID_COMMENTS
+    isBillPayment:
+      description: Indicates whether or not the transaction is identified by Visa as a bill payment, prearranged
+        between the cardholder and the merchant.
+      type: boolean
+    verificationResult:
+      description: card verification  Result
+      type: object
+      readOnly: true
+      properties:
+        transactionDate:
+          description: Designates the hour, minute, seconds and date (if timestamp) or year, month, and
+            date (if date) when the transaction (monetary or non-monetary) occurred.
+          type: string
+        transactionId:
+          description: Identifies a unique occurrence of a transaction.
+          type: string
+        messages:
+          $ref: '#/components/schemas/messages'
+    accountNumberType:
+      description: Specifies the type of payment method used by the account number in payment transaction.
+      type: string
+      default: PAN
+      enum:
+      - PAN
+      - NETWORK_TOKEN
+      - DEVICE_TOKEN
+      writeOnly: true
+    bulkImportFileStatusResponse:
+      description: This is used for specifying an attribute used on a model for object that will contain
+        one or more attributes
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        merchantFileName:
+          $ref: '#/components/schemas/merchantFileName'
+        submitterIdentifier:
+          $ref: '#/components/schemas/submitterIdentifier'
+        totalRecordCount:
+          description: This is used for specifiying the count of the total records in the Bulk Import
+            File.
+          type: integer
+          format: int64
+        processedRecordCount:
+          description: This is used for specifiying the count of the processed records out of the total
+            records  in the Bulk Import File.
+          type: integer
+          format: int64
+        erroredRecordCount:
+          description: This is used for specifiying the count of the errored records out of the total
+            records in the Bulk Import File.
+          type: integer
+          format: int64
+        fileReceivedTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the bulk import
+            File received from submitter.
+          type: string
+        finalResponseTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the bulk import
+            final response file sent to Submitter.
+          type: string
+        ackResponseTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the acknowledgment
+            response file sent to submitter.
+          type: string
+        errorResponseTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the error response
+            file sent to submitter.
+          type: string
+        fileFormat:
+          description: This is used for specifiying Format of the Bulk Import File.
+          type: string
+          enum:
+          - COLUMN_BASED
+          - JSON
+        fileVersion:
+          description: This is used for specifiying Version of the Bulk Import File.
+          type: string
+        overallFileStatusDescription:
+          description: Specifies the Overall Status description of the Bulk Import File process
+          type: string
+        fileProcessCompletionPercent:
+          description: Specifies the percentage of the progress of Bulk Import file process.
+          type: string
+        bulkTokenizationStatus:
+          $ref: '#/components/schemas/bulkTokenizationStatus'
+        signedUrl:
+          description: A Signed URL is a temporary, time-limited link that grants temporary access to
+            a private object, allowing users to perform specific actions to download a file without needing
+            AWS credentials or permissions
+          type: string
+        overallFileStatus:
+          $ref: '#/components/schemas/overallFileStatus'
+        templateType:
+          $ref: '#/components/schemas/templateType'
+    merchantFileName:
+      description: This is used for specifying FileName of the Bulk Import File.
+      type: string
+      example: M123456789_TransactionData.csv
+    bulkTokenizationStatus:
+      description: Contains information related to the Tokenization status for the Bulk Import file.
+      type: object
+      properties:
+        toknRequestFilesExpectedCount:
+          description: This is used for specifiying the count of the expected token request files for
+            the bulk import file.
+          type: integer
+          format: int64
+        toknRequestFilesCreatedCount:
+          description: This is used for specifiying the count of the created token request files for the
+            bulk import file.
+          type: integer
+          format: int64
+        toknResponseFilesReceivedCount:
+          description: This is used for specifiying the count of the received token response files for
+            the bulk import file.
+          type: integer
+          format: int64
+        toknRequestFilesSentPercent:
+          description: This is used for specifiying the percentage of the token files sent for bulk import
+            file.
+          type: string
+        toknResponseFilesReceivedPercent:
+          description: This is used for specifiying the percentage of the token files received for bulk
+            import file.
+          type: string
+    submitterIdentifier:
+      description: This is used for specifying Submitter Id of the Bulk Import File.
+      type: string
+      example: SUBMITTER001
+    profileCardSourceName:
+      description: 'profileCardSourceName (string, optional): This attribute is to inform if the card
+        is converted card from safetech token or Apple Pay token or network token. ["SAFETECH_TOKEN"]'
+      type: string
+      enum:
+      - SAFETECH_TOKEN
+    merchantId:
+      description: Identifies a unique entity for transaction processing at the lowest level of the account
+        hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes
+        transaction types for submission, funding, and reporting.
+      type: string
+    paze:
+      description: Use is for encrypted bundles for web or Internet acceptance of digital device wallets
+        PAZE
+      type: object
+      properties:
+        encryptedPaymentBundle:
+          $ref: '#/components/schemas/encryptedPaymentBundle'
+    applepay:
+      description: Use is for encrypted bundles for web or Internet acceptance of digital device wallets
+        such as Apple Pay
+      type: object
+      properties:
+        latLong:
+          $ref: '#/components/schemas/latLong'
+        encryptedPaymentBundle:
+          $ref: '#/components/schemas/encryptedPaymentBundle'
+    googlepay:
+      description: Use is for encrypted bundles for web or Internet acceptance of digital device wallets
+        such as Google Pay
+      type: object
+      properties:
+        latLong:
+          $ref: '#/components/schemas/latLong'
+        encryptedPaymentBundle:
+          $ref: '#/components/schemas/encryptedPaymentBundle'
+    latLong:
+      description: 'Identifies the latitude and longitude coordinates of the digital device when it is
+        being provisioned. Information is expressed in the order of latitude followed by longitude. Valid
+        Range: Latitude is greater than or equal to -90.00000 and less than or equal to 90.00000. Longitude
+        is greater than or equal to -180.00000 and less than or equal to 180.00000.'
+      type: string
+      minLength: 3
+      maxLength: 21
+      example: 1,1
+    encryptedPaymentBundle:
+      description: Encrypted Data for digital payment methods such as ApplePay, GooglePay and Paze.
+      type: object
+      writeOnly: true
+      properties:
+        encryptedPaymentHeader:
+          $ref: '#/components/schemas/encryptedPaymentHeader'
+        protocolVersion:
+          description: Identifies encrypted bundle protocol version as defined by wallet.
+          type: string
+        signature:
+          description: This is the virtual signature data of the payment and header data. The signature
+            information let the receiver know that the data is indeed sent by the sender. The signature
+            is created using sender's key pair.
+          type: string
+        encryptedPayload:
+          $ref: '#/components/schemas/encryptedPayload'
+    encryptedPaymentHeader:
+      description: Header information used on digital payment methods such as ApplePay, GooglePay and
+        Paze in the Encrypted format.
+      type: object
+      properties:
+        ephemeralPublicKey:
+          description: Provides textual information about a cipher key for exchanging data via an associated
+            string or byte image. This is a public key generated by the merchant and shared with Firm.
+            In this context, this key is called ephemeral for its short life span.
+          type: string
+        publicKeyHash:
+          description: This is the hash output using a hash function for the Ephemeral Public Key.
+          type: string
+          example: MUwkjyUBpyRiZTVMUrIzA6+SIrr9mV8nNct6YO0rGNg=
+        walletTransactionId:
+          description: Identifies a unique occurrence of a transaction.
+          type: string
+        walletApplicationData:
+          description: Contain the data provided by merchant to the wallet provider.
+          type: string
+    profileGooglepay:
+      description: Use is for encrypted bundles for web or Internet acceptance of digital device wallets
+        such as Google Pay
+      type: object
+      properties:
+        latLong:
+          $ref: '#/components/schemas/latLong'
+        encryptedPaymentBundle:
+          $ref: '#/components/schemas/encryptedPaymentBundle'
+    encryptedPayload:
+      description: Encrypted message details have been rendered unreadable by general means through the
+        application of a given set of instructions and a key.
+      type: string
+      example: IzxSm6YWehmlLvk5HY/rsl4hhWuorOG7R6ERP0fqzTokMhS5JtyAU8ajPIu/aHcbOxYQOhvk/K+3n6N7SbEKgSuT100YFmeIKh3IkSLa4u1/1Y4Z9y5bqZFPxd8IcQnuR8HZKgJDHCXQzDDYP4JBMtqZQzRztzsIfa4eoOnGuZCc2s+WxGap4iv92vPj8tAHonvSE9t0ByUCBLgfvu25GR0eJb6UM8nBvxP2/qBSElOuyLo80enrZ6tlp3xtpBEV8oeOc9iLSmalayfD7JQxZXd2cWA/sZPWn4VGIj7Dt05NYE/iFZrw2VOa2hOJ4/4dOGS1KJzhw+RPRufhadAF96k7O3LwbMphcM9sZLN/Y/LSqVFGzIq6ZlrnOwcxzvjNqw4ccNl4v3eehL4TRRgfF3LirV56BeADzJmq0pB3W/vu
+    profileApplepay:
+      description: This is used for specifying an attribute used on a model for object that will contain
+        one or more attributes
+      type: object
+      properties:
+        latLong:
+          $ref: '#/components/schemas/latLong'
+        encryptedPaymentBundle:
+          $ref: '#/components/schemas/encryptedPaymentBundle'
+    profilePaze:
+      description: This is used for specifying an attribute used on a model for object that will contain
+        one or more attributes
+      type: object
+      properties:
+        encryptedPaymentBundle:
+          $ref: '#/components/schemas/encryptedPaymentBundle'
+    bulkImportFileStatusListResponse:
+      description: This is used for specifying an attribute used on a model for object that will contain
+        one or more attributes
+      type: object
+      properties:
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        bulkImportFileStatusInfoList:
+          type: array
+          minItems: 0
+          description: This is used for specifying an attribute used on a model for collection object
+            that will contain one or more attributes
+          items:
+            $ref: '#/components/schemas/bulkImportFileStatusInfo'
+    pageNumber:
+      description: THE DOMAIN ASSIGNED TO THIS ATTRIBUTE IS A MID-LEVEL INHERITANCE DOMAIN NOT INTENDED
+        TO BE ASSIGNED TO AN ATTRIBUTE.  IF THIS ELEMENT IS A CRITICAL DATA ELEMENT, YOU CAN EITHER USE
+        OR DEFINE A DOMAIN FOR THE SPECIFIC CDE OR USE A "CLASSWORD" DOMAIN AND MANUALLY APPLY THE CORRECT
+        METADATA FOR THE CDE (BUSINESS TERM, DEFINITION, DATATYPE, AND UDPS).
+      type: string
+      default: '1'
+    bulkImportFileStatusInfo:
+      description: This is used for specifying an attribute used on a model for object that will contain
+        one or more attributes
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        merchantFileName:
+          $ref: '#/components/schemas/merchantFileName'
+        submitterIdentifier:
+          $ref: '#/components/schemas/submitterIdentifier'
+        processedRecordCount:
+          description: This is used for specifiying the count of the processed records out of the total
+            records  in the Bulk Import File.
+          type: integer
+        erroredRecordCount:
+          description: This is used for specifiying the count of the errored records out of the total
+            records in the Bulk Import File.
+          type: integer
+        totalRecordCount:
+          description: This is used for specifiying the count of the total records in the Bulk Import
+            File.
+          type: integer
+        fileReceivedTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the bulk import
+            File received from submitter.
+          type: string
+        finalResponseTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the bulk import
+            final response file sent to Submitter.
+          type: string
+        ackResponseTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the acknowledgment
+            response file sent to submitter.
+          type: string
+        errorResponseTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the error response
+            file sent to submitter.
+          type: string
+        fileFormat:
+          description: This is used for specifiying Format of the Bulk Import File.
+          type: string
+          enum:
+          - COLUMN_BASED
+          - JSON
+        fileVersion:
+          description: This is used for specifiying Version of the Bulk Import File.
+          type: string
+        overallFileStatusDescription:
+          description: Specifies the Overall Status description of the Bulk Import File process
+          type: string
+        fileProcessCompletionPercent:
+          description: Specifies the percentage of the progress of Bulk Import file process.
+          type: string
+        signedUrl:
+          description: A Signed URL is a temporary, time-limited link that grants temporary access to
+            a private object, allowing users to perform specific actions to download a file without needing
+            AWS credentials or permissions
+          type: string
+        overallFileStatus:
+          $ref: '#/components/schemas/overallFileStatus'
+        templateType:
+          $ref: '#/components/schemas/templateType'
+    pageSize:
+      description: The number of records to be returned per page.This is used in API requests to specify
+        how many records should be included in each page of results.Sample values are 10,20,40
+      type: integer
+      format: int64
+      default: 20
+      example: 20
+    signedUrl:
+      description: A reference to a web resource on the internet specifying its location on a computer
+        network and a mechanism for retrieving.
+      type: string
+    overallFileStatus:
+      description: Codifies the state of processing a file.
+      type: string
+      enum:
+      - FILE_RECEIVED
+      - FILE_PROCESSING_COMPLETED
+      - FILE_REJECTED
+      - FILE_PROCESSING
+      - FILE_UPLOADED
+    consumerPreferredPaymentNetwork:
+      description: The consumer’s chosen card network to route eligible transactions when multiple networks
+        are available. Valid Values are VI,MC, CB
+      type: string
+      enum:
+      - VI
+      - MC
+      - CB
+    templateType:
+      description: Description type of template that is being processed
+      type: string
+    cardBadgeType:
+      description: 'Codifies the type of card that operate on single payment network or co-badge (more
+        than one network) .Valid values : CO_BADGED or MONO_BADGED'
+      type: string
+      enum:
+      - CO_BADGED
+      - MONO_BADGED
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - NEED_INPUT
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - NEED_INPUT

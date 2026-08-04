@@ -1,0 +1,63 @@
+# Idempotency convention DERIVED from IdempotencyKey parameters declared in the
+# harvested OpenAPI definitions. Not a claim beyond what the contracts declare.
+generated: '2026-07-28'
+method: derived
+source: openapi/*.yml
+specification: API Commons Conventions
+specificationVersion: '0.1'
+provider: JPMorgan Chase
+providerId: jp-morgan-chase
+convention: Idempotency
+specs_declaring_idempotency: 6
+of_specs: 26
+specs:
+- spec: jp-morgan-chase-account-information-services-openapi.yml
+  api: Account Information Services
+  tokens:
+  - Idempotency-Key
+  - IdempotencyKey
+  parameter_definitions:
+  - IdempotencyKey
+  header: Idempotency-Key
+- spec: jp-morgan-chase-digital-onboarding-api-openapi.yml
+  api: Digital Onboarding API
+  tokens:
+  - Idempotency Key
+  - Idempotency-Key
+  - IdempotencyKey
+  parameter_definitions:
+  - IdempotencyKey
+  header: Idempotency-Key
+- spec: jp-morgan-chase-global-payments-openapi.yml
+  api: Global Payments
+  tokens:
+  - Idempotency Key
+  - Idempotency-Key
+  - IdempotencyKey
+  parameter_definitions:
+  - IdempotencyKey
+  header: Idempotency-Key
+- spec: jp-morgan-chase-notifications-api-openapi.yml
+  api: Notifications API
+  tokens:
+  - IdempotencyKey
+  parameter_definitions: []
+  header: null
+- spec: jp-morgan-chase-payment-initiation-service-openapi.yml
+  api: Payment Initiation Service
+  tokens:
+  - Idempotency Key
+  - Idempotency-Key
+  - IdempotencyKey
+  parameter_definitions:
+  - IdempotencyKey
+  header: Idempotency-Key
+- spec: jp-morgan-chase-request-to-pay-via-qr-code-api-openapi.yml
+  api: Request to Pay via QR Code API
+  tokens:
+  - Idempotency Key
+  - Idempotency-Key
+  - IdempotencyKey
+  parameter_definitions:
+  - IdempotencyKey
+  header: Idempotency-Key

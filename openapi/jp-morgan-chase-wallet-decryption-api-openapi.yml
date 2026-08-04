@@ -1,0 +1,624 @@
+# Harvested verbatim from the J.P. Morgan Payments Developer Portal.
+# method: searched
+# source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fwallet-decryption%2Fwallet-decryption-oas.md
+# generated: '2026-07-28'
+openapi: 3.0.1
+info:
+  title: Wallet Decryption API
+  description: The Wallet Decryption API decrypts the Apple Pay, Google Pay, and Paze wallet encrypted
+    payment bundles to obtain network tokens, cryptograms, electronic commerce indicators (ECIs), and
+    other payment instrument data.
+  version: 2.4.2
+  contact:
+    name: Online Payments API Support
+    url: https://developer.payments.jpmorgan.com/contact/support
+servers:
+- url: https://api-ms.payments.jpmorgan.com/api/v2
+  description: PRODUCTION - OAUTH
+- url: https://cat-api.merchant.jpmorgan.com/api/v2
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/api/v2
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Transactions
+  description: Initiating and processing a payment
+- name: Health Check
+  description: Check if a particular service is available
+paths:
+  /healthcheck:
+    get:
+      summary: Validate the health of the service.
+      security: []
+      operationId: v1GetHealth
+      tags:
+      - Health Check
+      description: Healthcheck endpoint to validate the health of the service.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/healthCheckResource'
+              examples:
+                Success:
+                  value:
+                    status: PASS
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/healthCheckResource'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/healthCheckResource'
+  /wallet-decryptions:
+    post:
+      summary: Decrypt a Paze, Google Pay, or Apple Pay encrypted wallet bundle
+      tags:
+      - Transactions
+      description: Returns the payment information from an encrypted wallet
+      parameters:
+      - name: request-id
+        in: header
+        schema:
+          type: string
+          maxLength: 40
+        description: Merchant identifier for the request. The value must be unique.
+        examples:
+          Paze Visa:
+            value: b57b4b67-0642-4bf0-ab5f-c4bd48e9c418
+          Apple Visa:
+            value: 63d18f79-2495-4bc2-b4f2-8c5bdb42d70e
+          Google Visa:
+            value: 2a0d1f35-b977-4769-8fcc-abe7cb5c602b
+          Paze Mastercard:
+            value: 5ea10587-ce36-4904-9e60-7117d1f91405
+          Apple Mastercard:
+            value: ec64a37e-e546-4913-8647-f302b2cd6d40
+          Apple MPAN:
+            value: 97d85c9f-8196-542d-bbbe-6f4447052dbc
+          Apple MultiToken:
+            value: 96d74c8f-9195-432d-bbbe-5f3337052dbc
+          Masked Apple First Six Last Four:
+            value: 5e4459f1-7b96-47ca-ab9b-5c15a32e2319
+          Masked PAZE Last Four:
+            value: 457c33ec-1391-4cff-972b-1d9150495428
+          Paze Mastercard Purchase and Card on file:
+            value: bdc4251f-7e9e-478e-b39f-3e34d7e893fd
+      - name: merchant-id
+        in: header
+        schema:
+          type: string
+          example: '991234567890'
+          minLength: 8
+          maxLength: 12
+        description: Identifier for the merchant account
+        examples:
+          Paze Visa:
+            value: '998482157632'
+          Apple Visa:
+            value: '998482157633'
+          Google Visa:
+            value: '998482157634'
+          Paze Mastercard:
+            value: '998482157635'
+          Apple Mastercard:
+            value: '998482157636'
+          Apple MPAN:
+            value: '998482157637'
+          Apple MultiToken:
+            value: '998482157638'
+          Masked Apple First Six Last Four:
+            value: '998482157639'
+          Masked PAZE Last Four:
+            value: '998482157640'
+          Paze Mastercard Purchase and Card on file:
+            value: '998482157651'
+      requestBody:
+        description: Wallet decryption request information
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/walletRequest'
+            examples:
+              Paze Visa:
+                value:
+                  encryptedPayloadText: eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTtYWRkMy0yZDEwOTQ2NDc4NWMiLCJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5kaWdpdGFsd2FsbGV0LmVhcmx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTIzNjczMjEsImlhdCI6MTY5MjE5NDUyMSwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdDQkVERjM4MDBhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIifQ.eyJwYXlsb2FkSWQiOiJhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIiLCJzZXNzaW9uSWQiOiJsbGRzdTVxb3Rjd291Y3VuaGciLCJzZWN1cmVkUGF5bG9hZCI6ImV5SmhkV1FpT2lKbWFXeGxPbHd2WEM4aUxDSnJhV1FpT2lKamFHRnpaUzF3WVhwbExVWTRkWFVyUm5GeVVtSlBVRUkzVVc4MlRuTXlZMlpXUVZOWlVVbHVNamRUVlVSa2IwMW9aMFJQTmxrOUlpd2lhWE56SWpvaWFIUjBjSE02WEM5Y0wzTmhibVJpYjNndVpHbG5hWFJoYkhkaGJHeGxkQzVsWVhKc2VYZGhjbTVwYm1jdVkyOXRJaXdpWTNSNUlqb2lTbGRVSWl3aWRIbHdJam9pU2xkVUlpd2laVzVqSWpvaVFUSTFOa2REVFNJc0ltVjRjQ0k2TVRZNU1qTTJOek15TVN3aWFXRjBJam94TmpreU1UazBOVEl4TENKaGJHY2lPaUpTVTBFdFQwRkZVQzB5TlRZaUxDSnFkR2tpT2lKaE1UWmlOR1poT1MwMk4ySTBMV0ZsTW1NdFpUTTVaUzB4TWprMlltRTFORFZrTURJaWZRLlBHOTBXR1M2Yy1vY2FnVUp0S2w2dEw0NW5SX2tHTmptZUVtXzZ4LUdDaURGWEpucVNWYzIzT3I2VTNvVG5YSFNIN2NMZ1Z1X0dfbGVWQzRSMTZmOEZmazVpSG9kai1wY3lwdXBaLWpXU0w1eHFBSk5Gc04tZkVwSTJJajhUR0lNVjhzNHNKQlBOYVd6cGxJRUJkUFZrZmdmdllBQlJtZ0pPaHlyQ2Q4UmE2ZFN2cUhDOU81bkZ6bndHa3c1TE14elBXWXlJQTNJdlZBUGRJOHR4cGZaaXBfZHBwVEloM0h3S0UxRlg2Y2pPa252dGhQVjRLZGVBSlh3MDRiNGdRZUV1LWp3QWtSYk4waDRwLXZ5c2wyVUxoNTVlaXMwcnhhaHJQdFc0ZEpPUG9qVlhDRWRmRnM3MlRRUmFhc1dUYTFqcUlEMzAtdG9fWTBWRFBkaVJTeTNGZy5UMHozemdsQVpTandoVHBSLlJWODN3OUF4Q19LSGVkYVBjalBtSEZ6UDl6UWhuR1hsVlVrOTZyaDN3SFJJdDZ3TDgyM1lhNzVtSEJOYl8wVXVMcVRvbHJrTGNhSXk1MDFrV2NkMjJLYno5WXc2T0k1MkJlZ3pYYUNoVXNVM0hDYmYza2ZqZGl3Sk1lVXh3ZnZqdWZybnZjM2xRVVlGNEhTSXpFVmNsNTQwTk01T3dYSHZJYzRVT3hldVE5Z3lUbTFWejV5VnpzQ21sU2QxNjE4aUFoTUlfSDJlLXFVd3h6OHNESEJZSE9Ddms0WkRBal9UcjItcmJjbGZpOHl3SlhxRWIwZ1BnUkt0QjlrLVpONm4wS3BOR0MzZ0lSLXZRY09wMnZDNDc3d3NaWmNCVGdWRWNfRlNVS3BQNXMwU3VBaGVac1ZIa0MxTnJVNzhEVTRtYnl2dFhrWko4UExPejdYTl9uWWE0bFNIa0Q2Q3NKd2lZS1V3SlhmX1R4SWJhWTl6dGplN0hXM0l1SkpxcHd1dGtYeWRaaEk3VjFMdms0UXhlSnVhNk1mbEtnay1LZ0Y0RnR5MUo3Y0h6SFlPMld6bGluOVlWRVVNdThPaFRGV3FBVjNOWXdxTnBwT0ZIekxjZHU4WmZMcS1wc0VLY3c5cjVxY2F0QWRUUkQxZEhlQnVySFFoMmlfS0hDbktkM0hfOHJOVG0zQVpNQUJiYzV6ZjB1SWlNYjREZEdQSUxrUmdiWlBGQUh4cVdfMGVWS3NiYU1JdXViUnFLSTd5S212SmRvSjk3MlE5bFJHMmVvckF2YkdSb2VBNmtmYmpMaEl5S1ZqOVpxS1FTdWtIdU9KRV9LeFJ6VmRFeERpdkpGS3VHTkFCQ3BKTkhDaTl6ck1JZk5Qck1lZ25qLVNYVTU1WHp1eWE0TzZMaTB3TDRKSXZuZHNwTTI5THFGYTktRW5PR3lRblN5djdZWDNPRHRwazNxcGIwN1liQTJtaEoxR05jV0pOTWEta2dhckRsZGlWSmd4Qi16Z2RMaGFPVlZVRHhMa0FaRUFmMXdXZmFmQmhPSjV3U0REanVfSjhZMVU2V0kxVUdjVmY3MDBPVEtHRmMzR1Yxa3RKN2xMbjA1dUVJVWdHeEJidVJ0SExsU0NJLVMzVDJkLUllYjlJeS16SHdETWpOLXFRUno4U2ZVRFZFend5QjA4eTMwRUlFWF9LaUZ0U3MtZ3RWY2MtOElKOVZ5ZXd4TW5wcUlpejRzS29WS0kxNmpnZDZKTUpHdFRVbFFSWTROVzNiWDBmbU1nczJLLUtKWHB1VUpzM3RxZGJWaEp3cU13cVVLdHh4MFRkeGdWa3FRVWtaNlAyZ1BQUGd1VTZ4dHNGeTFaY2dnZWpwdU9GUkxkVE5FN1d1V3FGSzYzUjRPMTZ6bjZWeGtrZElIV0tsWFlCNHJuMTJtQTFvRjNiR0ZIb21OclMzQ1ltbW92a2ZIcnpCdWEteFdfb3V0dk9BTkNCQmlHdTNoSUQzZV9QdWd3OXZCXzlkdm4wOW1scHktVzJQNGVQSXdBSGY3SWNBcE5yVUNYS3dmYlNqRTdSU0ZwVEhnYkFQb0hlQ211OFhNOFp1c1R1VGR6bGVKVFFLc0tYcWtha2E0NDZjUi1QMEQtWFZ5QzRKc0NWR1FJVmVPd0h6eklOZXVaVERpZHJjV2NlbEJQYWp5X0QzbnVsVTVUWHhuYzhpeEE1d2JuM0lxRjdVTzEtV0tFRTBQeTVfVlpnRGhncEZyM3ZWVE5GXzBWUVJOZjY2cV80eXZmUmNyYTlSMnZ0N3lFTHd2WlNDYWpOV0N3eUJPekkta1hRR3QySUFJRnduWjMzellpamwwMjJsQ3Z5V0pEVTBKMXFjajE0V29XTEF6X2t3QjVCcnhUbjluS0hGaXRsNlVJUDIwc184eTBlWlZEU1JyZnA1bi1JMWJYLUJwWUVKeWs4X0UwQkg3U0p6V3J2V0NnM0hSY1FKaHk2ZlJPTlQ2Ujg5bW4zNjB4UkxTcHhQdGZkUjVSVFRXZGdCelpOUDhSSUxoVm5SQVZOQXJOSzZHZ0l2UmpLd0dlMEVhenB0M0Q3d2pEVjVtdXJqaXBoMC1VYVlraDFrTW9jbTlYOWdXZ3VIbkdRWDFDUUVKV0poN09BcEFrdWljZnpEbDRZOFo4a25oVG5XbFZDdlBJdlN3bWthZnpsX2RiMDJvTzNqSm5NOHR5Qks4WHRHUFI4RUtkX0Nta2Itdmc5MzZTRDBWc2pZdnFqNEFLVWdqUDlnVFpmWWM1UlBqNTJIdm83SWpQWG1qQldISm1LbE1lX0Rib1FKNUM5Xy13bHpmYTlCTmd1elBYWG1KbkE4cmFyR0RyeUU3YlNFRG5UMVZBNXlCUFQ5S3JYVlJLN3JMeHZNckRuVG42X0w2RXBDQnVCTk5IRVhUUm5XTUsxdWtNMG5XMUFkN2gyR0FDRE5jWHAwUW5SR1J3Y3RlbmxnVmJhWG9YN29OSktTMTh6WUlqUlhEaXBQTGRxYWpOQUtjbHhtZ1lhM1ZZZnhwZEllbERTbHg3MmFrZVYyb1o4dnctNUxNUE9JNXgyb2lRcmdaNmhxSklHU0IzNU1kQ2pBdkQ1dEd3d0FDenN6WGZ1MTU0TUhJRkstWm41YmNOUEFlc2gtbVhlaEJqSndZeFl3eVdWTjc1bkVQYnI0SVBMNVN0M2trbGFyQUl2cTFHUDdFRG5vSTJyT040UjRiU1ZxWkN3czBXRXdEMFVKSVpzYnRXZENkZzJvZlhjbG5KZ0JzbE8xdGFyMmEzdEp0MlMzTXJQc0FsVTY5V0NJUG91TXpTTlh4RmNnLUxaTjk0Z05YOVhUb2ZJSEhhbDlqdXNwdXhodlRrYTJZOVlJeC1rc2lnNGZYOFFZamZtLlpPNnNkTzJTSHlQdkdFdnA5eGJBWmcifQ.K8EAidhF0cOG_N1HcvmvYyeCHIcsmVB6ACDMxVnnZqIGlusl0ixHnOitap6lfkKAg080WYAzi4Fc2cyU2uDm23L_TiH2mS0CYaCRFvid_1p8SUmtkEkfEgVGLy-dNrYKOuzE9t6d0sfYI8a71OgYg5N9Ef2BMNAtz1kTloS83rAhIhWxNbIUE7OZn7dHir8Yh1dKvk0cYngi8P1t6AvTc6MTR8US-L8mzgjxODqVWnBjW7xGjxnUQatsBuZj-jz9w26OqHkz72182defw6
+                  walletProvider: PAZE
+              Apple Visa:
+                value:
+                  encryptedPayloadText: gS+esjhUKWbHkKgPa7ON+zeAUBgmTbxw1gdHC6wKITPeGb+65dnTVTm/XKAIp/9U3yUB36heoZbVzQYTUrE0CJ/k06K1O/ugzv1vKduuIAjEsAR0HdVpTOxw3Fnt6k7vCIFeUcBzClg5YkQWPc7gki/b9YT+d62PUSScWhcGDaMOiiwjADMSx1O4vO0Fh1BYr0vkIRiSlY8+dpEeQBcZz9VCX9OKLilxAJMW2QAD69EGdOg5nE+m+/zt/umXpoAxisuIdG2uUUXtSIhDWDoOn8wA7rZv+rUpoyaxxgTkMsuS8OtV6tXG/2dlJvIlA8W6cbebJ94cGEtBaJYwasgsnN8WT6czPenYnbvS0ep8A==
+                  publicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE6b5UW4sjimNkya86fxLYj07+7YmJbekeDzJTmRheg0DvFmHLDqAkp45rDHhjZlYHuoBO9fJI6fyw6i/4W3104g==
+                  version: EC_v1
+                  walletProvider: APPLE_PAY
+                  keyHash: H5iRMfeQ+/3z7fd/hKPG4LZKjU8znl8x2KIPT0p52UE=
+                  digitalSignature: MIAGCSqGSIb3DQEHAqCAMIACAQExDTALBglghkgBZQMEAgEwgAYJKoZIhvcNAQcBAACggDCCAWIwggEIoAMCAQICBgFdZTj7ATAKBggqhkjOPQQDAzA4MSEwHwYDVQQDDBhQYXltZW50ZWNoIE1vYmlsZSBTREsgQ0ExEzARBgNVBAoMClBheW1lbnRlY2gwHhcNMTcwNzIxMTI1NjU5WhcNMzQwNzIxMTI1NjU5WjA4MSEwHwYDVQQDDBhQYXltZW50ZWNoIE1vYmlsZSBTREsgQ0ExEzARBgNVBAoMClBheW1lbnRlY2gwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARCrlzB/UN22ZXpHk7iJqI8T7h0J8QOIyCohcBd8Dh+p0GPeGrDpiyy8LNyQ/bb9jNj+6aVJfeta9eWsOPBp69lMAoGCCqGSM49BAMDA0gAMEUCIQCL3CzFvN8IHbx9DIYtWSWvdwleW2OkbuRimP9LzW9ReAIgTuGzzqlu2EfBpSesfNt78fgAE04OYKHGBq4/Larj540AADGCAUQwggFAAgEBMEIwODEhMB8GA1UEAwwYUGF5bWVudGVjaCBNb2JpbGUgU0RLIENBMRMwEQYDVQQKDApQYXltZW50ZWNoAgYBXWU4+wEwCwYJYIZIAWUDBAIBoIGTMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDQyNjIwNDAyN1owKAYJKoZIhvcNAQk0MRswGTALBglghkgBZQMEAgGhCgYIKoZIzj0EAwIwLwYJKoZIhvcNAQkEMSIEIGkBkJLDb3KRO4QVj+4cIfh9dj8izKkMUlnz/iO/FCPVMAoGCCqGSM49BAMCBEgwRgIhAPRdb0/Wpv4QRNGihLGaMB7hHtTIqV8daku3ouFHCdjsAiEA0XFVw3KU15KNXep1ohkgrDc29ZHziXCBZOXmc1hbb0AAAAAAAAA=
+              Google Visa:
+                value:
+                  encryptedPayloadText: '{\"encryptedMessage\":\"4G8gJet/obbNmdngsOShgWHRZhEe/DcmF6iGkfKjiZWFl+r1jmZeikb9R/gQctZUrjejHq46KsTYszc5DnKiMrfnooziXsHiFHTRIvQRWhvXNgsHgttbETAnYe5r2yL9NM/qX7Jlg5oPAT3g+4PiZARpnR35Mm+uSNAp2StIj8GTFsVndscHEOt0jpKNwSuKCAiiw47kHp5/qw8dQsBXRmcrim4kNXhrAk072VS4Fm88BivFQDqQMwJIrtSqsB+lz9+GTDvJW2A7Klha+XcGFqbGdxIUJ9jsOIQBAOcllIWT4G7T5nvUm8jTkW4W+VsYr8x8xI2WufF6HKsSWQIaJEyWRCIqxnJmg4HfKlp7Tex4CVBL5LgRdjV5DHYysNUr37P4q+VgXe9RwrrfENPIem13vJ+m6EMudN5fUqlkQXd2lClsJfsVhMp5/tiVqtnoQ0xSedOI27ySlXM8P1JsGMyMK2sXw3ZE1TD65EM9BvqI+8CrYM4Iiz+5KRFpak/U\\u003d\",\"ephemeralPublicKey\":\"BAv2rXWLfunwKrwcfSdYn7/Y1v5iRQpvEeiUpmAvwQJKsFTA8f5qqy6we6OqRKXOKb86grzy8eJNQaSe7qE67jg\\u003d\",\"tag\":\"sWyK/heBwIc7PNvi9eOGKcThsGTOvsKKKJ7Qg8IV2T0\\u003d\"}'
+                  version: ECv1
+                  walletProvider: GOOGLE_PAY
+                  digitalSignature: MEYCIQDGftZMJiiutdFBlvAXX84GomMfT0bLHIp6nwSRXinE5QIhAPGsBBqbH78dQW23ZnXTyTMVL3NdksSSS7jLaDnYeig+
+              Paze Mastercard:
+                value:
+                  encryptedPayloadText: eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTRiOGMtYWRkMy0yZDEwOTQ2NDc4NWMiLCJpc3MiOiJodHRwczpcL1wvc2FjE2OTcxODcyMTQsImlhdCI6MTY5NzAxNDQxNCwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdERjkwMzI0MDBhZWQ4MjI4ZC1lNmQxLTYyOTYtMjIxMC0xNGNiMWY2MzRhMDEifQ.eyJwYXlsb2FkSWQiOiJhZWQ4MjI4ZC1lNmQxLTYyOTYtMjIxMC0xNGNiMWY2MzRhMDEiLCJzZXNzaW9uSWQiOiJsbmxpaWJxdDB2ZG84emRpcnJxaCIsInNlY3VyZWRQYXlsb2FkIjoiZXlKaGRXUWlPaUptYVd4bE9sd3ZYQzhpTENKcmFXUWlPaUpqYUdGelpTMXdZWHBsTFVZNGRYVXJSbkZ5VW1KUFVFSTNVVzgyVG5NeVkyWldRVk5aVVVsdU1qZFRWVVJrYjAxb1owUlBObGs5SWl3aWFYTnpJam9pYUhSMGNITTZYQzljTDNOaGJtUmliM2d1WkdsbmFYUmhiSGRoYkd4bGRDNWxZWEpzZVhkaGNtNXBibWN1WTI5dElpd2lZM1I1SWpvaVNsZFVJaXdpZEhsd0lqb2lTbGRVSWl3aVpXNWpJam9pUVRJMU5rZERUU0lzSW1WNGNDSTZNVFk1TnpFNE56SXhOQ3dpYVdGMElqb3hOamszTURFME5ERTBMQ0poYkdjaU9pSlNVMEV0VDBGRlVDMHlOVFlpTENKcWRHa2lPaUpoWldRNE1qSTRaQzFsTm1ReExUWXlPVFl0TWpJeE1DMHhOR05pTVdZMk16UmhNREVpZlEuZm1oSTRQUUQ3X3BCQnltZ2drVDlES05jMU42d2NlekY3dWVyZHJkWWZRel80Rmk4U3FwM0pqdE5WNHV5UUljVUEzRktRbTh3WThsV0lhcUFJM05lNGNHYk01eTRjMGx4cjNYTlVoRDdtRUNDZi1tMTh4OFZ2RTdMTWNUUHpzOHZsNkFaWGUtU2dXX0Y5SGllZm1wNmhlN0VZazhxMFdhQnlBN0NoM0dtNzU2RHh1c2lKMUk0MExqc29wcmhMWW9nSHVXQUpJemN3UEx2dktiSFR2QWVsRFZteHQ4TGg2TzVndEVtam1uWF8yQWJQZTV4Y1FHbkdPM1dUVHdiaGxrNmgwcDVkWGNUWUN3enVmR2pWM19GWWQ4WWdtNTRJYnlLMGQxOVRpNnVJYjF2UjB3VTFCQlBGWjNsTkV2Wkp5b3d3Nk5EWGVBaTJXa2dUUTVRQUZ4UU53LjBRMmFUWWNBMXhoQkNMRTkuWWFpRXM1YzExaTNaQVVHVnEyZGJmY0dFV2E4QktjVXZIXzJmdE1hcmk1R2tsbkl0MkkwNVdWaUE5ejZVVUZpUXRKRDlzN3dHSS0zcHFLWkpWYWlHQ0FZWWp2R3I0NzAwQjh6aC0tUjZnbDlSQ25zVFJwOWh4VnQ0VFcxdmJRemQ4eHFlRnphWElHYlVCM0dqQ19fZ0p0Y0xvSVAtc0VhSFhPaGRTYVprLUo5LWIxSFA5LUUwZXQxamkzRXA0VndzUkJTZWtQT3JudTRmbUxEdE5Cc3B2ZUZTaGRidDc1alhwRmNZeWtnd3V6aHo2eHlwLXBLdVliMUR1Z0diSGJhR29KN1BpaTVhUUE3SDU2U0Q3TGkxRXRSSUszUUNNY25wekJQenhMdEJrTGJWRlFKbXZONmhlV2xQdzJNcGUtd0RtTGx4MDJpb1NkQWtwQndCVE9SbWJZYUZsVTRHME85eTNJREFaemVvTGM3UlVEOGVnZ1NybEhUbFpsSE9VOUp2Z1plYjQwMFY0RUdxM0hFeUN6ZzRrU2dVYkhQckl5NEhQUnpRdnlMY0ppcVJuYUtJZWMzb05tT0t4NXhaZ3hfaVNFanphRUJ1ZmtTS2xRQWxRSG9ZSC0yUFQzUC1iSlI1MVlfZlpEWldKOVIwMlBvUm1UV0JSWVBuQ0xTOF9jODY5OTVkSEtYRTJCdFpRUnZHRUlGWG85ZTVjTTNYX2hVUzBQbHh5dU1qZFc4RlJRVlpaSVFWSlNncjUtSDhhTVlJNGx3cGZacUpQN2lCV2FZNUdPdkR2bXgxU1JmYzZTMm12UXc1MzBaVHM1OUdCeFZhTzdVbFBob1FRV3lEdDRGdVhyTmtULXptcU9zNGFhNXVHUjN2U183Tlo3V053MWhKNlZSOXdjUnFnd0ZPYzUwRmRFWjNXdUNFeGs5bk9WV3Iya0l2R3RWU1ZkZERmRVRUdV94emNhU0trWXhtdXNHWWM3MzJpMkNXR3VLbHJabDVoS3F5NFVEOUJsdjQ4a21ZTEE3TTB5NVFVTGJQRWl4NHNweEFTM2pCWUlqWC0xZGE2aWpTRC1RNTZPNmY5TXIwYlRnU0YyZm5lTmlWdmkyNXJKWWhwQlBCT3l6TnhpOUM1YUtyMG9JYW4yUFhaejEtMjV0aGVoTEJQQTJ1blVpNThGSHBVMFlBSTZadE9JVmxHOHlaM2JLbXE1TERBX3lpUDl5YmtGTjM1STlTSUdQdUdja2IyMDRHQVZBODlWREU2OFMwUndSaGN3cGNHMUdGdHYwQlVQSFR5c1hfZllYU1RYT1BLbnI1MWhEbGFjVzNJLXhkbV9oUVVJOXRFY1N2Z0xDWFRjTnlsQjV5d0V4NG90eUJPVVZRZTdmNHVDNzRmX2RmZlZOek5IQ29VWm84N2xqX3BpdUUtWE81TnBFdzVGYzN0V0I4cXJMLTROWEViX3JrQk9QSmhPZm9xaV9mN2VnUF9oRGpnMExuSG9NWDIzX1VYOVozRTMtendsTTE4dVMwM0NRdE81SktaMUhaeEV1ZlM2emVPOWdtYzdObDNsbDFHUWlFSC1qUEk3bWxZd3JQUkNpdzdGR245b1NLU0o5Ukc1QzdaRXZPVXZLcTVZaVhlclpyZjZ2ZXVlX2syZjJjLTV6a3dxLU10MGlJY2JNNUF0WkxOa2JHcVdOWmNlVmxZcTN4RnBMY2VaQ0VVVnBoR1c4azhRVDJiNHNfQThLUlhZbXJzTnNZbzZvaklqMC13Q0dLWnRBbllDcm1XUXVpSExELUo0a2liUl9Uc0lzYXJfNGM2bDJNSnF1TWZ1MTlRd3l5aG5KVWxZNUdhak9ldHF6U3drVnYwUll5OFR5cXo1RVJvNmt6OGVieGFpLW40dHJCUUw3VFo0NEoxVWl1UThTWVAzcUlUUFhiUFE2c1pVMUJENjZBd3l3LV8tdUVmQXNOSmpGUXdlX1NKb0hYTFhfYXhqVXZ3anc3S3haRjZoNjlHWVZSaUNBaWRkZTIwSXNvQjY4bjZPWmRrdnJlZ0JBdkFXNGhXYUk2ckJKSlR3V1FEckRaNncwR1NiVHFBY2htQXBUMzVhOTVXNzRwVWU1T3JJM2FCWk9fcngwYklrLWFLZGdia2VVcFZ2a0F4OFNLVVlydllGYU1rS2xnVlF2Sk43M0dPWklLbXI4cWJVdVoxM0RPVFI2TURPUUdwNUg1SWpUdVFFTkhEUHRHZkoyWVhlVXBSS3A1WkhLVVlJMmd6TldXVERqR0oxVlIxRUx4MTBvWWQxMHgtaHBEOEtaSFE1U3VOTnR0V3RrN0cwOUFISGZQbF9JV1A2N1R3TGNIQndaTTRnTl9RR1Bicl9GeXFIUmo3WXRMMEtTZ3BWUi1ndWlxY241aF9RcFkzR0lqNEFEVXptak1QVEJEVVU1TVB5b3JKOWZrclFGOWFwQUpDbzMzdW9iaDdzWVVrQXZjdUNRV3ByMkdra0pqRGI2OGR2dUhhZ2xQd3VDcGNKRTNBdXZkeDVSQlNCUnlzOWxDc2U1djAxMDRGQldqWDJ3MnJsRFNqZGkwMHZwdGU5T3VpRXZYXy0tVEozM1laU2Q2WmowbDRTSUN0SnE0Vi1KSTFsZFhlcTFpWGVpQnBuWlJSbXR0bFRBNTc2c05ERzBwZ3dpb3pQWnlWVUhkVWJGVVZuNi1CQWUwYVp6cTVqTERlSy1IWWh0MW5na1pvc0tQc20wTWFxZDdnZUtKZGJKV0x0VXV3ZWtvMHVjMFdydTJJODhhT1ptY1hwMGdhZmUtZ3VnRl93c283Qm5xQnliaFNpQ1RTc20tV29lTDloVmdsbVc3T3dCMWItVGtrVmZnUUd0U1U3bG1SZUMwUmQyb1JsWkh6d1RQQUhFUFdlYy1oWGFmUEk1LXhSRE1hZVIyLmlYeU56SGp2SnJKclBBYVcyMnZPSVEifQ.YxztqEZGzf7Fv2PdHrfYpDPr4xjxbf0c2KTUxhyqUd79_krnCMOSWNDchhGjPfenkip_YqHEXV4mafomJp1D-7Yj96DQ6cFeIvzdtDhrL5BX3DKgYByy1UAll3HeFQgPhOXjds3m62nzGdWs4WlESP6Mt3ElVFrb6qlQqbkYMo5jxxGuIjEemfvpsGN7FhLVrSuF3T4aN2eR4yP6l9SKvUkEB-1gbTR4LfTIhNYLA8pmxUX6fw7Ld20u9D0l9k0xo8_zOOfZ-JZ49jIBJMjxC0cFHR-lglmx2pgdypSc78r3EC2ICOFHeggXrw9EtER
+                  walletProvider: PAZE
+              Apple Mastercard:
+                value:
+                  encryptedPayloadText: RNDGYmZRrD3oVECJupJB3mFB8LwLdIETBVwT484h0RPTEK9tnulUm4TFiU/zDhPtlAIdyH0CejoKdlqyYY/NlWKtFGKtAdCfX9zFdzudCqYQwx8X56WMy546dWISyST6fccf5loIQMrqZ20PfqZ1tvOrm5iHZwtDA7TAfeTPXbcHbwgG7OyxdJ4r9k6a9NGrt+0ApAQfpyPum8cpW3y7Icra7ancgzFq0ZfK8uv7zlit0BR0h3mI6JN73ABj5IuE/EwLvTtVbUxlwOje4LlDS2tXVrecU4E7EYL0+c6egOD5itNJsmKfVxtC2AuG98DfE2bT7yCbzT4DX2ICyPcKBZL4UmldERFbhH8/J4OD0g==
+                  publicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJq58rVHY187s10YAel3Dhf+stX3kVvPn+cNZxRUoW/7K6J+TE4KXYjWOVw3XTmHjK8pFHwyniYOK2BS0Rh5+QA==
+                  version: EC_v1
+                  walletProvider: APPLE_PAY
+                  keyHash: H5iRMfeQ+/3z7fd/hKPG4LZKjU8znl8x2KIPT0p52UE=
+                  digitalSignature: MIAGCSqGSIb3DQEHAqCAMIACAQExDTALBglghkgBZQMEAgEwgAYJKoZIhvcNAQcBAACggDCCAWIwggEIoAMCAQICBgFdZTj7ATAKBggqhkjOPQQDAzA4MSEwHwYDVQQDDBhQYXltZW50ZWNoIE1vYmlsZSBTREsgQ0ExEzARBgNVBAoMClBheW1lbnRlY2gwHhcNMTcwNzIxMTI1NjU5WhcNMzQwNzIxMTI1NjU5WjA4MSEwHwYDVQQDDBhQYXltZW50ZWNoIE1vYmlsZSBTREsgQ0ExEzARBgNVBAoMClBheW1lbnRlY2gwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARCrlzB/UN22ZXpHk7iJqI8T7h0J8QOIyCohcBd8Dh+p0GPeGrDpiyy8LNyQ/bb9jNj+6aVJfeta9eWsOPBp69lMAoGCCqGSM49BAMDA0gAMEUCIQCL3CzFvN8IHbx9DIYtWSWvdwleW2OkbuRimP9LzW9ReAIgTuGzzqlu2EfBpSesfNt78fgAE04OYKHGBq4/Larj540AADGCAUMwggE/AgEBMEIwODEhMB8GA1UEAwwYUGF5bWVudGVjaCBNb2JpbGUgU0RLIENBMRMwEQYDVQQKDApQYXltZW50ZWNoAgYBXWU4+wEwCwYJYIZIAWUDBAIBoIGTMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDQyNjIwNDE0NFowKAYJKoZIhvcNAQk0MRswGTALBglghkgBZQMEAgGhCgYIKoZIzj0EAwIwLwYJKoZIhvcNAQkEMSIEIKtlbyyYF16+7y2XmcFp65MlEom/UBxSSx71uHd39HzzMAoGCCqGSM49BAMCBEcwRQIhANrA8e2QRQ/xBnRr5b/GvNq1/CnptZM6Xa44ptUmWuGkAiAbZ9sBHhVDsCqK0AtEHb+UGqTQSwepL1WJLbsd14v3GgAAAAAAAA==
+              Apple MPAN:
+                value:
+                  encryptedPayloadText: 0gGxh858yAs3cPp9/1qrQnvx5At1o2xFuEkvZyZETWrrVMaUrxKATkeSEUfaimUnso3O9ffoZO1xvCkh4/+H8BMXYT6NVhIbkBkGhECG16MsUNZAu4qbD44l82UOxdvwwWkr8yUvCmwED9yn0DMhR8tomLRo1CK/xCuqSekW3w8cV3u7Ug4rY9tey8O6Ch7OoB/xVrtHzMp1OmFsYnmGjfC0vIHuJPQuaJUNc/x8h+eamMzDpGbb+/I9VHOJ+YueMiH/lnrG7p2swKvGHlmeG7OPYtgs4qaGlAi7qI530fMugLf6m0F1m/pOy9KNIYQewG6OWxApsDC9Qm+4tKOw55/htln5kvZ/GEPCl3BKYgTGmhf+Zg1Oy15wRraTGx5wXrvSF+InyzWCKAcelXcokMFpV3gaT9sIyc9B+C5Gkrqmkc1mAlrmrhdKSoOPivJ2sNi5gYyFSGk+OmAszVJMbEA8IW15fLekR+I6DRZFH50pksypdMM17tQMUsoq/UJ5KxWkNTAlR1xMn/bAKKzrNNZv8XoRrj6lCtjDeuy79n/24EuueYJag9cD/8nVB4FpBAHkGoH/t9CAZf7Fma7vtRlWE7Rf+AAYQ6BQTCsUP1tONgZyVxc2re1AYXfN5Y9QdyCdYWMS9uGyFGY6ML2yv3F0XAvrlJfSfYSTf1NTVqfS46gPQpjRAqWGxxs9jONpWEgdukGS2XTBUvfUg/0fwIbcP4j+g/YYJQrn3XzpdvOflpF8gVsdKnF6If/dyJ96pDmfH4LJAIQsYa9ikMfh5SpoSekU6aahleveQ5abflDwW+8hE+TmrZc9inq0XRI4zbmUwMbK1WhGUMj33GCh8Ar2Z27cTKgR3+m04Wto7/IVeIGaGIxHE8hNON+BLnIDpq/eyst+Gerlfyqy7pX2CQ8aEWa8m5oCenjJTG2etA+qjUcVCS7Fyo21UE1jSDrfY6GYLBvKGnKOAUNVgkN36ZJXr8mhk0oDzhmGUZmpSNh0wCdgLyE0mAtjHAzVVUfcPDoOEwOMwWG5lW3gUNUm1hQxXma7CELCpQFqb3OMlhqz4HfsyD242Xu2s4xLUvV5M9H0qbrcBE9RlFyV5lsHB7pAS7EfFVAL8up2McsX+ICLOYccZQkrvzskzmXD51XzcDmuR930jvEhqJa5ADSmbFxLXzTCSZJz/FLmsSaPt6uVlLQ==
+                  walletProvider: APPLE_PAY
+                  walletTransactionId: 27ed51c15512070be3058fb6070c2e63ddd69ca2e75b3187e2af6faf92ba2901
+                  walletApplicationData: 27ed51c15512070be3058fb6070c2e63ddd69ca2e75b3187e2af6faf92ba2901
+                  digitalSignature: MIAGCSqGSIb3DQEHAqCAMIACAQExDTALBglghkgBZQMEAgEwCwYJKoZIhvcNAQcBoIAwggFiMIIBCKADAgECAgYBXWU4+wEwCgYIKoZIzj0EAwMwODEhMB8GA1UEAwwYUGF5bWVudGVjaCBNb2JpbGUgU0RLIENBMRMwEQYDVQQKDApQYXltZW50ZWNoMB4XDTE3MDcyMTEyNTY1OVoXDTM0MDcyMTEyNTY1OVowODEhMB8GA1UEAwwYUGF5bWVudGVjaCBNb2JpbGUgU0RLIENBMRMwEQYDVQQKDApQYXltZW50ZWNoMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQq5cwf1DdtmV6R5O4iaiPE+4dCfEDiMgqIXAXfA4fqdBj3hqw6YssvCzckP22/YzY/umlSX3rWvXlrDjwaevZTAKBggqhkjOPQQDAwNIADBFAiEAi9wsxbzfCB28fQyGLVklr3cJXltjpG7kYpj/S81vUXgCIE7hs86pbthHwaUnrHzbe/H4ABNODmChxgauPy2q4+eNAAAxggFDMIIBPwIBATBCMDgxITAfBgNVBAMMGFBheW1lbnRlY2ggTW9iaWxlIFNESyBDQTETMBEGA1UECgwKUGF5bWVudGVjaAIGAV1lOPsBMAsGCWCGSAFlAwQCAaCBkzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yNDA3MDgyMDEyNDJaMCgGCSqGSIb3DQEJNDEbMBkwCwYJYIZIAWUDBAIBoQoGCCqGSM49BAMCMC8GCSqGSIb3DQEJBDEiBCApyS76wnLoE50m8IN9nTK248Tj2K1je76z+IIKEH9OezAKBggqhkjOPQQDAgRHMEUCICX1jTpwsrHaEmjy4gJl+IRLdrIwcTuqJQN+f/qDpoxkAiEA8SdYhqpQXCWZOWWWPMbVu1PprUyQ4RlDcG9bA4wTggkAAAAAAAA=
+                  version: EC_v1
+                  keyHash: xVC/RhZQk4eWVtID9DMSnzoRnBoGF7z3jvm4iWztpis=
+                  publicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmwK0foCYZAwrPM4AzSkhemnkqr8ZWdYQKDGUENGwpP3xJyiiwckTP6cqgkzBHI4nXP1iGaFbh2KNIOBQ2nI0jw==
+              Apple MultiToken:
+                value:
+                  encryptedPayloadText: 0gGxh858yAs3cPp9/1qrQnvx5At1o2xFuEkvZyZETWrrVMaUrxKATkeSEUfaimUnso3O9ffoZO1xvCkh4/+H8BMXYT6NVhIbkBkGhECG16MsUNZAu4qbD44l82UOxdvwwWkr8yUvCmwED9yn0DMhR8tomLRo1CK/xCuqSekW3w8cV3u7Ug4rY9tey8O6Ch7OoB/xVrtHzMp1OmFsYnmGjfC0vIHuJPQuaJUNc/x8h+eamMzDpGbb+/I9VHOJ+YueMiH/lnrG7p2swKvGHlmeG7OPYtgs4qaGlAi7qI530fMugLf6m0F1m/pOy9KNIYQewG6OWxApsDC9Qm+4tKOw55/htln5kvZ/GEPCl3BKYgTGmhf+Zg1Oy15wRraTGx5wXrvSF+InyzWCKAcelXcokMFpV3gaT9sIyc9B+C5Gkrqmkc1mAlrmrhdKSoOPivJ2sNi5gYyFSGk+OmAszVJMbEA8IW15fLekR+I6DRZFH50pksypdMM17tQMUsoq/UJ5KxWkNTAlR1xMn/bAKKzrNNZv8XoRrj6lCtjDeuy79n/24EuueYJag9cD/8nVB4FpBAHkGoH/t9CAZf7Fma7vtRlWE7Rf+AAYQ6BQTCsUP1tONgZyVxc2re1AYXfN5Y9QdyCdYWMS9uGyFGY6ML2yv3F0XAvrlJfSfYSTf1NTVqfS46gPQpjRAqWGxxs9jONpWEgdukGS2XTBUvfUg/0fwIbcP4j+g/YYJQrn3XzpdvOflpF8gVsdKnF6If/dyJ96pDmfH4LJAIQsYa9ikMfh5SpoSekU6aahleveQ5abflDwW+8hE+TmrZc9inq0XRI4zbmUwMbK1WhGUMj33GCh8Ar2Z27cTKgR3+m04Wto7/IVeIGaGIxHE8hNON+BLnIDpq/eyst+Gerlfyqy7pX2CQ8aEWa8m5oCenjJTG2etA+qjUcVCS7Fyo21UE1jSDrfY6GYLBvKGnKOAUNVgkN36ZJXr8mhk0oDzhmGUZmpSNh0wCdgLyE0mAtjHAzVVUfcPDoOEwOMwWG5lW3gUNUm1hQxXma7CELCpQFqb3OMlhqz4HfsyD242Xu2s4xLUvV5M9H0qbrcBE9RlFyV5lsHB7pAS7EfFVAL8up2McsX+ICLOYccZQkrvzskzmXD51XzcDmuR930jvEhqJa5ADSmbFxLXzTCSZJz/FLmsSaPt6uVlLQ==
+                  walletProvider: APPLE_PAY
+                  walletTransactionId: 27ed51c15512070be3058fb6070c2e63ddd69ca2e75b3187e2af6faf92ba2901
+                  walletApplicationData: 27ed51c15512070be3058fb6070c2e63ddd69ca2e75b3187e2af6faf92ba2901
+                  digitalSignature: MIAGCSqGSIb3DQEHAqCAMIACAQExDTALBglghkgBZQMEAgEwCwYJKoZIhvcNAQcBoIAwggFiMIIBCKADAgECAgYBXWU4+wEwCgYIKoZIzj0EAwMwODEhMB8GA1UEAwwYUGF5bWVudGVjaCBNb2JpbGUgU0RLIENBMRMwEQYDVQQKDApQYXltZW50ZWNoMB4XDTE3MDcyMTEyNTY1OVoXDTM0MDcyMTEyNTY1OVowODEhMB8GA1UEAwwYUGF5bWVudGVjaCBNb2JpbGUgU0RLIENBMRMwEQYDVQQKDApQYXltZW50ZWNoMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQq5cwf1DdtmV6R5O4iaiPE+4dCfEDiMgqIXAXfA4fqdBj3hqw6YssvCzckP22/YzY/umlSX3rWvXlrDjwaevZTAKBggqhkjOPQQDAwNIADBFAiEAi9wsxbzfCB28fQyGLVklr3cJXltjpG7kYpj/S81vUXgCIE7hs86pbthHwaUnrHzbe/H4ABNODmChxgauPy2q4+eNAAAxggFDMIIBPwIBATBCMDgxITAfBgNVBAMMGFBheW1lbnRlY2ggTW9iaWxlIFNESyBDQTETMBEGA1UECgwKUGF5bWVudGVjaAIGAV1lOPsBMAsGCWCGSAFlAwQCAaCBkzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yNDA3MDgyMDEyNDJaMCgGCSqGSIb3DQEJNDEbMBkwCwYJYIZIAWUDBAIBoQoGCCqGSM49BAMCMC8GCSqGSIb3DQEJBDEiBCApyS76wnLoE50m8IN9nTK248Tj2K1je76z+IIKEH9OezAKBggqhkjOPQQDAgRHMEUCICX1jTpwsrHaEmjy4gJl+IRLdrIwcTuqJQN+f/qDpoxkAiEA8SdYhqpQXCWZOWWWPMbVu1PprUyQ4RlDcG9bA4wTggkAAAAAAAA=
+                  version: EC_v1
+                  keyHash: xVC/RhZQk4eWVtID9DMSnzoRnBoGF7z3jvm4iWztpis=
+                  publicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmwK0foCYZAwrPM4AzSkhemnkqr8ZWdYQKDGUENGwpP3xJyiiwckTP6cqgkzBHI4nXP1iGaFbh2KNIOBQ2nI0jw==
+              Masked Apple First Six Last Four:
+                value:
+                  encryptedPayloadText: RNDGYmZRrD3oVECJupJB3mFB8LwLdIETBVwT484h0RPTEK9tnulUm4TFiU/zDhPtlAIdyH0CejoKdlqyYY/NlWKtFGKtAdCfX9zFdzudCqYQwx8X56WMy546dWISyST6fccf5loIQMrqZ20PfqZ1tvOrm5iHZwtDA7TAfeTPXbcHbwgG7OyxdJ4r9k6a9NGrt+0ApAQfpyPum8cpW3y7Icra7ancgzFq0ZfK8uv7zlit0BR0h3mI6JN73ABj5IuE/EwLvTtVbUxlwOje4LlDS2tXVrecU4E7EYL0+c6egOD5itNJsmKfVxtC2AuG98DfE2bT7yCbzT4DX2ICyPcKBZL4UmldERFbhH8/J4OD0g==
+                  publicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJq58rVHY187s10YAel3Dhf+stX3kVvPn+cNZxRUoW/7K6J+TE4KXYjWOVw3XTmHjK8pFHwyniYOK2BS0Rh5+QA==
+                  version: EC_v1
+                  walletProvider: APPLE_PAY
+                  keyHash: H5iRMfeQ+/3z7fd/hKPG4LZKjU8znl8x2KIPT0p52UE=
+                  digitalSignature: MIAGCSqGSIb3DQEHAqCAMIACAQExDTALBglghkgBZQMEAgEwgAYJKoZIhvcNAQcBAACggDCCAWIwggEIoAMCAQICBgFdZTj7ATAKBggqhkjOPQQDAzA4MSEwHwYDVQQDDBhQYXltZW50ZWNoIE1vYmlsZSBTREsgQ0ExEzARBgNVBAoMClBheW1lbnRlY2gwHhcNMTcwNzIxMTI1NjU5WhcNMzQwNzIxMTI1NjU5WjA4MSEwHwYDVQQDDBhQYXltZW50ZWNoIE1vYmlsZSBTREsgQ0ExEzARBgNVBAoMClBheW1lbnRlY2gwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARCrlzB/UN22ZXpHk7iJqI8T7h0J8QOIyCohcBd8Dh+p0GPeGrDpiyy8LNyQ/bb9jNj+6aVJfeta9eWsOPBp69lMAoGCCqGSM49BAMDA0gAMEUCIQCL3CzFvN8IHbx9DIYtWSWvdwleW2OkbuRimP9LzW9ReAIgTuGzzqlu2EfBpSesfNt78fgAE04OYKHGBq4/Larj540AADGCAUMwggE/AgEBMEIwODEhMB8GA1UEAwwYUGF5bWVudGVjaCBNb2JpbGUgU0RLIENBMRMwEQYDVQQKDApQYXltZW50ZWNoAgYBXWU4+wEwCwYJYIZIAWUDBAIBoIGTMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDQyNjIwNDE0NFowKAYJKoZIhvcNAQk0MRswGTALBglghkgBZQMEAgGhCgYIKoZIzj0EAwIwLwYJKoZIhvcNAQkEMSIEIKtlbyyYF16+7y2XmcFp65MlEom/UBxSSx71uHd39HzzMAoGCCqGSM49BAMCBEcwRQIhANrA8e2QRQ/xBnRr5b/GvNq1/CnptZM6Xa44ptUmWuGkAiAbZ9sBHhVDsCqK0AtEHb+UGqTQSwepL1WJLbsd14v3GgAAAAAAAA==
+                  accountNumberMaskingIndicator: true
+              Masked PAZE Last Four:
+                value:
+                  encryptedPayloadText: eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTRiOGMtYWRkMy0ymx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTcxODcyMTQsImlhdCI6MTY5NzAxNDQxNCwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdERjkwMzI0MDBhZWQ4MjI4ZC1lNmQxLTYyOTYtMjIxMC0xNGNiMWY2MzRhMDEifQ.eyJwYXlsb2FkSWQiOiJhZWQ4MjI4ZC1lNmQxLTYyOTYtMjIxMC0xNGNiMWY2MzRhMDEiLCJzZXNzaW9uSWQiOiJsbmxpaWJxdDB2ZG84emRpcnJxaCIsInNlY3VyZWRQYXlsb2FkIjoiZXlKaGRXUWlPaUptYVd4bE9sd3ZYQzhpTENKcmFXUWlPaUpqYUdGelpTMXdZWHBsTFVZNGRYVXJSbkZ5VW1KUFVFSTNVVzgyVG5NeVkyWldRVk5aVVVsdU1qZFRWVVJrYjAxb1owUlBObGs5SWl3aWFYTnpJam9pYUhSMGNITTZYQzljTDNOaGJtUmliM2d1WkdsbmFYUmhiSGRoYkd4bGRDNWxZWEpzZVhkaGNtNXBibWN1WTI5dElpd2lZM1I1SWpvaVNsZFVJaXdpZEhsd0lqb2lTbGRVSWl3aVpXNWpJam9pUVRJMU5rZERUU0lzSW1WNGNDSTZNVFk1TnpFNE56SXhOQ3dpYVdGMElqb3hOamszTURFME5ERTBMQ0poYkdjaU9pSlNVMEV0VDBGRlVDMHlOVFlpTENKcWRHa2lPaUpoWldRNE1qSTRaQzFsTm1ReExUWXlPVFl0TWpJeE1DMHhOR05pTVdZMk16UmhNREVpZlEuZm1oSTRQUUQ3X3BCQnltZ2drVDlES05jMU42d2NlekY3dWVyZHJkWWZRel80Rmk4U3FwM0pqdE5WNHV5UUljVUEzRktRbTh3WThsV0lhcUFJM05lNGNHYk01eTRjMGx4cjNYTlVoRDdtRUNDZi1tMTh4OFZ2RTdMTWNUUHpzOHZsNkFaWGUtU2dXX0Y5SGllZm1wNmhlN0VZazhxMFdhQnlBN0NoM0dtNzU2RHh1c2lKMUk0MExqc29wcmhMWW9nSHVXQUpJemN3UEx2dktiSFR2QWVsRFZteHQ4TGg2TzVndEVtam1uWF8yQWJQZTV4Y1FHbkdPM1dUVHdiaGxrNmgwcDVkWGNUWUN3enVmR2pWM19GWWQ4WWdtNTRJYnlLMGQxOVRpNnVJYjF2UjB3VTFCQlBGWjNsTkV2Wkp5b3d3Nk5EWGVBaTJXa2dUUTVRQUZ4UU53LjBRMmFUWWNBMXhoQkNMRTkuWWFpRXM1YzExaTNaQVVHVnEyZGJmY0dFV2E4QktjVXZIXzJmdE1hcmk1R2tsbkl0MkkwNVdWaUE5ejZVVUZpUXRKRDlzN3dHSS0zcHFLWkpWYWlHQ0FZWWp2R3I0NzAwQjh6aC0tUjZnbDlSQ25zVFJwOWh4VnQ0VFcxdmJRemQ4eHFlRnphWElHYlVCM0dqQ19fZ0p0Y0xvSVAtc0VhSFhPaGRTYVprLUo5LWIxSFA5LUUwZXQxamkzRXA0VndzUkJTZWtQT3JudTRmbUxEdE5Cc3B2ZUZTaGRidDc1alhwRmNZeWtnd3V6aHo2eHlwLXBLdVliMUR1Z0diSGJhR29KN1BpaTVhUUE3SDU2U0Q3TGkxRXRSSUszUUNNY25wekJQenhMdEJrTGJWRlFKbXZONmhlV2xQdzJNcGUtd0RtTGx4MDJpb1NkQWtwQndCVE9SbWJZYUZsVTRHME85eTNJREFaemVvTGM3UlVEOGVnZ1NybEhUbFpsSE9VOUp2Z1plYjQwMFY0RUdxM0hFeUN6ZzRrU2dVYkhQckl5NEhQUnpRdnlMY0ppcVJuYUtJZWMzb05tT0t4NXhaZ3hfaVNFanphRUJ1ZmtTS2xRQWxRSG9ZSC0yUFQzUC1iSlI1MVlfZlpEWldKOVIwMlBvUm1UV0JSWVBuQ0xTOF9jODY5OTVkSEtYRTJCdFpRUnZHRUlGWG85ZTVjTTNYX2hVUzBQbHh5dU1qZFc4RlJRVlpaSVFWSlNncjUtSDhhTVlJNGx3cGZacUpQN2lCV2FZNUdPdkR2bXgxU1JmYzZTMm12UXc1MzBaVHM1OUdCeFZhTzdVbFBob1FRV3lEdDRGdVhyTmtULXptcU9zNGFhNXVHUjN2U183Tlo3V053MWhKNlZSOXdjUnFnd0ZPYzUwRmRFWjNXdUNFeGs5bk9WV3Iya0l2R3RWU1ZkZERmRVRUdV94emNhU0trWXhtdXNHWWM3MzJpMkNXR3VLbHJabDVoS3F5NFVEOUJsdjQ4a21ZTEE3TTB5NVFVTGJQRWl4NHNweEFTM2pCWUlqWC0xZGE2aWpTRC1RNTZPNmY5TXIwYlRnU0YyZm5lTmlWdmkyNXJKWWhwQlBCT3l6TnhpOUM1YUtyMG9JYW4yUFhaejEtMjV0aGVoTEJQQTJ1blVpNThGSHBVMFlBSTZadE9JVmxHOHlaM2JLbXE1TERBX3lpUDl5YmtGTjM1STlTSUdQdUdja2IyMDRHQVZBODlWREU2OFMwUndSaGN3cGNHMUdGdHYwQlVQSFR5c1hfZllYU1RYT1BLbnI1MWhEbGFjVzNJLXhkbV9oUVVJOXRFY1N2Z0xDWFRjTnlsQjV5d0V4NG90eUJPVVZRZTdmNHVDNzRmX2RmZlZOek5IQ29VWm84N2xqX3BpdUUtWE81TnBFdzVGYzN0V0I4cXJMLTROWEViX3JrQk9QSmhPZm9xaV9mN2VnUF9oRGpnMExuSG9NWDIzX1VYOVozRTMtendsTTE4dVMwM0NRdE81SktaMUhaeEV1ZlM2emVPOWdtYzdObDNsbDFHUWlFSC1qUEk3bWxZd3JQUkNpdzdGR245b1NLU0o5Ukc1QzdaRXZPVXZLcTVZaVhlclpyZjZ2ZXVlX2syZjJjLTV6a3dxLU10MGlJY2JNNUF0WkxOa2JHcVdOWmNlVmxZcTN4RnBMY2VaQ0VVVnBoR1c4azhRVDJiNHNfQThLUlhZbXJzTnNZbzZvaklqMC13Q0dLWnRBbllDcm1XUXVpSExELUo0a2liUl9Uc0lzYXJfNGM2bDJNSnF1TWZ1MTlRd3l5aG5KVWxZNUdhak9ldHF6U3drVnYwUll5OFR5cXo1RVJvNmt6OGVieGFpLW40dHJCUUw3VFo0NEoxVWl1UThTWVAzcUlUUFhiUFE2c1pVMUJENjZBd3l3LV8tdUVmQXNOSmpGUXdlX1NKb0hYTFhfYXhqVXZ3anc3S3haRjZoNjlHWVZSaUNBaWRkZTIwSXNvQjY4bjZPWmRrdnJlZ0JBdkFXNGhXYUk2ckJKSlR3V1FEckRaNncwR1NiVHFBY2htQXBUMzVhOTVXNzRwVWU1T3JJM2FCWk9fcngwYklrLWFLZGdia2VVcFZ2a0F4OFNLVVlydllGYU1rS2xnVlF2Sk43M0dPWklLbXI4cWJVdVoxM0RPVFI2TURPUUdwNUg1SWpUdVFFTkhEUHRHZkoyWVhlVXBSS3A1WkhLVVlJMmd6TldXVERqR0oxVlIxRUx4MTBvWWQxMHgtaHBEOEtaSFE1U3VOTnR0V3RrN0cwOUFISGZQbF9JV1A2N1R3TGNIQndaTTRnTl9RR1Bicl9GeXFIUmo3WXRMMEtTZ3BWUi1ndWlxY241aF9RcFkzR0lqNEFEVXptak1QVEJEVVU1TVB5b3JKOWZrclFGOWFwQUpDbzMzdW9iaDdzWVVrQXZjdUNRV3ByMkdra0pqRGI2OGR2dUhhZ2xQd3VDcGNKRTNBdXZkeDVSQlNCUnlzOWxDc2U1djAxMDRGQldqWDJ3MnJsRFNqZGkwMHZwdGU5T3VpRXZYXy0tVEozM1laU2Q2WmowbDRTSUN0SnE0Vi1KSTFsZFhlcTFpWGVpQnBuWlJSbXR0bFRBNTc2c05ERzBwZ3dpb3pQWnlWVUhkVWJGVVZuNi1CQWUwYVp6cTVqTERlSy1IWWh0MW5na1pvc0tQc20wTWFxZDdnZUtKZGJKV0x0VXV3ZWtvMHVjMFdydTJJODhhT1ptY1hwMGdhZmUtZ3VnRl93c283Qm5xQnliaFNpQ1RTc20tV29lTDloVmdsbVc3T3dCMWItVGtrVmZnUUd0U1U3bG1SZUMwUmQyb1JsWkh6d1RQQUhFUFdlYy1oWGFmUEk1LXhSRE1hZVIyLmlYeU56SGp2SnJKclBBYVcyMnZPSVEifQ.YxztqEZGzf7Fv2PdHrfYpDPr4xjxbf0c2KTUxhyqUd79_krnCMOSWNDchhGjPfenkip_YqHEXV4mafomJp1D-7Yj96DQ6cFeIvzdtDhrL5BX3DKgYByy1UAll3HeFQgPhOXjds3m62nzGdWs4WlESP6Mt3ElVFrb6qlQqbkYMo5jxxGuIjEemfvpsGN7FhLVrSuF3T4aN2eR4yP6l9SKvUkEB-1gbTR4LfTIhNYLA8pmxUX6fw7Ld20u9D0l9k0xo8_zOOfZ-JZ49jIBJMjxC0cFHR-lglmx2pgdypSc78r3EC2ICOFHeggXrw9EtE
+                  walletProvider: PAZE
+                  accountNumberMaskingIndicator: true
+              Paze Mastercard Purchase and Card on file:
+                value:
+                  encryptedPayloadText: eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTRiOGMtYWRkMy5kaWdpdGFsd2FsbGV0LmVhcmx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTcxODcyMTQsImlhdCI6MTY5NzAxNDQxNCwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdERjkwMzI0MDBhZWQ4MjI4ZC1lNmQxLTYyOTYtMjIxMC0xNGNiMWY2MzRhMDEifQ.eyJwYXlsb2FkSWQiOiJhZWQ4MjI4ZC1lNmQxLTYyOTYtMjIxMC0xNGNiMWY2MzRhMDEiLCJzZXNzaW9uSWQiOiJsbmxpaWJxdDB2ZG84emRpcnJxaCIsInNlY3VyZWRQYXlsb2FkIjoiZXlKaGRXUWlPaUptYVd4bE9sd3ZYQzhpTENKcmFXUWlPaUpqYUdGelpTMXdZWHBsTFVZNGRYVXJSbkZ5VW1KUFVFSTNVVzgyVG5NeVkyWldRVk5aVVVsdU1qZFRWVVJrYjAxb1owUlBObGs5SWl3aWFYTnpJam9pYUhSMGNITTZYQzljTDNOaGJtUmliM2d1WkdsbmFYUmhiSGRoYkd4bGRDNWxZWEpzZVhkaGNtNXBibWN1WTI5dElpd2lZM1I1SWpvaVNsZFVJaXdpZEhsd0lqb2lTbGRVSWl3aVpXNWpJam9pUVRJMU5rZERUU0lzSW1WNGNDSTZNVFk1TnpFNE56SXhOQ3dpYVdGMElqb3hOamszTURFME5ERTBMQ0poYkdjaU9pSlNVMEV0VDBGRlVDMHlOVFlpTENKcWRHa2lPaUpoWldRNE1qSTRaQzFsTm1ReExUWXlPVFl0TWpJeE1DMHhOR05pTVdZMk16UmhNREVpZlEuZm1oSTRQUUQ3X3BCQnltZ2drVDlES05jMU42d2NlekY3dWVyZHJkWWZRel80Rmk4U3FwM0pqdE5WNHV5UUljVUEzRktRbTh3WThsV0lhcUFJM05lNGNHYk01eTRjMGx4cjNYTlVoRDdtRUNDZi1tMTh4OFZ2RTdMTWNUUHpzOHZsNkFaWGUtU2dXX0Y5SGllZm1wNmhlN0VZazhxMFdhQnlBN0NoM0dtNzU2RHh1c2lKMUk0MExqc29wcmhMWW9nSHVXQUpJemN3UEx2dktiSFR2QWVsRFZteHQ4TGg2TzVndEVtam1uWF8yQWJQZTV4Y1FHbkdPM1dUVHdiaGxrNmgwcDVkWGNUWUN3enVmR2pWM19GWWQ4WWdtNTRJYnlLMGQxOVRpNnVJYjF2UjB3VTFCQlBGWjNsTkV2Wkp5b3d3Nk5EWGVBaTJXa2dUUTVRQUZ4UU53LjBRMmFUWWNBMXhoQkNMRTkuWWFpRXM1YzExaTNaQVVHVnEyZGJmY0dFV2E4QktjVXZIXzJmdE1hcmk1R2tsbkl0MkkwNVdWaUE5ejZVVUZpUXRKRDlzN3dHSS0zcHFLWkpWYWlHQ0FZWWp2R3I0NzAwQjh6aC0tUjZnbDlSQ25zVFJwOWh4VnQ0VFcxdmJRemQ4eHFlRnphWElHYlVCM0dqQ19fZ0p0Y0xvSVAtc0VhSFhPaGRTYVprLUo5LWIxSFA5LUUwZXQxamkzRXA0VndzUkJTZWtQT3JudTRmbUxEdE5Cc3B2ZUZTaGRidDc1alhwRmNZeWtnd3V6aHo2eHlwLXBLdVliMUR1Z0diSGJhR29KN1BpaTVhUUE3SDU2U0Q3TGkxRXRSSUszUUNNY25wekJQenhMdEJrTGJWRlFKbXZONmhlV2xQdzJNcGUtd0RtTGx4MDJpb1NkQWtwQndCVE9SbWJZYUZsVTRHME85eTNJREFaemVvTGM3UlVEOGVnZ1NybEhUbFpsSE9VOUp2Z1plYjQwMFY0RUdxM0hFeUN6ZzRrU2dVYkhQckl5NEhQUnpRdnlMY0ppcVJuYUtJZWMzb05tT0t4NXhaZ3hfaVNFanphRUJ1ZmtTS2xRQWxRSG9ZSC0yUFQzUC1iSlI1MVlfZlpEWldKOVIwMlBvUm1UV0JSWVBuQ0xTOF9jODY5OTVkSEtYRTJCdFpRUnZHRUlGWG85ZTVjTTNYX2hVUzBQbHh5dU1qZFc4RlJRVlpaSVFWSlNncjUtSDhhTVlJNGx3cGZacUpQN2lCV2FZNUdPdkR2bXgxU1JmYzZTMm12UXc1MzBaVHM1OUdCeFZhTzdVbFBob1FRV3lEdDRGdVhyTmtULXptcU9zNGFhNXVHUjN2U183Tlo3V053MWhKNlZSOXdjUnFnd0ZPYzUwRmRFWjNXdUNFeGs5bk9WV3Iya0l2R3RWU1ZkZERmRVRUdV94emNhU0trWXhtdXNHWWM3MzJpMkNXR3VLbHJabDVoS3F5NFVEOUJsdjQ4a21ZTEE3TTB5NVFVTGJQRWl4NHNweEFTM2pCWUlqWC0xZGE2aWpTRC1RNTZPNmY5TXIwYlRnU0YyZm5lTmlWdmkyNXJKWWhwQlBCT3l6TnhpOUM1YUtyMG9JYW4yUFhaejEtMjV0aGVoTEJQQTJ1blVpNThGSHBVMFlBSTZadE9JVmxHOHlaM2JLbXE1TERBX3lpUDl5YmtGTjM1STlTSUdQdUdja2IyMDRHQVZBODlWREU2OFMwUndSaGN3cGNHMUdGdHYwQlVQSFR5c1hfZllYU1RYT1BLbnI1MWhEbGFjVzNJLXhkbV9oUVVJOXRFY1N2Z0xDWFRjTnlsQjV5d0V4NG90eUJPVVZRZTdmNHVDNzRmX2RmZlZOek5IQROWEViX3JrQk9QSmhPZm9xaV9mN2VnUF9oRGpnMExuSG9NWDIzX1VYOVozRTMtendsTTE4dVMwM0NRdE81SktaMUhaeEV1ZlM2emVPOWdtYzdObDNsbDFHUWlFSC1qUEk3bWxZd3JQUkNpdzdGR245b1NLU0o5Ukc1QzdaRXZPVXZLcTVZaVhlclpyZjZ2ZXVlX2syZjJjLTV6a3dxLU10MGlJY2JNNUF0WkxOa2JHcVdOWmNlVmxZcTN4RnBMY2VaQ0VVVnBoR1c4azhRVDJiNHNfQThLUlhZbXJzTnNZbzZvaklqMC13Q0dLWnRBbllDcm1XUXVpSExELUo0a2liUl9Uc0lzYXJfNGM2bDJNSnF1TWZ1MTlRd3l5aG5KVWxZNUdhak9ldHF6U3drVnYwUll5OFR5cXo1RVJvNmt6OGVieGFpLW40dHJCUUw3VFo0NEoxVWl1UThTWVAzcUlUUFhiUFE2c1pVMUJENjZBd3l3LV8tdUVmQXNOSmpGUXdlX1NKb0hYTFhfYXhqVXZ3anc3S3haRjZoNjlHWVZSaUNBaWRkZTIwSXNvQjY4bjZPWmRrdnJlZ0JBdkFXNGhXYUk2ckJKSlR3V1FEckRaNncwR1NiVHFBY2htQXBUMzVhOTVXNzRwVWU1T3JJM2FCWk9fcngwYklrLWFLZGdia2VVcFZ2a0F4OFNLVVlydllGYU1rS2xnVlF2Sk43M0dPWklLbXI4cWJVdVoxM0RPVFI2TURPUUdwNUg1SWpUdVFFTkhEUHRHZkoyWVhlVXBSS3A1WkhLVVlJMmd6TldXVERqR0oxVlIxRUx4MTBvWWQxMHgtaHBEOEtaSFE1U3VOTnR0V3RrN0cwOUFISGZQbF9JV1A2N1R3TGNIQndaTTRnTl9RR1Bicl9GeXFIUmo3WXRMMEtTZ3BWUi1ndWlxY241aF9RcFkzR0lqNEFEVXptak1QVEJEVVU1TVB5b3JKOWZrclFGOWFwQUpDbzMzdW9iaDdzWVVrQXZjdUNRV3ByMkdra0pqRGI2OGR2dUhhZ2xQd3VDcGNKRTNBdXZkeDVSQlNCUnlzOWxDc2U1djAxMDRGQldqWDJ3MnJsRFNqZGkwMHZwdGU5T3VpRXZYXy0tVEozM1laU2Q2WmowbDRTSUN0SnE0Vi1KSTFsZFhlcTFpWGVpQnBuWlJSbXR0bFRBNTc2c05ERzBwZ3dpb3pQWnlWVUhkVWJGVVZuNi1CQWUwYVp6cTVqTERlSy1IWWh0MW5na1pvc0tQc20wTWFxZDdnZUtKZGJKV0x0VXV3ZWtvMHVjMFdydTJJODhhT1ptY1hwMGdhZmUtZ3VnRl93c283Qm5xQnliaFNpQ1RTc20tV29lTDloVmdsbVc3T3dCMWItVGtrVmZnUUd0U1U3bG1SZUMwUmQyb1JsWkh6d1RQQUhFUFdlYy1oWGFmUEk1LXhSRE1hZVIyLmlYeU56SGp2SnJKclBBYVcyMnZPSVEifQ.YxztqEZGzf7Fv2PdHrfYpDPr4xjxbf0c2KTUxhyqUd79_krnCMOSWNDchhGjPfenkip_YqHEXV4mafomJp1D-7Yj96DQ6cFeIvzdtDhrL5BX3DKgYByy1UAll3HeFQgPhOXjds3m62nzGdWs4WlESP6Mt3ElVFrb6qlQqbkYMo5jxxGuIjEemfvpsGN7FhLVrSuF3T4aN2eR4yP6l9SKvUkEB-1gbTR4LfTIhNYLA8pmxUX6fw7Ld20u9D0l9k0xo8_zOOfZ-JZ49jIBJMjxC0cFHR-lglmx2pgdypSc78r3EC2ICOFHeggXrw9EtER_ulZ1nuKZEUa-FESPiel65w
+                  walletProvider: PAZE
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    healthCheckResource:
+      description: Contains health check information about a resource
+      type: object
+      properties:
+        status:
+          description: General status of all resources
+          type: string
+          enum:
+          - PASS
+          - FAIL
+          - WARN
+    adfsError:
+      description: Object containing information in the file
+      type: object
+      properties:
+        applicationErrorSourceName:
+          description: The label of the component from where the error or warning is generated.
+          type: string
+        applicationSystemComponentErrorCode:
+          description: Codifies a raised exception encountered by an internal or external system, sub-system,
+            interface, job, module, system component with which the web service application interfaces.  In
+            this instance it refers to the error raised when reporting job failed.
+          type: string
+        applicationSystemComponentErrorDescriptionText:
+          description: The textual information of the code of the raised exception encountered by an internal
+            or external system, sub-system, interface, job, module, system component with which the web
+            service application interfaces.
+          type: string
+    messages:
+      description: A list of errors and warnings
+      type: object
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: validationErrors
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    validationErrors:
+      description: Object containing information in the file
+      type: object
+      properties:
+        validationMessage:
+          $ref: '#/components/schemas/validationMessage'
+    validationMessage:
+      description: Object containing information in the file
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          description: The moniker given to the module or program where the error generated.
+          type: string
+    responseStatus:
+      description: 'Status for the request. Valid Values: ERROR,SUCCESS, DENIED'
+      type: string
+    responseCode:
+      description: Short explanation of the response code
+      type: string
+    responseMessage:
+      description: Long explanation of the response code
+      type: string
+    code:
+      description: Codifies a raised exception encountered by an internal or external system, sub-system,
+        interface, job, module, system component with which the web service application interfaces.  In
+        this instance it refers to the error raised when reporting job failed.
+      type: string
+    message:
+      description: Provides textual description of a problem that has occurred and is preventing the system
+        from completing a task. Messages can be a confirmation, warning or notification, and can trigger
+        the system to apply a customized default value or override to a field, record or file, halt or
+        postpone processing, skip or reject the entry generating the problem. Messages can be displayed
+        on-screen in the user interface or in reporting.
+      type: string
+    walletRequest:
+      description: Wallet request object
+      type: object
+      required:
+      - encryptedPayloadText
+      properties:
+        walletTransactionId:
+          $ref: '#/components/schemas/walletTransactionId'
+        walletApplicationData:
+          description: A Base64-encoded string provided by the wallet provider.
+          type: string
+          writeOnly: true
+        encryptedPayloadText:
+          description: Merchant provides the unreadable encrypted payload
+          type: string
+        publicKey:
+          description: The associated cipher key for ApplePay and GooglePay used when encrypts the payload.
+          type: string
+        version:
+          description: Value provided by Apple and Google wallets.
+          type: string
+        walletProvider:
+          description: Identifies the type of wallet being used, ApplePay, GooglePay, or Paze
+          type: string
+          enum:
+          - APPLE_PAY
+          - GOOGLE_PAY
+          - PAZE
+        keyHash:
+          description: 'Identifies a hash value based only on primary keys for the dataset.  (Note: It
+            is required for ApplePay)'
+          type: string
+        digitalSignature:
+          description: Value provided by wallet provider.
+          type: string
+        accountNumberMaskingIndicator:
+          description: Optional parameter that allows the integrator to specify whether the API response
+            should include a masked version of the account number. When set to true, the API will return
+            the account number in a format that obscures sensitive information, based on the preference
+            setup at the merchant level. Merchants can choose how the masked PAN (Primary Account Number)
+            is displayed, such as showing the first six and last four digits or only the last four digits.
+            This feature is designed to enhance security by ensuring that full account numbers are not
+            exposed in the API response, while still providing enough information for identification and
+            verification purposes.
+          type: boolean
+    walletResponse:
+      description: Wallet response object
+      type: object
+      properties:
+        requestId:
+          description: A uniquely generated identifier for a request which the consuming resource uses
+            to recognize subsequent retries of the same request.
+          type: string
+        walletTransactionId:
+          $ref: '#/components/schemas/walletTransactionId'
+        messages:
+          $ref: '#/components/schemas/messages'
+        accountHolder:
+          $ref: '#/components/schemas/accountHolder'
+        cryptogramDetail:
+          $ref: '#/components/schemas/cryptogramDetail'
+        multiTokenAuthenticationResponses:
+          type: array
+          minItems: 0
+          description: List of Multi Token Authentication Responses
+          items:
+            $ref: '#/components/schemas/multiTokenAuthenticationResponse'
+    transactionId:
+      description: A unique value identifies the request.
+      type: string
+    cardType:
+      description: 'Codifies the method used to pay for the exchange of money, goods or services between
+        a merchant and their customer. Examples: Visa, MasterCard, PayPal, Bill Me Later etc. Also known
+        with the Firm as method of payment or MOP.'
+      type: string
+    expiry:
+      description: Expiration for the account number
+      type: object
+      properties:
+        monthNumber:
+          description: Identifies a unique occurrence of the month within a calendar year (e.g., 1 = January,
+            2 = February, 12 = December).
+          type: string
+        yearNumber:
+          description: Identifies the century and year portion of a date. (e.g., 2014, 2015)
+          type: string
+    address:
+      description: Address Information
+      type: object
+      properties:
+        addressType:
+          description: Codifies the classification given to the various addresses captured for a party,
+            such as Doing Business As Address, Legal Entity Address, and Tax Address.
+          type: string
+        line1:
+          description: Line 1 of the address
+          type: string
+        line2:
+          description: Line 2 of the address
+          type: string
+        city:
+          description: Name of the city
+          type: string
+        state:
+          description: Name of the state
+          type: string
+        postalCode:
+          description: Zip code for the address
+          type: string
+        countryCode:
+          description: Country code for the address, valid values are based on ISO standards.
+          type: string
+    accountHolder:
+      description: Card owner properties
+      type: object
+      properties:
+        accountNumber:
+          description: The token (DPAN) provided by wallet provider, please note GooglePay wallet provides
+            PAN for certain use case.
+          type: string
+        accountNumberType:
+          description: The type of card
+          type: string
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        authenticationMethod:
+          description: Codifies how the Three Domain Secure (3-D Secure or 3DS) Requestor (merchant) authenticated
+            the cardholder before or during the transaction.
+          type: string
+        transactionAmount:
+          description: The amount of the transaction
+          type: integer
+          format: int64
+        currencyCode:
+          description: 'Currency code of the transaction. Example: ''USD'''
+          type: string
+        paymentAccountReference:
+          description: A unique identifier associated with a specific cardholder primary account number
+            (PAN) used to link a payment account represented by that PAN to affiliated payment tokens
+          type: string
+        billingAddress:
+          $ref: '#/components/schemas/address'
+        consumerInfo:
+          $ref: '#/components/schemas/consumerInfo'
+        walletCardData:
+          $ref: '#/components/schemas/walletCardData'
+    consumerInfo:
+      description: Consumer Information
+      type: object
+      properties:
+        firstName:
+          description: First name of the consumer
+          type: string
+        lastName:
+          description: Last name of the consumer
+          type: string
+        fullName:
+          description: Full name of the consumer
+          type: string
+        emailAddress:
+          description: Email address of the consumer
+          type: string
+        countryCode:
+          description: Country code values based on ISO standards
+          type: string
+        languageCode:
+          description: Consumer's prefer language based on ISO standard
+          type: string
+        mobileTelephoneNumber:
+          description: Consumer's mobile number
+          type: string
+    cryptogramDetail:
+      description: Cryptogram Detail Information
+      type: object
+      properties:
+        tokenAuthenticationValue:
+          description: Cryptogram provided by the wallet provider when authenticated with token
+          type: string
+        authenticationValue:
+          description: Cryptogram provided by the wallet provider when 3DS is used
+          type: string
+        applicationTransactionCounter:
+          description: Enumerates the attempts an authorization request was presented for a single cardholder
+            interaction.
+          type: integer
+        cryptogramInformationData:
+          description: Cryptogram Information
+          type: string
+        deviceManufacturerId:
+          description: Device Manufacturer Id
+          type: string
+        paymentDataType:
+          description: Payment Data Type Code
+          type: string
+        messageId:
+          description: A random generated value for each Google wallet payload
+          type: string
+        gatewayMerchantId:
+          description: Identifies a merchant account maintained by an external party and is used as a
+            reference identifier during transaction processing.
+          type: string
+        electronicCommerceIndicator:
+          description: Describes the Electronic Commerce Indicator used in cardholder authentication on
+            a network token
+          type: string
+        cryptogramExpirationTimestamp:
+          description: Designates the hour, minute, and second in a specific day used to determine when
+            the cryptogram message no longer valid
+          type: string
+        tokenProvisioningVerificationValue:
+          description: Contains Paze wallet authentication value received from payments networks for card
+            on file or network token provisioning transactions. Also knows as dynamic EVC- Enrollment
+            verification value for certain networks.
+          type: string
+        tokenProvisioningVerificationExpirationTimestamp:
+          description: Designates the hour, minute, and second in a specific day used to determine when
+            the Token provisioning Verification value is  no longer valid.
+          type: string
+    walletTransactionId:
+      description: Value provided by the wallet provider.
+      type: string
+    cardArt:
+      description: Card art information of a payment card.
+      type: object
+      properties:
+        name:
+          description: The name of card art that is used to build virtual replication of actual physical
+            card art.
+          type: string
+        type:
+          description: The category of card art that is used to build virtual replication of actual physical
+            card art.
+          type: string
+        url:
+          description: A reference to a web resource on the internet specifying its location on a computer
+            network and a mechanism for retrieving for the card art that is used to build virtual replication
+            of physical card.
+          type: string
+    multiTokenAuthenticationResponse:
+      description: This is used for specifying an attribute used on a model for object that will contain
+        one or more attributes
+      type: object
+      properties:
+        externalMerchantId:
+          description: The sub-merchant identifier provided to wallet provider by the merchant.
+          type: string
+        walletServiceProviderCryptogram:
+          description: Cryptogram provided by the wallet provider when authenticated with token
+          type: string
+        transactionAmount:
+          description: Payment network-generated cryptogram for the submerchant.
+          type: integer
+          format: int64
+    walletCardData:
+      description: additional card information received from digital wallet provider.
+      type: object
+      properties:
+        cardArtList:
+          type: array
+          minItems: 0
+          description: List of Card Art information
+          items:
+            $ref: '#/components/schemas/cardArt'
+        cardMetadata:
+          $ref: '#/components/schemas/cardMetadata'
+        walletMerchantTokenReferenceId:
+          description: 'Identifies uniquely a token provisioning request assigned by token service/vault
+            and provided to Issuer and Wallet Provider. This can be used as a reference to the token number
+            that is assigned for an account when provisioning completes. Example: DNITHE461927644624368716'
+          type: string
+    cardMetadata:
+      description: Card Metadata information
+      type: object
+      properties:
+        expirationDate:
+          description: Designates the year, month and day when a card account reaches the end of the current
+            contractual period and ceases allowing transactions.
+          type: string
+        accountSuffixNumber:
+          description: Identifies a sequential number for an account when it is transferred. The Account
+            Suffix Number is incremented and a new record is created within the Account Reference Number
+            when the customer reports the card lost / stolen or when fraud is suspected on the account.
+            This new record contains the fraudulent or potentially fraudulent balance. The 00 suffix is
+            always the non-fraudulent account record.
+          type: string
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles: []
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles: []

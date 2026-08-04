@@ -1,0 +1,324 @@
+# Error catalogue for JPMorgan Chase — DERIVED from the harvested OpenAPI
+# definitions in openapi/. Counts are 4xx/5xx responses declared across specs.
+generated: '2026-07-28'
+method: derived
+source: openapi/*.yml
+specification: API Commons ErrorCatalog
+specificationVersion: '0.1'
+provider: JPMorgan Chase
+providerId: jp-morgan-chase
+errors:
+- code: '400'
+  occurrences: 175
+  apis:
+  - 3-D Secure API
+  - Account Information Services
+  - Account Updater API
+  - Accounts API
+  - Alerts and Decisioning API
+  - Blockchain Deposit Account Balances API
+  - Checkout API
+  - Consumer Profile Management API
+  - Digital Onboarding API
+  - Dispute Management API
+  - Documents API
+  - Global Payments
+  descriptions:
+  - Bad Request
+  - 'Bad Request
+
+
+    **List of Error codes and Usage explanations.**
+
+    | Error Code      |           Usage                                                                '
+  - 'Bad Request
+
+
+    **List of Error codes and Usage explanations.**
+
+    | Error Code      |           Usage                                                           |
+
+    | -'
+  - 'Bad Request
+
+
+    **The following table lists and describes the error codes applicable**
+
+
+    | Error Code | Meaning                                       |
+
+    |-----------'
+  - "Bad Request \n\nList of error codes and usage descriptions\n  | Error Code        |            Usage\
+    \            |  \n  |-------------------|------------------------"
+  - 'Bad Request.
+
+
+    **List of Error codes and Rule definitions. errorDescription is
+
+    dynamically generated hence not shown here**
+
+    |  Error Code | Meaning              '
+- code: '401'
+  occurrences: 165
+  apis:
+  - 3-D Secure API
+  - Account Information Services
+  - Account Updater API
+  - Accounts API
+  - Alerts and Decisioning API
+  - Blockchain Deposit Account Balances API
+  - Checkout API
+  - Consumer Profile Management API
+  - Digital Onboarding API
+  - Dispute Management API
+  - Documents API
+  - Global Payments
+  descriptions:
+  - Forbidden access
+  - Unauthorized
+  - Unauthorized - Authentication credentials are missing or invalid.
+- code: '403'
+  occurrences: 175
+  apis:
+  - 3-D Secure API
+  - Account Information Services
+  - Account Updater API
+  - Accounts API
+  - Alerts and Decisioning API
+  - Blockchain Deposit Account Balances API
+  - Checkout API
+  - Consumer Profile Management API
+  - Digital Onboarding API
+  - Dispute Management API
+  - Documents API
+  - Global Payments
+  descriptions:
+  - 'Customer not authorized
+
+
+    **List of Error codes and Usage explanations.**
+
+    | Error Code      |           Usage                                                    '
+  - Forbidden
+  - 'Forbidden
+
+
+    **The following table lists and describes the error codes applicable**
+
+
+    | Error Code | Meaning             |
+
+    |------------|---------------------|
+
+    | P'
+  - "Forbidden \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n\
+    |  14000        | Secur"
+  - Forbidden - client forbidden from accessing the resource
+  - 'Forbidden.
+
+
+    |  Error Code  | Meaning                                    |
+
+    |--------------|--------------------------------------------|
+
+    |  GCA-001     | Client '
+- code: '404'
+  occurrences: 134
+  apis:
+  - 3-D Secure API
+  - Account Information Services
+  - Account Updater API
+  - Accounts API
+  - Alerts and Decisioning API
+  - Checkout API
+  - Consumer Profile Management API
+  - Digital Onboarding API
+  - Dispute Management API
+  - Documents API
+  - Global Payments
+  - J.P. Morgan Business Direct Connect
+  descriptions:
+  - Forbidden
+  - Not Found
+  - 'Not Found
+
+
+    **List of Error codes and Usage explanations.**
+
+    | Error Code      |           Usage                                                                  '
+  - 'Not Found
+
+
+    **List of Error codes and Usage explanations.**
+
+    | Error Code      |           Usage                                                           |
+
+    | ---'
+- code: '405'
+  occurrences: 5
+  apis:
+  - Request to Pay via QR Code API
+  descriptions: []
+- code: '406'
+  occurrences: 5
+  apis:
+  - Dispute Management API
+  descriptions:
+  - Not Acceptable
+- code: '408'
+  occurrences: 26
+  apis:
+  - Checkout API
+  - Consumer Profile Management API
+  - Dispute Management API
+  - Wallet Decryption API
+  descriptions:
+  - Request Timeout
+  - Service Unavailable
+  - Timeout Error
+- code: '409'
+  occurrences: 19
+  apis:
+  - Alerts and Decisioning API
+  - Digital Onboarding API
+  - Payment Initiation Service
+  - Tokenization API
+  descriptions:
+  - Conflict
+  - 'Conflict
+
+
+    **List of error codes and descriptions**
+
+
+    | Error Code      |           Description                          |
+
+    | --------------  |--------------------'
+- code: '412'
+  occurrences: 10
+  apis:
+  - 3-D Secure API
+  - Request to Pay via QR Code API
+  - Tokenization API
+  descriptions:
+  - Precondition Failed
+  - Precondition failed
+- code: '415'
+  occurrences: 3
+  apis:
+  - J.P. Morgan Business Direct Connect
+  descriptions: []
+- code: '422'
+  occurrences: 26
+  apis:
+  - Account Information Services
+  - Digital Onboarding API
+  - Dispute Management API
+  - Global Payments
+  - J.P. Morgan Business Direct Connect
+  descriptions:
+  - Unprocessable Entity
+- code: '429'
+  occurrences: 29
+  apis:
+  - Account Information Services
+  - Account Updater API
+  - Alerts and Decisioning API
+  - Checkout API
+  - Dispute Management API
+  - Request to Pay via QR Code API
+  - Validation Services API
+  - Wallet Decryption API
+  descriptions:
+  - Too Many Requests
+  - Too many requests
+- code: '500'
+  occurrences: 139
+  apis:
+  - 3-D Secure API
+  - Account Updater API
+  - Accounts API
+  - Blockchain Deposit Account Balances API
+  - Checkout API
+  - Consumer Profile Management API
+  - Digital Onboarding API
+  - Documents API
+  - J.P. Morgan Business Direct Connect
+  - Notifications API
+  - Pay By Bank PIS
+  - Recipients API
+  descriptions:
+  - 'Internal Error.
+
+    * GCA-099 - System is Unavailable.'
+  - Internal Server Error
+  - 'Internal server error
+
+
+    **The following table lists and describes the error codes applicable**
+
+
+    | Error Code | Meaning                   |
+
+    |------------|--------'
+  - 'Internal server error
+
+
+    **The following table lists and describes the error codes applicable**
+
+    | Error Code | Meaning              |
+
+    |------------|--------------'
+  - Unexpected error
+- code: '501'
+  occurrences: 5
+  apis:
+  - J.P. Morgan Business Direct Connect
+  descriptions: []
+- code: '503'
+  occurrences: 170
+  apis:
+  - 3-D Secure API
+  - Account Information Services
+  - Account Updater API
+  - Accounts API
+  - Alerts and Decisioning API
+  - Blockchain Deposit Account Balances API
+  - Checkout API
+  - Consumer Profile Management API
+  - Digital Onboarding API
+  - Dispute Management API
+  - Documents API
+  - Global Payments
+  descriptions:
+  - Internal Server Error
+  - Resource is temporarily unavailable.
+  - Service Unavailable
+  - 'Service Unavailable
+
+
+    **The following table lists and describes the error codes applicable**
+
+
+    | Error Code | Meaning                                             '
+  - 'Service Unavailable
+
+
+    **The following table lists and describes the error codes applicable**
+
+    | Error Code | Meaning                                       |
+
+    |----'
+  - Service Unavailable - Service temporarily unavailable
+- code: '504'
+  occurrences: 63
+  apis:
+  - 3-D Secure API
+  - Account Updater API
+  - Consumer Profile Management API
+  - Notifications API
+  - Reporting API
+  - Tokenization API
+  descriptions:
+  - Gateway Timeout
+  - Timeout

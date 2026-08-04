@@ -1,0 +1,89 @@
+# Request/response examples DERIVED from the harvested OpenAPI definitions.
+generated: '2026-07-28'
+method: derived
+source: openapi/*.yml
+specification: API Commons Examples
+specificationVersion: '0.1'
+provider: JPMorgan Chase
+providerId: jp-morgan-chase
+example_total: 1793
+specs_with_examples: 26
+specs:
+- spec: jp-morgan-chase-3-d-secure-api-openapi.yml
+  api: 3-D Secure API
+  example_count: 41
+- spec: jp-morgan-chase-account-information-services-openapi.yml
+  api: Account Information Services
+  example_count: 35
+- spec: jp-morgan-chase-account-updater-api-openapi.yml
+  api: Account Updater API
+  example_count: 42
+- spec: jp-morgan-chase-accounts-api-openapi.yml
+  api: Accounts API
+  example_count: 72
+- spec: jp-morgan-chase-alerts-and-decisioning-api-openapi.yml
+  api: Alerts and Decisioning API
+  example_count: 73
+- spec: jp-morgan-chase-blockchain-deposit-account-balances-api-openapi.yml
+  api: Blockchain Deposit Account Balances API
+  example_count: 9
+- spec: jp-morgan-chase-checkout-api-openapi.yml
+  api: Checkout API
+  example_count: 60
+- spec: jp-morgan-chase-consumer-profile-management-api-openapi.yml
+  api: Consumer Profile Management API
+  example_count: 146
+- spec: jp-morgan-chase-digital-onboarding-api-openapi.yml
+  api: Digital Onboarding API
+  example_count: 161
+- spec: jp-morgan-chase-dispute-management-api-openapi.yml
+  api: Dispute Management API
+  example_count: 49
+- spec: jp-morgan-chase-documents-api-openapi.yml
+  api: Documents API
+  example_count: 16
+- spec: jp-morgan-chase-global-payments-api-openapi.yml
+  api: Global Payments API
+  example_count: 13
+- spec: jp-morgan-chase-global-payments-openapi.yml
+  api: Global Payments
+  example_count: 56
+- spec: jp-morgan-chase-j-p-morgan-business-direct-connect-openapi.yml
+  api: J.P. Morgan Business Direct Connect
+  example_count: 88
+- spec: jp-morgan-chase-notifications-api-openapi.yml
+  api: Notifications API
+  example_count: 107
+- spec: jp-morgan-chase-pay-by-bank-pis-openapi.yml
+  api: Pay By Bank PIS
+  example_count: 82
+- spec: jp-morgan-chase-payment-initiation-service-openapi.yml
+  api: Payment Initiation Service
+  example_count: 61
+- spec: jp-morgan-chase-product-configuration-api-openapi.yml
+  api: Product Configuration API
+  example_count: 16
+- spec: jp-morgan-chase-recipients-api-openapi.yml
+  api: Recipients API
+  example_count: 75
+- spec: jp-morgan-chase-reporting-api-openapi.yml
+  api: Reporting API
+  example_count: 42
+- spec: jp-morgan-chase-request-to-pay-via-qr-code-api-openapi.yml
+  api: Request to Pay via QR Code API
+  example_count: 47
+- spec: jp-morgan-chase-tokenization-api-openapi.yml
+  api: Tokenization API
+  example_count: 148
+- spec: jp-morgan-chase-transactions-api-openapi.yml
+  api: Transactions API
+  example_count: 130
+- spec: jp-morgan-chase-validation-services-api-openapi.yml
+  api: Validation Services API
+  example_count: 54
+- spec: jp-morgan-chase-wallet-decryption-api-openapi.yml
+  api: Wallet Decryption API
+  example_count: 7
+- spec: jp-morgan-chase-webhooks-api-openapi.yml
+  api: Webhooks API
+  example_count: 163

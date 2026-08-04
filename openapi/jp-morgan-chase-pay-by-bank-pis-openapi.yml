@@ -1,0 +1,3413 @@
+# Harvested verbatim from the J.P. Morgan Payments Developer Portal.
+# method: searched
+# source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Ftreasury%2Fpay-by-bank%2Fpis-oas.md
+# generated: '2026-07-28'
+openapi: 3.0.0
+info:
+  title: Pay By Bank PIS
+  version: 1.1.4
+  description: "## Pay By Bank v1 - PIS API\n\n---\n\n> J.P. Morgan as a registered Third Party Provider\
+    \ (**TPP**) of Open Banking services,\n> offers a seamless integration platform for Pay by Bank such\
+    \ that:\n> - clients can initiate payments (serving as a Payment Initiation Service Provider, or **PISP**)\
+    \ \n>"
+  contact:
+    name: JPMorgan Chase & Co. API Support
+    email: imsd.security.operations@jpmorgan.com
+    url: https://developer.payments.jpmorgan.com/contact/support
+servers:
+- url: https://apigateway.jpmorgan.com/tsapi/v1
+  description: PRODUCTION - MTLS
+- url: https://api-mock.payments.jpmorgan.com/tsapi/v1
+  description: MOCK
+tags:
+- name: PIS
+  description: Payment Initiation Services
+- name: Refunds
+  description: Refund initiation services.
+paths:
+  /pisp/providers:
+    post:
+      summary: Request for Providers
+      description: "- Clients can request a list of ASPSPs reachable using J.P. Morgan's PISP\nservices\
+        \ in each country.\n- For the purposes of this API, ASPSPs are referred to as 'Providers.' \n\
+        - The request for retrieving a particular country's list of supported providers must contain the\
+        \ correct country code."
+      tags:
+      - PIS
+      operationId: retrievePISProviders
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PispProvidersRequest'
+            examples:
+              ExamplePispProvidersRequest:
+                $ref: '#/components/examples/PispProvidersRequestExample'
+        required: false
+      x-examples:
+      - name: ExamplePispProvidersRequest
+        description: Example country code
+        parameters:
+          body:
+            countryCode: XF
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PispProvidersResponse'
+              examples:
+                ExamplePispProvidersResponse:
+                  $ref: '#/components/examples/PispProvidersResponseExample'
+        '400':
+          description: "Bad Request\n\n**The following table lists and describes the error codes applicable**\n\
+            \n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | PISP-001   |Customer does not exist within our system      |    \n| PISP-003   |Invalid\
+            \ JSON format                            |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '403':
+          description: 'Forbidden
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning             |
+
+            |------------|---------------------|
+
+            | PISP-006   |Unauthorized access  |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/UnauthorizedAccessExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning                   |
+
+            |------------|---------------------------|
+
+            | PISP-002   |Internal server error      |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n\n| Error Code | Meaning                                                 \
+            \   |\n|------------|------------------------------------------------------------|\n| PISP-004\
+            \   |System exception                                            |    \n| PISP-005   |No customer\
+            \ exists associated with paymentId: `<paymentID>` |\n| PISP-017   |The JSON request is incorrectly\
+            \ formed                      |\n| PISP-017   |Customer is locked                        \
+            \                  |\n| PISP-017   |We do not support the received provider_mode         \
+            \       |\n| PISP-017   |The return_to URL exceeds 2040 characters.                  |\n|\
+            \ PISP-017   |Invalid payment attributes.                                 |\n| PISP-017  \
+            \ |Certificate not found.                                      |\n| PISP-017   |Action not\
+            \ supported                                        |\n| PISP-017   |The accessed provider\
+            \ is inactive at the moment             |\n| PISP-017   |The provider is temporary unavailable.\
+            \                      |\n| PISP-017   |Payment already authorized                       \
+            \           |\n| PISP-017   |Sending a provider_code that is not present in our system   |\n\
+            | PISP-017   |Failed to create the payment                                |\n| PISP-017  \
+            \ |The customer tried to initiate a payment with invalid credentials|\n| PISP-017   |Payment\
+            \ already finished.                                   |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /pisp/payment/request:
+    post:
+      summary: Request for Payment Initiation
+      description: This request initiates a payment on a PSU's behalf.
+      tags:
+      - PIS
+      operationId: createPaymentIntent
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+            examples:
+              ExampleSEPAPaymentRequest:
+                $ref: '#/components/examples/SEPAPaymentRequestExample'
+              ExampleFPSPaymentRequest:
+                $ref: '#/components/examples/FPSPaymentRequestExample'
+              ExampleBACSPaymentRequest:
+                $ref: '#/components/examples/BACSPaymentRequestExample'
+              ExampleCHAPSPaymentRequest:
+                $ref: '#/components/examples/CHAPSPaymentRequestExample'
+      x-examples:
+      - name: ExampleSEPAPaymentRequest
+        description: Example Request for an SEPA payment
+        parameters:
+          body:
+            customer_id: 00ef7b8enca1elA1tm6bmyphhgk3
+            country_code: DE
+            provider_code: berliner_sparkasse_oauth_client_de
+            payee_description: MusicCorpDE
+            template_identifier: SEPA
+            return_to: https://www.merchant.com/signup/redirectRequestLanding?action=nextAction&skipMoneyballModeRedirect=true&authURL=1695271209906.YsdmtRcveemWqg%252BQFVHNwRJO8B0%3D&flwssn=fb616054-ae67-4767-81a9-fb4d0f9976c0&nftoken=BQAbAAEBECYycrotnMdMPM%2BW6p7%2BWC%2BAoKPmq4VIBpWZVXQlGJnjdG0QZXjPij2O0eICZncDDLrE2n%2FMLxZvSBxYfto72m9nvCUjz0pZlnd%2Fcf1UnJStNNky3qwZbKMAJP2PeosCnbQ8fXIifdfaMcXZKZEKCSaOX1LpCM1Xx0kB6yfmT1FuTV5NlaphUclni%2FYt7BNVqC4tyjPAM9uUkqCPMBZzxgw%2FGeUBV2kXdmfct9EtE5PMGms%3D&redirectStrategy=open-banking
+            payment_attributes:
+              end_to_end_id: '20018300321270540'
+              creditor_name: MusicCorp
+              creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+              debtor_iban: DEXXXXXXXXXXXXXXXXXXXX
+              description: For goods
+              amount: '17.99'
+              currency_code: EUR
+              mode: Normal
+      - name: ExampleFPSPaymentRequest
+        description: Example Request for an FPS payment
+        parameters:
+          body:
+            customer_id: 00ef7b8enca1elA1tm6bmyphhgk3
+            country_code: DE
+            provider_code: berliner_sparkasse_oauth_client_de
+            payee_description: MusicCorpDE
+            template_identifier: SEPA
+            return_to: https://www.merchant.com/signup/redirectRequestLanding?action=nextAction&skipMoneyballModeRedirect=true&authURL=1695271209906.YsdmtRcveemWqg%252BQFVHNwRJO8B0%3D&flwssn=fb616054-ae67-4767-81a9-fb4d0f9976c0&nftoken=BQAbAAEBECYycrotnMdMPM%2BW6p7%2BWC%2BAoKPmq4VIBpWZVXQlGJnjdG0QZXjPij2O0eICZncDDLrE2n%2FMLxZvSBxYfto72m9nvCUjz0pZlnd%2Fcf1UnJStNNky3qwZbKMAJP2PeosCnbQ8fXIifdfaMcXZKZEKCSaOX1LpCM1Xx0kB6yfmT1FuTV5NlaphUclni%2FYt7BNVqC4tyjPAM9uUkqCPMBZzxgw%2FGeUBV2kXdmfct9EtE5PMGms%3D&redirectStrategy=open-banking
+            payment_attributes:
+              end_to_end_id: '20018300321270540'
+              creditor_name: MusicCorp
+              creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+              debtor_iban: DEXXXXXXXXXXXXXXXXXXXX
+              description: For goods
+              amount: '17.99'
+              currency_code: EUR
+              mode: Normal
+      - name: ExampleBACSPaymentRequest
+        description: Example Request for a BACS payment
+        parameters:
+          body:
+            customer_id: D310252
+            country_code: GB
+            provider_code: barclays_oauth_client_gb
+            payee_description: barclays PVT 10-25-23
+            template_identifier: BACS
+            return_to: https://sites.obtest.com/sites/cib
+            payment_attributes:
+              end_to_end_id: PISP_1025_PVT_002
+              creditor_name: John Smith
+              creditor_sort_code: XXX242
+              creditor_account_number: XXXXX035
+              description: For Goods
+              amount: '100.00'
+              currency_code: GBP
+      - name: ExampleCHAPSPaymentRequest
+        description: Example Request for a CHAPS payment
+        parameters:
+          body:
+            customer_id: D310252
+            country_code: GB
+            provider_code: barclays_oauth_client_gb
+            payee_description: barclays PVT 10-25-23
+            template_identifier: CHAPS
+            return_to: https://sites.obtest.com/sites/cib
+            payment_attributes:
+              end_to_end_id: PISP_1025_PVT_002
+              creditor_name: John Smith
+              creditor_sort_code: XXX242
+              creditor_account_number: XXXXX035
+              description: For Goods
+              amount: '100.00'
+              currency_code: GBP
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+              examples:
+                ExamplePaymentResponse:
+                  $ref: '#/components/examples/PaymentResponseExample'
+        '400':
+          description: "Bad Request\n\n**The following table lists and describes the error codes applicable**\n\
+            \n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | PISP-001   |Customer does not exist within our system      |    \n| PISP-003   |Invalid\
+            \ JSON format                            |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '403':
+          description: 'Forbidden
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning             |
+
+            |------------|---------------------|
+
+            | PISP-006   |Unauthorized access  |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/UnauthorizedAccessExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning                   |
+
+            |------------|---------------------------|
+
+            | PISP-002   |Internal server error      |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n\n| Error Code | Meaning                                                 \
+            \   |\n|------------|------------------------------------------------------------|\n| PISP-004\
+            \   |System exception                                            |    \n| PISP-005   |No customer\
+            \ exists associated with paymentId: `<paymentID>` |\n| PISP-017   |The JSON request is incorrectly\
+            \ formed                      |\n| PISP-017   |Customer is locked                        \
+            \                  |\n| PISP-017   |We do not support the received provider_mode         \
+            \       |\n| PISP-017   |The return_to URL exceeds 2040 characters.                  |\n|\
+            \ PISP-017   |Invalid payment attributes.                                 |\n| PISP-017  \
+            \ |Certificate not found.                                      |\n| PISP-017   |Action not\
+            \ supported                                        |\n| PISP-017   |The accessed provider\
+            \ is inactive at the moment             |\n| PISP-017   |The provider is temporary unavailable.\
+            \                      |\n| PISP-017   |Payment already authorized                       \
+            \           |\n| PISP-017   |Sending a provider_code that is not present in our system   |\n\
+            | PISP-017   |Failed to create the payment                                |\n| PISP-017  \
+            \ |The customer tried to initiate a payment with invalid credentials|\n| PISP-017   |Payment\
+            \ already finished.                                   |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /pisp/payment/authorize:
+    post:
+      summary: Request for Payment Authorization
+      description: "This request is used to authorize a payment.    \n\n**NOTE: The request payload MUST\
+        \ be digitally signed and encrypted using the Signing Certificate**"
+      operationId: createPaymentAuthorization
+      tags:
+      - PIS
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentAuthorizationRequest'
+            examples:
+              ExamplePaymentAuthorizeRequest:
+                $ref: '#/components/examples/PaymentAuthorizationRequestExample'
+      x-examples:
+      - name: ExamplePaymentAuthorizeRequest
+        description: Example Request for payment Authorization
+        parameters:
+          body:
+            paymentId: '1105291498426995690'
+            authToken: a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13&end_to_end_id=00000002
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentAuthStatusResponse'
+              examples:
+                ExamplePaymentAuthorizationresponse:
+                  $ref: '#/components/examples/PaymentAuthStatusResponseExample'
+        '400':
+          description: "Bad Request\n\n**The following table lists and describes the error codes applicable**\n\
+            \n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | PISP-001   |Customer does not exist within our system      |    \n| PISP-003   |Invalid\
+            \ JSON format                            |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '403':
+          description: 'Forbidden
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning             |
+
+            |------------|---------------------|
+
+            | PISP-006   |Unauthorized access  |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/UnauthorizedAccessExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning                   |
+
+            |------------|---------------------------|
+
+            | PISP-002   |Internal server error      |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n\n| Error Code | Meaning                                                 \
+            \   |\n|------------|------------------------------------------------------------|\n| PISP-004\
+            \   |System exception                                            |    \n| PISP-005   |No customer\
+            \ exists associated with paymentId: `<paymentID>` |\n| PISP-017   |The JSON request is incorrectly\
+            \ formed                      |\n| PISP-017   |Customer is locked                        \
+            \                  |\n| PISP-017   |We do not support the received provider_mode         \
+            \       |\n| PISP-017   |The return_to URL exceeds 2040 characters.                  |\n|\
+            \ PISP-017   |Invalid payment attributes.                                 |\n| PISP-017  \
+            \ |Certificate not found.                                      |\n| PISP-017   |Action not\
+            \ supported                                        |\n| PISP-017   |The accessed provider\
+            \ is inactive at the moment             |\n| PISP-017   |The provider is temporary unavailable.\
+            \                      |\n| PISP-017   |Payment already authorized                       \
+            \           |\n| PISP-017   |Sending a provider_code that is not present in our system   |\n\
+            | PISP-017   |Failed to create the payment                                |\n| PISP-017  \
+            \ |The customer tried to initiate a payment with invalid credentials|\n| PISP-017   |Payment\
+            \ already finished.                                   |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /pisp/payment/status:
+    post:
+      summary: Request for Payment Status
+      description: 'This request retrieves the current status of a previously initiated
+
+        payment.'
+      operationId: retrievePaymentStatus
+      tags:
+      - PIS
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentStatusRequest'
+            examples:
+              ExamplePaymentStatusRequest:
+                $ref: '#/components/examples/PaymentStatusRequestExample'
+      x-examples:
+      - name: ExamplePaymentStatusRequest
+        description: Example Payment Status Request
+        parameters:
+          body:
+            customer_id: '1105291496237568999'
+            payment_id: '1104531176632095201'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentAuthStatusResponse'
+              examples:
+                ExamplesPaymentStatusResponse:
+                  $ref: '#/components/examples/PaymentAuthStatusResponseExample'
+        '400':
+          description: "Bad Request\n\n**The following table lists and describes the error codes applicable**\n\
+            \n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | PISP-001   |Customer does not exist within our system      |    \n| PISP-003   |Invalid\
+            \ JSON format                            |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '403':
+          description: 'Forbidden
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning             |
+
+            |------------|---------------------|
+
+            | PISP-006   |Unauthorized access  |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/UnauthorizedAccessExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning                   |
+
+            |------------|---------------------------|
+
+            | PISP-002   |Internal server error      |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n\n| Error Code | Meaning                                                 \
+            \   |\n|------------|------------------------------------------------------------|\n| PISP-004\
+            \   |System exception                                            |    \n| PISP-005   |No customer\
+            \ exists associated with paymentId: `<paymentID>` |\n| PISP-017   |The JSON request is incorrectly\
+            \ formed                      |\n| PISP-017   |Customer is locked                        \
+            \                  |\n| PISP-017   |We do not support the received provider_mode         \
+            \       |\n| PISP-017   |The return_to URL exceeds 2040 characters.                  |\n|\
+            \ PISP-017   |Invalid payment attributes.                                 |\n| PISP-017  \
+            \ |Certificate not found.                                      |\n| PISP-017   |Action not\
+            \ supported                                        |\n| PISP-017   |The accessed provider\
+            \ is inactive at the moment             |\n| PISP-017   |The provider is temporary unavailable.\
+            \                      |\n| PISP-017   |Payment already authorized                       \
+            \           |\n| PISP-017   |Sending a provider_code that is not present in our system   |\n\
+            | PISP-017   |Failed to create the payment                                |\n| PISP-017  \
+            \ |The customer tried to initiate a payment with invalid credentials|\n| PISP-017   |Payment\
+            \ already finished.                                   |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /pisp/payments/refunds:
+    post:
+      summary: Request for Payment refunds
+      description: This request initiates a refund on the payments made before
+      operationId: createRefunds
+      tags:
+      - Refunds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundsRequest'
+        required: true
+      x-examples:
+      - name: PSD2 Payment Refunds
+        description: Refund request payload
+        parameters:
+          body:
+            paymentIdentifiers:
+              endToEndId: '123123123'
+              paymentId: '1401642'
+            amount:
+              amount: 100
+              currency: GBP
+            reason: REQUESTED_BY_CUSTOMER
+            mode: INSTANT
+      responses:
+        '202':
+          description: Refund has been accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundsResponse'
+        '400':
+          description: "Bad Request.\n\n**List of Error codes and Rule definitions. errorDescription is\n\
+            dynamically generated hence not shown here.\nRefer the table below**\n|  Error Code | Meaning\
+            \                                              |\n|-------------|------------------------------------------------------|\n\
+            |  10001       | Mandatory field is missing or invalid               |\n|  10002       | Minimum\
+            \ length validation failure                   |\n|  10003       | Maximum length validation\
+            \ failure                   |\n|  10006       | Amount validation failure ~ value less than\
+            \ minimum | \n|  10007       | Amount validation failure ~ value is not a number   | \n| \
+            \ 10008       | Validation failure ~ unexpected value provided      | \n|  10009       | Invalid\
+            \ Id provided                                 | \n|  12000       | System Error          \
+            \                              | \n|  13000       | Uncategorized Error                  \
+            \               | \n\n**Standard API Gateway Error codes and descriptions** \n\n|  Error Code\
+            \  | Meaning                      |\n|--------------|------------------------------|\n|  GCA-030\
+            \     | API Processing Error         |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsInit'
+        '403':
+          description: 'Forbidden.
+
+
+            |  Error Code  | Meaning                                    |
+
+            |--------------|--------------------------------------------|
+
+            |  GCA-001     | Client is not eligible for the API Service |
+
+            |  GCA-003     | Client is not eligible for the API Service |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '503':
+          description: 'Service Unavailable.
+
+
+            |  Error Code  | Meaning           |
+
+            |--------------|-------------------|
+
+            |  GCA-099    | System Unavailable |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /pisp/payments/refunds/{refundId}:
+    get:
+      summary: Retrieve refund status
+      description: This request retrieves the refund status and details based on the given refund Id
+      tags:
+      - Refunds
+      operationId: getRefunds
+      parameters:
+      - $ref: '#/components/parameters/RefundId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundsResponse'
+        '400':
+          description: "Bad Request.\n\n**List of Error codes and Rule definitions. errorDescription is\n\
+            dynamically generated hence not shown here**\n|  Error Code | Meaning                    \
+            \                          |\n|-------------|------------------------------------------------------|\n\
+            |  10001       | Mandatory field is missing or invalid               |\n|  10002       | Minimum\
+            \ length validation failure                   |\n|  10003       | Maximum length validation\
+            \ failure                   |\n|  10006       | Amount validation failure ~ value less than\
+            \ minimum | \n|  10007       | Amount validation failure ~ value is not a number   | \n| \
+            \ 10008       | Validation failure ~ unexpected value provided      | \n|  10009       | Invalid\
+            \ Id provided                                 | \n|  12000       | System Error          \
+            \                              | \n|  13000       | Uncategorized Error                  \
+            \               | \n\n**Standard API Gateway Error codes and descriptions** \n\n|  Error Code\
+            \  | Meaning                      |\n|--------------|------------------------------|\n|  GCA-030\
+            \     | API Processing Error         |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsInit'
+        '403':
+          description: 'Forbidden.
+
+
+            |  Error Code  | Meaning                                    |
+
+            |--------------|--------------------------------------------|
+
+            |  GCA-001     | Client is not eligible for the API Service |
+
+            |  GCA-003     | Client is not eligible for the API Service |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '503':
+          description: 'Service Unavailable.
+
+
+            |  Error Code  | Meaning           |
+
+            |--------------|-------------------|
+
+            |  GCA-099    | System Unavailable |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /aisp/providers:
+    post:
+      deprecated: true
+      summary: Request for Providers
+      description: '<!-- theme: warning-->
+
+        > Deprecated
+
+        >
+
+        > Sunset: 30 May 2026
+
+        - This request retrieves a list of ASPSPs reachable using J.P. Morgan''s AISP services in each
+        country.
+
+        - For the purposes of this API, ASPSPs are referred to as Providers.
+
+        - The request for retrieving a particular country''s list of supported Providers must contain
+        the correct country code'
+      tags:
+      - AIS
+      operationId: retrieveAISProviders
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProvidersRequest'
+        required: false
+      x-examples:
+      - name: ExampleProvidersRequest
+        description: Example request to retrieve providers
+        parameters:
+          body:
+            countryCode: XF
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProvidersResponse'
+              examples:
+                ExamplesProvidersResponse:
+                  $ref: '#/components/examples/ProvidersResponseExample'
+        '400':
+          description: 'Bad Request.
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning                                                                                              |
+
+            |------------|------------------------------------------------------------------------------------------------------|
+
+            | AISP-001   |Values are missing for properties: `<properties>`                                                     |
+
+            | AISP-002   |Invalid consent scopes: `<invalid_scopes>`                                                            |
+
+            | AISP-003   |Invalid JSON format                                                                                   |
+
+            | AISP-006   |Report not found with requested payload                                                               |
+
+            | AISP-007   |Customer did not consent to the Provider:<invalid_payload>                                            |
+
+            | AISP-008   |Provider not found for country code: `<invalid_country_code>` or provider code:`<invalid_provider_code>`
+            This error code will appear if an incorrect providerCode is given|
+
+            | AISP-010   |ClientID not present in the header                                                                    |
+
+            | AISP-012   |Required properties are missing: `<missing_fields>`                                                   |
+
+            | AISP-013   |Invalid properties exist: `<additional_fields>`                                                       |
+
+            | AISP-014   |Providers are not available with countryCode: `<country_code>`                                        |
+
+            | AISP-015   |Consent expired, please call consent provider API to re-consent                                       |
+
+            | AISP-016   |Bad request                                                                                           |
+
+            | AISP-017   |The consent has already been revoked                                                                  |
+
+            | AISP-017   |Refresh is not possible because the consent has expired                                               |
+
+            | AISP-017   |A consent with such an id does not exist                                                              |
+
+            | AISP-017   |Refresh is not possible because the consent has been revoked                                          |
+
+            | AISP-017   |The value of consent scopes parameter is invalid                                                      |
+
+            | AISP-017   |The value of consent scopes parameter is not allowed for the client or/and by
+            the provider            |
+
+            | AISP-017   |The next refresh attempt will be allowed according to next_refresh_possible
+            attribute or connection''s status is inactive|
+
+            | AISP-017   |The client tried to connect, reconnect or fetch a connection, but it appears
+            to be disabled           |
+
+            | AISP-017   |Bad requestWe could not find a connection with the requested connection_id                            |
+
+            | AISP-017   |We have received an invalid Date format                                                               |
+
+            | AISP-017   |The passed from_date - to_date interval is out of consent from_date - to_date
+            range                   |
+
+            | AISP-017   |Sending a date value that does not fit in admissible range                                            |
+
+            | AISP-017   |We have received an invalid DateTime format                                                           |
+
+            | AISP-017   |Sending a datetime value that does not fit in admissible range                                        |
+
+            | AISP-017   |The value of fetch_scopes parameter is invalid                                                        |
+
+            | AISP-017   |Fetching holder_info for this provider is not supported                                               |
+
+            | AISP-017   |Invalid consent from_date value, either out of range or a wrong date format                           |
+
+            | AISP-017   |Invalid consent period_days value or not allowed by provider                                          |
+
+            | AISP-017   |Invalid from_date value, either out of range or wrong date format                                     |
+
+            | AISP-017   |Invalid to_date value, either out of range or wrong date format                                       |
+
+            | AISP-017   |We have received some other request format instead of JSON, or the body could
+            not be parsed           |
+
+            | AISP-017   |The accessed provider has the disabled status. Hence, is no longer supported                          |
+
+            | AISP-017   |The requested provider has the inactive status. That means that new connections
+            cannot be created while the current ones cannot be refreshed or reconnected|
+
+            | AISP-017   |Sending a provider_code that is not present in our system                                             |
+
+            | AISP-017   |The connection''s provider has no interactive step                                                     |
+
+            | AISP-017   |Too many connections are being processed at the same time from one application                        |
+
+            | AISP-018   |Customer did not consent to provider `<provider_code>`, please call consent
+            provider API to re-consent|
+
+            | AISP-019   |Provider `<provider_code>` does not support the requested service                                     |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning              |
+
+            |------------|----------------------|
+
+            | AISP-020   |Internal server error |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | AISP-004   |System exception                               |    \n| AISP-005   |Consent\
+            \ terms not found with requested payload |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /aisp/consent/provider:
+    post:
+      deprecated: true
+      summary: Request to Access Account Information Services
+      description: '<!-- theme: warning-->
+
+        > Deprecated
+
+        >
+
+        > Sunset: 30 May 2026
+
+        - This request allows the PSU to consent to J.P. Morgan accessing their
+
+        account information at a particular `Provider`.'
+      tags:
+      - AIS
+      operationId: createAccountConsents
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsentRequest'
+            examples:
+              ExampleConsentRequest:
+                $ref: '#/components/examples/ConsentRequestExample'
+        required: true
+      x-examples:
+      - name: ExampleConsentRequest
+        description: Example Consent Request
+        parameters:
+          body:
+            customerId: CUST_QA02103453A
+            countryCode: XF
+            providerCode: fake_oauth_client_xf
+            consentScopes:
+            - account_details
+            - transactions_details
+            - holder_information
+            consentDuration: 90
+            returnToUrl: https://sites.jpmchase.com/sites/cib
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentResponse'
+              examples:
+                ExampleConsentResponse:
+                  $ref: '#/components/examples/ConsentResponseExample'
+        '400':
+          description: 'Bad Request.
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning                                                                                              |
+
+            |------------|------------------------------------------------------------------------------------------------------|
+
+            | AISP-001   |Values are missing for properties: `<properties>`                                                     |
+
+            | AISP-002   |Invalid consent scopes: `<invalid_scopes>`                                                            |
+
+            | AISP-003   |Invalid JSON format                                                                                   |
+
+            | AISP-006   |Report not found with requested payload                                                               |
+
+            | AISP-007   |Customer did not consent to the Provider:<invalid_payload>                                            |
+
+            | AISP-008   |Provider not found for country code: `<invalid_country_code>` or provider code:`<invalid_provider_code>`
+            This error code will appear if an incorrect providerCode is given|
+
+            | AISP-010   |ClientID not present in the header                                                                    |
+
+            | AISP-012   |Required properties are missing: `<missing_fields>`                                                   |
+
+            | AISP-013   |Invalid properties exist: `<additional_fields>`                                                       |
+
+            | AISP-014   |Providers are not available with countryCode: `<country_code>`                                        |
+
+            | AISP-015   |Consent expired, please call consent provider API to re-consent                                       |
+
+            | AISP-016   |Bad request                                                                                           |
+
+            | AISP-017   |The consent has already been revoked                                                                  |
+
+            | AISP-017   |Refresh is not possible because the consent has expired                                               |
+
+            | AISP-017   |A consent with such an id does not exist                                                              |
+
+            | AISP-017   |Refresh is not possible because the consent has been revoked                                          |
+
+            | AISP-017   |The value of consent scopes parameter is invalid                                                      |
+
+            | AISP-017   |The value of consent scopes parameter is not allowed for the client or/and by
+            the provider            |
+
+            | AISP-017   |The next refresh attempt will be allowed according to next_refresh_possible
+            attribute or connection''s status is inactive|
+
+            | AISP-017   |The client tried to connect, reconnect or fetch a connection, but it appears
+            to be disabled           |
+
+            | AISP-017   |Bad requestWe could not find a connection with the requested connection_id                            |
+
+            | AISP-017   |We have received an invalid Date format                                                               |
+
+            | AISP-017   |The passed from_date - to_date interval is out of consent from_date - to_date
+            range                   |
+
+            | AISP-017   |Sending a date value that does not fit in admissible range                                            |
+
+            | AISP-017   |We have received an invalid DateTime format                                                           |
+
+            | AISP-017   |Sending a datetime value that does not fit in admissible range                                        |
+
+            | AISP-017   |The value of fetch_scopes parameter is invalid                                                        |
+
+            | AISP-017   |Fetching holder_info for this provider is not supported                                               |
+
+            | AISP-017   |Invalid consent from_date value, either out of range or a wrong date format                           |
+
+            | AISP-017   |Invalid consent period_days value or not allowed by provider                                          |
+
+            | AISP-017   |Invalid from_date value, either out of range or wrong date format                                     |
+
+            | AISP-017   |Invalid to_date value, either out of range or wrong date format                                       |
+
+            | AISP-017   |We have received some other request format instead of JSON, or the body could
+            not be parsed           |
+
+            | AISP-017   |The accessed provider has the disabled status. Hence, is no longer supported                          |
+
+            | AISP-017   |The requested provider has the inactive status. That means that new connections
+            cannot be created while the current ones cannot be refreshed or reconnected|
+
+            | AISP-017   |Sending a provider_code that is not present in our system                                             |
+
+            | AISP-017   |The connection''s provider has no interactive step                                                     |
+
+            | AISP-017   |Too many connections are being processed at the same time from one application                        |
+
+            | AISP-018   |Customer did not consent to provider `<provider_code>`, please call consent
+            provider API to re-consent|
+
+            | AISP-019   |Provider `<provider_code>` does not support the requested service                                     |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning              |
+
+            |------------|----------------------|
+
+            | AISP-020   |Internal server error |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | AISP-004   |System exception                               |    \n| AISP-005   |Consent\
+            \ terms not found with requested payload |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /aisp/authorize:
+    post:
+      deprecated: true
+      summary: Send Authorized Token Issued by Provider
+      description: "<!-- theme: warning-->\n> Deprecated\n>\n> Sunset: 30 May 2026\n- Following the PSUs\
+        \ authorization and confirmation of information sharing with their provider, the provider issues\
+        \ a token\n  that permits access to the PSUs data. \n- This token must be transmitted to J.P.\
+        \ Morgan to complete the account information\n  request and digitally sign the request payload."
+      tags:
+      - AIS
+      operationId: createAuthorization
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorizeRequest'
+            examples:
+              ExampleAuthorizeRequest:
+                $ref: '#/components/examples/AuthorizeRequestExample'
+        required: true
+      x-examples:
+      - name: ExampleAuthorizeRequest
+        description: Example Authorize Request
+        parameters:
+          body:
+            customerId: TestCustomer1
+            providerCode: fake_oauth_client_xf
+            authToken: access_token=bc4521d3&state=Pd8b4d0eb
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizeResponse'
+              examples:
+                ExampleAuthorizeResponse:
+                  $ref: '#/components/examples/AuthorizeResponseExample'
+        '400':
+          description: 'Bad Request.
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning                                                                                              |
+
+            |------------|------------------------------------------------------------------------------------------------------|
+
+            | AISP-001   |Values are missing for properties: `<properties>`                                                     |
+
+            | AISP-002   |Invalid consent scopes: `<invalid_scopes>`                                                            |
+
+            | AISP-003   |Invalid JSON format                                                                                   |
+
+            | AISP-006   |Report not found with requested payload                                                               |
+
+            | AISP-007   |Customer did not consent to the Provider:<invalid_payload>                                            |
+
+            | AISP-008   |Provider not found for country code: `<invalid_country_code>` or provider code:`<invalid_provider_code>`
+            This error code will appear if an incorrect providerCode is given|
+
+            | AISP-010   |ClientID not present in the header                                                                    |
+
+            | AISP-012   |Required properties are missing: `<missing_fields>`                                                   |
+
+            | AISP-013   |Invalid properties exist: `<additional_fields>`                                                       |
+
+            | AISP-014   |Providers are not available with countryCode: `<country_code>`                                        |
+
+            | AISP-015   |Consent expired, please call consent provider API to re-consent                                       |
+
+            | AISP-016   |Bad request                                                                                           |
+
+            | AISP-017   |The consent has already been revoked                                                                  |
+
+            | AISP-017   |Refresh is not possible because the consent has expired                                               |
+
+            | AISP-017   |A consent with such an id does not exist                                                              |
+
+            | AISP-017   |Refresh is not possible because the consent has been revoked                                          |
+
+            | AISP-017   |The value of consent scopes parameter is invalid                                                      |
+
+            | AISP-017   |The value of consent scopes parameter is not allowed for the client or/and by
+            the provider            |
+
+            | AISP-017   |The next refresh attempt will be allowed according to next_refresh_possible
+            attribute or connection''s status is inactive|
+
+            | AISP-017   |The client tried to connect, reconnect or fetch a connection, but it appears
+            to be disabled           |
+
+            | AISP-017   |Bad requestWe could not find a connection with the requested connection_id                            |
+
+            | AISP-017   |We have received an invalid Date format                                                               |
+
+            | AISP-017   |The passed from_date - to_date interval is out of consent from_date - to_date
+            range                   |
+
+            | AISP-017   |Sending a date value that does not fit in admissible range                                            |
+
+            | AISP-017   |We have received an invalid DateTime format                                                           |
+
+            | AISP-017   |Sending a datetime value that does not fit in admissible range                                        |
+
+            | AISP-017   |The value of fetch_scopes parameter is invalid                                                        |
+
+            | AISP-017   |Fetching holder_info for this provider is not supported                                               |
+
+            | AISP-017   |Invalid consent from_date value, either out of range or a wrong date format                           |
+
+            | AISP-017   |Invalid consent period_days value or not allowed by provider                                          |
+
+            | AISP-017   |Invalid from_date value, either out of range or wrong date format                                     |
+
+            | AISP-017   |Invalid to_date value, either out of range or wrong date format                                       |
+
+            | AISP-017   |We have received some other request format instead of JSON, or the body could
+            not be parsed           |
+
+            | AISP-017   |The accessed provider has the disabled status. Hence, is no longer supported                          |
+
+            | AISP-017   |The requested provider has the inactive status. That means that new connections
+            cannot be created while the current ones cannot be refreshed or reconnected|
+
+            | AISP-017   |Sending a provider_code that is not present in our system                                             |
+
+            | AISP-017   |The connection''s provider has no interactive step                                                     |
+
+            | AISP-017   |Too many connections are being processed at the same time from one application                        |
+
+            | AISP-018   |Customer did not consent to provider `<provider_code>`, please call consent
+            provider API to re-consent|
+
+            | AISP-019   |Provider `<provider_code>` does not support the requested service                                     |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning              |
+
+            |------------|----------------------|
+
+            | AISP-020   |Internal server error |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | AISP-004   |System exception                               |    \n| AISP-005   |Consent\
+            \ terms not found with requested payload |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /aisp/accounts:
+    post:
+      deprecated: true
+      summary: Request for Account Information
+      description: "<!-- theme: warning-->\n> Deprecated\n>\n> Sunset: 30 May 2026\n- This request retrieves\
+        \ the account information for a given combination\nof PSU and Provider. \n- An active authorization\
+        \ token is required or access will be denied"
+      tags:
+      - AIS
+      operationId: retrieveAccountInfo
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountsRequest'
+            examples:
+              ExampleAccountsRequest:
+                $ref: '#/components/examples/AccountsRequestExample'
+        required: true
+      x-examples:
+      - name: ExampleAccountsRequest
+        description: Example Accounts Request
+        parameters:
+          body:
+            customerId: TestCustomer1
+            providerCode: fake_oauth_client_xf
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+              examples:
+                ExamplesAccountsResponse:
+                  $ref: '#/components/examples/AccountsResponseExample'
+        '400':
+          description: 'Bad Request.
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning                                                                                              |
+
+            |------------|------------------------------------------------------------------------------------------------------|
+
+            | AISP-001   |Values are missing for properties: `<properties>`                                                     |
+
+            | AISP-002   |Invalid consent scopes: `<invalid_scopes>`                                                            |
+
+            | AISP-003   |Invalid JSON format                                                                                   |
+
+            | AISP-006   |Report not found with requested payload                                                               |
+
+            | AISP-007   |Customer did not consent to the Provider:<invalid_payload>                                            |
+
+            | AISP-008   |Provider not found for country code: `<invalid_country_code>` or provider code:`<invalid_provider_code>`
+            This error code will appear if an incorrect providerCode is given|
+
+            | AISP-010   |ClientID not present in the header                                                                    |
+
+            | AISP-012   |Required properties are missing: `<missing_fields>`                                                   |
+
+            | AISP-013   |Invalid properties exist: `<additional_fields>`                                                       |
+
+            | AISP-014   |Providers are not available with countryCode: `<country_code>`                                        |
+
+            | AISP-015   |Consent expired, please call consent provider API to re-consent                                       |
+
+            | AISP-016   |Bad request                                                                                           |
+
+            | AISP-017   |The consent has already been revoked                                                                  |
+
+            | AISP-017   |Refresh is not possible because the consent has expired                                               |
+
+            | AISP-017   |A consent with such an id does not exist                                                              |
+
+            | AISP-017   |Refresh is not possible because the consent has been revoked                                          |
+
+            | AISP-017   |The value of consent scopes parameter is invalid                                                      |
+
+            | AISP-017   |The value of consent scopes parameter is not allowed for the client or/and by
+            the provider            |
+
+            | AISP-017   |The next refresh attempt will be allowed according to next_refresh_possible
+            attribute or connection''s status is inactive|
+
+            | AISP-017   |The client tried to connect, reconnect or fetch a connection, but it appears
+            to be disabled           |
+
+            | AISP-017   |Bad requestWe could not find a connection with the requested connection_id                            |
+
+            | AISP-017   |We have received an invalid Date format                                                               |
+
+            | AISP-017   |The passed from_date - to_date interval is out of consent from_date - to_date
+            range                   |
+
+            | AISP-017   |Sending a date value that does not fit in admissible range                                            |
+
+            | AISP-017   |We have received an invalid DateTime format                                                           |
+
+            | AISP-017   |Sending a datetime value that does not fit in admissible range                                        |
+
+            | AISP-017   |The value of fetch_scopes parameter is invalid                                                        |
+
+            | AISP-017   |Fetching holder_info for this provider is not supported                                               |
+
+            | AISP-017   |Invalid consent from_date value, either out of range or a wrong date format                           |
+
+            | AISP-017   |Invalid consent period_days value or not allowed by provider                                          |
+
+            | AISP-017   |Invalid from_date value, either out of range or wrong date format                                     |
+
+            | AISP-017   |Invalid to_date value, either out of range or wrong date format                                       |
+
+            | AISP-017   |We have received some other request format instead of JSON, or the body could
+            not be parsed           |
+
+            | AISP-017   |The accessed provider has the disabled status. Hence, is no longer supported                          |
+
+            | AISP-017   |The requested provider has the inactive status. That means that new connections
+            cannot be created while the current ones cannot be refreshed or reconnected|
+
+            | AISP-017   |Sending a provider_code that is not present in our system                                             |
+
+            | AISP-017   |The connection''s provider has no interactive step                                                     |
+
+            | AISP-017   |Too many connections are being processed at the same time from one application                        |
+
+            | AISP-018   |Customer did not consent to provider `<provider_code>`, please call consent
+            provider API to re-consent|
+
+            | AISP-019   |Provider `<provider_code>` does not support the requested service                                     |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning              |
+
+            |------------|----------------------|
+
+            | AISP-020   |Internal server error |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | AISP-004   |System exception                               |    \n| AISP-005   |Consent\
+            \ terms not found with requested payload |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /aisp/transactions:
+    post:
+      deprecated: true
+      summary: Request for Transaction Details
+      description: '<!-- theme: warning-->
+
+        > Deprecated
+
+        >
+
+        > Sunset: 30 May 2026
+
+        This request retrieves the transaction details for a given combination
+
+        Provider and PSU. An active authorization token is required.'
+      tags:
+      - AIS
+      operationId: retrieveTransactions
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionsRequest'
+            examples:
+              ExampleTransactionsRequest:
+                $ref: '#/components/examples/TransactionsRequestExample'
+        required: true
+      x-examples:
+      - name: ExampleTransactionsRequest
+        description: Example Request
+        parameters:
+          body:
+            customerId: TestCustomer1
+            providerCode: fake_oauth_client_xf
+            accountId: '12000012'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsResponse'
+              examples:
+                ExampleTransactionsResponse:
+                  $ref: '#/components/examples/TransactionsResponseExample'
+        '400':
+          description: 'Bad Request.
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning                                                                                              |
+
+            |------------|------------------------------------------------------------------------------------------------------|
+
+            | AISP-001   |Values are missing for properties: `<properties>`                                                     |
+
+            | AISP-002   |Invalid consent scopes: `<invalid_scopes>`                                                            |
+
+            | AISP-003   |Invalid JSON format                                                                                   |
+
+            | AISP-006   |Report not found with requested payload                                                               |
+
+            | AISP-007   |Customer did not consent to the Provider:<invalid_payload>                                            |
+
+            | AISP-008   |Provider not found for country code: `<invalid_country_code>` or provider code:`<invalid_provider_code>`
+            This error code will appear if an incorrect providerCode is given|
+
+            | AISP-010   |ClientID not present in the header                                                                    |
+
+            | AISP-012   |Required properties are missing: `<missing_fields>`                                                   |
+
+            | AISP-013   |Invalid properties exist: `<additional_fields>`                                                       |
+
+            | AISP-014   |Providers are not available with countryCode: `<country_code>`                                        |
+
+            | AISP-015   |Consent expired, please call consent provider API to re-consent                                       |
+
+            | AISP-016   |Bad request                                                                                           |
+
+            | AISP-017   |The consent has already been revoked                                                                  |
+
+            | AISP-017   |Refresh is not possible because the consent has expired                                               |
+
+            | AISP-017   |A consent with such an id does not exist                                                              |
+
+            | AISP-017   |Refresh is not possible because the consent has been revoked                                          |
+
+            | AISP-017   |The value of consent scopes parameter is invalid                                                      |
+
+            | AISP-017   |The value of consent scopes parameter is not allowed for the client or/and by
+            the provider            |
+
+            | AISP-017   |The next refresh attempt will be allowed according to next_refresh_possible
+            attribute or connection''s status is inactive|
+
+            | AISP-017   |The client tried to connect, reconnect or fetch a connection, but it appears
+            to be disabled           |
+
+            | AISP-017   |Bad requestWe could not find a connection with the requested connection_id                            |
+
+            | AISP-017   |We have received an invalid Date format                                                               |
+
+            | AISP-017   |The passed from_date - to_date interval is out of consent from_date - to_date
+            range                   |
+
+            | AISP-017   |Sending a date value that does not fit in admissible range                                            |
+
+            | AISP-017   |We have received an invalid DateTime format                                                           |
+
+            | AISP-017   |Sending a datetime value that does not fit in admissible range                                        |
+
+            | AISP-017   |The value of fetch_scopes parameter is invalid                                                        |
+
+            | AISP-017   |Fetching holder_info for this provider is not supported                                               |
+
+            | AISP-017   |Invalid consent from_date value, either out of range or a wrong date format                           |
+
+            | AISP-017   |Invalid consent period_days value or not allowed by provider                                          |
+
+            | AISP-017   |Invalid from_date value, either out of range or wrong date format                                     |
+
+            | AISP-017   |Invalid to_date value, either out of range or wrong date format                                       |
+
+            | AISP-017   |We have received some other request format instead of JSON, or the body could
+            not be parsed           |
+
+            | AISP-017   |The accessed provider has the disabled status. Hence, is no longer supported                          |
+
+            | AISP-017   |The requested provider has the inactive status. That means that new connections
+            cannot be created while the current ones cannot be refreshed or reconnected|
+
+            | AISP-017   |Sending a provider_code that is not present in our system                                             |
+
+            | AISP-017   |The connection''s provider has no interactive step                                                     |
+
+            | AISP-017   |Too many connections are being processed at the same time from one application                        |
+
+            | AISP-018   |Customer did not consent to provider `<provider_code>`, please call consent
+            provider API to re-consent|
+
+            | AISP-019   |Provider `<provider_code>` does not support the requested service                                     |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning              |
+
+            |------------|----------------------|
+
+            | AISP-020   |Internal server error |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | AISP-004   |System exception                               |    \n| AISP-005   |Consent\
+            \ terms not found with requested payload |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /aisp/holderinfo:
+    post:
+      deprecated: true
+      summary: Request for Account Holder Information
+      description: '<!-- theme: warning-->
+
+        > Deprecated
+
+        >
+
+        > Sunset: 30 Jun 2026
+
+        This request retrieves information about the account holder based on a
+
+        given Provider and Customer ID.'
+      tags:
+      - AIS
+      operationId: retrieveAccountHolderInfo
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HolderInfoRequest'
+            examples:
+              ExampleHolderInfoRequest:
+                $ref: '#/components/examples/HolderInfoRequestExample'
+        required: true
+      x-examples:
+      - name: ExampleHolderInfoRequest
+        description: Example Request
+        parameters:
+          body:
+            customerId: P123456
+            providerCode: bank_xf
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HolderInfoResponse'
+              examples:
+                ExampleHolderInfoResponse:
+                  $ref: '#/components/examples/HolderInfoResponseExample'
+        '400':
+          description: 'Bad Request.
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning                                                                                              |
+
+            |------------|------------------------------------------------------------------------------------------------------|
+
+            | AISP-001   |Values are missing for properties: `<properties>`                                                     |
+
+            | AISP-002   |Invalid consent scopes: `<invalid_scopes>`                                                            |
+
+            | AISP-003   |Invalid JSON format                                                                                   |
+
+            | AISP-006   |Report not found with requested payload                                                               |
+
+            | AISP-007   |Customer did not consent to the Provider:<invalid_payload>                                            |
+
+            | AISP-008   |Provider not found for country code: `<invalid_country_code>` or provider code:`<invalid_provider_code>`
+            This error code will appear if an incorrect providerCode is given|
+
+            | AISP-010   |ClientID not present in the header                                                                    |
+
+            | AISP-012   |Required properties are missing: `<missing_fields>`                                                   |
+
+            | AISP-013   |Invalid properties exist: `<additional_fields>`                                                       |
+
+            | AISP-014   |Providers are not available with countryCode: `<country_code>`                                        |
+
+            | AISP-015   |Consent expired, please call consent provider API to re-consent                                       |
+
+            | AISP-016   |Bad request                                                                                           |
+
+            | AISP-017   |The consent has already been revoked                                                                  |
+
+            | AISP-017   |Refresh is not possible because the consent has expired                                               |
+
+            | AISP-017   |A consent with such an id does not exist                                                              |
+
+            | AISP-017   |Refresh is not possible because the consent has been revoked                                          |
+
+            | AISP-017   |The value of consent scopes parameter is invalid                                                      |
+
+            | AISP-017   |The value of consent scopes parameter is not allowed for the client or/and by
+            the provider            |
+
+            | AISP-017   |The next refresh attempt will be allowed according to next_refresh_possible
+            attribute or connection''s status is inactive|
+
+            | AISP-017   |The client tried to connect, reconnect or fetch a connection, but it appears
+            to be disabled           |
+
+            | AISP-017   |Bad requestWe could not find a connection with the requested connection_id                            |
+
+            | AISP-017   |We have received an invalid Date format                                                               |
+
+            | AISP-017   |The passed from_date - to_date interval is out of consent from_date - to_date
+            range                   |
+
+            | AISP-017   |Sending a date value that does not fit in admissible range                                            |
+
+            | AISP-017   |We have received an invalid DateTime format                                                           |
+
+            | AISP-017   |Sending a datetime value that does not fit in admissible range                                        |
+
+            | AISP-017   |The value of fetch_scopes parameter is invalid                                                        |
+
+            | AISP-017   |Fetching holder_info for this provider is not supported                                               |
+
+            | AISP-017   |Invalid consent from_date value, either out of range or a wrong date format                           |
+
+            | AISP-017   |Invalid consent period_days value or not allowed by provider                                          |
+
+            | AISP-017   |Invalid from_date value, either out of range or wrong date format                                     |
+
+            | AISP-017   |Invalid to_date value, either out of range or wrong date format                                       |
+
+            | AISP-017   |We have received some other request format instead of JSON, or the body could
+            not be parsed           |
+
+            | AISP-017   |The accessed provider has the disabled status. Hence, is no longer supported                          |
+
+            | AISP-017   |The requested provider has the inactive status. That means that new connections
+            cannot be created while the current ones cannot be refreshed or reconnected|
+
+            | AISP-017   |Sending a provider_code that is not present in our system                                             |
+
+            | AISP-017   |The connection''s provider has no interactive step                                                     |
+
+            | AISP-017   |Too many connections are being processed at the same time from one application                        |
+
+            | AISP-018   |Customer did not consent to provider `<provider_code>`, please call consent
+            provider API to re-consent|
+
+            | AISP-019   |Provider `<provider_code>` does not support the requested service                                     |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+            | Error Code | Meaning              |
+
+            |------------|----------------------|
+
+            | AISP-020   |Internal server error |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes\
+            \ applicable**\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n\
+            | AISP-004   |System exception                               |    \n| AISP-005   |Consent\
+            \ terms not found with requested payload |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  parameters:
+    RefundId:
+      in: path
+      name: refundId
+      description: A unique refund identifier in UUID (version 4) format.
+      schema:
+        type: string
+        minLength: 0
+        maxLength: 36
+      required: true
+      example: 45f452df-f84a-4fc1-acee-d024f5fede98
+    ContentType:
+      name: Content-Type
+      description: Content Type
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - application/json
+  schemas:
+    ProvidersRequest:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          example: DE
+          description: 'ISO 3166-1 Alpha-2 code for the desired country from which to fetch
+
+            the Providers list. If no countryCode is given, then the API will
+
+            return the full list of Providers'
+    ProvidersResponse:
+      type: object
+      description: Contains providers information
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Providers'
+          minItems: 0
+    Providers:
+      type: object
+      properties:
+        providersCode:
+          type: string
+          description: Provider's unique reference code
+        providersName:
+          type: string
+          description: Provider's name
+        customerNotifiedOnSignIn:
+          type: boolean
+          description: Whether the Provider will notify the customer upon a login attempt
+        instruction:
+          type: string
+          description: Instructions on how to connect to the Provider in English
+        homeUrl:
+          type: string
+          description: The URL of the Provider's main page
+          format: URL
+        loginUrl:
+          type: string
+          description: URL of the entry point to the provider's login interface. This URL is not used
+            in account information service requests
+          format: URL
+        logoUrl:
+          type: string
+          description: The URL of the Provider's logo
+          format: URL
+        refreshTimeOut:
+          type: integer
+          description: Amount of time in minutes that connections to the provider can be refreshed until
+            timeout
+        maxConsentDays:
+          type: integer
+          description: Maximum allowed consent duration in days. If the response is `null` then there
+            is no limit on the consent duration
+        countryCode:
+          type: string
+          description: Code of Provider's country; ISO 3166-1 alpha-2
+        supportedFetchScopes:
+          type: array
+          description: 'Array of strings with supported fetch scopes (i.e. what data can be
+
+            retrieved from the Provider)'
+          items:
+            type: string
+          minItems: 1
+        supportedAccountNatures:
+          type: array
+          description: Array of possible account natures that can be fetched. Currently, only `account`
+            is supported
+          items:
+            type: string
+          minItems: 0
+    ConsentRequest:
+      type: object
+      required:
+      - customerId
+      - countryCode
+      - consentScopes
+      - providerCode
+      - returnToUrl
+      properties:
+        customerId:
+          type: string
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        countryCode:
+          type: string
+          description: Code of provider's country in ISO 3166-1 alpha-2 format
+        providerCode:
+          type: string
+          description: Provider's unique reference code
+        consentScopes:
+          type: array
+          description: "Array of possible consent scopes for the PSU to consent to. \nYou must provide\
+            \ at least one of the below options"
+          items:
+            type: string
+            properties:
+              account_details:
+                type: string
+              transactions_details:
+                type: string
+              holder_information:
+                type: string
+          minItems: 0
+        consentDuration:
+          type: integer
+          description: 'Duration in days of the consent. Can be left blank or null for
+
+            open-ended consent if the provider permits it'
+        returnToUrl:
+          type: string
+          description: 'URL to redirect the PSU once they have completed the
+
+            consent process. This URL must be fully qualified and
+
+            include the full path, as some providers will validate it.
+
+            Additionally, some providers only permit HTTPS redirect URLs'
+          format: URL
+    ConsentResponse:
+      type: object
+      properties:
+        redirectUrl:
+          type: string
+          description: 'URL to redirect the PSU to their online banking portal or mobile app to
+
+            confirm the sharing of information. Additionally, the redirect URL will
+
+            contain the access token needed in the Send Authorized Token API
+
+            request body'
+          format: URL
+    AuthorizeRequest:
+      type: object
+      required:
+      - customerId
+      - providerCode
+      - authToken
+      properties:
+        customerId:
+          type: string
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        providerCode:
+          type: string
+          description: Providers unique reference code
+        authToken:
+          type: string
+          example: access_token=bc4521d3&state=Pd8b4d0eb
+          description: The authorization token given by the provider in the `redirectUrl` attribute in
+            the Account Information Access Consent API response body
+    AuthorizeResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message that states whether the authorization was successful and a connection was
+            established to the provider or not
+    AccountsRequest:
+      type: object
+      required:
+      - customerId
+      - providerCode
+      properties:
+        customerId:
+          type: string
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        providerCode:
+          type: string
+          description: Providers unique reference code
+    AccountsResponse:
+      type: array
+      description: Contains account(s) information
+      items:
+        $ref: '#/components/schemas/Account'
+      minItems: 0
+      maxItems: 100
+    Account:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Accounts unique identifier. This number has no other relevance or use to the PSU
+            or provider; it is only used to identify the account in API requests and responses
+        balance:
+          type: number
+          description: Account's current balance
+        nature:
+          type: string
+          description: 'The type of the account. Note that for the ''credit_card'' nature, the
+
+            balance represents the sum of all negative transactions; the
+
+            positive ones do not count'
+          enum:
+          - account
+          - bonus
+          - card
+          - checking
+          - credit
+          - credit_card
+          - debit_card
+          - ewallet
+          - insurance
+          - investment
+          - loan
+          - mortgage
+          - savings
+        name:
+          type: string
+          description: Accounts unique name
+          example: Account100
+        currencyCode:
+          type: string
+          description: Accounts currency. ISO 4217 Alpha-3 Currency Code
+        extra:
+          type: object
+          description: Additional account related fields.
+          properties:
+            accountName:
+              type: string
+              description: Changeable name of the account
+            accountNumber:
+              type: string
+              description: Account number
+            lastPostedTransactionId:
+              type: string
+              description: The identifier of the last posted transaction
+            cards:
+              type: array
+              description: List of masked card numbers
+              items:
+                type: string
+              minItems: 0
+            assets:
+              type: array
+              description: Array of crypto codes and their amounts assigned to an `investment` account
+              items:
+                type: string
+              minItems: 0
+            availableAmount:
+              type: number
+              description: Available amount in the accounts currency
+            units:
+              type: string
+              description: Amount of units owned (used with unit_price, available for `investment` account
+                nature only)
+            nextPaymentDate:
+              type: string
+              description: Next payment date for loans or credits
+              format: date
+            closingBalance:
+              type: number
+              description: Account balance at the end of an accounting period
+            creditLimit:
+              type: number
+              description: Credit limit in the account?s currency
+            interestRate:
+              type: string
+              description: 'Interest rate paid on the account?s balance as a percentage
+
+                value'
+            openingBalance:
+              type: number
+              description: 'Account balance that is brought forward from the end of one
+
+                accounting period to the beginning of a new accounting period'
+            clientName:
+              type: string
+              description: Account's client owner
+            currentTime:
+              type: string
+              description: Time of Provider statement generation (applicable to banks)
+              format: timestamp
+            swift:
+              type: string
+              description: Account's SWIFT code
+            openDate:
+              type: string
+              description: Card open date
+              format: date
+            expiryDate:
+              type: string
+              description: Card expiry date
+              format: date
+            cardType:
+              type: string
+              description: Type of card account
+              enum:
+              - american_express
+              - china_unionpay
+              - diners_club
+              - jcb
+              - maestro
+              - master_card
+              - uatp
+              - visa
+              - mir
+            sortCode:
+              type: string
+              description: Routing number (US) / BSB code (Australia) / sort code (UK)
+            unitPrice:
+              type: number
+              description: 'Price per unit (used with units, available for `investment`
+
+                account nature only)'
+            totalPaymentAmount:
+              type: number
+              description: Total payment amount for loans or credits
+            currentDate:
+              type: string
+              description: Date of Provider statement generation (applicable to banks)
+              format: date
+            statementCutDate:
+              type: string
+              description: Date when the current statement becomes a previous one
+              format: date
+            iban:
+              type: string
+              description: Account's IBAN number
+            blockedAmount:
+              type: string
+              description: The amount currently blocked in the account?s currency
+            status:
+              type: string
+              description: States if the account is active or inactive
+            nextPaymentAmount:
+              type: string
+              description: Next payment amount for loans or credits
+            transactionsCount:
+              type: object
+              description: Number of transactions, separated by posted and pending
+              properties:
+                pending:
+                  type: integer
+                  description: Number of pending transactions
+                posted:
+                  type: integer
+                  description: Number of posted transactions
+    TransactionsRequest:
+      type: object
+      required:
+      - customerId
+      - providerCode
+      properties:
+        customerId:
+          type: string
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        providerCode:
+          type: string
+          description: Provider's unique reference code
+        accountId:
+          type: string
+          description: 'Account''s unique identifier. If no identifier is provided,
+
+            transactions from all of the PSU''s available accounts will be retrieved'
+    TransactionsResponse:
+      type: array
+      description: Contains transaction details
+      items:
+        $ref: '#/components/schemas/Transaction'
+      minItems: 0
+      maxItems: 100
+    Transaction:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: The ID of the account the transaction belongs to
+        duplicated:
+          type: boolean
+          description: Whether the transaction is duplicated or not
+        mode:
+          type: string
+          enum:
+          - normal
+          - fee
+          - transfer
+          description: "Please refer the table below for interpretation of modes  \n\n|   Mode    |  \
+            \         Description                                                                    \
+            \            |  \n|-----------|------------------------------------------------------------------------------------------------------|\n\
+            | `normal`  | A standard purchase made using funds held in the account (e.g. purchase of goods\
+            \ at a supermarket)   | \n| `fee`     | Fees paid from the account to the bank (e.g. monthly\
+            \ account fee)                                    | \n| `transfer`| a bank transfer made directly\
+            \ to another account (e.g. a bank transfer to one's parents)             |"
+        amount:
+          type: number
+          description: Transaction's amount
+        madeOn:
+          type: string
+          description: The date when the transaction was made
+          format: date
+        description:
+          type: string
+          description: Transaction's description
+        category:
+          type: string
+          description: Transaction's category
+        currencyCode:
+          type: string
+          description: Transaction's currency code
+        status:
+          type: string
+          enum:
+          - pending
+          - posted
+        extra:
+          type: array
+          description: Additional account related fields
+          items:
+            type: object
+            description: Extra fields
+            properties:
+              accountNumber:
+                type: string
+                description: Account's number
+              possibleDuplicate:
+                type: boolean
+                description: 'Is set to true if current transaction duplicates `amount`,
+
+                  `made_on` or `currency_code` of any transaction parsed in a
+
+                  previous attempt'
+              additional:
+                type: string
+                description: 'Additional information (recommended to augment the
+
+                  standard ''description'' field, if necessary)'
+              recordNumber:
+                type: string
+                description: Bank record number
+              convert:
+                type: boolean
+                description: 'Whether the transaction amount was converted using exchange
+
+                  rates or not'
+              merchantId:
+                type: string
+                description: Merchant's identifier
+              units:
+                type: number
+                description: 'Amount of units owned (used with unit_price, available for
+
+                  `investment` account nature only)'
+              mcc:
+                type: string
+                description: Merchant category code
+              type:
+                type: string
+                description: Transaction type
+              payer:
+                type: string
+                description: Name of the payer
+              payerInformation:
+                type: string
+                description: Additional payer information
+              checkNumber:
+                type: string
+                description: Payee's transaction check number
+              closingBalance:
+                type: number
+                description: Account balance after transaction
+              originalAmount:
+                type: number
+                description: 'Transaction amount in the transaction''s local currency, if
+
+                  applicable (comes with originalCurrencyCode)'
+              originalCategory:
+                type: string
+                description: Original category of the transaction
+              originalSubcategory:
+                type: string
+                description: Original subcategory of the transaction
+              categorizationConfidence:
+                type: number
+                description: 'Value from 0 to 1 showing the probability that the current
+
+                  category is the correct one'
+              id:
+                type: string
+                description: Transaction ID
+              openingBalance:
+                type: number
+                description: Account balance before transaction
+              specificCode:
+                type: string
+                description: 'Additional identification information for cashless domestic
+
+                  payments (transfers)'
+              variableCode:
+                type: string
+                description: 'Identifies the tax subject to the tax office, used for
+
+                  domestic payments (transfers)'
+              accountBalanceSnapshot:
+                type: number
+                description: Balance of the account when the transaction was imported
+              unitPrice:
+                type: number
+                description: 'Price per unit (used with units, available for `investment`
+
+                  account nature only)'
+              tags:
+                type: array
+                description: The original tags of the transaction
+                items:
+                  type: object
+                minItems: 0
+              assetCode:
+                type: string
+                description: 'Asset''s commonly used abbreviation (e.g. ''BTC'' - Bitcoin,
+
+                  `XAU` - Gold etc.)'
+              payee:
+                type: string
+                description: Name of the payee
+              payeeInformation:
+                type: string
+                description: Additional payee information
+              postingDate:
+                type: string
+                description: Date when the transaction is reported on the account statement
+                format: date
+              postingTime:
+                type: string
+                description: 'Time in HH:MM:SS format, representing the time at
+
+                  which the transaction is reported on the account statement'
+                format: timestamp
+              originalCurrencyCode:
+                type: string
+                description: Transaction's local currency, if applicable (comes with originalAmount)
+              constantCode:
+                type: string
+                description: Payment reference for cashless domestic payments
+              information:
+                type: string
+                description: Information about the transaction
+              transferAccountName:
+                type: string
+                description: Name of the linked account
+              assetAmount:
+                type: number
+                description: Original transaction amount in asset units
+              customerCategoryCode:
+                type: string
+                description: 'The category that was categorized
+
+                  by the rules created by the customer'
+              customerCategoryName:
+                type: string
+                description: 'The category that was
+
+                  categorized by the rules created by the customer'
+              time:
+                type: string
+                description: Time when the transaction was made
+                format: timestamp
+          minItems: 0
+        createdAt:
+          type: string
+          description: Transaction created date and time
+          format: date-time
+        updatedAt:
+          type: string
+          description: Date and time at which the transaction was updated
+          format: date-time
+    HolderInfoRequest:
+      type: object
+      required:
+      - customerId
+      - providerCode
+      properties:
+        customerId:
+          type: string
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        providerCode:
+          type: string
+          description: Provider's unique reference code
+    HolderInfoResponse:
+      type: object
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+            description: Account holder name(s)
+          minItems: 0
+        emails:
+          type: array
+          format: email
+          items:
+            type: string
+            description: Account holder email(s)
+            format: email
+          minItems: 0
+        phoneNumbers:
+          type: array
+          items:
+            type: string
+            description: Account holder number(s)
+          minItems: 0
+        addresses:
+          type: array
+          items:
+            type: string
+            description: Account holder address(s)
+          minItems: 0
+    PispProvidersRequest:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          example: DE
+          description: 'ISO 3166-1 Alpha-2 code for the desired country from which to fetch
+
+            the providers list. If no countryCode is provided, the API returns
+
+            the full list of Providers'
+    PispProvidersResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: List of PISP providers
+          items:
+            $ref: '#/components/schemas/PispProvider'
+          minItems: 1
+    PispProvider:
+      type: object
+      description: PISP Provider
+      properties:
+        id:
+          type: string
+          description: Provider's unique id
+        code:
+          type: string
+          description: Provider's code to be provided for payment instruction
+        name:
+          type: string
+          description: Provider's name
+        status:
+          type: string
+          description: Provider's status
+          enum:
+          - active
+          - inactive
+          - disabled
+        interactive:
+          type: boolean
+          description: 'indicates whether the provider require an interactive element during the
+
+            authentication process (e.g. SMS code entry or CAPTCHA solution)'
+        instruction:
+          type: string
+          description: 'Instructions for the PSU to complete the authentication process. For
+
+            redirect authentication, a brief overview of the process will be given'
+        home_url:
+          type: string
+          description: The URL of provider's home page
+        logo_url:
+          type: string
+          description: URL of the provider's logo
+        country_code:
+          type: string
+          description: Code of provider's country; ISO 3166-1 Alpha-2 format
+        created_at:
+          type: string
+          description: Indicates the date time of when the provider was integrated with JPMC. Represented
+            in ISO 8601 date time format
+        updated_at:
+          type: string
+          description: Indicates the date time of when the provider was last updated by JPMC. Represented
+            in ISO 8601 date time format
+        identification_codes:
+          type: array
+          description: 'Bank code as defined by the IBAN Structure (e.g. DEKK BBBB BBBB
+
+            CCCC CCCC CC) Where B is the Bank Identification Code'
+          items:
+            type: string
+          minItems: 0
+        payment_templates:
+          type: array
+          description: List of payment types supported by the provider
+          items:
+            type: string
+            properties:
+              FPS:
+                type: string
+              SEPA:
+                type: string
+              SEPA_INSTANT:
+                type: string
+              BACS:
+                type: string
+              CHAPS:
+                type: string
+          minItems: 0
+    Payment:
+      oneOf:
+      - $ref: '#/components/schemas/SepaPayment'
+      - $ref: '#/components/schemas/BacsChapsFpsPayment'
+      discriminator:
+        propertyName: template_identifier
+        mapping:
+          FPS: '#/components/schemas/BacsChapsFpsPayment'
+          SEPA: '#/components/schemas/SepaPayment'
+    SepaPayment:
+      title: SEPA Payment
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+          - customer_id
+          - country_code
+          - provider_code
+          - payee_description
+          - template_identifier
+          - return_to
+          - payment_attributes
+          properties:
+            customer_id:
+              type: string
+              description: The unique identifier determined by the J.P. Morgan client for the PSU
+            country_code:
+              type: string
+              description: Provider's country code in ISO 3166-1 alpha-2 format
+            provider_code:
+              type: string
+              description: Provider's unique code. This value is the same as the `code` attribute in the
+                providers API response body
+            payee_description:
+              type: string
+              description: 'A versatile field that can be used to specify the merchant''s
+
+                internal identifier, payee name, user identifier, or any other
+
+                fields that might be relevant to the J.P. Morgan client for
+
+                internal processes. This field is not visible to the PSU'
+            template_identifier:
+              type: string
+              description: 'Unique identifier for the template being used for the
+
+                payment. This value is the same as the ''identifier'' field in
+
+                the Payment Templates API response body and the
+
+                ''payment_templates'' attribute returned by the providers API'
+            return_to:
+              type: string
+              description: 'The URL that the PSU will be redirected to after they have
+
+                completed the payment. This URL must be fully qualified
+
+                and include the full path, as some providers will validate it.
+
+                Additionally, some providers only permit HTTPS redirect URLs'
+            locale:
+              type: string
+              description: "The language of the error message in the ISO 639-1 format. \nPossible values\
+                \ are: bg, cz, de, en, es-MX, es, fi, fr, he, hr, hu, it, nl, pl, pt-BR, pt, ro, ru, si,\
+                \ sk, sv, tr, uk, zh-HK(Traditional), zh(Simplified)  \n\n**Defaults to en if not provided**"
+            payment_attributes:
+              type: object
+              description: 'Payment attributes for the select Payment Template. This object will
+
+                vary based on payment type'
+              required:
+              - end_to_end_id
+              - creditor_name
+              - creditor_iban
+              - description
+              - amount
+              - currency_code
+              properties:
+                end_to_end_id:
+                  type: string
+                  description: 'Numerical identifier determined by the J.P. Morgan
+
+                    client for the payment. This identifier will follow the
+
+                    payment throughout the process and can be used
+
+                    for reconciliation and reporting'
+                customer_last_logged_at:
+                  type: string
+                  description: Customer's last login date and time
+                customer_ip_address:
+                  type: string
+                  description: Customer's IP address
+                customer_device_os:
+                  type: string
+                  description: Customer's operating system
+                creditor_name:
+                  type: string
+                  description: 'Creditor''s name
+
+                    This field may be visible to the PSU, depending on the provider'
+                creditor_street_name:
+                  type: string
+                  description: Creditor's street name
+                creditor_building_number:
+                  type: string
+                  description: Creditor's building number
+                creditor_post_code:
+                  type: string
+                  description: Creditor's post code
+                creditor_town:
+                  type: string
+                  description: Creditor's town
+                creditor_iban:
+                  type: string
+                  description: Creditor's IBAN
+                debtor_iban:
+                  type: string
+                  description: 'Debtor''s IBAN
+
+                    **Can be mandatory to initiate payments in some locales**'
+                description:
+                  type: string
+                  description: 'A description of the payment that will be sent to the
+
+                    provider. The description may be visible to the PSU,
+
+                    depending on the provider'
+                amount:
+                  type: string
+                  description: Amount of the payment
+                currency_code:
+                  type: string
+                  description: Currency used for the Payment
+            connect_template:
+              type: string
+              description: 'An optional field to specify the UI template.
+
+
+                **Only applicable for certain merchants**'
+    BacsChapsFpsPayment:
+      type: object
+      title: bacsChapsFpsPayment
+      description: Payment request schema for BACS, CHAPS and FPS payments
+      properties:
+        data:
+          type: object
+          required:
+          - customer_id
+          - country_code
+          - provider_code
+          - payee_description
+          - template_identifier
+          - return_to
+          - payment_attributes
+          properties:
+            customer_id:
+              type: string
+              description: The unique identifier determined by the J.P. Morgan client for the PSU
+            country_code:
+              type: string
+              description: Provider's country code in ISO 3166-1 alpha-2 format
+            provider_code:
+              type: string
+              description: Provider's unique code. This value is the same as the `code` attribute in the
+                providers API response body
+            payee_description:
+              type: string
+              description: 'A versatile field that can be used to specify the merchant''s
+
+                internal identifier, payee name, user identifier, or any other
+
+                fields that might be relevant to the J.P. Morgan client for
+
+                internal processes. This field is not visible to the PSU'
+            template_identifier:
+              type: string
+              description: 'Unique identifier for the template being used for the
+
+                payment. This value is the same as the ''identifier'' field in
+
+                the Payment Templates API response body and the
+
+                ''payment_templates'' attribute returned by the providers API'
+            return_to:
+              type: string
+              description: 'The URL that the PSU will be redirected to after they have
+
+                completed the payment. This URL must be fully qualified
+
+                and include the full path, as some providers will validate it.
+
+                Additionally, some providers only permit HTTPS redirect URLs'
+            noFundsRjctPreferred:
+              type: boolean
+              description: "This flag is handled only for those providers which support it:\n  -  TRUE:\
+                \ If the PSU has no available funds (a.k.a.\n  fundsAvailable=false) the bank should reject\
+                \ the\n  payment\n  - FALSE Payment Initiation is accepted even when\n  \"fundsAvailable\"\
+                =false. If the account has funds at\n  the time of SEPA execution (e.g. End of Day batch\n\
+                \  Payment instead of Instant payment), the payment will go through."
+            payment_attributes:
+              type: object
+              description: 'Payment attributes for the select Payment Template. This object will
+
+                vary based on payment type'
+              required:
+              - end_to_end_id
+              - creditor_name
+              - creditor_sort_code
+              - creditor_account_number
+              - description
+              - amount
+              - currency_code
+              properties:
+                end_to_end_id:
+                  type: string
+                  description: 'Numerical identifier determined by the J.P. Morgan
+
+                    client for the payment. This identifier will follow the
+
+                    payment throughout the process and can be used
+
+                    for reconciliation and reporting'
+                customer_last_logged_at:
+                  type: string
+                  description: Customer's last login date and time
+                customer_ip_address:
+                  type: string
+                  description: Customer's IP address
+                customer_device_os:
+                  type: string
+                  description: Customer's operating system
+                creditor_name:
+                  type: string
+                  description: 'Creditor''s name
+
+                    This field may be visible to the PSU, depending on the provider'
+                creditor_street_name:
+                  type: string
+                  description: Creditor's street name
+                creditor_building_number:
+                  type: string
+                  description: Creditor's building number
+                creditor_post_code:
+                  type: string
+                  description: Creditor's post code
+                creditor_town:
+                  type: string
+                  description: Creditor's town
+                creditor_account_number:
+                  type: string
+                  description: Creditor's account number
+                creditor_sort_code:
+                  type: string
+                  description: Creditor's sort code
+                description:
+                  type: string
+                  description: 'A description of the payment that will be sent to the
+
+                    provider. The description may be visible to the PSU,
+
+                    depending on the provider'
+                amount:
+                  type: string
+                  description: Amount of the payment
+                currency_code:
+                  type: string
+                  description: Currency used for the Payment
+    PaymentResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            payment_id:
+              type: string
+              description: Internal payment ID for the submitted payment initiation request
+            expires_at:
+              type: string
+              description: Expiration date of the redirect URL
+            redirect_url:
+              type: string
+              description: Points to a page where the PSU can provide PISP access to make the payment
+    PaymentStatusRequest:
+      type: object
+      properties:
+        customer_id:
+          type: string
+          description: The unique ID determined by the J.P. Morgan client for the PSU
+        payment_id:
+          type: string
+          description: 'The unique payment identifier generated by J.P. Morgan.
+
+            This value is the same as the `payment_id` attribute in the
+
+            Payment Initiation API response body'
+    PaymentStatusResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Payment ID for the submitted payment initiation request
+        provider_code:
+          type: string
+          description: Provider's code for where the payment has been initiated
+        provider_name:
+          type: string
+          description: Provider's name
+        status:
+          type: string
+          description: Payment status
+          enum:
+          - processing
+          - accepted
+          - rejected
+          - failed
+        template_identifier:
+          type: string
+          description: 'Identifiers of the payment templates that are supported by this
+
+            provider'
+          enum:
+          - FPS
+          - SEPA
+          - SEPA_INSTANT
+          - BACS
+          - CHAPS
+          - SWIFT
+        payment_attributes:
+          type: object
+          description: Attributes of the payment. May vary based on payment template
+          properties:
+            mode:
+              type: string
+            amount:
+              type: string
+            debtor_iban:
+              type: string
+            description:
+              type: string
+            creditor_iban:
+              type: string
+            creditor_name:
+              type: string
+            creditor_town:
+              type: string
+            currency_code:
+              type: string
+            end_to_end_id:
+              type: string
+            creditor_agent:
+              type: string
+            creditor_region:
+              type: string
+            creditor_address:
+              type: string
+            creditor_post_code:
+              type: string
+            customer_device_os:
+              type: string
+            creditor_agent_name:
+              type: string
+            customer_ip_address:
+              type: string
+            customer_user_agent:
+              type: string
+            creditor_street_name:
+              type: string
+            creditor_bank_country_code:
+              type: string
+            customer_last_logged_at:
+              type: string
+            creditor_building_number:
+              type: string
+            payment_template_identifier:
+              type: string
+        stages:
+          type: array
+          items:
+            type: object
+            description: 'The stages the payment request has completed. Will contain details
+
+              on the time and status'
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              created_at:
+                type: string
+                description: Created date time in ISO 8601 date time format
+          minItems: 0
+    PaymentAuthorizationRequest:
+      required:
+      - paymentId
+      - authToken
+      type: object
+      properties:
+        paymentId:
+          type: string
+          description: 'The unique payment identifier generated by J.P. Morgan.
+
+            This value is the same as the `payment_id` attribute in the
+
+            Payment Initiation API response body'
+        authToken:
+          type: string
+          description: 'One-time use token given by the provider to authorize the
+
+            payment. This token is obtained from the `redirect_url` field in
+
+            the Payment Initiation API response body and it must be
+
+            appended with “&” and the “end_to_end id” (e.g.
+
+            “code=95c…Ijo&end_to_end_id= 0002")'
+    PaymentAuthStatusResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Payment ID for the submitted payment initiation request
+        provider_code:
+          type: string
+          description: Provider code for where the payment has been initiated
+        provider_name:
+          type: string
+          description: Provider's name
+        customer_id:
+          type: string
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        created_at:
+          type: string
+          description: Created timestamp in ISO 8601 date time format
+        updated_at:
+          type: string
+          description: Updated timestamp in ISO 8601 date time format
+        payment_consent_id:
+          type: string
+          description: Consent Id of the authorized payment.
+        status:
+          type: string
+          description: 'The status of the payment.
+
+
+            | Status     | Meaning                                                                                                                              |
+
+            | -----------|--------------------------------------------------------------------------------------------------------------------------------------|
+
+            | processing | The payment initiation is in process. Further detail can be found by looking
+            at the “stages” attribute below                         |
+
+            | accepted   | The payment initiation has been accepted by the ASPSP                                                                                |
+
+            | rejected   | The payment was rejected by the ASPSP. An error code will be provided                                                                |
+
+            | failed     | he payment initiation has been rejected due to an unknown reason, such as the
+            ASPSP being down or returning a generic error response |'
+          enum:
+          - processing
+          - accepted
+          - rejected
+          - failed
+        fundsAvailable:
+          type: boolean
+          description: 'Refer the table for the interpretation of the values
+
+            | FundsAvailable | Meaning                                                                                                                                                                                                     |
+
+            | -----------    |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+            | True           | Money will be debited. If the bank uses a batch process for SEPA processing
+            and the PSU no longer have sufficient funds, the money will not be debited                                                      |
+
+            | False          | In combination with `noFundsRjctPreferred=TRUE`, the bank rejects the payment.
+            If noFundsRjctPreferred is not supported for a specific bank, the default behavior is that
+            the payment is rejected by the bank |'
+        template_identifier:
+          type: string
+          description: Identifiers of the payment templates that are supported by this provider such as
+            FPS, SEPA, SEPA_INSTANT, BACS, CHAPS
+        payment_attributes:
+          type: object
+          description: 'The payment attributes object. These are the same attributes used to
+
+            initiate the payment, so will therefore vary depending on the payment template'
+        custom_fields:
+          type: object
+          description: The custom fields (optional) are not used currently but would be used for any additional
+            fields that would be relevant to payments.
+        stages:
+          type: array
+          items:
+            type: object
+            description: "The stages that the payment request has completed. \n\n- Possible values for\
+              \ a payment with status `processing`are below:\n\n  | Stage Name | Meaning             \
+              \                                                                                      \
+              \                           |\n  | -----------|--------------------------------------------------------------------------------------------------------------------------------------|\n\
+              \  | initialize | The payment has been created, but the initiation process has not begun\n\
+              \  | start      | The payment initiation process has begun|\n  | interactive| User interaction\
+              \ is required, such as authentication or redirection to the ASPSP|\n  | submission | The\
+              \ payment has been submitted to the ASPSP|\n  | settlement | The payment has been validated\
+              \ by the ASPSP|\n  | completed  | The payment lifecycle has been completed|\n  | finish\
+              \     | The action has been completed|\n\n- Possible value for payments with status “accepted/rejected/failed”\
+              \ is `finish`"
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              created_at:
+                type: string
+                description: Created date time in ISO 8601 date time format
+          minItems: 0
+    RefundsRequest:
+      type: object
+      required:
+      - paymentIdentifiers
+      - amount
+      - reason
+      - mode
+      properties:
+        paymentIdentifiers:
+          $ref: '#/components/schemas/PaymentIdentifiers'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        reason:
+          $ref: '#/components/schemas/Reason'
+        mode:
+          $ref: '#/components/schemas/Mode'
+    Amount:
+      description: Contains amount details
+      type: object
+      properties:
+        amount:
+          description: Amount should be more than 0.01 and maximum of two decimal places allowed
+          type: number
+          format: decimal
+          example: 10
+        currency:
+          description: 3 character ISO 4217 currency code.
+          type: string
+          enum:
+          - GBP
+          - EUR
+      required:
+      - amount
+      - currency
+    Reason:
+      description: Reason for the refund request
+      type: string
+      enum:
+      - DUPLICATE
+      - WITHDRAWAL
+      - REFUND
+      - PARTIAL_REFUND
+    Mode:
+      description: Captures the speed of refund settlement
+      type: string
+      enum:
+      - INSTANT
+      - NORMAL
+    PaymentIdentifiers:
+      type: object
+      description: the payment identifier provided in the original payment request
+      properties:
+        endToEndId:
+          description: The EndtoEndId provided in the original payment initiation request
+          type: string
+          example: '123123123'
+        paymentId:
+          description: The PaymentId received in the original payment initiation response
+          type: string
+          example: '1401642'
+      minProperties: 1
+      additionalProperties: false
+    StatusUpdatedAt:
+      type: string
+      format: dateTime
+      description: The last updated date and time of the refund status
+      example: '2022-05-31T14:00:57.751Z'
+    RefundsResponse:
+      type: object
+      description: The refunds response object from the API provided the request was accepted successfully.
+      properties:
+        refund:
+          type: object
+          properties:
+            refundId:
+              type: string
+              description: A unique refund identifier in UUID ( version 4) format
+              example: 45f452df-f84a-4fc1-acee-d024f5fede98
+            status:
+              description: 'Describes the status of the refund.
+
+
+                |Status|    |Description|
+
+                PENDING   - The refund is pending for processing
+
+                COMPLETED - The refund is processed successfully
+
+                REJECTED  - The refund was rejected due to the request not qualified
+
+                FAILED    - The refund was failed such as credit can''t be done to the bank account'
+              type: string
+              enum:
+              - PENDING
+              - COMPLETED
+              - REJECTED
+              - FAILED
+            paymentIdentifiers:
+              $ref: '#/components/schemas/PaymentIdentifiers'
+            amount:
+              $ref: '#/components/schemas/Amount'
+            reason:
+              $ref: '#/components/schemas/Reason'
+            mode:
+              $ref: '#/components/schemas/Mode'
+            statusUpdatedAt:
+              $ref: '#/components/schemas/StatusUpdatedAt'
+    Error:
+      type: object
+      description: "The error response object \n\n**Note: This error response format is used by all AISP\
+        \ and PISP endpoints except Refunds endpoint which adopted a better error strcuture**"
+      properties:
+        error:
+          type: array
+          items:
+            properties:
+              errorCode:
+                type: string
+                description: Unique error code
+              errorMsg:
+                type: string
+                description: Describes the details of the error occurred
+          minItems: 0
+          maxItems: 99
+    ErrorsInit:
+      type: object
+      description: Contains error response
+      properties:
+        errors:
+          description: Contains error payload
+          type: object
+          properties:
+            errorDetails:
+              type: array
+              items:
+                $ref: '#/components/schemas/ErrorDetailsInit'
+              minItems: 0
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            errorDetails:
+              type: array
+              items:
+                $ref: '#/components/schemas/ErrorDetailsType'
+              minItems: 0
+    ErrorDetailsInit:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          example: '1009'
+        errorDescription:
+          type: string
+          example: RefundId provided in the URI is invalid
+        ruleDefinition:
+          type: string
+          example: Invalid Id provided
+    ErrorDetailsType:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          example: GCA-001
+        errorDescription:
+          type: string
+          example: Client is not eligible for the API Service.
+  examples:
+    ProvidersResponseExample:
+      value:
+        data:
+        - providersCode: fakebank_image_xf
+          providersName: Fake Bank with Image
+          customerNotifiedOnSignIn: false
+          loginUrl: http://example.com/login
+          logoUrl: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/xf/placeholder_global.svg
+          countryCode: XF
+          supportedFetchScopes:
+          - accounts
+          - accounts_without_balance
+          - holder_info
+          - transactions
+          supportedAccountNatures:
+          - account
+          - card
+          - credit_card
+    ConsentRequestExample:
+      value:
+        customerId: CUST_QA02103453A
+        countryCode: XF
+        providerCode: fake_oauth_client_xf
+        consentScopes:
+        - account_details
+        - transactions_details
+        - holder_information
+        consentDuration: 90
+        returnToUrl: https://sites.jpmchase.com/sites/cib
+    ConsentResponseExample:
+      value:
+        redirectUrl: https://www.abc.com/regulated_fake_providers/fake_oauth_client_xf?client_id=2886&fetch_scopes%5B%5D=accounts&fetch_scopes%5B%5D=holder_info&fetch_scopes%5B%5D=transactions&flow=ais&return_to=https%3A%2F%2Fwww.saltedge.com%2Fconnect%2Foauth_callback%2Faisp%2F2c58378dea8acbc899a4ef6be60e6f8462662615f2011e93de1625af8dcc6c3e&state=connect_token_2c58378dea8acbc899a4ef6be60e6f8462662615f2011e93de1625af8dcc6c3e
+    AuthorizeRequestExample:
+      value:
+        customerId: TestCustomer1
+        providerCode: fake_oauth_client_xf
+        authToken: access_token=bc4521d3&state=Pd8b4d0eb
+    AuthorizeResponseExample:
+      value:
+        message: Connection with provider forgerock_client_gb_xf established successfully
+    AccountsRequestExample:
+      value:
+        customerId: TestCustomer1
+        providerCode: fake_oauth_client_xf
+    AccountsResponseExample:
+      value:
+      - accountId: '7610825'
+        balance: 2010.8
+        nature: card
+        name: AccountList
+        currencyCode: EUR
+        extra:
+          cards: []
+          assets: []
+          clientName: Fake name
+          lastPostedTransactionId: '1378698846'
+          iban: DEXXXXXXXXXXXXXXXXX
+          transactionsCount:
+            pending: 0
+            posted: 1098
+    TransactionsRequestExample:
+      value:
+        customerId: TestCustomer1
+        providerCode: fake_oauth_client_xf
+        accountId: '12000012'
+    TransactionsResponseExample:
+      value:
+      - accountId: '12000012'
+        duplicated: false
+        mode: normal
+        amount: 100
+        madeOn: '2018-12-20'
+        description: Online crockery purchase
+        category: fees_and_charges
+        currencyCode: EUR
+        status: posted
+        extra:
+        - possibleDuplicate: false
+          convert: false
+          categorizationConfidence: 1
+          id: '1378698846'
+          accountBalanceSnapshot: 10100
+          tags: []
+        createdAt: '2018-12-20T17:38:13Z'
+        updatedAt: '2019-08-05T17:38:13Z'
+      - accountId: '12000012'
+        duplicated: false
+        mode: normal
+        amount: 50
+        madeOn: '2018-12-19'
+        description: Online clothes purchase
+        category: fees_and_charges
+        currencyCode: EUR
+        status: posted
+        extra:
+        - possibleDuplicate: false
+          convert: false
+          categorizationConfidence: 1
+          id: '1378698847'
+          accountBalanceSnapshot: 10150
+          tags: []
+        createdAt: '2018-12-19T17:38:13Z'
+        updatedAt: '2019-08-05T17:38:13Z'
+    HolderInfoRequestExample:
+      value:
+        customerId: TestCustomer1
+        providerCode: fake_oauth_client_xf
+    HolderInfoResponseExample:
+      value:
+        names:
+        - Engelbert Smith
+        emails:
+        - esmith@emailservice.com
+        phoneNumbers:
+        - '+440123123123'
+        addresses: []
+    PispProvidersRequestExample:
+      value:
+        countryCode: XF
+    PispProvidersResponseExample:
+      value:
+        data:
+        - id: '3094'
+          code: starlingbank_oauth_client_gb
+          name: Starling
+          mode: oauth
+          status: active
+          interactive: true
+          pisp_instruction: You will be securely redirected to your financial institution to authenticate
+          logo_url: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/gb/starlingbank_oauth_client_gb.svg
+          country_code: GB
+          created_at: '2018-04-12T14:27:32Z'
+          updated_at: '2023-07-12T15:33:52Z'
+          identification_codes: []
+          payment_templates:
+          - FPS
+        - id: '3830'
+          code: revolut_client_oauth_gb
+          name: Revolut
+          mode: oauth
+          status: active
+          interactive: false
+          pisp_instruction: You will be securely redirected to your financial institution to authenticate
+          logo_url: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/gb/revolut_gb.svg
+          country_code: GB
+          created_at: '2019-04-12T14:06:05Z'
+          updated_at: '2023-08-30T07:19:06Z'
+          identification_codes: []
+          payment_templates:
+          - FPS
+          - CHAPS
+          - BACS
+          - FPS_STANDING_ORDER
+          - SEPA
+          - SEPA_INSTANT
+          - SWIFT
+    FPSPaymentRequestExample:
+      value:
+        data:
+          customer_id: D310252
+          country_code: GB
+          provider_code: barclays_oauth_client_gb
+          payee_description: barclays PVT 10-25-23
+          template_identifier: FPS
+          return_to: https://sites.obtest.com/sites/cib
+          payment_attributes:
+            end_to_end_id: PISP_1025_PVT_002
+            creditor_name: John Smith
+            creditor_sort_code: XXX242
+            creditor_account_number: XXXXX035
+            description: For Goods
+            amount: '100.00'
+            currency_code: GBP
+    BACSPaymentRequestExample:
+      value:
+        data:
+          customer_id: D310252
+          country_code: GB
+          provider_code: barclays_oauth_client_gb
+          payee_description: barclays PVT 10-25-23
+          template_identifier: BACS
+          return_to: https://sites.obtest.com/sites/cib
+          payment_attributes:
+            end_to_end_id: PISP_1025_PVT_002
+            creditor_name: John Smith
+            creditor_sort_code: XXX242
+            creditor_account_number: XXXXX035
+            description: For Goods
+            amount: '100.00'
+            currency_code: GBP
+    CHAPSPaymentRequestExample:
+      value:
+        data:
+          customer_id: D310252
+          country_code: GB
+          provider_code: barclays_oauth_client_gb
+          payee_description: barclays PVT 10-25-23
+          template_identifier: CHAPS
+          return_to: https://sites.obtest.com/sites/cib
+          payment_attributes:
+            end_to_end_id: PISP_1025_PVT_002
+            creditor_name: John Smith
+            creditor_sort_code: XXX242
+            creditor_account_number: XXXXX035
+            description: For Goods
+            amount: '100.00'
+            currency_code: GBP
+    SEPAPaymentRequestExample:
+      value:
+        data:
+          customer_id: 00ef7b8enca1elA1tm6bmyphhgk3
+          country_code: DE
+          provider_code: berliner_sparkasse_oauth_client_de
+          payee_description: MusicCorpDE
+          template_identifier: SEPA
+          return_to: https://www.musiccorp.com/pisp_oauth_callback
+          locale: de-DE
+          payment_attributes:
+            end_to_end_id: '20018300321270540'
+            creditor_name: MusicCorp
+            creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+            debtor_iban: DEXXXXXXXXXXXXXXXXXXXX
+            description: For goods
+            amount: '17.99'
+            currency_code: EUR
+            mode: Normal
+          connect_template: jpmorgan_musiccorp_v3
+    PaymentResponseExample:
+      value:
+        data:
+          payment_id: '1105048674708230671'
+          expires_at: '2023-09-21T04:56:43Z'
+          redirect_url: https://paymentservices.jpmorgan.com/payments/connect?token=a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13
+    PaymentAuthorizationRequestExample:
+      value:
+        paymentId: '1105291498426995690'
+        authToken: a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13&end_to_end_id=00000002
+    PaymentAuthStatusResponseExample:
+      value:
+        data:
+          id: 1105291498426995700
+          provider_code: deutsche_bank_client_de
+          provider_name: Deutsche Bank
+          customer_id: 1105291496237569000
+          created_at: '2023-09-21T12:43:10Z'
+          updated_at: '2023-09-21T12:44:52Z'
+          status: accepted
+          payment_consent_id: 1105291498334721000
+          template_identifier: SEPA
+          payment_attributes:
+            mode: Normal
+            amount: 12.99
+            debtor_iban: DE75380707240330795600
+            description: NETFLIX
+            creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+            creditor_name: NETFLIX
+            currency_code: EUR
+            end_to_end_id: 20043855508803784
+            customer_ip_address: 159.53.64.214
+          custom_fields: {}
+          stages:
+          - id: 1105291498368275500
+            name: initialize
+            created_at: '2023-09-21T12:43:10Z'
+          - id: 1105291670938719200
+            name: start
+            created_at: '2023-09-21T12:43:31Z'
+          - id: 1105291671400092700
+            name: received
+            created_at: '2023-09-21T12:43:31Z'
+          - id: 1105291678303917000
+            name: interactive
+            created_at: '2023-09-21T12:43:32Z'
+            interactive_html: null
+            interactive_fields_names: []
+            interactive_redirect_url: https://meine.deutsche-bank.de/taf/db/#/authorizepaymentorder?transaction-id=cce9323d-c57e-4e77-9f1e-c394368e4751&psu-id=9503307956&authorization-id=f8190b5f-f0ee-40c7-987d-3aa453e994aa
+            interactive_fields_options: null
+          - id: 1105292279280571400
+            name: submission
+            created_at: '2023-09-21T12:44:43Z'
+          - id: 1105292284808664000
+            name: pending
+            created_at: '2023-09-21T12:44:44Z'
+          - id: 1105292288801641500
+            name: completed
+            created_at: '2023-09-21T12:44:44Z'
+          - id: 1105292290093487100
+            name: finish
+            created_at: '2023-09-21T12:44:44Z'
+    PaymentStatusRequestExample:
+      value:
+        customer_id: '1105291496237568999'
+        payment_id: '1104531176632095201'
+    InvalidJSONFormatExample:
+      value:
+        errorCode: PISP-003
+        errorMsg: Invalid JSON format
+    UnauthorizedAccessExample:
+      value:
+        errorCode: PISP-006
+        errorMsg: Unauthorized access
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2: {}
+x-jpmc-security: {}

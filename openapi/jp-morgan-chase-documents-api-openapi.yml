@@ -1,0 +1,298 @@
+# Harvested verbatim from the J.P. Morgan Payments Developer Portal.
+# method: searched
+# source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fembedded-finance-solutions%2Fembedded-payments%2Fembedded-payments%2Fdocuments.md
+# generated: '2026-07-28'
+openapi: 3.0.1
+info:
+  title: Documents API
+  version: 1.0.50
+  description: Manage your documents programmatically. Generate new documents and retrieve documents relevant
+    to your accounts. This allows you to obtain important documentation with ease.
+  contact:
+    name: JPMC Technical Services Support
+servers:
+- url: https://api.payments.jpmorgan.com/embedded/v1
+  description: PRODUCTION - MTLS
+- url: https://api-mock.payments.jpmorgan.com/embedded/v1
+  description: MOCK
+- url: https://api-sandbox.payments.jpmorgan.com/embedded/v1
+  description: CLIENT TESTING - MTLS
+tags:
+- name: Documents
+  description: Generate and download documents.
+paths:
+  /documents:
+    post:
+      summary: Generate a document
+      description: Generate a document for the specified document type and parameters
+      operationId: postDocuments
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDocumentRequest'
+      tags:
+      - Documents
+      responses:
+        '202':
+          description: Document generation request accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDocumentResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        '503':
+          $ref: '#/components/responses/503'
+  /documents/{id}:
+    get:
+      summary: Download a document
+      description: Download a document with the specified document ID
+      operationId: getDocumentById
+      parameters:
+      - $ref: '#/components/parameters/documentIdInPath'
+      tags:
+      - Documents
+      responses:
+        '200':
+          description: PDF document for the specified document ID
+          content:
+            application/pdf:
+              schema:
+                $ref: '#/components/schemas/FileDownloadData'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        '503':
+          $ref: '#/components/responses/503'
+components:
+  parameters:
+    documentIdInPath:
+      name: id
+      in: path
+      description: Unique document identifier
+      schema:
+        type: string
+      required: true
+      example: 89eb5ab2-d688-43be-9b6d-a21dc87750b1
+  schemas:
+    DocumentParameters:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Unique account identifier
+          example: f5246c6eb2c742a19c9c79327a769708
+    CreateDocumentRequest:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          nullable: false
+          description: Document type (only ACCOUNT_CONFIRMATION_LETTER is currently supported)
+          example: ACCOUNT_CONFIRMATION_LETTER
+        parameters:
+          $ref: '#/components/schemas/DocumentParameters'
+    CreateDocumentResponse:
+      type: object
+      required:
+      - id
+      - type
+      properties:
+        id:
+          type: string
+          nullable: false
+          description: Unique document identifier
+          example: 89eb5ab2-d688-43be-9b6d-a21dc87750b1
+        type:
+          type: string
+          nullable: false
+          description: Document type (only ACCOUNT_CONFIRMATION_LETTER is currently supported)
+          example: ACCOUNT_CONFIRMATION_LETTER
+        parameters:
+          $ref: '#/components/schemas/DocumentParameters'
+    ApiErrorReasonV2:
+      type: object
+      description: Schema representing detailed reasons for an API error, including code, location, and
+        message.
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          example: '11000'
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 0
+          maxLength: 5
+        location:
+          type: string
+          enum:
+          - BODY
+          - QUERY
+          - PATH
+          - HEADER
+          example: BODY
+          description: Part of the request which is responsible for the reason
+        field:
+          type: string
+          description: The location of the property or parameter in error
+          minLength: 0
+          maxLength: 512
+        message:
+          type: string
+          example: Client with ID 0031234567 does not exist.
+          description: Message describing the reason. This message can typically be displayed to your
+            platform's users, except in cases specified otherwise
+          minLength: 0
+          maxLength: 2048
+    ApiError:
+      type: object
+      required:
+      - title
+      - httpStatus
+      - error
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: Short humanly-readable title of the error
+          example: BAD REQUEST
+        httpStatus:
+          type: integer
+          minimum: 100
+          maximum: 599
+          format: int32
+          description: HTTP status code
+          example: 422
+        traceId:
+          type: string
+          minLength: 0
+          maxLength: 512
+          description: Internal assigned traced identifier
+        requestId:
+          type: string
+          minLength: 0
+          maxLength: 512
+          description: Client provided request identifier
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorReasonV2'
+          description: Provides additional context and detail on the validation errors
+          minItems: 0
+          maxItems: 100
+    FileDownloadData:
+      type: string
+      format: byte
+      description: Document binary data
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Bad Request
+              summary: Bad Request
+              value:
+                title: Bad Request
+                httpStatus: 400
+                error: BAD_REQUEST
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Unauthorized
+              summary: Unauthorized
+              value:
+                title: Unauthorized Request
+                httpStatus: 401
+                error: UNAUTHORIZED
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Forbidden
+              summary: Forbidden
+              value:
+                title: Forbidden
+                httpStatus: 403
+                error: FORBIDDEN
+    '404':
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Not Found
+              summary: Not Found
+              value:
+                title: Not Found
+                httpStatus: 404
+                error: NOT_FOUND
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Internal Server Error
+              summary: Internal Server Error
+              value:
+                title: Internal Server Error
+                httpStatus: 500
+                error: INTERNAL_SERVER_ERROR
+    '503':
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Service Unavailable
+              summary: Service Unavailable
+              value:
+                title: Service Unavailable
+                httpStatus: 503
+                error: SERVICE_UNAVAILABLE
+x-jpmc-securityDefinitions:
+  MutualTLS:
+    type: x509
+    description: Mutual TLS authentication using client and server certificates.
+x-jpmc-security:
+- MutualTLS

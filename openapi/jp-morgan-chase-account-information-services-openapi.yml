@@ -1,0 +1,3724 @@
+# Harvested verbatim from the J.P. Morgan Payments Developer Portal.
+# method: searched
+# source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Ftreasury%2Fpay-by-bank%2Fais-oas.md
+# generated: '2026-07-28'
+openapi: 3.0.1
+info:
+  title: Account Information Services
+  version: 2.0.22
+  description: Enable access to account information services that allow J.P. Morgan clients to leverage
+    Open Banking for data from customer bank accounts. Support consent management, account verification,
+    balance retrieval, and transaction history for secure and efficient financial integration.
+  contact:
+    name: JPMorgan Chase & Co. API Support
+    url: https://apistore.jpmchase.net/support/contact
+    email: imsd.security.operations@jpmorgan.com
+servers:
+- url: https://api.payments.jpmorgan.com/paybybank/v2
+  description: PRODUCTION
+- url: https://api-cat.payments.jpmorgan.com/paybybank/v2
+  description: CLIENT TESTING
+- url: https://api-mock.payments.jpmorgan.com/paybybank/v2
+  description: MOCK
+tags:
+- name: Consents
+  description: Account Information - Consents
+- name: Account Services
+  description: Account Information - Services
+paths:
+  /consents:
+    post:
+      tags:
+      - Consents
+      summary: Initiate Consent Journey
+      description: '**Initiate consent journey to grant access to account information**
+
+        '
+      operationId: initiateConsent
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      requestBody:
+        $ref: '#/components/requestBodies/ConsentInitiation'
+      responses:
+        '201':
+          $ref: '#/components/responses/201-ConsentCreated'
+        '400':
+          $ref: '#/components/responses/400-BadConsentRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+      callbacks:
+        consentCallback:
+          '{client-url}/callback':
+            post:
+              operationId: consentCallBack
+              summary: Consent Webhook
+              requestBody:
+                description: '**Consent callback to merchant, after completion of user consent journey.
+                  Merchant can retrieve consented information**
+
+                  '
+                content:
+                  application/cloudevents+json:
+                    schema:
+                      $ref: '#/components/schemas/WebHook'
+                    examples:
+                      Consent Link - Initiated US:
+                        $ref: '#/components/examples/ConsentLinkInitiatedCallBackUS'
+                      Consent Link - Initiated EU:
+                        $ref: '#/components/examples/ConsentLinkInitiatedCallBackEU'
+                      Consent Link - Initiated UK:
+                        $ref: '#/components/examples/ConsentLinkInitiatedCallBackUK'
+                      Consent Link - Opened US:
+                        $ref: '#/components/examples/ConsentLinkOpenedCallBackUS'
+                      Consent Link - Opened EU:
+                        $ref: '#/components/examples/ConsentLinkOpenedCallBackEU'
+                      Consent Link - Opened UK:
+                        $ref: '#/components/examples/ConsentLinkOpenedCallBackUK'
+                      Consent Link - Pending US:
+                        $ref: '#/components/examples/ConsentLinkPendingCallBackUS'
+                      Consent Link - Expired US:
+                        $ref: '#/components/examples/ConsentLinkExpiredCallBackUS'
+                      Consent Link - Expired EU:
+                        $ref: '#/components/examples/ConsentLinkExpiredCallBackEU'
+                      Consent Link - Expired UK:
+                        $ref: '#/components/examples/ConsentLinkExpiredCallBackUK'
+                      Consent Link - Failed US:
+                        $ref: '#/components/examples/ConsentLinkFailedCallBackUS'
+                      Consent Link - Failed EU:
+                        $ref: '#/components/examples/ConsentLinkFailedCallBackEU'
+                      Consent Link - Failed UK:
+                        $ref: '#/components/examples/ConsentLinkFailedCallBackUK'
+                      Consent Link - Cancelled US:
+                        $ref: '#/components/examples/ConsentLinkCancelledCallBackUS'
+                      Consent Link - Cancelled EU:
+                        $ref: '#/components/examples/ConsentLinkCancelledCallBackEU'
+                      Consent Link - Cancelled UK:
+                        $ref: '#/components/examples/ConsentLinkCancelledCallBackUK'
+                      Consent Link - Abandoned US:
+                        $ref: '#/components/examples/ConsentLinkAbandonedCallBackUS'
+                      Consent Link - Abandoned EU:
+                        $ref: '#/components/examples/ConsentLinkAbandonedCallBackEU'
+                      Consent Link - Abandoned UK:
+                        $ref: '#/components/examples/ConsentLinkAbandonedCallBackUK'
+                      Consent Link - Successful US:
+                        $ref: '#/components/examples/ConsentLinkSuccessfullCallbackUS'
+                      Consent Link - Successful EU:
+                        $ref: '#/components/examples/ConsentLinkSuccessfullCallbackEU'
+                      Consent Link - Successful UK:
+                        $ref: '#/components/examples/ConsentLinkSuccessfullCallbackUK'
+                      Consent - Partially Success - US:
+                        $ref: '#/components/examples/ConsentPartiallySuccessfulCallBackUS'
+                      Consent - Success - US:
+                        $ref: '#/components/examples/ConsentSuccessfulCallBackUS'
+                      Consent - Success - UK:
+                        $ref: '#/components/examples/ConsentSuccessfulCallBackUK'
+                      Consent - Success - EU:
+                        $ref: '#/components/examples/ConsentSuccessfulCallBackEU'
+                      Consent - Pending - US:
+                        $ref: '#/components/examples/ConsentPendingCallBackUS'
+                      Consent - Ready to Validate - US:
+                        $ref: '#/components/examples/ConsentReadyToValidateCallBackUS'
+                      Consent - Revoked by Client US:
+                        $ref: '#/components/examples/ConsentRevokeCallBackUS-ClientDelete'
+                      Consent - Revoked by System US:
+                        $ref: '#/components/examples/ConsentRevokeCallBackUS-PermanentDelete'
+                      Consent - Failed US:
+                        $ref: '#/components/examples/ConsentFailedCallBackUS'
+                      Consent - Failed EU:
+                        $ref: '#/components/examples/ConsentFailedCallBackEU'
+                      Consent - Failed UK:
+                        $ref: '#/components/examples/ConsentFailedCallBackUK'
+                      Consent - Expired US:
+                        $ref: '#/components/examples/ConsentRevokeCallBackUS-Expired'
+                      ConsentFix - Success US:
+                        $ref: '#/components/examples/ConsentFixSuccessfulCallBackUS'
+                      ConsentFix - Failed US:
+                        $ref: '#/components/examples/ConsentFixFailedCallBackUS'
+                required: true
+              responses:
+                '204':
+                  description: Callback successfully completed
+  /consents/{consentId}:
+    summary: Get consent status
+    get:
+      tags:
+      - Consents
+      summary: Get consent status
+      description: '**Get consent status.**
+
+        '
+      operationId: getConsentStatus
+      parameters:
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      - name: consentId
+        in: path
+        description: JPMC generated consent identifier in UUID format (e.g., 0488ecb1-33c3-4b6a-b5e5-7a61680c463f)
+        required: true
+        schema:
+          $ref: '#/components/schemas/ConsentId'
+        examples:
+          ConsentId-US:
+            summary: Example of consent id for US
+            value: 0488ecb1-33c3-4b6a-b5e5-7a61680c463f
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-ConsentBasic'
+        '400':
+          $ref: '#/components/responses/400-BadConsentIdRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFoundAccount'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+    delete:
+      tags:
+      - Consents
+      summary: Revoke consent
+      description: '**Revoke a consent authorized for continuous access**
+
+        '
+      operationId: revokeConsent
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      - name: consentId
+        in: path
+        description: JPMC generated consent identifier
+        required: true
+        schema:
+          $ref: '#/components/schemas/ConsentId'
+        examples:
+          ConsentId-US:
+            summary: Example of consent id for US
+            value: 0488ecb133c34b6ab5e57a61680c463f
+      responses:
+        '204':
+          description: Consent Revoked Successfully
+        '400':
+          $ref: '#/components/responses/400-BadConsentIdRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /consents/{consentId}/renew:
+    summary: Renew consent or obtain new Consent Link URL for Microdeposit Confirmation
+    post:
+      tags:
+      - Consents
+      summary: Renew consent
+      description: 'Renew consent is used to prompt the account holder for continued access to their financial
+        data.
+
+        For flows with Microdeposit and Challenge, Renew Consent is used to obtain new Consent Link URL
+        for completion of the microdeposit confirmation.
+
+        '
+      operationId: renewConsent
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      - name: consentId
+        in: path
+        description: JPMC generated consent identifier
+        required: true
+        schema:
+          $ref: '#/components/schemas/ConsentId'
+        examples:
+          ConsentId-US:
+            summary: Example of consent id for US
+            value: 0488ecb133c34b6ab5e57a61680c463f
+      requestBody:
+        $ref: '#/components/requestBodies/ConsentUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-ConsentRenew'
+        '400':
+          $ref: '#/components/responses/400-BadConsentIdRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFoundAccount'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /accounts:
+    get:
+      summary: Retrieve account information report
+      description: 'The **Pay By Bank** - **Account Information Report API** provides an overview of permissioned
+        consumer payment account details.
+
+        '
+      tags:
+      - Account Services
+      operationId: getAccounts
+      parameters:
+      - $ref: '#/components/parameters/ConsentId'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-AccountSummary'
+        '400':
+          $ref: '#/components/responses/400-AccountVerificationBadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /balances:
+    get:
+      summary: Retrieve balance information report
+      description: 'The **Pay By Bank** - **Balance Report** provides an overview of permissioned consumer
+        payment account information and access to real-time balances.
+
+        '
+      tags:
+      - Account Services
+      operationId: getAccountBalances
+      parameters:
+      - $ref: '#/components/parameters/ConsentId'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-BalanceDetails'
+        '400':
+          $ref: '#/components/responses/400-AccountVerificationBadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /transactions:
+    get:
+      summary: Retrieve transaction history report
+      description: 'The **Pay By Bank** - **Transaction History Report API** provides an overview of permissioned
+        consumer payment account information, including real-time balances and transaction history.
+
+        '
+      tags:
+      - Account Services
+      operationId: getAccountTransactions
+      parameters:
+      - $ref: '#/components/parameters/ConsentId'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-TransactionDetails'
+        '400':
+          $ref: '#/components/responses/400-AccountVerificationBadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /account-information:
+    get:
+      summary: Retrieve account information
+      description: 'The **Pay By Bank** - **Account Information API** facilitates the verification and
+        provision of detailed information for linked bank accounts with continuous access permissions.
+        This API allows users to retrieve specific account information, including account details, account
+        owner verification, and balance checks.
+
+        '
+      tags:
+      - Account Services
+      operationId: getAccountSummaries
+      parameters:
+      - $ref: '#/components/parameters/ConsentId'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      - $ref: '#/components/parameters/AccountView'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-AccountInformation'
+        '400':
+          $ref: '#/components/responses/400-AccountInformationBadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+components:
+  schemas:
+    IdempotencyKey:
+      title: IdempotencyKey
+      description: A string that enables the API support idempotency by safely retrying requests without
+        accidentally performing the same operation twice.
+      type: string
+      minLength: 36
+      maxLength: 36
+      pattern: ^[-_.a-zA-Z0-9]{36}$
+      example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+    RequestId:
+      title: RequestId
+      description: Client provided unique identifier for the current request invocation
+      type: string
+      minLength: 6
+      maxLength: 128
+      example: 5d1ff121-3a41-4cdc-9af9-de2f19cd567f
+    ClientId:
+      title: ClientId
+      description: Unique Identifier of the client that is generated by PBB.
+      type: string
+      minLength: 1
+      maxLength: 36
+      example: '9876543210'
+    ReferenceId:
+      type: string
+      minLength: 6
+      maxLength: 128
+      description: A unique identifier provided by the client for the request, which will be returned
+        upon the completion of the consent process.
+    ConsentType:
+      title: ConsentType
+      type: string
+      description: 'Type of consent requested, specifying the **scope** of access to account information
+
+
+        | Consent Type             | Description                                                           |
+        Supported Region |
+
+        |:-------------------------|:-----------------------------------------------------------------------|:------------------|
+
+        | `ACCOUNT_INFORMATION`    | Consent for continuous access to account, account holders and balances
+        information  | US  |
+
+        | `ACCOUNT_CHECK`          | Consent for one time access to account and account holder information|
+        UK, EU|
+
+        | `BALANCE_CHECK`          | Consent for one time access to account balances information| UK,
+        EU|
+
+        | `TRANSACTIONS`           | Consent for one time access to access account transaction history|UK,
+        EU|
+
+        | `PAYMENT`                | Consent for one time payment to make a payment |UK, EU|
+
+        '
+      enum:
+      - ACCOUNT_INFORMATION
+      - ACCOUNT_CHECK
+      - BALANCE_CHECK
+      - TRANSACTIONS
+      - PAYMENT
+    ExternalUserId:
+      title: ExternalUserId
+      description: User Id for tracking the external user
+      type: string
+      minLength: 6
+      maxLength: 256
+    Email:
+      title: Email
+      type: object
+      description: Representation of detailed email information.
+      properties:
+        isPrimary:
+          type: boolean
+          description: Indicates the email address is the first point of communication in instances where
+            there are multiple email addresses.
+        emailAddressType:
+          type: string
+          description: The email type.
+          enum:
+          - PERSONAL
+          - BUSINESS
+          - OTHER
+          - UNKNOWN
+        emailAddress:
+          type: string
+          description: The email address.
+          format: email
+      additionalProperties: false
+    Phone:
+      title: Phone
+      type: object
+      description: Representation of a Phone Number
+      properties:
+        phoneNumber:
+          type: string
+          pattern: ^\+[0-9]{1,3}-[0-9()+\-]{1,30}$
+          description: Number as defined by the Telecom services
+        phoneNumberType:
+          type: string
+          description: "The phone type.\r\n"
+          enum:
+          - PHONE
+          - MOBILE
+          - BUSINESS
+          - OTHER
+    ExternalUserProfile:
+      type: object
+      title: ExternalUserProfile
+      description: Details of the external user.
+      properties:
+        firstName:
+          type: string
+          description: First name of the external user.
+          maxLength: 100
+        lastName:
+          type: string
+          description: Last name of the external user.
+          maxLength: 100
+        email:
+          $ref: '#/components/schemas/Email'
+        phone:
+          $ref: '#/components/schemas/Phone'
+    FinancialInstitutionIdType:
+      title: FinancialInstitutionIdType
+      description: Financial Institution Identifier Type
+      type: string
+      enum:
+      - BIC
+      - SORT_CODE
+    FinancialInstitutionId:
+      title: FinancialInstitutionId
+      description: Financial Institution Identifier
+      type: object
+      properties:
+        id:
+          type: string
+          description: Financial Institution Identifier
+        idType:
+          $ref: '#/components/schemas/FinancialInstitutionIdType'
+      required:
+      - id
+      - idType
+    ConsentLinkRequest:
+      type: object
+      title: ConsentLinkRequest
+      description: Representation of a User's consent detail for accessing financial data
+      properties:
+        referenceId:
+          $ref: '#/components/schemas/ReferenceId'
+        country:
+          type: string
+          minLength: 2
+          maxLength: 2
+          pattern: ^[A-Z]{2}$
+          description: "ISO 3166-1 Alpha-2 Country Code representing where the consent is requested\n\n\
+            \  **Supported Countries:**\n  | Region         | Country                        |\n  | :-------------\
+            \ | :----------------------------- |\n  | United States  | US                            \
+            \ |\n  | United Kingdom | GB                             |\n  | EU             | DE, ES, IT,\
+            \ NL, AT |\n"
+        consentType:
+          $ref: '#/components/schemas/ConsentType'
+        externalUserId:
+          $ref: '#/components/schemas/ExternalUserId'
+        externalUserProfile:
+          $ref: '#/components/schemas/ExternalUserProfile'
+        redirectUrl:
+          type: string
+          format: uri
+          description: Callback URL to be redirected upon consent completion
+        locale:
+          type: string
+          description: 'Locale indicating the language and regional settings for the consent initiation
+
+            '
+          default: en_US
+          maxLength: 5
+        financialInstitutionId:
+          description: 'Financial Institution where the end user will log in to provide consent
+
+            '
+          allOf:
+          - $ref: '#/components/schemas/FinancialInstitutionId'
+      required:
+      - consentType
+      - externalUserId
+      - country
+      additionalProperties: false
+    ConsentLinkId:
+      title: ConsentLinkId
+      description: Unique identifier to access Pay by Bank UI for Link (UUID)
+      type: string
+      maxLength: 36
+      minLength: 32
+    ConsentId:
+      title: ConsentId
+      description: Unique identifier to access consent resources (UUID)
+      type: string
+      maxLength: 36
+      minLength: 32
+    ConsentLink:
+      title: ConsentLink
+      type: object
+      description: Representation of a generated consent link.
+      properties:
+        consentLinkId:
+          $ref: '#/components/schemas/ConsentLinkId'
+        consentId:
+          $ref: '#/components/schemas/ConsentId'
+        referenceId:
+          $ref: '#/components/schemas/ReferenceId'
+      required:
+      - consentLinkId
+      - consentId
+    ConsentLinkResponse:
+      title: ConsentLinkResponse
+      description: Representation of the details necessary to start and track the consent journey.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ConsentLink'
+      - type: object
+        properties:
+          consentLink:
+            type: string
+            description: A URL link used to initiate user interaction for granting and authorizing consent.
+            format: uri
+          createdAt:
+            type: string
+            description: The timestamp indicating when the consent initiation process was created, formatted
+              in ISO 8601 format.
+            format: date-time
+          consentLinkExpiringAt:
+            type: string
+            description: The timestamp indicating when the consent link will expire, formatted in ISO
+              8601 format.
+            format: date-time
+        required:
+        - consentLink
+        - createdAt
+        - consentLinkExpiringAt
+    TraceId:
+      title: TraceId
+      description: A unique identifier generated by server for tracing the request through the system.
+      type: string
+      minLength: 16
+      maxLength: 36
+      pattern: ^[-_.a-zA-Z0-9]{16,36}$
+      example: ed392d86-83f3-4611-ac51-3a00442c8fc5
+    ApiAdditionalContext:
+      title: AdditionalContext
+      type: object
+      properties:
+        type:
+          type: string
+          description: Category of the error code (EXTERNAL)
+          minLength: 3
+          maxLength: 20
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+        message:
+          type: string
+          description: Humanly readable textual description of the error
+          minLength: 1
+          maxLength: 200
+      required:
+      - type
+      - code
+      - message
+      additionalProperties: false
+    ApiErrorContext:
+      title: ErrorContext
+      description: The API error context object returned by the API.
+      type: object
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+        message:
+          type: string
+          description: Humanly readable textual description of the error
+          minLength: 1
+          maxLength: 200
+        location:
+          type: string
+          description: The location of the error occurred in the request.
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+          minLength: 1
+          maxLength: 99
+        field:
+          type: string
+          description: The field which caused the error. Where the location of error occurred is BODY
+            the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+        additionalContext:
+          type: array
+          description: List of additional error contexts providing detailed information
+          items:
+            $ref: '#/components/schemas/ApiAdditionalContext'
+          minItems: 0
+          maximum: 10
+      required:
+      - message
+      additionalProperties: false
+    ApiError:
+      title: Error
+      description: The error object returned by the API.
+      type: object
+      properties:
+        title:
+          type: string
+          description: Brief title describing the error
+          example: Consent Processing Error
+          minLength: 1
+          maxLength: 128
+        httpStatus:
+          type: integer
+          format: int32
+          description: HTTP Status Code
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        requestId:
+          $ref: '#/components/schemas/RequestId'
+        context:
+          type: array
+          description: List of error contexts providing detailed information
+          items:
+            $ref: '#/components/schemas/ApiErrorContext'
+          minItems: 0
+          maxItems: 10
+      required:
+      - title
+      - httpStatus
+      - traceId
+      additionalProperties: false
+    ConsentLinkInitiated:
+      title: ConsentLinkInitiated
+      description: Consent Link event published as part of account linking flow for consent link URL is
+        generated
+      type: object
+      properties:
+        consentLinkRequest:
+          $ref: '#/components/schemas/ConsentLinkRequest'
+        consentLinkResponse:
+          $ref: '#/components/schemas/ConsentLinkResponse'
+      required:
+      - consentLinkRequest
+      - consentLinkResponse
+    ConsentLinkWithView:
+      title: ConsentLinkCancelled
+      type: object
+      description: Representation of a generated consent link.
+      allOf:
+      - $ref: '#/components/schemas/ConsentLink'
+      - type: object
+        properties:
+          viewName:
+            type: string
+            description: The view page where the user cancelled the consent link
+    AdditionalContext:
+      title: AdditionalContext
+      type: object
+      properties:
+        type:
+          type: string
+          description: Category of the error code (EXTERNAL)
+          minLength: 3
+          maxLength: 20
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+        message:
+          type: string
+          description: Humanly readable textual description of the error
+          minLength: 1
+          maxLength: 200
+      required:
+      - type
+      - code
+      - message
+      additionalProperties: false
+    ErrorContext:
+      title: ConsentErrorContext
+      type: object
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+        message:
+          type: string
+          description: Humanly readable textual description of the error
+          minLength: 1
+          maxLength: 200
+        field:
+          type: string
+          description: The field which caused the error. Where the location of error occurred is BODY
+            the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+        additionalContext:
+          type: array
+          description: List of additional error contexts providing detailed information
+          items:
+            $ref: '#/components/schemas/AdditionalContext'
+          minItems: 0
+          maxItems: 10
+      required:
+      - message
+      additionalProperties: false
+    Error:
+      title: ConsentError
+      description: Error details for consent processing issues
+      type: object
+      properties:
+        title:
+          type: string
+          description: Brief title describing the error
+          example: Consent Processing Error
+          minLength: 1
+          maxLength: 128
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        context:
+          type: array
+          description: List of error contexts providing detailed information
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 0
+          maxItems: 10
+      required:
+      - title
+      - traceId
+    ConsentLinkFailed:
+      title: ConsentLinkFailed
+      description: Consent Link event published as part of account linking flow for failure
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ConsentLink'
+      - type: object
+        properties:
+          error:
+            $ref: '#/components/schemas/Error'
+        required:
+        - error
+    ConsumerProfileId:
+      title: ConsumerProfileId
+      type: string
+      description: Internal consumer profile identifier provided by JPMC
+      minLength: 5
+      maxLength: 64
+    User:
+      title: User
+      description: Pay by Bank User
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ExternalUserProfile'
+      properties:
+        consumerProfileId:
+          $ref: '#/components/schemas/ConsumerProfileId'
+    ConsentStatus:
+      title: ConsentStatus
+      type: string
+      description: 'Type of consent status
+
+
+        | Consent Status     | Description                                                                 |
+
+        |:---------------------|:--------------------------------------------------------------------------|
+
+        | `SUCCESS`            | Consent process completed successfully.                                   |
+
+        | `PARTIAL_SUCCESS`    | Consent completed successful. Consent data retrieval partial successful.  |
+
+        | `FAILED`             | Consent process failed.                                                   |
+
+        | `REVOKED_BY_USER`    | Consent was revoked by the user.                                          |
+
+        | `REVOKED_BY_CLIENT`  | Consent was revoked by the client.                                        |
+
+        | `REVOKED_BY_SYSTEM`  | Consent was revoked by System and can not be recovered.                   |
+
+        | `REVOKED_EXPIRED`    | Consent has expired and is no longer valid.                               |
+
+        | `PENDING`            | Consent process is still in progress.                                     |
+
+        '
+      enum:
+      - SUCCESS
+      - PARTIAL_SUCCESS
+      - FAILED
+      - REVOKED_BY_USER
+      - REVOKED_BY_CLIENT
+      - REVOKED_BY_SYSTEM
+      - REVOKED_EXPIRED
+      - PENDING
+    ConsentLinkType:
+      title: ConsentLinkType
+      type: string
+      description: 'Type of consent link that defines how account connects.
+
+
+        | Consent Link Type | Description                                       |
+
+        |:------------------|:--------------------------------------------------|
+
+        | `INSTANT`         | Consumer links account instantly via Open Banking.|
+
+        | `MANUAL`          | Consumer links account manually.                  |
+
+        '
+      enum:
+      - INSTANT
+      - MANUAL
+    ConsentBasic:
+      title: ConsentBasic
+      type: object
+      description: Representation of a User's consent details without account information.
+      properties:
+        consentId:
+          $ref: '#/components/schemas/ConsentId'
+        referenceId:
+          $ref: '#/components/schemas/ReferenceId'
+        consentType:
+          $ref: '#/components/schemas/ConsentType'
+        externalUserId:
+          $ref: '#/components/schemas/ExternalUserId'
+        externalUserProfile:
+          $ref: '#/components/schemas/User'
+        status:
+          $ref: '#/components/schemas/ConsentStatus'
+        statusReason:
+          type: string
+          description: A detailed reason for the current status of the consent, providing additional context.
+            This field is optional and may be omitted if not applicable.
+          maxLength: 200
+        lastUpdatedAt:
+          type: string
+          description: The timestamp indicating when the consent initiation process was created, formatted
+            in ISO 8601 format.
+          format: date-time
+        clientId:
+          $ref: '#/components/schemas/ClientId'
+        country:
+          type: string
+          minLength: 2
+          maxLength: 2
+          pattern: ^[A-Z]{2}$
+          description: "ISO 3166-1 Alpha-2 Country Code representing where the consent is requested\n\n\
+            \  **Supported Countries:**\n  | Region         | Country                        |\n  | :-------------\
+            \ | :----------------------------- |\n  | United States  | US                            \
+            \ |\n  | United Kingdom | GB                             |\n  | EU             | DE, ES, IT,\
+            \ NL, AT |\n"
+        locale:
+          type: string
+          description: 'Locale indicating the language and regional settings for the consent initiation
+
+            '
+          default: en_US
+          maxLength: 5
+        consentLinkType:
+          $ref: '#/components/schemas/ConsentLinkType'
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - consentId
+      - consentType
+      - status
+      - country
+      - externalUserId
+      - lastUpdatedAt
+    AccountId:
+      title: AccountId
+      description: Internal account identifier provided by JPMC
+      type: string
+      maxLength: 36
+      minLength: 32
+    FinancialInstitution:
+      title: FinancialInstitution
+      description: Represents a financial institution with its name and logo.
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the financial institution.
+          minLength: 2
+          maxLength: 100
+        logoUrl:
+          type: string
+          description: URL of the financial institution's logo.
+          format: uri
+          pattern: ^https?:\/\/[^\s$.?#].[^\s]*$
+      required:
+      - name
+      additionalProperties: false
+    USABA:
+      title: USABA
+      type: object
+      description: Account Identifier in US Banking account number format
+      required:
+      - accountIdType
+      properties:
+        accountIdType:
+          type: string
+          default: USABA
+        routingNumber:
+          type: string
+          description: Represents routing number of financial institution, that account belongs to.
+          minLength: 1
+          maxLength: 128
+        accountNumber:
+          type: string
+          description: Represents account number assigned by financial institution.
+          minLength: 1
+          maxLength: 128
+        maskedAccountNumber:
+          type: string
+          description: Account number assigned by financial institution in masked format e.g.  XXXXXXXXXXXX1234
+          maxLength: 20
+        tokenizedAccountNumber:
+          type: string
+          description: Tokenized representation of the US bank account number.
+          minLength: 1
+          maxLength: 128
+      additionalProperties: false
+    SORTCODE:
+      type: object
+      title: SORTCODE
+      description: Account identifier specific to the SORT_CODE account numbering scheme.
+      required:
+      - accountIdType
+      properties:
+        accountIdType:
+          type: string
+          default: SORT_CODE
+        accountNumber:
+          type: string
+          description: The account number of the account.
+          minLength: 1
+          maxLength: 128
+        sortCode:
+          type: string
+          description: The sort code of the account.
+          minLength: 1
+          maxLength: 128
+      additionalProperties: false
+    IBAN:
+      type: object
+      title: IBAN
+      description: International bank account number (**IBAN**) standard numbering system.
+      required:
+      - accountIdType
+      properties:
+        accountIdType:
+          type: string
+          default: IBAN
+        bban:
+          type: string
+          description: BBAN represents a country-specific bank account number.
+          minLength: 1
+          maxLength: 128
+        bic:
+          type: string
+          description: BIC bank number. This can be inferred from the IBAN, but some banks might require
+            it for adding a beneficiary or will display it for existing accounts owned by the user.
+          minLength: 1
+          maxLength: 128
+        iban:
+          type: string
+          description: IBAN represents an international bank account number.
+          minLength: 1
+          maxLength: 128
+      additionalProperties: false
+    AccountType:
+      title: AccountType
+      type: string
+      description: 'Specifies the type of account.
+
+
+        | Account Type   | Description            |
+
+        |----------------|------------------------|
+
+        | **CHECKING**   | A Checking account.    |
+
+        | **SAVINGS**    | A Savings account.     |
+
+        | **CREDIT_CARD**| A Credit Card account. |
+
+        '
+      enum:
+      - CHECKING
+      - SAVINGS
+      - CREDIT_CARD
+      - OTHER
+    ISOCurrencyCode:
+      title: ISOCurrencyCode
+      description: '**Currency of the money movement**: a 3 alpha character ISO 4217 currency code.'
+      type: string
+      minLength: 3
+      maxLength: 3
+      pattern: ^[A-Z]{3}$
+      example: EUR
+    AccountStatus:
+      type: string
+      description: Account Status
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - UNKNOWN
+    AccountBasic:
+      title: AccountBasic
+      description: Basic representation of a financial account.
+      type: object
+      properties:
+        financialInstitution:
+          $ref: '#/components/schemas/FinancialInstitution'
+        accountIdentifiers:
+          description: Unique account identifiers assigned by the financial institution for identification
+            and transaction processing.
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/USABA'
+          - $ref: '#/components/schemas/SORTCODE'
+          - $ref: '#/components/schemas/IBAN'
+          discriminator:
+            propertyName: accountIdType
+            mapping:
+              USABA: '#/components/schemas/USABA'
+              SORTCODE: '#/components/schemas/SORTCODE'
+              IBAN: '#/components/schemas/IBAN'
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        currencyCode:
+          $ref: '#/components/schemas/ISOCurrencyCode'
+        name:
+          type: string
+          maxLength: 250
+          description: Name of the account assigned by the account holder or by the financial institution.
+            This field is typically what the user recognises in their online banking app.
+        segment:
+          type: string
+          description: Customer segment
+          enum:
+          - PERSONAL
+          - BUSINESS
+          - UNKNOWN
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+    PartyRole:
+      type: string
+      enum:
+      - PRIMARY
+      - PRIMARY_JOINT
+      - PRIMARY_JOINT_TENANTS
+      - PRIMARY_BORROWER
+      - SECONDARY
+      - SECONDARY_JOINT
+      - SECONDARY_BORROWER
+      - SECONDARY_JOINT_TENANTS
+      - SOLE_OWNER
+      - TRUSTEE
+      - UNIFORM_TRANSFER_TO_MINOR
+      - AUTHORIZED_USER
+      - BUSINESS
+      - POWER_OF_ATTORNEY
+      - FOR_BENEFIT_OF_PRIMARY
+      - FOR_BENEFIT_OF_PRIMARY_JOINT_RESTRICTED
+      - FOR_BENEFIT_OF_SECONDARY
+      - FOR_BENEFIT_OF_SECONDARY_JOINT_RESTRICTED
+      - FOR_BENEFIT_OF_SOLE_OWNER_RESTRICTED
+      - OTHER
+      - UNKNOWN
+      description: 'The role of the party to the account.
+
+        '
+    ISOCountryCode:
+      title: ISOCountryCode
+      type: string
+      description: ISO 3166-1 Alpha-2 Country Code
+      minLength: 2
+      maxLength: 2
+      pattern: ^[A-Z]{2}$
+      example: AU
+    Address:
+      title: Address
+      type: object
+      description: Representation of an address object.
+      properties:
+        fullAddress:
+          type: string
+          description: Full Address.
+          minLength: 3
+          maxLength: 256
+        addressType:
+          type: string
+          description: Type of the address.
+          enum:
+          - BUSINESS
+          - CORRESPONDENCE
+          - DELIVERY_TO
+          - MAIL_TO
+          - PO_BOX
+          - RESIDENTIAL
+          - POSTAL
+          - UNKNOWN
+        addressLines:
+          type: array
+          nullable: true
+          description: Optional; if provided must contain at least one address line.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 70
+          minItems: 1
+          maxItems: 7
+        city:
+          type: string
+          description: City name.
+          minLength: 1
+          maxLength: 100
+        state:
+          type: string
+          description: State or region name.
+          minLength: 1
+          maxLength: 100
+        postalCode:
+          type: string
+          description: Postal or ZIP code.
+          minLength: 1
+          maxLength: 20
+          pattern: ^[0-9A-Za-z\- ]+$
+        countryCode:
+          $ref: '#/components/schemas/ISOCountryCode'
+    PartyIdentity:
+      title: PartyIdentity
+      type: object
+      description: Representation of a party with its role, identity, and verification status.
+      properties:
+        name:
+          type: string
+          description: Party name.
+          maxLength: 200
+        addresses:
+          type: array
+          description: Addresses of the party.
+          items:
+            $ref: '#/components/schemas/Address'
+          minItems: 0
+          maxItems: 7
+        emails:
+          type: array
+          description: Email addresses of the user.
+          items:
+            $ref: '#/components/schemas/Email'
+          minItems: 0
+          maxItems: 5
+        phones:
+          type: array
+          description: Phone numbers of the user.
+          items:
+            $ref: '#/components/schemas/Phone'
+          minItems: 0
+          maxItems: 5
+    Party:
+      title: Party
+      type: object
+      description: Representation of a party with its role, identity, and verification status.
+      properties:
+        role:
+          $ref: '#/components/schemas/PartyRole'
+        identity:
+          $ref: '#/components/schemas/PartyIdentity'
+        dateOfBirth:
+          type: string
+          description: Date of birth of the party, ISO 8601 date format `YYYY-MM-DD`.
+          format: date
+        verificationStatus:
+          type: string
+          description: Verification status of the party.
+          enum:
+          - VERIFIED
+          - PARTIALLY_VERIFIED
+          - UNVERIFIED
+          - UNKNOWN
+      required:
+      - identity
+    Amount:
+      title: Amount
+      type: string
+      minLength: 3
+      maxLength: 18
+      pattern: ^(\d{1,15})\.(\d{1,2})$
+      example: '10.50'
+      description: The value representation of a monetary amount. The amount value should be more than
+        0.01 with maximum of two decimal places allowed.
+    Value:
+      title: Value
+      description: Value
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        currency:
+          $ref: '#/components/schemas/ISOCurrencyCode'
+      required:
+      - amount
+      - currency
+    Balance:
+      title: Balance
+      description: Balance Information
+      type: object
+      properties:
+        balanceType:
+          type: string
+          description: "Balance types\n\n  | Balance Type      | Description             |\n  |:-----------------\
+            \ |:------------------------|\n  | BOOKED_BALANCE    | The current balance of the account\
+            \ at the end of an account reporting period|\n  | AVAILABLE_BALANCE | The amount of funds\
+            \ the customer is able to withdraw from the account|"
+          enum:
+          - BOOKED_BALANCE
+          - AVAILABLE_BALANCE
+        value:
+          $ref: '#/components/schemas/Value'
+        lastRefreshedAt:
+          type: string
+          format: date-time
+          description: The timestamp of when the balance data was last refreshed.
+      required:
+      - balanceType
+      - value
+      additionalProperties: false
+    AccountDetail:
+      title: AccountDetail
+      description: Consented accounts details
+      type: object
+      properties:
+        accountId:
+          $ref: '#/components/schemas/AccountId'
+        account:
+          $ref: '#/components/schemas/AccountBasic'
+        parties:
+          type: array
+          description: List of parties associated with the account.
+          items:
+            $ref: '#/components/schemas/Party'
+          minItems: 0
+          maxItems: 5
+        balances:
+          type: array
+          description: List of balances associated with the account.
+          items:
+            $ref: '#/components/schemas/Balance'
+          minItems: 0
+          maxItems: 2
+      required:
+      - accountId
+    ConsentDetail:
+      title: Consent
+      description: Representation of a User's consent detail with account information.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ConsentBasic'
+      - type: object
+        properties:
+          accounts:
+            type: array
+            description: List of accounts associated with the consent.
+            items:
+              $ref: '#/components/schemas/AccountDetail'
+            minItems: 1
+            maxItems: 10
+    WebHook:
+      title: AccountInformationServiceNotification
+      description: Webhook Data
+      type: object
+      required:
+      - notificationId
+      - notificationType
+      - notificationSubType
+      - messageCreateTimestamp
+      - clientId
+      - accountInformationServiceNotification
+      properties:
+        notificationType:
+          type: string
+          description: Notification type
+          enum:
+          - accountInformationServiceNotification
+          default: accountInformationServiceNotification
+        notificationId:
+          type: string
+          description: Unique Notification Identifier
+        notificationSubType:
+          type: string
+          description: Type of notification being published
+          enum:
+          - ConsentLinkInitiated
+          - ConsentLinkOpened
+          - ConsentLinkSuccessful
+          - ConsentLinkCancelled
+          - ConsentLinkExpired
+          - ConsentLinkAbandoned
+          - ConsentLinkPending
+          - ConsentLinkFailed
+          - ConsentSuccessful
+          - ConsentFailed
+          - ConsentRevoked
+          - ConsentPending
+          - ConsentReadyToValidate
+          - ConsentFixSuccessful
+          - ConsentFixFailed
+        messageCreateTimestamp:
+          description: Notification occurrence timestamp. An RFC-3339 compliant date-time format.
+          type: string
+          format: date-time
+        clientId:
+          type: string
+          description: Client identifier
+        platformId:
+          type: string
+          description: Platform identifier
+        accountInformationServiceNotification:
+          type: object
+          description: Account Information Service Notification event data
+          oneOf:
+          - title: Consent Link Initiated Event
+            type: object
+            required:
+            - consentLinkInitiated
+            properties:
+              consentLinkInitiated:
+                $ref: '#/components/schemas/ConsentLinkInitiated'
+          - title: Consent Link Opened Event
+            type: object
+            required:
+            - consentLinkOpened
+            properties:
+              consentLinkOpened:
+                $ref: '#/components/schemas/ConsentLink'
+          - title: Consent Link Successful Event
+            type: object
+            required:
+            - consentLinkSuccessful
+            properties:
+              consentLinkSuccessful:
+                $ref: '#/components/schemas/ConsentLink'
+          - title: Consent Link Cancelled Event
+            type: object
+            required:
+            - consentLinkCancelled
+            properties:
+              consentLinkCancelled:
+                $ref: '#/components/schemas/ConsentLinkWithView'
+          - title: Consent Link Expired Event
+            type: object
+            required:
+            - consentLinkExpired
+            properties:
+              consentLinkExpired:
+                $ref: '#/components/schemas/ConsentLink'
+          - title: Consent Link Abandoned Event
+            type: object
+            required:
+            - consentLinkAbandoned
+            properties:
+              consentLinkAbandoned:
+                $ref: '#/components/schemas/ConsentLinkWithView'
+          - title: Consent Link Pending Event
+            type: object
+            required:
+            - consentLinkPending
+            properties:
+              consentLinkPending:
+                $ref: '#/components/schemas/ConsentLink'
+          - title: Consent Link Failed Event
+            type: object
+            required:
+            - consentLinkFailed
+            properties:
+              consentLinkFailed:
+                $ref: '#/components/schemas/ConsentLinkFailed'
+          - title: Consent Successful Event
+            type: object
+            required:
+            - consentSuccessful
+            properties:
+              consentSuccessful:
+                $ref: '#/components/schemas/ConsentDetail'
+          - title: Consent Failed Event
+            type: object
+            required:
+            - consentFailed
+            properties:
+              consentFailed:
+                $ref: '#/components/schemas/ConsentBasic'
+          - title: Consent Revoked Event
+            type: object
+            required:
+            - consentRevoked
+            properties:
+              consentRevoked:
+                $ref: '#/components/schemas/ConsentBasic'
+          - title: Consent Fix Successful Event
+            type: object
+            required:
+            - consentFixSuccessful
+            properties:
+              consentSuccessful:
+                $ref: '#/components/schemas/ConsentDetail'
+          - title: Consent Fix Failed Event
+            type: object
+            required:
+            - consentFixFailed
+            properties:
+              consentFailed:
+                $ref: '#/components/schemas/ConsentBasic'
+          - title: Consent Pending Event
+            type: object
+            required:
+            - consentPending
+            properties:
+              consentPending:
+                $ref: '#/components/schemas/ConsentDetail'
+          - title: Consent Ready To Validate Event
+            type: object
+            required:
+            - consentReadyToValidate
+            properties:
+              consentReadyToValidate:
+                $ref: '#/components/schemas/ConsentDetail'
+    ConsentRenew:
+      type: object
+      title: ConsentRenew
+      description: 'Consent renew or re-consent request for continuous access to existing consented information
+
+        '
+      properties:
+        redirectUrl:
+          type: string
+          format: uri
+          description: 'Callback URL to be redirected upon consent completion
+
+            '
+        locale:
+          type: string
+          description: 'Locale indicating the language and regional settings for the consent initiation
+
+            '
+          default: en_US
+          maxLength: 5
+    UpdateConsentLinkResponse:
+      title: UpdateConsentLinkResponse
+      description: Representation of the details necessary to start and track the consent journey.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ConsentLink'
+      - type: object
+        properties:
+          updatedAt:
+            type: string
+            description: The timestamp indicating when the consent updated, formatted in ISO 8601 format.
+            format: date-time
+          consentLink:
+            type: string
+            description: A URL link used to initiate user interaction for granting and authorizing consent.
+            format: uri
+          consentLinkExpiringAt:
+            type: string
+            description: The timestamp indicating when the consent link will expire, formatted in ISO
+              8601 format.
+            format: date-time
+        required:
+        - consentLink
+        - updatedAt
+        - consentLinkExpiringAt
+    AccountSummary:
+      title: AccountSummary
+      description: Sufficient account details to identify the account
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            properties:
+              accountId:
+                $ref: '#/components/schemas/AccountId'
+              account:
+                $ref: '#/components/schemas/AccountBasic'
+              parties:
+                type: array
+                description: List of parties associated with the account.
+                items:
+                  $ref: '#/components/schemas/Party'
+                minItems: 0
+                maxItems: 5
+            required:
+            - accountId
+            - account
+            - parties
+            additionalProperties: false
+          minItems: 1
+          maxItems: 3
+    BalanceDetail:
+      title: BalanceDetail
+      description: Balance Information
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            properties:
+              accountId:
+                $ref: '#/components/schemas/AccountId'
+              account:
+                $ref: '#/components/schemas/AccountBasic'
+              parties:
+                type: array
+                description: List of parties associated with the account.
+                items:
+                  $ref: '#/components/schemas/Party'
+                minItems: 0
+                maxItems: 5
+              balances:
+                type: array
+                description: List of balances associated with the account.
+                items:
+                  $ref: '#/components/schemas/Balance'
+                minItems: 0
+                maxItems: 2
+            required:
+            - accountId
+            - account
+            - balances
+          minItems: 1
+          maxItems: 3
+    TransactionCounterParty:
+      title: TransactionCounterParty
+      description: Creditor/Debtor counter party details in the context of transaction
+      type: object
+      properties:
+        name:
+          description: Name provided by creditor/Debtor's financial institution
+          type: string
+          minLength: 1
+          maxLength: 128
+        accountNumber:
+          type: string
+          description: Internal account identifier provided by creditor/debtor's financial institution
+          minLength: 1
+          maxLength: 128
+    AccountTransaction:
+      title: Transaction
+      description: Transaction details of an verified account
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the transaction
+        providerTransactionId:
+          description: Provider's Transaction Identifier
+          type: string
+        transactionInitiatedAt:
+          description: The time and date when the transaction event was first initiated. For example when
+            a payment card was authorized at the point of sale (before it was booked) or when a money
+            transfer was first initiated (before it was executed). Format - `YYYY-MM-DDThh:mm:ss`+/-time
+            offset to UTC
+          type: string
+          format: date-time
+        bookedAt:
+          description: Transaction Date ( Booked). For BOOKED transaction this indicates the date and
+            time when the transaction was posted on the financial institution’s books. For PENDING transactions
+            indicates the expected booking date and time. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset
+            to UTC
+          type: string
+          format: date-time
+        valuedAt:
+          description: The date and time when assets either become available or cease to be available
+            to the account owner. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+          type: string
+          format: date-time
+        transactionType:
+          type: string
+          description: "Transaction Type. Possible values as below\n| Type              | Description\
+            \                |\n|:------------------|:---------------------------|\n|CREDIT_CARD     \
+            \   | Credit card                | \n|TRANSFER           | Transfer                   |\n\
+            |WITHDRAWAL         | Withdrawal                 |\n|PAYMENT            | Payment        \
+            \            |\n|DEFAULT            | Default                    |\n|UNDEFINED          |\
+            \ Undefined Type             |"
+        value:
+          description: Transaction Amount
+          allOf:
+          - $ref: '#/components/schemas/Value'
+        originalDescription:
+          description: Transaction Description - Original
+          type: string
+        displayDescription:
+          description: Transaction Description - Display
+          type: string
+        merchantCategory:
+          description: Merchant Category Code (MCC) as indicated by financial institution
+          type: string
+        merchantName:
+          description: Name of merchant, as indicated by financial institution
+          type: string
+        status:
+          description: Transaction booking Status
+          type: string
+          enum:
+          - PENDING
+          - BOOKED
+          - UNDEFINED
+        debtor:
+          description: Debtor details in the context of transaction
+          $ref: '#/components/schemas/TransactionCounterParty'
+        creditor:
+          description: Creditor details in the context of transaction
+          $ref: '#/components/schemas/TransactionCounterParty'
+        referenceId:
+          type: string
+          description: Transaction reference as provided by the financial institution.
+    AccountTransactionDetail:
+      title: TransactionDetail
+      description: Transactions List
+      type: object
+      properties:
+        accountId:
+          $ref: '#/components/schemas/AccountId'
+        account:
+          $ref: '#/components/schemas/AccountBasic'
+        balances:
+          type: array
+          description: List of balances associated with the account.
+          items:
+            $ref: '#/components/schemas/Balance'
+          minItems: 0
+          maxItems: 2
+        transactions:
+          type: array
+          description: List of transaction associated with the account.
+          items:
+            $ref: '#/components/schemas/AccountTransaction'
+          minItems: 0
+          maxItems: 100
+      required:
+      - accountId
+      - account
+      - balances
+      - transactions
+    ConsentIncludes:
+      title: Includes
+      type: string
+      description: "Option to retrieve either the complete set or specific portions of the consented information.\n\
+        \n |View                   |Description                                                      \
+        \                       |\n |:----------------------|:-------------------------------------------\
+        \ -------------------------------------------|\n |FULL                   |Retrieve full details\
+        \ of authorized accounts                                            |\n |ACCOUNT             \
+        \   |Retrieve basic details of authorized accounts                                           |\n\
+        \ |PARTIES                |Retrieve all account parties and their corresponding roles        \
+        \                      |\n |BALANCES               |Retrieve the balances of active accounts|\n"
+      enum:
+      - FULL
+      - ACCOUNT
+      - PARTIES
+      - BALANCES
+    AccountView:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConsentIncludes'
+      minItems: 0
+      maxItems: 3
+    AccountInformation:
+      title: AccountInformation
+      description: Account Information account , balances, etc....
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountDetail'
+          minItems: 1
+          maxItems: 3
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: 'Client generated unique idempotency key used in recognizing consecutive retries of
+        the same request.
+
+
+        **Usage of V4 UUIDs is recommended.**'
+      schema:
+        $ref: '#/components/schemas/IdempotencyKey'
+      required: false
+    RequestId:
+      name: Request-Id
+      in: header
+      description: 'Client generated identifier for the current request invocation.
+
+        If provided, this identifier will be included in error responses to assist in problem diagnosis.'
+      schema:
+        $ref: '#/components/schemas/RequestId'
+      required: false
+    ClientId:
+      name: Client-Id
+      in: header
+      description: Unique Identifier of the client that is generated by PBB.
+      schema:
+        $ref: '#/components/schemas/ClientId'
+      required: false
+    ConsentId:
+      name: Consent-Id
+      in: header
+      description: The Consent id generated during the consent initiation journey
+      schema:
+        $ref: '#/components/schemas/ConsentId'
+      required: true
+      examples:
+        ConsentId-EU:
+          summary: Example of consent id for EU
+          value: e607ba0dc4534647b72bbff1e8ff4442
+        ConsentId-UK:
+          summary: Example of consent id for UK
+          value: ba28d866eeae4657a7e59156534159a8
+    AccountView:
+      name: view
+      in: query
+      description: 'Option to retrieve either the complete set or specific portions of the consented information.
+
+        '
+      schema:
+        $ref: '#/components/schemas/AccountView'
+      required: true
+  examples:
+    AccountInformationConsentRequestUS:
+      description: Sample request payload for US to initiate account information consent journey
+      value:
+        country: US
+        consentType: ACCOUNT_INFORMATION
+        externalUserId: user-12345
+        externalUserProfile:
+          firstName: John
+          lastName: Doe
+          email:
+            isPrimary: true
+            emailAddressType: PERSONAL
+            emailAddress: john.doe@example.com
+          phone:
+            phoneNumberType: MOBILE
+            phoneNumber: +1-123-456-7890
+        locale: en-US
+        redirectUrl: https://abc.merchant.com/callback
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+    AccountCheckConsentRequestEU:
+      description: Sample request payload for EU to initiate account consent journey
+      value:
+        country: DE
+        consentType: ACCOUNT_CHECK
+        externalUserId: JPMCUser1234@chase.eu.com
+        locale: de_DE
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        financialInstitutionId:
+          idType: BIC
+          id: DEUTDEFFXXX
+    AccountCheckConsentRequestUK:
+      description: Sample request payload for GB to initiate account consent journey
+      value:
+        country: GB
+        consentType: ACCOUNT_CHECK
+        externalUserId: JPMCUser1234@chase.uk.com
+        locale: en_US
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        financialInstitutionId:
+          idType: SORT_CODE
+          id: 090129
+    BalanceCheckConsentRequestUK:
+      description: Sample request payload for GB, to initiate balance check consent journey
+      value:
+        consentType: BALANCE_CHECK
+        externalUserId: JPMCUser1234@chase.uk.com
+        country: GB
+        locale: en_US
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        financialInstitutionId:
+          idType: SORT_CODE
+          id: 090129
+    BalanceCheckConsentRequestEU:
+      description: Sample request payload for EU, to initiate balance check consent journey
+      value:
+        country: DE
+        consentType: ACCOUNT_CHECK
+        externalUserId: JPMCUser1234@chase.eu.com
+        locale: de_DE
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        financialInstitutionId:
+          idType: BIC
+          id: DEUTDEFFXXX
+    TransactionCheckConsentRequestUK:
+      description: Transactions consent initiation
+      value:
+        country: GB
+        consentType: TRANSACTIONS
+        externalUserId: JPMCUser1234@chase.uk.com
+        locale: en_US
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        financialInstitutionId:
+          idType: SORT_CODE
+          id: 090129
+    TransactionCheckConsentRequestEU:
+      description: Transactions consent initiation
+      value:
+        country: DE
+        consentType: TRANSACTIONS
+        externalUserId: JPMCUser1234@chase.eu.com
+        locale: de_DE
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        financialInstitutionId:
+          idType: BIC
+          id: DEUTDEFFXXX
+    AccountInformationConsentResponseUS:
+      description: Sample response payload for US to initiate account information consent journey. The
+        consent link in the response allow merchants to redirect user to consent to their account(s).
+      value:
+        consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=en_US
+        createdAt: '2025-05-29T14:03:01Z'
+        consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    AccountCheckConsentResponseEU:
+      description: Sample response payload for EU to initiate account consent journey. The consent link
+        in the response allow merchants to redirect user to consent to their account(s).
+      value:
+        consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=de_DE
+        createdAt: '2025-05-29T14:03:01Z'
+        consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    AccountCheckConsentResponseUK:
+      description: Sample response payload for GB to initiate account consent journey. The consent link
+        in the response allow merchants to redirect user to consent to their account(s).
+      value:
+        consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=en_US
+        createdAt: '2025-05-29T14:03:01Z'
+        consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    BalanceCheckConsentResponseEU:
+      description: Sample balance check consent response payload for EU. The consent link allow merchants
+        to redirect user to consent to their account(s).
+      value:
+        consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=de_DE
+        createdAt: '2025-05-29T14:03:01Z'
+        consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    BalanceCheckConsentResponseUK:
+      description: Sample balance check consent response payload for GB. The consent link allow merchants
+        to redirect user to consent to their account(s).
+      value:
+        consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=en_US
+        createdAt: '2025-05-29T14:03:01Z'
+        consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    TransactionCheckConsentResponseEU:
+      description: Sample transactions check consent response payload for EU
+      value:
+        consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=de_DE
+        createdAt: '2025-05-29T14:03:01Z'
+        consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    TransactionCheckConsentResponseUK:
+      description: Sample transactions check consent response payload for GB
+      value:
+        consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=en_US
+        createdAt: '2025-05-29T14:03:01Z'
+        consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    InvalidConsentTypeError:
+      description: Sample error payload for invalid consent type
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '10104'
+          message: Field value must have the expected value.
+          field: $.consentType
+          location: BODY
+    Unauthorized:
+      value:
+        title: Authentication Failure
+        httpStatus: 401
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - code: '14000'
+          message: Client could not be authenticated
+    SecurityFailureError:
+      value:
+        title: Authorization Failure
+        httpStatus: 403
+        traceId: 5914f136-4544-4b1c-8004-6c2388ba76b4
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '14000'
+          message: Invalid client profile
+    ErrorRateLimit:
+      summary: Too Many Requests
+      value:
+        title: Too Many Requests
+        httpStatus: 429
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        context:
+        - message: The agreed upon rate limit for this API has been exceeded
+    ServiceUnavailableError:
+      value:
+        title: Service Unavailable
+        httpStatus: 503
+        traceId: d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '12970'
+          message: API is currently unavailable for usage. Please try again after some time.
+    ConsentLinkInitiatedCallBackUS:
+      description: Sample account information consent Link - Initiated callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkInitiated
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkInitiated:
+            consentLinkRequest:
+              country: US
+              consentType: ACCOUNT_INFORMATION
+              externalUserId: user-12345
+              externalUserProfile:
+                firstName: John
+                lastName: Doe
+                email:
+                  isPrimary: true
+                  emailAddressType: PERSONAL
+                  emailAddress: john.doe@example.com
+                phone:
+                  phoneNumberType: MOBILE
+                  phoneNumber: +1-123-456-7890
+              locale: en-US
+              redirectUrl: https://abc.merchant.com/callback
+              referenceId: 120c99c4b05347d096ccd77f758f7315
+            consentLinkResponse:
+              consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+              consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+              referenceId: 120c99c4b05347d096ccd77f758f7315
+              consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=en_US
+              createdAt: '2025-05-29T14:03:01Z'
+              consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    ConsentLinkInitiatedCallBackEU:
+      description: Sample account information consent Link - Initiated callback payload for EU
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkInitiated
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkInitiated:
+            consentLinkRequest:
+              country: DE
+              consentType: ACCOUNT_CHECK
+              externalUserId: JPMCUser1234@chase.eu.com
+              locale: de_DE
+              referenceId: 120c99c4b05347d096ccd77f758f7315
+              financialInstitutionId:
+                idType: BIC
+                id: DEUTDEFFXXX
+            consentLinkResponse:
+              consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+              consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+              referenceId: 120c99c4b05347d096ccd77f758f7315
+              consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=de_DE
+              createdAt: '2025-05-29T14:03:01Z'
+              consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    ConsentLinkInitiatedCallBackUK:
+      description: Sample account information consent Link - Initiated callback payload for UK
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkInitiated
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkInitiated:
+            consentLinkRequest:
+              country: GB
+              consentType: ACCOUNT_CHECK
+              externalUserId: JPMCUser1234@chase.uk.com
+              locale: en_US
+              referenceId: 120c99c4b05347d096ccd77f758f7315
+              financialInstitutionId:
+                idType: SORT_CODE
+                id: 090129
+            consentLinkResponse:
+              consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+              consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+              referenceId: 120c99c4b05347d096ccd77f758f7315
+              consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=de_DE
+              createdAt: '2025-05-29T14:03:01Z'
+              consentLinkExpiringAt: '2025-05-29T14:13:45Z'
+    ConsentLinkOpenedCallBackUS:
+      description: Sample account information consent Link - Opened callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkOpened
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkOpened:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentLinkOpenedCallBackEU:
+      description: Sample account information consent Link - Opened callback payload for EU
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkOpened
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkOpened:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentLinkOpenedCallBackUK:
+      description: Sample account information consent Link - Opened callback payload for UK
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkOpened
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkOpened:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentLinkPendingCallBackUS:
+      description: Sample account information consent Link - Pending callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkPending
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkPending:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentLinkExpiredCallBackUS:
+      description: Sample account information consent Link - Expired callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkExpired
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkExpired:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentLinkExpiredCallBackEU:
+      description: Sample account information consent Link - Expired callback payload for EU
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkExpired
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkExpired:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentLinkExpiredCallBackUK:
+      description: Sample account information consent Link - Expired callback payload for UK
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkExpired
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkExpired:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentLinkFailedCallBackUS:
+      description: Sample account information consent Link - Failed callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkFailed
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkFailed:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            error:
+              title: Service Unavailable
+              traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+              context:
+              - code: '12970'
+                message: API is currently unavailable for usage. Please try again after some time
+    ConsentLinkFailedCallBackEU:
+      description: Sample account information consent Link - Failed callback payload for EU
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkFailed
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkFailed:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            error:
+              title: Service Unavailable
+              traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+              context:
+              - code: '12970'
+                message: API is currently unavailable for usage. Please try again after some time
+    ConsentLinkFailedCallBackUK:
+      description: Sample account information consent Link - Failed callback payload for UK
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkFailed
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkFailed:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            error:
+              title: Service Unavailable
+              traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+              context:
+              - code: '12970'
+                message: API is currently unavailable for usage. Please try again after some time
+    ConsentLinkCancelledCallBackUS:
+      description: Sample account information consent Link - cancelled callback payload for UK
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkCancelled
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkCancelled:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            viewName: FI Selection
+    ConsentLinkCancelledCallBackEU:
+      description: Sample account information consent Link - cancelled callback payload for EU
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkCancelled
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkCancelled:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            viewName: FI Selection
+    ConsentLinkCancelledCallBackUK:
+      description: Sample account information consent Link - cancelled callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkCancelled
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkCancelled:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            viewName: FI Selection
+    ConsentLinkAbandonedCallBackUS:
+      description: Sample account information consent Link - abandoned callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkAbandoned
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+        accountInformationServiceNotification:
+          consentLinkAbandoned:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            viewName: FI Selection
+    ConsentLinkAbandonedCallBackEU:
+      description: Sample account information consent Link - abandoned callback payload for EU
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkAbandoned
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkAbandoned:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            viewName: FI Selection
+    ConsentLinkAbandonedCallBackUK:
+      description: Sample account information consent Link - abandoned callback payload for UK
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkAbandoned
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkAbandoned:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            viewName: FI Selection
+    ConsentLinkSuccessfullCallbackUS:
+      description: Sample account information consent Link - successful callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkSuccessful
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkSuccessful:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentLinkSuccessfullCallbackEU:
+      description: Sample account information consent Link - successful callback payload for EU
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkSuccessful
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkSuccessful:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentLinkSuccessfullCallbackUK:
+      description: Sample account information consent Link - successful callback payload for UK
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentLinkSuccessful
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentLinkSuccessful:
+            consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+    ConsentPartiallySuccessfulCallBackUS:
+      description: Sample account information consent callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentSuccessful
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentSuccessful:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: PARTIAL_SUCCESS
+            externalUserId: JPMCUser1234@chase.us.com
+            externalUserProfile:
+              consumerProfileId: cpm-001
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            consentLinkType: INSTANT
+            accounts:
+            - accountId: 61d0ed13-6391-43bc-9fd4-7dc0a782912f
+              account:
+                accountIdentifiers:
+                  accountIdType: USABA
+                  accountNumber: '45789123456789'
+                  routingNumber: '6013140'
+                  maskedAccountNumber: XXXXX6789
+                accountType: SAVINGS
+                currencyCode: USD
+                name: John's Savings Account
+                segment: PERSONAL
+                status: ACTIVE
+              balances:
+              - balanceType: BOOKED_BALANCE
+                value:
+                  amount: '450.00'
+                  currency: USD
+                lastRefreshedAt: '2025-03-11T14:00:00Z'
+              - balanceType: AVAILABLE_BALANCE
+                value:
+                  amount: '700.00'
+                  currency: USD
+                lastRefreshedAt: '2025-03-11T14:00:00Z'
+            error:
+              title: User Action Required
+              traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+              context:
+              - code: '11402'
+                message: Inadequate response to security questions from the end user.
+                field: parties
+                additionalContext:
+                - type: EXTERNAL
+                  code: MA185
+                  message: Missing or incorrect MFA answer. One of your security questions has expired
+                    and needs to be answered.
+    ConsentSuccessfulCallBackUS:
+      description: Sample account information consent callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentSuccessful
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentSuccessful:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: SUCCESS
+            externalUserId: JPMCUser1234@chase.us.com
+            externalUserProfile:
+              consumerProfileId: cpm-001
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            consentLinkType: INSTANT
+            accounts:
+            - accountId: 61d0ed13-6391-43bc-9fd4-7dc0a782912f
+              account:
+                accountIdentifiers:
+                  accountIdType: USABA
+                  accountNumber: '45789123456789'
+                  routingNumber: '6013140'
+                  maskedAccountNumber: XXXXX6789
+                  tokenizedAccountNumber: '98745632564'
+                financialInstitution:
+                  name: Chase Bank
+                  logoUrl: https://www.chase.com/logo.png
+                accountType: SAVINGS
+                currencyCode: USD
+                name: John's Savings Account
+                segment: PERSONAL
+                status: ACTIVE
+              parties:
+              - role: PRIMARY
+                identity:
+                  name: John Doe
+                  addresses:
+                  - addressType: RESIDENTIAL
+                    addressLines:
+                    - Street 123
+                    city: Omaha
+                    state: NE
+                    postalCode: '78450'
+                    country: US
+                  emails:
+                  - isPrimary: true
+                    emailAddressType: PERSONAL
+                    emailAddress: john.doe@example.com
+                  phones:
+                  - phoneNumberType: MOBILE
+                    phoneNumber: +1-1234567890
+                verificationStatus: VERIFIED
+              balances:
+              - balanceType: BOOKED_BALANCE
+                value:
+                  amount: '450.00'
+                  currency: USD
+                lastRefreshedAt: '2025-03-11T14:00:00Z'
+              - balanceType: AVAILABLE_BALANCE
+                value:
+                  amount: '700.00'
+                  currency: USD
+                lastRefreshedAt: '2025-03-11T14:00:00Z'
+    ConsentSuccessfulCallBackUK:
+      description: Sample account check consent callback payload for UK with necessary information to
+        fetch consented account details
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentSuccessful
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentSuccessful:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_CHECK
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: SUCCESS
+            externalUserId: JPMCUser1234@chase.uk.com
+            country: GB
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            consentLinkType: INSTANT
+    ConsentSuccessfulCallBackEU:
+      description: Sample account check consent callback payload for German with necessary information
+        to fetch consented account details
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentSuccessful
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentSuccessful:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_CHECK
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: SUCCESS
+            externalUserId: JPMCUser1234@chase.eu.com
+            country: DE
+            locale: de_DE
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            consentLinkType: INSTANT
+    ConsentPendingCallBackUS:
+      description: Sample account information consent callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentPending
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentPending:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: PENDING
+            externalUserId: JPMCUser1234@chase.us.com
+            externalUserProfile:
+              consumerProfileId: cpm-001
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            consentLinkType: MANUAL
+            accounts:
+            - accountId: 61d0ed13-6391-43bc-9fd4-7dc0a782912f
+              account:
+                accountIdentifiers:
+                  accountIdType: USABA
+                  maskedAccountNumber: XXXXX6789
+                financialInstitution:
+                  name: Chase Bank
+                  logoUrl: https://www.chase.com/logo.png
+                accountType: SAVINGS
+                currencyCode: USD
+                name: John's Savings Account
+                status: UNKNOWN
+    ConsentReadyToValidateCallBackUS:
+      description: Sample account information consent callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentReadyToValidate
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentReadyToValidate:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: PENDING
+            externalUserId: JPMCUser1234@chase.us.com
+            externalUserProfile:
+              consumerProfileId: cpm-001
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            consentLinkType: MANUAL
+            accounts:
+            - accountId: 61d0ed13-6391-43bc-9fd4-7dc0a782912f
+              account:
+                accountIdentifiers:
+                  accountIdType: USABA
+                  maskedAccountNumber: XXXXX6789
+                financialInstitution:
+                  name: Chase Bank
+                  logoUrl: https://www.chase.com/logo.png
+                accountType: SAVINGS
+                currencyCode: USD
+                name: John's Savings Account
+                status: UNKNOWN
+    ConsentRevokeCallBackUS-ClientDelete:
+      description: Sample account information consent revoke callback payload for US when client deletes
+        the consent.
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentRevoked
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentRevoked:
+            consentId: 0488ecb133c34b6ab5e57a61680c463f
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: REVOKED_BY_CLIENT
+            statusReason: Client deleted the consent via API call
+            externalUserId: JPMCUser1234@chase.us.com
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+    ConsentRevokeCallBackUS-PermanentDelete:
+      description: 'Sample account information consent revoke callback payload for US  when a consent
+        is identified to have permanently broken link with financialInstitution or underlying account
+        information changed. Client should create a new consent in this case. '
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentRevoked
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentRevoked:
+            consentId: 0488ecb133c34b6ab5e57a61680c463f
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: REVOKED_BY_SYSTEM
+            statusReason: The bank account cannot be found at the financial institution. Please ask user
+              to link a different bank account.
+            externalUserId: JPMCUser1234@chase.us.com
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+    ConsentFailedCallBackUS:
+      description: Sample account information consent failure callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentFailed
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentFailed:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: FAILED
+            externalUserId: JPMCUser1234@chase.us.com
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            error:
+              title: Service Unavailable
+              traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+              context:
+              - code: '12970'
+                message: API is currently unavailable for usage. Please try again after some time
+    ConsentFailedCallBackEU:
+      description: Sample account information consent failure callback payload for EU
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentFailed
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentFailed:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_CHECK
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: FAILED
+            externalUserId: JPMCUser1234@chase.uk.com
+            country: DE
+            locale: de_DE
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            error:
+              title: Service Unavailable
+              traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+              context:
+              - code: '12970'
+                message: API is currently unavailable for usage. Please try again after some time
+    ConsentFailedCallBackUK:
+      description: Sample account information consent failure callback payload for UK
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentFailed
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentFailed:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_CHECK
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: FAILED
+            externalUserId: JPMCUser1234@chase.uk.com
+            country: GB
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            error:
+              title: Service Unavailable
+              traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+              context:
+              - code: '12970'
+                message: API is currently unavailable for usage. Please try again after some time
+    ConsentRevokeCallBackUS-Expired:
+      description: 'Sample account information consent revoke callback payload for US  when a consent
+        is identified to have a broken link with financialInstitution or underlying account information
+        changed. Client may renew consent in this case. '
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentRevoked
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentRevoked:
+            consentId: 0488ecb133c34b6ab5e57a61680c463f
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: REVOKED_BY_SYSTEM
+            statusReason: Account is either invalid or closed and needs user to re-authenticate. If re-authentication
+              doesn't work, link a different bank account.
+            externalUserId: JPMCUser1234@chase.us.com
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+    ConsentFixSuccessfulCallBackUS:
+      description: Sample account information consent fix callback payload for US.  This is a sample payload
+        when there were NO changes in account information during renewal or fix flow.
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentFixSuccessful
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentFixSuccessful:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: SUCCESS
+            externalUserId: JPMCUser1234@chase.us.com
+            externalUserProfile:
+              consumerProfileId: cpm-001
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            consentLinkType: INSTANT
+    ConsentFixFailedCallBackUS:
+      description: Sample account information consent-fix failure callback payload for US
+      value:
+        notificationType: accountInformationServiceNotification
+        notificationId: 3c44ab18-889b-452a-962c-76827099d0d1
+        notificationSubType: ConsentFixFailed
+        messageCreateTimestamp: '2024-10-30T14:15:23Z'
+        clientId: 12345678-9abc-def0-1234-56789abcdef0
+        accountInformationServiceNotification:
+          consentFixFailed:
+            consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+            consentType: ACCOUNT_INFORMATION
+            referenceId: 120c99c4b05347d096ccd77f758f7315
+            status: FAILED
+            externalUserId: JPMCUser1234@chase.us.com
+            country: US
+            locale: en_US
+            lastUpdatedAt: '2025-03-11T14:00:00Z'
+            error:
+              title: Service Unavailable
+              traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+              context:
+              - code: '12970'
+                message: API is currently unavailable for usage. Please try again after some time
+    GetConsent-US:
+      description: Sample response payload of consent.
+      value:
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentType: ACCOUNT_INFORMATION
+        country: US
+        locale: en_US
+        externalUserId: user-12345
+        externalUserProfile:
+          consumerProfileId: cpm-001
+        status: SUCCESS
+        lastUpdatedAt: '2025-03-11T14:00:00Z'
+        clientId: '9876543210'
+        consentLinkType: INSTANT
+    GetConsent-EMEA:
+      description: Sample response payload of consent.
+      value:
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentType: ACCOUNT_CHECK
+        country: DE
+        locale: de_DE
+        externalUserId: user-12345
+        status: SUCCESS
+        lastUpdatedAt: '2025-03-11T14:00:00Z'
+        consentLinkType: INSTANT
+    GetConsentPartialSuccess:
+      description: Sample response payload of consent.
+      value:
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentType: ACCOUNT_INFORMATION
+        country: US
+        locale: en_US
+        externalUserId: user-12345
+        externalUserProfile:
+          consumerProfileId: cpm-001
+        status: PARTIAL_SUCCESS
+        lastUpdatedAt: '2025-03-11T14:00:00Z'
+        clientId: '9876543210'
+        consentLinkType: INSTANT
+        error:
+          title: User Action Required
+          traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+          context:
+          - code: '11402'
+            message: Inadequate response to security questions from the end user.
+            field: parties
+            additionalContext:
+            - type: EXTERNAL
+              code: MA185
+              message: Missing or incorrect MFA answer. One of your security questions has expired and
+                needs to be answered.
+    InvalidConsentIdError:
+      description: Sample error payload for invalid consent type
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '10104'
+          message: Field value must have the expected value.
+          field: $.consentId
+          location: PATH
+    NotFoundPath:
+      summary: Not Found
+      value:
+        title: Not Found
+        httpStatus: 404
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+    SuspiciousContent:
+      summary: Unprocessable Entity - Suspicious Content Detected
+      value:
+        title: Suspicious Content
+        httpStatus: 422
+        traceId: 223e4567-e89b-12d3-a456-426614174002
+        requestId: 223e4567-e89b-12d3-a456-426614174003
+        context:
+        - code: '13100'
+          message: During consent process some other aspect of request was flagged as containing sensitive
+            data
+    NotFound:
+      summary: Not Found
+      value:
+        title: Not Found
+        httpStatus: 404
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+    AccountInformationUpdateConsentRequestUS:
+      description: Sample update request payload for US to update account information consent
+      value:
+        locale: en-ES
+        redirectUrl: https://abc.merchant.com/callback
+    AccountInformationConsentUpdateResponseUS:
+      description: Sample response payload for US to update account information consent. The consent link
+        in the response allow merchants to redirect user to consent to their account(s).
+      value:
+        consentLinkId: ed392d86-83f3-4611-ac51-3a00442c8fc5
+        consentId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        referenceId: 120c99c4b05347d096ccd77f758f7315
+        consentLink: https://globalconnect.jpmorgan.com?consentLinkId=ed392d86-83f3-4611-ac51-3a00442c8fc5&redirect_uri=https://test.merchant.com/callback&locale=en_US
+        updatedAt: '2025-05-29T14:06:01Z'
+        consentLinkExpiringAt: '2025-05-29T14:16:45Z'
+    AccountDetailsEU:
+      description: Sample response payload of consented Account details for EU
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: IBAN
+              bic: DEUTDEFFXXX
+              iban: DE89370400440532013000
+              bban: '370400440532013000'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: EUR
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - Musterstraße 1
+                city: Berlin
+                country: DE
+                postalCode: '10115'
+              emails:
+              - isPrimary: true
+                emailAddressType: PERSONAL
+                emailAddress: Michael.Ands@hotmail.com
+              phones:
+              - phoneNumber: +49-7477811780
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            verificationStatus: VERIFIED
+    AccountDetailsUK:
+      description: Sample response payload of consented Account details for GB
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: SORT_CODE
+              sortCode: 090129
+              accountNumber: '10126789'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: GBP
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - 49 Featherstone Street
+                city: London
+                postalCode: EC1Y8SY
+                country: GB
+              emails:
+              - isPrimary: true
+                emailAddressType: OTHER
+                emailAddress: JPMCUser1234@chase.uk.com
+              phones:
+              - phoneNumber: +44-02071234567
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            verificationStatus: VERIFIED
+            dateOfBirth: '1996-08-24'
+    ConsentIdMissing:
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '10101'
+          message: Mandatory field must be present.
+          location: HEADER
+          field: Consent-Id
+    BalanceDetailsEU:
+      description: Sample response payload of account balances for EU
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: IBAN
+              bic: DEUTDEFFXXX
+              iban: DE89370400440532013000
+              bban: '370400440532013000'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: EUR
+            name: John's account
+            segment: PERSONAL
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - Musterstraße 1
+                city: Berlin
+                country: DE
+                postalCode: '10115'
+              emails:
+              - isPrimary: true
+                emailAddressType: PERSONAL
+                emailAddress: Michael.Ands@hotmail.com
+              phones:
+              - phoneNumber: +49-7477811780
+                phoneNumberType: MOBILE
+            role: PRIMARY
+          balances:
+          - value:
+              amount: '450.00'
+              currency: EUR
+            balanceType: BOOKED_BALANCE
+            lastRefreshedAt: '2025-06-04T15:33:17Z'
+          - value:
+              amount: '700.00'
+              currency: EUR
+            balanceType: AVAILABLE_BALANCE
+            lastRefreshedAt: '2025-06-04T15:33:17Z'
+    BalanceDetailsUK:
+      description: Sample response payload of account balances for GB
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: SORT_CODE
+              sortCode: 090129
+              accountNumber: '10126789'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: GBP
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - 49 Featherstone Street
+                city: London
+                postalCode: EC1Y8SY
+                country: GB
+              emails:
+              - isPrimary: true
+                emailAddressType: OTHER
+                emailAddress: JPMCUser1234@chase.uk.com
+              phones:
+              - phoneNumber: +44-02071234567
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            dateOfBirth: '1996-08-24'
+          balances:
+          - value:
+              amount: '5.00'
+              currency: GBP
+            balanceType: BOOKED_BALANCE
+            lastRefreshedAt: '2025-06-04T15:33:17Z'
+          - value:
+              amount: '7.00'
+              currency: GBP
+            balanceType: AVAILABLE_BALANCE
+            lastRefreshedAt: '2025-06-04T15:33:17Z'
+    TransactionsDetailsEU:
+      description: Sample response payload of consented account's transaction history for EU
+      value:
+        accountId: 61d0ed13639143bc9fd47dc0a782912f
+        account:
+          accountIdentifiers:
+            accountIdType: IBAN
+            bic: DEUTDEFFXXX
+            iban: DE89370400440532013000
+            bban: '370400440532013000'
+          financialInstitution:
+            name: Chase Bank
+            logoUrl: https://www.chase.com/logo.png
+          accountType: SAVINGS
+          currencyCode: EUR
+          name: John's account
+          segment: PERSONAL
+          status: ACTIVE
+        balances:
+        - value:
+            amount: '450.00'
+            currency: EUR
+          balanceType: BOOKED_BALANCE
+          lastRefreshedAt: '2025-06-04T15:33:17Z'
+        - value:
+            amount: '700.00'
+            currency: EUR
+          balanceType: AVAILABLE_BALANCE
+          lastRefreshedAt: '2025-06-04T15:33:17Z'
+        transactions:
+        - id: f86dcb84cc164f41a166e3f56e013903
+          providerTransactionId: 500015d3-acf3-48cc-9918-9e53738d3692
+          transactionInitiatedAt: '2020-07-30T17:00:00.000Z'
+          bookedAt: '2020-07-30T18:00:00.000Z'
+          value:
+            amount: '2.00'
+            currency: EUR
+          originalDescription: Hello Fresh
+          displayDescription: Hello Fresh
+          merchantName: Luxury Apartments
+          status: BOOKED
+          transactionType: PAYMENT
+        - id: f86dcb84cc164f41a166e3f56e013903
+          providerTransactionId: 500015d3-acf3-48cc-9918-9e53738d3692
+          transactionInitiatedAt: '2020-07-30T17:00:00.000Z'
+          bookedAt: '2020-07-30T18:00:00.000Z'
+          value:
+            amount: '2.00'
+            currency: EUR
+          originalDescription: Monthly Subscription Fee
+          displayDescription: Monthly Subscription Fee
+          merchantName: Netflix
+          status: BOOKED
+          transactionType: PAYMENT
+    TransactionsDetailsUK:
+      description: Sample response payload of consented account's transaction history for GB
+      value:
+        accountId: 61d0ed13639143bc9fd47dc0a782912f
+        account:
+          accountIdentifiers:
+            accountIdType: SORT_CODE
+            sortCode: 090129
+            accountNumber: '10126789'
+          financialInstitution:
+            name: Chase Bank
+            logoUrl: https://www.chase.com/logo.png
+          accountType: SAVINGS
+          currencyCode: GBP
+          name: John's account
+          segment: PERSONAL
+          status: ACTIVE
+        balances:
+        - value:
+            amount: '5.00'
+            currency: GBP
+          balanceType: BOOKED_BALANCE
+          lastRefreshedAt: '2025-06-04T15:33:17Z'
+        - value:
+            amount: '7.00'
+            currency: GBP
+          balanceType: AVAILABLE_BALANCE
+          lastRefreshedAt: '2025-06-04T15:33:17Z'
+        transactions:
+        - id: 61d0ed13639143bc9fd47dc0a782912f
+          providerTransactionId: 500015d3-acf3-48cc-9918-9e53738d3692
+          bookedAt: '2020-07-30T18:00:00.000Z'
+          value:
+            amount: '120.00'
+            currency: GBP
+          originalDescription: TFL Rail
+          displayDescription: Tfl Rail
+          merchantName: Amazon
+          status: BOOKED
+          transactionType: PAYMENT
+        - id: 61d0ed13639143bc9fd47dc0a782912f
+          providerTransactionId: 500015d3-acf3-48cc-9918-9e53738d3692
+          initiatedAt: '2020-07-30T17:00:00.000Z'
+          bookedAt: '2020-07-30T18:00:00.000Z'
+          value:
+            amount: '2.00'
+            currency: GBP
+          originalDescription: iTunes
+          displayDescription: iTunes
+          merchantName: Amazon
+          status: BOOKED
+          transactionType: PAYMENT
+    AccountInformationUS-FullView:
+      description: Sample response payload of consented full account information for US
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: USABA
+              accountNumber: '45789123456789'
+              routingNumber: '6013140'
+              maskedAccountNumber: XXXXX6789
+              tokenizedAccountNumber: '98745632564'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: USD
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - Street 123
+                city: Omaha
+                country: US
+                postalCode: '78497'
+              emails:
+              - isPrimary: true
+                emailAddress: JPMCUser1234@chase.us.com
+              phones:
+              - phoneNumber: +1-7477811780
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            verificationStatus: VERIFIED
+          balances:
+          - value:
+              amount: '450.00'
+              currency: USD
+            balanceType: BOOKED_BALANCE
+            lastRefreshedAt: '2025-03-11T14:00:00Z'
+          - value:
+              amount: '700.00'
+              currency: USD
+            balanceType: AVAILABLE_BALANCE
+            lastRefreshedAt: '2025-03-11T14:00:00Z'
+    AccountInformationUS-FullViewWithError:
+      description: Sample response payload of consented full account information for US with error that
+        we could not fetch balance
+      value:
+        accounts:
+        - accountId: 61d0ed13-6391-43bc-9fd4-7dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: USABA
+              accountNumber: '45789123456789'
+              routingNumber: '6013140'
+              maskedAccountNumber: XXXXX6789
+              tokenizedAccountNumber: '98745632564'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: USD
+            name: John's Savings Account
+            segment: PERSONAL
+            status: ACTIVE
+          balances:
+          - balanceType: BOOKED_BALANCE
+            value:
+              amount: '450.00'
+              currency: USD
+            lastRefreshedAt: '2025-03-11T14:00:00Z'
+          - balanceType: AVAILABLE_BALANCE
+            value:
+              amount: '700.00'
+              currency: USD
+            lastRefreshedAt: '2025-03-11T14:00:00Z'
+        error:
+          title: User Action Required
+          traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+          context:
+          - code: '11402'
+            message: Inadequate response to security questions from the end user.
+            field: parties
+            additionalContext:
+            - type: EXTERNAL
+              code: MA185
+              message: Missing or incorrect MFA answer. One of your security questions has expired and
+                needs to be answered.
+    AccountInformationUS-Account:
+      description: Sample response payload of consented basic account detail for US
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: USABA
+              accountNumber: '45789123456789'
+              routingNumber: '6013140'
+              maskedAccountNumber: XXXXX6789
+              tokenizedAccountNumber: '98745632564'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: USD
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+    AccountInformationUS-Balances:
+      description: Sample response payload of consented Account details for US
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          balances:
+          - value:
+              amount: '450.00'
+              currency: USD
+            balanceType: BOOKED_BALANCE
+          - value:
+              amount: '700.00'
+              currency: USD
+            balanceType: AVAILABLE_BALANCE
+    AccountInformationUS-Parties:
+      description: Sample response payload of consented Account details for US
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - Street 123
+                city: Omaha
+                country: US
+                postalCode: '78497'
+              emails:
+              - isPrimary: true
+                emailAddress: JPMCUser1234@chase.us.com
+              phones:
+              - phoneNumber: +1-7477811780
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            verificationStatus: VERIFIED
+    AccountDetailsNotFoundError:
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '11408'
+          message: Account details not found
+          additionalContext:
+          - type: EXTERNAL
+            code: MA38008
+            message: Account details not found.
+  requestBodies:
+    ConsentInitiation:
+      description: Consent Initiation Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConsentLinkRequest'
+          examples:
+            Account Information US:
+              $ref: '#/components/examples/AccountInformationConsentRequestUS'
+            Account Check EU:
+              $ref: '#/components/examples/AccountCheckConsentRequestEU'
+            Account Check UK:
+              $ref: '#/components/examples/AccountCheckConsentRequestUK'
+            Balance Check UK:
+              $ref: '#/components/examples/BalanceCheckConsentRequestUK'
+            Balance Check EU:
+              $ref: '#/components/examples/BalanceCheckConsentRequestEU'
+            Transactions Check UK:
+              $ref: '#/components/examples/TransactionCheckConsentRequestUK'
+            Transactions Check EU:
+              $ref: '#/components/examples/TransactionCheckConsentRequestEU'
+    ConsentUpdate:
+      description: Consent Renew Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConsentRenew'
+          examples:
+            Account Information US:
+              $ref: '#/components/examples/AccountInformationUpdateConsentRequestUS'
+  responses:
+    201-ConsentCreated:
+      description: Consent Initiation Response
+      headers:
+        Request-Id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConsentLinkResponse'
+          examples:
+            Account Information US:
+              $ref: '#/components/examples/AccountInformationConsentResponseUS'
+            Account Check EU:
+              $ref: '#/components/examples/AccountCheckConsentResponseEU'
+            Account Check  UK:
+              $ref: '#/components/examples/AccountCheckConsentResponseUK'
+            Balance Check  EU:
+              $ref: '#/components/examples/BalanceCheckConsentResponseEU'
+            Balance Check  UK:
+              $ref: '#/components/examples/BalanceCheckConsentResponseUK'
+            Transactions EU:
+              $ref: '#/components/examples/TransactionCheckConsentResponseEU'
+            Transactions UK:
+              $ref: '#/components/examples/TransactionCheckConsentResponseUK'
+    400-BadConsentRequest:
+      description: "Bad Request. \n\n**List of Error codes and description explanations.**\n\n| Error\
+        \ Code      | Description                                    |\n| --------------  |------------------------------------------------|\n\
+        | 10001           | Mandatory field missing                        |\n| 10002           | Minimum\
+        \ length violation                       |\n| 10003           | Maximum length violation     \
+        \                  |\n| 10100           | Minimum value violation                        |\n|\
+        \ 10101           | Maximum value violation                        |\n| 10102           | Range\
+        \ violation                                |\n| 10103           | Bad format                 \
+        \                    |\n| 10104           | Bad value                                      |\n\
+        | 10105           | Unexpected field                               |\n| 10106           | Idempotency\
+        \ Check Failure                      |\n| 10199           | Other                            \
+        \              |\n| 13000           | Uncategorized error                            |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            InvalidConsentType:
+              $ref: '#/components/examples/InvalidConsentTypeError'
+    401-Unauthorized:
+      description: "Unauthorized\n| Error Code      | Description                                    |\n\
+        | --------------  |------------------------------------------------|\n| 11404           | Authentication\
+        \ failure                         |\n| 11412           | User blocked by financial institution\
+        \          |\n| 11415           | Maximum Limit Exceeded                         |\n| 12400  \
+        \         | Authentication flow cancelled                  |\n| 12401           | Authentication\
+        \ flow timeout                    |\n| 12402           | Session has expired or timeout      \
+        \          |  \n| 14000           | Security failure                               |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            UnauthorizedError:
+              $ref: '#/components/examples/Unauthorized'
+    403-Forbidden:
+      description: 'Forbidden
+
+        | Error Code    | Description                                |
+
+        |---------------|--------------------------------------------|
+
+        |  11410        | Authorization failure                      |
+
+        |  11411        | Connection to financial institution not supported.       |
+
+        |  14000        | Security failure                           |'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            SecurityFailureError:
+              $ref: '#/components/examples/SecurityFailureError'
+    429-TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            TooManyRequests:
+              $ref: '#/components/examples/ErrorRateLimit'
+    503-ServiceUnavailable:
+      description: 'Service Unavailable.
+
+        | Error Code    | Description       |
+
+        |---------------|-------------------|
+
+        |   12970       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12971       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12972       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12973       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12974       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12975       | API is currently unavailable for usage. Please try again after some time. |'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            ServiceUnavailableError:
+              $ref: '#/components/examples/ServiceUnavailableError'
+    200-OK-ConsentBasic:
+      description: Consent Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConsentBasic'
+          examples:
+            Consent Details  US:
+              $ref: '#/components/examples/GetConsent-US'
+            Consent Details EMEA:
+              $ref: '#/components/examples/GetConsent-EMEA'
+            Consent Details US Partial Success:
+              $ref: '#/components/examples/GetConsentPartialSuccess'
+    400-BadConsentIdRequest:
+      description: "Bad Request. \n\n**List of Error codes and description explanations.**\n\n| Error\
+        \ Code      | Description                                    |\n| --------------  |------------------------------------------------|\n\
+        | 10001           | Mandatory field missing                        |\n| 10002           | Minimum\
+        \ length violation                       |\n| 10003           | Maximum length violation     \
+        \                  |\n| 10100           | Minimum value violation                        |\n|\
+        \ 10101           | Maximum value violation                        |\n| 10102           | Range\
+        \ violation                                |\n| 10103           | Bad format                 \
+        \                    |\n| 10104           | Bad value                                      |\n\
+        | 10105           | Unexpected field                               |\n| 10106           | Idempotency\
+        \ Check Failure                      |\n| 10199           | Other                            \
+        \              |\n| 13000           | Uncategorized error                            |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            InvalidConsentId:
+              $ref: '#/components/examples/InvalidConsentIdError'
+    404-NotFoundAccount:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            NotFoundError:
+              $ref: '#/components/examples/NotFoundPath'
+    422-Unprocessable:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            UnprocessableEntitySuspiciousContent:
+              $ref: '#/components/examples/SuspiciousContent'
+    404-NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            NotFoundError:
+              $ref: '#/components/examples/NotFound'
+    200-OK-ConsentRenew:
+      description: Consent Renew Response
+      headers:
+        Request-Id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateConsentLinkResponse'
+          examples:
+            Account Information US:
+              $ref: '#/components/examples/AccountInformationConsentUpdateResponseUS'
+    200-OK-AccountSummary:
+      description: Account Details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountSummary'
+          examples:
+            Account Details EU:
+              $ref: '#/components/examples/AccountDetailsEU'
+            Account Details UK:
+              $ref: '#/components/examples/AccountDetailsUK'
+    400-AccountVerificationBadRequest:
+      description: "Bad Request. \n\n**List of Error codes and description explanations.**\n\n| Error\
+        \ Code      | Description                                    |\n| --------------  |------------------------------------------------|\n\
+        | 10001           | Mandatory field missing                        |\n| 10002           | Minimum\
+        \ length violation                       |\n| 10003           | Maximum length violation     \
+        \                  |\n| 10100           | Minimum value violation                        |\n|\
+        \ 10101           | Maximum value violation                        |\n| 10102           | Range\
+        \ violation                                |\n| 10103           | Bad format                 \
+        \                    |\n| 10104           | Bad value                                      |\n\
+        | 10105           | Unexpected field                               |\n| 10106           | Idempotency\
+        \ Check Failure                      |\n| 10199           | Other                            \
+        \              |\n| 11400           | FI Token is invalid                                 |\n\
+        | 11401           | Additional Information needed from the end user at financial institution |\n\
+        | 11402           | Inadequate response to security questions from the end user |\n| 11403   \
+        \        | Account is migrated from legacy to OAuth connection |\n| 11405           | Account\
+        \ is invalid and cannot be recovered          |\n| 11406           | Connection to Financial institution\
+        \ not supported   |\n| 11407           | Account Routing Number not found                    |\n\
+        | 11408           | Account details not found                           |\n| 11409           |\
+        \ Available balance has not been captured yet         |\n| 11900           | User has cancelled\
+        \ the consent                      |\n| 11901           | User has declined the consent      \
+        \                 |\n| 11902           | Provider unavailable in market. Please contact support\
+        \   |\n| 11903           | Balances option is not supported for Manual Connect flow |\n| 11904\
+        \           | Parties data not available for Manual Connect flow       |    \n| 11905        \
+        \   | Allowed time for Micro Deposit confirmation has expired  |    \n| 11906           | Micro\
+        \ Deposit confirmation attempts have been exhausted  |    \n| 13000           | Uncategorized\
+        \ error                                      |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            ConsentIdMissing:
+              $ref: '#/components/examples/ConsentIdMissing'
+    200-OK-BalanceDetails:
+      description: Balance Details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BalanceDetail'
+          examples:
+            Account Balances EU:
+              $ref: '#/components/examples/BalanceDetailsEU'
+            Account Balances UK:
+              $ref: '#/components/examples/BalanceDetailsUK'
+    200-OK-TransactionDetails:
+      description: Transaction History Details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountTransactionDetail'
+          examples:
+            TransactionsListEU:
+              $ref: '#/components/examples/TransactionsDetailsEU'
+            TransactionsListUK:
+              $ref: '#/components/examples/TransactionsDetailsUK'
+    200-OK-AccountInformation:
+      description: Account Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountInformation'
+          examples:
+            Account Information US - Full View:
+              $ref: '#/components/examples/AccountInformationUS-FullView'
+            Account Information US - Full View with Error:
+              $ref: '#/components/examples/AccountInformationUS-FullViewWithError'
+            Account Information US - Account View:
+              $ref: '#/components/examples/AccountInformationUS-Account'
+            Account Information US - Balances View:
+              $ref: '#/components/examples/AccountInformationUS-Balances'
+            Account Information US - Parties View:
+              $ref: '#/components/examples/AccountInformationUS-Parties'
+    400-AccountInformationBadRequest:
+      description: "Bad Request. \n\n**List of Error codes and description explanations.**\n\n| Error\
+        \ Code      | Description                                    |\n| --------------  |------------------------------------------------|\n\
+        | 10001           | Mandatory field missing                        |\n| 10002           | Minimum\
+        \ length violation                       |\n| 10003           | Maximum length violation     \
+        \                  |\n| 10100           | Minimum value violation                        |\n|\
+        \ 10101           | Maximum value violation                        |\n| 10102           | Range\
+        \ violation                                |\n| 10103           | Bad format                 \
+        \                    |\n| 10104           | Bad value                                      |\n\
+        | 10105           | Unexpected field                               |\n| 10106           | Idempotency\
+        \ Check Failure                      |\n| 10199           | Other                            \
+        \              |\n| 11400           | FI Token is invalid                                 |\n\
+        | 11401           | Additional Information needed from the end user at financial institution |\n\
+        | 11402           | Inadequate response to security questions from the end user |\n| 11403   \
+        \        | Account is migrated from legacy to OAuth connection |\n| 11405           | Account\
+        \ is invalid and cannot be recovered          |\n| 11406           | Connection to Financial institution\
+        \ not supported   |\n| 11407           | Account Routing Number not found                    |\n\
+        | 11408           | Account details not found                           |\n| 11409           |\
+        \ Available balance has not been captured yet         |\n| 11900           | User has cancelled\
+        \ the consent                      |\n| 11901           | User has declined the consent      \
+        \                 |\n| 11902           | Provider unavailable in market. Please contact support\
+        \   |\n| 11903           | Balances option is not supported for Manual Connect flow |\n| 11904\
+        \           | Parties data not available for Manual Connect flow       |    \n| 11905        \
+        \   | Allowed time for Micro Deposit confirmation has expired  |    \n| 11906           | Micro\
+        \ Deposit confirmation attempts have been exhausted  |    \n| 13000           | Uncategorized\
+        \ error                                      |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            ConsentIdMissing:
+              $ref: '#/components/examples/ConsentIdMissing'
+            AccountDetailsNotFound:
+              $ref: '#/components/examples/AccountDetailsNotFoundError'
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2: {}
+x-jpmc-security: {}
+x-jpmc-securitySchemes:
+  MutualTLS:
+    type: x509
+    description: Mutual TLS authentication using client and server certificates.
+    x509: {}

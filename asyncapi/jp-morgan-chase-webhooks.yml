@@ -1,0 +1,15 @@
+# Webhook surface DERIVED from the harvested OpenAPI definitions.
+generated: '2026-07-28'
+method: derived
+source: openapi/*.yml
+specification: API Commons Webhooks
+specificationVersion: '0.1'
+provider: JPMorgan Chase
+providerId: jp-morgan-chase
+webhook_specs:
+- spec: jp-morgan-chase-alerts-and-decisioning-api-openapi.yml
+  api: Alerts and Decisioning API
+  operations: 5
+- spec: jp-morgan-chase-webhooks-api-openapi.yml
+  api: Webhooks API
+  operations: 4

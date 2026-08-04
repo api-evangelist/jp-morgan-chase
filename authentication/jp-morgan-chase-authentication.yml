@@ -1,0 +1,50 @@
+generated: '2026-07-28'
+method: searched
+source: https://developer.payments.jpmorgan.com/api/authentication
+specification: API Commons Authentication
+specificationVersion: '0.1'
+provider: JPMorgan Chase
+providerId: jp-morgan-chase
+description: 'Authentication for the J.P. Morgan Payments Developer Portal. Access is credential-based
+  and tied to an onboarded client: mTLS transport certificates confirm identity, digital-signature certificates
+  sign POST requests, and OAuth 2.0 issues access tokens.'
+methods:
+- type: OAuth 2.0
+  variants:
+  - name: Basic OAuth
+    environment: Mock
+    notes: Client secret shared with J.P. Morgan.
+  - name: OAuth with signed JWT assertions
+    environment: Client Testing, Production
+    notes: Public-key cryptography; avoids sharing a client secret.
+  - name: Legacy OAuth
+    environment: Legacy APIs
+    notes: Certificate Signing Request (CSR) based.
+  source: https://developer.payments.jpmorgan.com/api/authentication-oauth-page
+- type: mTLS
+  notes: Transport certificate from an approved CA confirms the identity of the calling host.
+  source: https://developer.payments.jpmorgan.com/api/mtls-with-digital-signature
+- type: Digital signature
+  notes: Certain requests (typically POST) must be signed with a digital signature certificate.
+  source: https://developer.payments.jpmorgan.com/api/mtls-with-digital-signature
+environments:
+- Mock
+- Client Testing
+- Production
+declared_security_schemes:
+  BearerAuth:
+  - 3-D Secure API
+  - Account Updater API
+  - Blockchain Deposit Account Balances API
+  - Checkout API
+  - Consumer Profile Management API
+  - Digital Onboarding API
+  - Global Payments
+  - Global Payments API
+  - Notifications API
+  - Product Configuration API
+  - Reporting API
+  - Tokenization API
+  - Wallet Decryption API
+  bearerAuth:
+  - Dispute Management API

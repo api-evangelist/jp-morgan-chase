@@ -1,0 +1,50 @@
+generated: '2026-07-28'
+method: searched
+source: https://developer.payments.jpmorgan.com/api/changelog
+specification: API Commons ChangeLog
+specificationVersion: '0.1'
+provider: JPMorgan Chase
+providerId: jp-morgan-chase
+description: J.P. Morgan publishes a separate changelog per API on the Payments Developer Portal. This
+  artifact indexes them.
+changelog_count: 13
+changelogs:
+- api: 3-D Secure
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2F3-d-secure%2Fchangelog.md
+  bytes: 1447
+- api: Account Updater
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Faccount-updater%2Fchangelog.md
+  bytes: 6046
+- api: Changelog
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Ftreasury%2Fglobal-payments%2Fglobal-payments%2Fchangelog.md
+  bytes: 6179
+- api: Checkout
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Fonline-payments%2Fcheckout%2Fchangelog.md
+  bytes: 20491
+- api: Consumer Profile Management
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fconsumer-profile%2Fchangelog.md
+  bytes: 7554
+- api: Digital Onboarding
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fdigital-onboarding%2Fchangelog.md
+  bytes: 45520
+- api: Dispute management
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Fdispute-management%2Fchangelog.md
+  bytes: 5321
+- api: Notifications
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fnotifications%2Fchangelog.md
+  bytes: 25110
+- api: Online Payments
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Fonline-payments%2Fonline-payments%2Fchangelog.md
+  bytes: 42486
+- api: Product Configuration
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Fproduct-configuration%2Fproduct-configuration-changelog.md
+  bytes: 716
+- api: Reporting
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Freporting%2Fchangelog.md
+  bytes: 11316
+- api: Tokenization
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Ftokenization%2Fchangelog.md
+  bytes: 2324
+- api: Wallet Decryption
+  source: https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fwallet-decryption%2Fchangelog.md
+  bytes: 2490
