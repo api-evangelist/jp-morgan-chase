@@ -23,7 +23,7 @@ tags:
 - Fortune 100
 created: '2026-03-24'
 modified: '2026-07-28'
-specificationVersion: '0.21'
+specificationVersion: '0.23'
 apis:
 - aid: jp-morgan-chase:digital-onboarding-api
   name: Digital Onboarding API
