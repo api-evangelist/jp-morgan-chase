@@ -1,0 +1,815 @@
+{
+  "item": [
+    {
+      "id": "8264b34b-552a-46d3-aec5-b6a0c36810b3",
+      "name": "Account Validation",
+      "description": {
+        "content": "API to validate accounts",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e4dece42-f469-47fe-8d6c-74c11cdc1277",
+          "name": "Account validation",
+          "request": {
+            "name": "Account validation",
+            "description": {
+              "content": "Validate an account",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "validations",
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                "key": "x-client-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                "key": "x-program-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "A unique identifier assigned to a specific Validation Services product selection. The defaults values is “AVS” program-id-type. It indicates the processing settings selected for the product and will be provided during onboarding. This is an optional parameter.",
+                "key": "x-program-id-type",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"account\": {\n      \"accountNumber\": \"<string>\",\n      \"financialInstitutionId\": {\n        \"clearingSystemId\": {\n          \"id\": \"<string>\",\n          \"idType\": \"<string>\"\n        },\n        \"bic\": \"<string>\",\n        \"postalAddress\": {\n          \"country\": \"<string>\",\n          \"addressLine\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"townName\": \"<string>\",\n          \"countrySubDvsn\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"county\": \"<string>\",\n          \"residentialStatus\": \"<string>\",\n          \"unitNumber\": \"<string>\",\n          \"buildingNumber\": \"<string>\",\n          \"buildingName\": \"<string>\",\n          \"streetType\": \"<string>\",\n          \"streetName\": \"<string>\",\n          \"suburb\": \"<string>\"\n        }\n      },\n      \"accountNumberType\": \"<string>\"\n    },\n    \"requestId\": \"<string>\",\n    \"profileName\": \"<string>\",\n    \"clientReferenceId\": \"<string>\",\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"<string>\",\n        \"fullName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"middleName\": \"<string>\",\n        \"additionalLastName\": \"<string>\",\n        \"issueDate\": \"<date>\",\n        \"namePrefix\": \"<string>\",\n        \"nameSuffix\": \"<string>\",\n        \"postalAddress\": {\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addressLine\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"townName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"countrySubDvsn\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"postalCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"county\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"residentialStatus\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"unitNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"streetType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"streetName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"suburb\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"associatedCountries\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"identification\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"gender\": \"<string>\",\n        \"dateOfBirth\": \"<integer>\",\n        \"contactDetails\": {\n          \"email\": \"<string>\",\n          \"phoneNumbers\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"channel\": \"<string>\",\n        \"income\": {\n          \"income\": \"<string>\",\n          \"incomeCurrency\": \"<string>\"\n        },\n        \"device\": {\n          \"ipAddress\": \"<string>\"\n        }\n      }\n    },\n    \"transactions\": [\n      {\n        \"context\": \"<string>\",\n        \"processControlTransactionCode\": \"<integer>\",\n        \"amount\": {\n          \"amount\": \"<double>\",\n          \"currency\": \"<string>\",\n          \"checkSerialNo\": \"<integer>\"\n        }\n      },\n      {\n        \"context\": \"<string>\",\n        \"processControlTransactionCode\": \"<integer>\",\n        \"amount\": {\n          \"amount\": \"<double>\",\n          \"currency\": \"<string>\",\n          \"checkSerialNo\": \"<integer>\"\n        }\n      }\n    ]\n  },\n  {\n    \"account\": {\n      \"accountNumber\": \"<string>\",\n      \"financialInstitutionId\": {\n        \"clearingSystemId\": {\n          \"id\": \"<string>\",\n          \"idType\": \"<string>\"\n        },\n        \"bic\": \"<string>\",\n        \"postalAddress\": {\n          \"country\": \"<string>\",\n          \"addressLine\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"townName\": \"<string>\",\n          \"countrySubDvsn\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"county\": \"<string>\",\n          \"residentialStatus\": \"<string>\",\n          \"unitNumber\": \"<string>\",\n          \"buildingNumber\": \"<string>\",\n          \"buildingName\": \"<string>\",\n          \"streetType\": \"<string>\",\n          \"streetName\": \"<string>\",\n          \"suburb\": \"<string>\"\n        }\n      },\n      \"accountNumberType\": \"<string>\"\n    },\n    \"requestId\": \"<string>\",\n    \"profileName\": \"<string>\",\n    \"clientReferenceId\": \"<string>\",\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"<string>\",\n        \"fullName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"middleName\": \"<string>\",\n        \"additionalLastName\": \"<string>\",\n        \"issueDate\": \"<date>\",\n        \"namePrefix\": \"<string>\",\n        \"nameSuffix\": \"<string>\",\n        \"postalAddress\": {\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addressLine\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"townName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"countrySubDvsn\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"postalCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"county\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"residentialStatus\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"unitNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"streetType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"streetName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"suburb\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"associatedCountries\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"identification\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"gender\": \"<string>\",\n        \"dateOfBirth\": \"<integer>\",\n        \"contactDetails\": {\n          \"email\": \"<string>\",\n          \"phoneNumbers\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"channel\": \"<string>\",\n        \"income\": {\n          \"income\": \"<string>\",\n          \"incomeCurrency\": \"<string>\"\n        },\n        \"device\": {\n          \"ipAddress\": \"<string>\"\n        }\n      }\n    },\n    \"transactions\": [\n      {\n        \"context\": \"<string>\",\n        \"processControlTransactionCode\": \"<integer>\",\n        \"amount\": {\n          \"amount\": \"<double>\",\n          \"currency\": \"<string>\",\n          \"checkSerialNo\": \"<integer>\"\n        }\n      },\n      {\n        \"context\": \"<string>\",\n        \"processControlTransactionCode\": \"<integer>\",\n        \"amount\": {\n          \"amount\": \"<double>\",\n          \"currency\": \"<string>\",\n          \"checkSerialNo\": \"<integer>\"\n        }\n      }\n    ]\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "86a8b86a-4a4e-439d-9bfb-a3880206e544",
+              "name": "OK\nError codes which could be returned with a 200 http response.\n* 9001 - Data Provider Error\n* 9002 - Processing Error\n* 9003 - Timeout Error\n* 9004 - Client Configuration Error\n* 9005 - Bad Request\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-program-id",
+                    "value": "VERIAUTH"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The defaults values is “AVS” program-id-type. It indicates the processing settings selected for the product and will be provided during onboarding. This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"clientReferenceId\": \"CLIENT-AVS-US-001\",\n    \"account\": {\n      \"accountNumber\": \"12345\",\n      \"financialInstitutionId\": {\n        \"clearingSystemId\": {\n          \"id\": \"122199983\",\n          \"idType\": \"ABA\"\n        }\n      }\n    },\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"Jane\",\n        \"lastName\": \"Abbot\",\n        \"fullName\": \"Jane Abbot\"\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"clientReferenceId\": \"CLIENT-AVS-US-001\",\n    \"responses\": [\n      {\n        \"codes\": {\n          \"verification\": {\n            \"code\": 1002,\n            \"message\": \"Open Valid\"\n          },\n          \"authentication\": {\n            \"code\": 5002,\n            \"message\": \"Ownership Match\"\n          }\n        },\n        \"provider\": \"JPMC_ACH\",\n        \"details\": {\n          \"paymentCheckContributingStatus\": \"Contributed\",\n          \"accountNumber\": \"XXXX5\",\n          \"financialInstitutionId\": {\n            \"clearingSystemId\": {\n              \"id\": \"122199983\",\n              \"idType\": \"ABA\"\n            }\n          }\n        }\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9054622f-c1d2-45c9-b789-eb86e31ab7be",
+              "name": "Bad Request.\n* GCA-023 - Please re-send request in valid format.\n* GCA-129 - ProgramId is required.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-program-id",
+                    "value": "VERIAUTH"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The defaults values is “AVS” program-id-type. It indicates the processing settings selected for the product and will be provided during onboarding. This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"clientReferenceId\": \"CLIENT-AVS-US-001\",\n    \"account\": {\n      \"accountNumber\": \"12345\",\n      \"financialInstitutionId\": {\n        \"clearingSystemId\": {\n          \"id\": \"122199983\",\n          \"idType\": \"ABA\"\n        }\n      }\n    },\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"Jane\",\n        \"lastName\": \"Abbot\",\n        \"fullName\": \"Jane Abbot\"\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    },\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f3aaa0bc-8845-44a0-a2d1-b217e796277b",
+              "name": "Forbidden.\n* GCA-001 - Unauthorized Access.\n* GCA-003 - Unauthorized Access.\n* GCA-103 - The programId was not found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-program-id",
+                    "value": "VERIAUTH"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The defaults values is “AVS” program-id-type. It indicates the processing settings selected for the product and will be provided during onboarding. This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"clientReferenceId\": \"CLIENT-AVS-US-001\",\n    \"account\": {\n      \"accountNumber\": \"12345\",\n      \"financialInstitutionId\": {\n        \"clearingSystemId\": {\n          \"id\": \"122199983\",\n          \"idType\": \"ABA\"\n        }\n      }\n    },\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"Jane\",\n        \"lastName\": \"Abbot\",\n        \"fullName\": \"Jane Abbot\"\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    },\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39dc2863-4840-4d9e-803f-d010fe6fa614",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-program-id",
+                    "value": "VERIAUTH"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The defaults values is “AVS” program-id-type. It indicates the processing settings selected for the product and will be provided during onboarding. This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"clientReferenceId\": \"CLIENT-AVS-US-001\",\n    \"account\": {\n      \"accountNumber\": \"12345\",\n      \"financialInstitutionId\": {\n        \"clearingSystemId\": {\n          \"id\": \"122199983\",\n          \"idType\": \"ABA\"\n        }\n      }\n    },\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"Jane\",\n        \"lastName\": \"Abbot\",\n        \"fullName\": \"Jane Abbot\"\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"errorCode\": \"9005\",\n      \"errorMsg\": \"The agreed rate limit has been exceeded, try again later.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3d21875b-c55e-4561-91cd-a1e82533a37d",
+              "name": "Internal Error.\n* GCA-099 - System is Unavailable.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-program-id",
+                    "value": "VERIAUTH"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The defaults values is “AVS” program-id-type. It indicates the processing settings selected for the product and will be provided during onboarding. This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"clientReferenceId\": \"CLIENT-AVS-US-001\",\n    \"account\": {\n      \"accountNumber\": \"12345\",\n      \"financialInstitutionId\": {\n        \"clearingSystemId\": {\n          \"id\": \"122199983\",\n          \"idType\": \"ABA\"\n        }\n      }\n    },\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"Jane\",\n        \"lastName\": \"Abbot\",\n        \"fullName\": \"Jane Abbot\"\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    },\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "c3133871-4a8a-4b8b-852f-c4079ede5d03",
+      "name": "Entity Validation",
+      "description": {
+        "content": "API to validate entities",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e0284817-fa71-4ab0-a911-3cb20fc722dc",
+          "name": "Entity validation",
+          "request": {
+            "name": "Entity validation",
+            "description": {
+              "content": "Validate an entity",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "validations",
+                "entities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                "key": "x-client-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) A unique identifier assigned to a Validation Services product during onboarding.",
+                "key": "x-program-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "A unique identifier assigned to a specific Validation Services product selection. The default value is “AVS” program-id-type. It indicates the processing settings selected for the product and is provided during onboarding.  This is an optional parameter.",
+                "key": "x-program-id-type",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"requestId\": \"<string>\",\n    \"profileName\": \"<string>\",\n    \"clientReferenceId\": \"<string>\",\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"<string>\",\n        \"fullName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"middleName\": \"<string>\",\n        \"additionalLastName\": \"<string>\",\n        \"issueDate\": \"<date>\",\n        \"namePrefix\": \"<string>\",\n        \"nameSuffix\": \"<string>\",\n        \"postalAddress\": {\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addressLine\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"townName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"countrySubDvsn\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"postalCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"county\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"residentialStatus\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"unitNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"streetType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"streetName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"suburb\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"associatedCountries\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"identification\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"gender\": \"<string>\",\n        \"dateOfBirth\": \"<integer>\",\n        \"contactDetails\": {\n          \"email\": \"<string>\",\n          \"phoneNumbers\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"channel\": \"<string>\",\n        \"income\": {\n          \"income\": \"<string>\",\n          \"incomeCurrency\": \"<string>\"\n        },\n        \"device\": {\n          \"ipAddress\": \"<string>\"\n        }\n      }\n    }\n  },\n  {\n    \"requestId\": \"<string>\",\n    \"profileName\": \"<string>\",\n    \"clientReferenceId\": \"<string>\",\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"<string>\",\n        \"fullName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"middleName\": \"<string>\",\n        \"additionalLastName\": \"<string>\",\n        \"issueDate\": \"<date>\",\n        \"namePrefix\": \"<string>\",\n        \"nameSuffix\": \"<string>\",\n        \"postalAddress\": {\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addressLine\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"townName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"countrySubDvsn\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"postalCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"county\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"residentialStatus\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"unitNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"streetType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"streetName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"suburb\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"associatedCountries\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"identification\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"gender\": \"<string>\",\n        \"dateOfBirth\": \"<integer>\",\n        \"contactDetails\": {\n          \"email\": \"<string>\",\n          \"phoneNumbers\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"channel\": \"<string>\",\n        \"income\": {\n          \"income\": \"<string>\",\n          \"incomeCurrency\": \"<string>\"\n        },\n        \"device\": {\n          \"ipAddress\": \"<string>\"\n        }\n      }\n    }\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a3f11595-54e8-4870-a4e7-ecf3d81eb143",
+              "name": "Error codes which could be returned with a 200 http response.\n* 9001 - Data Provider Error\n* 9002 - Processing Error\n* 9003 - Timeout Error\n* 9004 - Client Configuration Error\n* 9005 - Bad Request\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a Validation Services product during onboarding.",
+                    "key": "x-program-id",
+                    "value": "COMPANYINDIVIDUAL"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The default value is “AVS” program-id-type. It indicates the processing settings selected for the product and is provided during onboarding.  This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174123\",\n    \"clientReferenceId\": \"CLIENT-EVS-IND-001\",\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"JOHN\",\n        \"lastName\": \"SMITH\",\n        \"middleName\": \"KAY\",\n        \"additionalLastName\": \"MARTINEZ\",\n        \"namePrefix\": \"MR\",\n        \"nameSuffix\": \"JR\",\n        \"fullName\": \"MR JOHN KAY SMITH MARTINEZ JR\",\n        \"postalAddress\": {\n          \"addressLine\": [\n            \"123 MAIN ST\",\n            \"APT 1A\"\n          ],\n          \"unitNumber\": \"4\",\n          \"buildingNumber\": \"120\",\n          \"buildingName\": \"CAPITAL TOWER\",\n          \"streetName\": \"CLEMENT TOWN\",\n          \"streetType\": \"AVENUE\",\n          \"suburb\": \"CITRUS PARK\",\n          \"townName\": \"TAMPA\",\n          \"countrySubDvsn\": \"FL\",\n          \"country\": \"US\",\n          \"postalCode\": \"33607\",\n          \"county\": \"HILLSBOROUGH\",\n          \"residentialStatus\": \"Rent\"\n        },\n        \"contactDetails\": {\n          \"phoneNumbers\": [\n            {\n              \"phoneNumber\": \"2137685675\",\n              \"phoneNumberType\": \"home\"\n            },\n            {\n              \"phoneNumber\": \"2137685676\",\n              \"phoneNumberType\": \"work\"\n            },\n            {\n              \"phoneNumber\": \"2137685677\",\n              \"phoneNumberType\": \"mobile\"\n            }\n          ],\n          \"email\": \"jsmith@fakemail.com\"\n        },\n        \"device\": {\n          \"ipAddress\": \"123.45.67.890\"\n        },\n        \"identification\": [\n          {\n            \"idType\": \"SSN\",\n            \"id\": \"111223333\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE_USA\",\n            \"id\": \"F123-1234-1234\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240131\n          },\n          {\n            \"idType\": \"NATIONAL_ID\",\n            \"id\": \"440861896421345987\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240130\n          },\n          {\n            \"idType\": \"VOTER_ID\",\n            \"id\": \"SIQ3830379\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE\",\n            \"id\": \"DL6971548E\",\n            \"issueDate\": 20140131,\n            \"expirationDate\": 20240130\n          }\n        ],\n        \"gender\": \"M\",\n        \"dateOfBirth\": 19850131\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174123\",\n    \"clientReferenceId\": \"CLIENT-EVS-IND-001\",\n    \"responses\": [\n      {\n        \"codes\": {\n          \"individualID\": {\n            \"code\": 1101,\n            \"message\": \"Pass\"\n          }\n        },\n        \"provider\": \"LEXISNEXIS\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5f9a47ea-b00e-472d-a598-bdd097ce6abb",
+              "name": "Bad Request.\n* GCA-023 - Please re-send request in valid format.\n* GCA-129 - ProgramId is required.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a Validation Services product during onboarding.",
+                    "key": "x-program-id",
+                    "value": "COMPANYINDIVIDUAL"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The default value is “AVS” program-id-type. It indicates the processing settings selected for the product and is provided during onboarding.  This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174123\",\n    \"clientReferenceId\": \"CLIENT-EVS-IND-001\",\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"JOHN\",\n        \"lastName\": \"SMITH\",\n        \"middleName\": \"KAY\",\n        \"additionalLastName\": \"MARTINEZ\",\n        \"namePrefix\": \"MR\",\n        \"nameSuffix\": \"JR\",\n        \"fullName\": \"MR JOHN KAY SMITH MARTINEZ JR\",\n        \"postalAddress\": {\n          \"addressLine\": [\n            \"123 MAIN ST\",\n            \"APT 1A\"\n          ],\n          \"unitNumber\": \"4\",\n          \"buildingNumber\": \"120\",\n          \"buildingName\": \"CAPITAL TOWER\",\n          \"streetName\": \"CLEMENT TOWN\",\n          \"streetType\": \"AVENUE\",\n          \"suburb\": \"CITRUS PARK\",\n          \"townName\": \"TAMPA\",\n          \"countrySubDvsn\": \"FL\",\n          \"country\": \"US\",\n          \"postalCode\": \"33607\",\n          \"county\": \"HILLSBOROUGH\",\n          \"residentialStatus\": \"Rent\"\n        },\n        \"contactDetails\": {\n          \"phoneNumbers\": [\n            {\n              \"phoneNumber\": \"2137685675\",\n              \"phoneNumberType\": \"home\"\n            },\n            {\n              \"phoneNumber\": \"2137685676\",\n              \"phoneNumberType\": \"work\"\n            },\n            {\n              \"phoneNumber\": \"2137685677\",\n              \"phoneNumberType\": \"mobile\"\n            }\n          ],\n          \"email\": \"jsmith@fakemail.com\"\n        },\n        \"device\": {\n          \"ipAddress\": \"123.45.67.890\"\n        },\n        \"identification\": [\n          {\n            \"idType\": \"SSN\",\n            \"id\": \"111223333\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE_USA\",\n            \"id\": \"F123-1234-1234\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240131\n          },\n          {\n            \"idType\": \"NATIONAL_ID\",\n            \"id\": \"440861896421345987\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240130\n          },\n          {\n            \"idType\": \"VOTER_ID\",\n            \"id\": \"SIQ3830379\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE\",\n            \"id\": \"DL6971548E\",\n            \"issueDate\": 20140131,\n            \"expirationDate\": 20240130\n          }\n        ],\n        \"gender\": \"M\",\n        \"dateOfBirth\": 19850131\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "A unique identifier assigned to a client during the onboarding process.",
+                  "key": "x-program-id",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "A unique identifier assigned to a specific Validation Services product selection. The default value is “AVS” program-id-type. It indicates the processing settings selected for the product and is provided during onboarding.  This is an optional parameter.",
+                  "key": "x-program-id-type",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "A unique identifier assigned to a client during the onboarding process.",
+                  "key": "x-client-id",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    },\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ae1ea56b-d2d9-4fa8-b7ff-5df5bd192a34",
+              "name": "Forbidden.\n* GCA-001 - Unauthorized Access.\n* GCA-003 - Unauthorized Access.\n* GCA-103 - The programId was not found.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a Validation Services product during onboarding.",
+                    "key": "x-program-id",
+                    "value": "COMPANYINDIVIDUAL"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The default value is “AVS” program-id-type. It indicates the processing settings selected for the product and is provided during onboarding.  This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174123\",\n    \"clientReferenceId\": \"CLIENT-EVS-IND-001\",\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"JOHN\",\n        \"lastName\": \"SMITH\",\n        \"middleName\": \"KAY\",\n        \"additionalLastName\": \"MARTINEZ\",\n        \"namePrefix\": \"MR\",\n        \"nameSuffix\": \"JR\",\n        \"fullName\": \"MR JOHN KAY SMITH MARTINEZ JR\",\n        \"postalAddress\": {\n          \"addressLine\": [\n            \"123 MAIN ST\",\n            \"APT 1A\"\n          ],\n          \"unitNumber\": \"4\",\n          \"buildingNumber\": \"120\",\n          \"buildingName\": \"CAPITAL TOWER\",\n          \"streetName\": \"CLEMENT TOWN\",\n          \"streetType\": \"AVENUE\",\n          \"suburb\": \"CITRUS PARK\",\n          \"townName\": \"TAMPA\",\n          \"countrySubDvsn\": \"FL\",\n          \"country\": \"US\",\n          \"postalCode\": \"33607\",\n          \"county\": \"HILLSBOROUGH\",\n          \"residentialStatus\": \"Rent\"\n        },\n        \"contactDetails\": {\n          \"phoneNumbers\": [\n            {\n              \"phoneNumber\": \"2137685675\",\n              \"phoneNumberType\": \"home\"\n            },\n            {\n              \"phoneNumber\": \"2137685676\",\n              \"phoneNumberType\": \"work\"\n            },\n            {\n              \"phoneNumber\": \"2137685677\",\n              \"phoneNumberType\": \"mobile\"\n            }\n          ],\n          \"email\": \"jsmith@fakemail.com\"\n        },\n        \"device\": {\n          \"ipAddress\": \"123.45.67.890\"\n        },\n        \"identification\": [\n          {\n            \"idType\": \"SSN\",\n            \"id\": \"111223333\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE_USA\",\n            \"id\": \"F123-1234-1234\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240131\n          },\n          {\n            \"idType\": \"NATIONAL_ID\",\n            \"id\": \"440861896421345987\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240130\n          },\n          {\n            \"idType\": \"VOTER_ID\",\n            \"id\": \"SIQ3830379\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE\",\n            \"id\": \"DL6971548E\",\n            \"issueDate\": 20140131,\n            \"expirationDate\": 20240130\n          }\n        ],\n        \"gender\": \"M\",\n        \"dateOfBirth\": 19850131\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    },\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e770d01d-c419-4156-b8ef-c71370b89c78",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a Validation Services product during onboarding.",
+                    "key": "x-program-id",
+                    "value": "COMPANYINDIVIDUAL"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The default value is “AVS” program-id-type. It indicates the processing settings selected for the product and is provided during onboarding.  This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174123\",\n    \"clientReferenceId\": \"CLIENT-EVS-IND-001\",\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"JOHN\",\n        \"lastName\": \"SMITH\",\n        \"middleName\": \"KAY\",\n        \"additionalLastName\": \"MARTINEZ\",\n        \"namePrefix\": \"MR\",\n        \"nameSuffix\": \"JR\",\n        \"fullName\": \"MR JOHN KAY SMITH MARTINEZ JR\",\n        \"postalAddress\": {\n          \"addressLine\": [\n            \"123 MAIN ST\",\n            \"APT 1A\"\n          ],\n          \"unitNumber\": \"4\",\n          \"buildingNumber\": \"120\",\n          \"buildingName\": \"CAPITAL TOWER\",\n          \"streetName\": \"CLEMENT TOWN\",\n          \"streetType\": \"AVENUE\",\n          \"suburb\": \"CITRUS PARK\",\n          \"townName\": \"TAMPA\",\n          \"countrySubDvsn\": \"FL\",\n          \"country\": \"US\",\n          \"postalCode\": \"33607\",\n          \"county\": \"HILLSBOROUGH\",\n          \"residentialStatus\": \"Rent\"\n        },\n        \"contactDetails\": {\n          \"phoneNumbers\": [\n            {\n              \"phoneNumber\": \"2137685675\",\n              \"phoneNumberType\": \"home\"\n            },\n            {\n              \"phoneNumber\": \"2137685676\",\n              \"phoneNumberType\": \"work\"\n            },\n            {\n              \"phoneNumber\": \"2137685677\",\n              \"phoneNumberType\": \"mobile\"\n            }\n          ],\n          \"email\": \"jsmith@fakemail.com\"\n        },\n        \"device\": {\n          \"ipAddress\": \"123.45.67.890\"\n        },\n        \"identification\": [\n          {\n            \"idType\": \"SSN\",\n            \"id\": \"111223333\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE_USA\",\n            \"id\": \"F123-1234-1234\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240131\n          },\n          {\n            \"idType\": \"NATIONAL_ID\",\n            \"id\": \"440861896421345987\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240130\n          },\n          {\n            \"idType\": \"VOTER_ID\",\n            \"id\": \"SIQ3830379\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE\",\n            \"id\": \"DL6971548E\",\n            \"issueDate\": 20140131,\n            \"expirationDate\": 20240130\n          }\n        ],\n        \"gender\": \"M\",\n        \"dateOfBirth\": 19850131\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"errorCode\": \"9005\",\n      \"errorMsg\": \"The agreed rate limit has been exceeded, try again later.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63f82744-bebf-42eb-ba5f-91defd9e32dd",
+              "name": "Internal Error.\n* GCA-099 - System is Unavailable.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validations",
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a client during the onboarding process.",
+                    "key": "x-client-id",
+                    "value": "CLIENTID"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique identifier assigned to a Validation Services product during onboarding.",
+                    "key": "x-program-id",
+                    "value": "COMPANYINDIVIDUAL"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "A unique identifier assigned to a specific Validation Services product selection. The default value is “AVS” program-id-type. It indicates the processing settings selected for the product and is provided during onboarding.  This is an optional parameter.",
+                    "key": "x-program-id-type",
+                    "value": "AVS"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"requestId\": \"123e4567-e89b-12d3-a456-426614174123\",\n    \"clientReferenceId\": \"CLIENT-EVS-IND-001\",\n    \"entity\": {\n      \"individual\": {\n        \"firstName\": \"JOHN\",\n        \"lastName\": \"SMITH\",\n        \"middleName\": \"KAY\",\n        \"additionalLastName\": \"MARTINEZ\",\n        \"namePrefix\": \"MR\",\n        \"nameSuffix\": \"JR\",\n        \"fullName\": \"MR JOHN KAY SMITH MARTINEZ JR\",\n        \"postalAddress\": {\n          \"addressLine\": [\n            \"123 MAIN ST\",\n            \"APT 1A\"\n          ],\n          \"unitNumber\": \"4\",\n          \"buildingNumber\": \"120\",\n          \"buildingName\": \"CAPITAL TOWER\",\n          \"streetName\": \"CLEMENT TOWN\",\n          \"streetType\": \"AVENUE\",\n          \"suburb\": \"CITRUS PARK\",\n          \"townName\": \"TAMPA\",\n          \"countrySubDvsn\": \"FL\",\n          \"country\": \"US\",\n          \"postalCode\": \"33607\",\n          \"county\": \"HILLSBOROUGH\",\n          \"residentialStatus\": \"Rent\"\n        },\n        \"contactDetails\": {\n          \"phoneNumbers\": [\n            {\n              \"phoneNumber\": \"2137685675\",\n              \"phoneNumberType\": \"home\"\n            },\n            {\n              \"phoneNumber\": \"2137685676\",\n              \"phoneNumberType\": \"work\"\n            },\n            {\n              \"phoneNumber\": \"2137685677\",\n              \"phoneNumberType\": \"mobile\"\n            }\n          ],\n          \"email\": \"jsmith@fakemail.com\"\n        },\n        \"device\": {\n          \"ipAddress\": \"123.45.67.890\"\n        },\n        \"identification\": [\n          {\n            \"idType\": \"SSN\",\n            \"id\": \"111223333\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE_USA\",\n            \"id\": \"F123-1234-1234\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240131\n          },\n          {\n            \"idType\": \"NATIONAL_ID\",\n            \"id\": \"440861896421345987\",\n            \"issuer\": \"FL\",\n            \"expirationDate\": 20240130\n          },\n          {\n            \"idType\": \"VOTER_ID\",\n            \"id\": \"SIQ3830379\"\n          },\n          {\n            \"idType\": \"DRIVERS_LICENSE\",\n            \"id\": \"DL6971548E\",\n            \"issueDate\": 20140131,\n            \"expirationDate\": 20240130\n          }\n        ],\n        \"gender\": \"M\",\n        \"dateOfBirth\": 19850131\n      }\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    },\n    {\n      \"errorCode\": \"GCA-001\",\n      \"errorMsg\": \"Unauthorized Access\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://apigateway.jpmorgan.com/tsapi/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0335f217-2bb1-4ada-b4fe-e2370da28371",
+    "name": "Validation Services API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Verify accounts and identities for individuals and organizations in real time, so you can confidently onboard customers, reduce fraud, and meet compliance requirements with a single, streamlined integration.\n\nContact Support:\n Name: JPMC Technical Services Support",
+      "type": "text/plain"
+    }
+  }
+}

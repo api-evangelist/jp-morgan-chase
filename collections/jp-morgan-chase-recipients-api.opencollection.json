@@ -1,0 +1,171 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Recipients API",
+    "version": "1.0.55"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Recipients",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List recipients",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/recipients",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "9000000001",
+                "type": "query",
+                "description": "Unique Client identifier"
+              },
+              {
+                "name": "type",
+                "value": "RECIPIENT",
+                "type": "query",
+                "description": "Recipient type to return"
+              },
+              {
+                "name": "status",
+                "value": "ACTIVE",
+                "type": "query",
+                "description": "Recipient statuses to filter results by"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page Number"
+              }
+            ]
+          },
+          "docs": "Returns a list of all recipients for a given client profile."
+        },
+        {
+          "info": {
+            "name": "Create recipient",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/recipients",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new recipient."
+        },
+        {
+          "info": {
+            "name": "Get recipient",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/recipients/:id",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "616d93a1-ce53-4c71-b03b-02a11396db28",
+                "type": "path",
+                "description": "Recipient ID. A unique identifier for a recipient."
+              }
+            ]
+          },
+          "docs": "Returns information about a specific recipient."
+        },
+        {
+          "info": {
+            "name": "Update recipient",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/recipients/:id",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "616d93a1-ce53-4c71-b03b-02a11396db28",
+                "type": "path",
+                "description": "Recipient ID. A unique identifier for a recipient."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates details of a recipient, such as adding values for attributes related to payment types. All attributes must be provided in the same format as when creating a recipient. The value partyDetails.type cannot be amended after creation."
+        },
+        {
+          "info": {
+            "name": "Creates a microdeposits verification process.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/recipients/:id/verify-microdeposit",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "dea21834-f876-404b-a240-9977e598da5e",
+                "type": "path",
+                "description": "Recipient ID. A unique identifier for a recipient."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a microdeposits verification process."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,498 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Notifications API",
+    "version": "1.13.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health Check",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Health check for the Notification Subscription service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://mns-aws.jpmchase.com/v1/healthcheck/notification-subscriptions"
+          },
+          "docs": "Health check endpoint to validate that the Notification Subscription service is running"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Notifications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a notification by notification Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://mns-aws.jpmchase.com/v1/notifications/:notification-id",
+            "headers": [
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "entity-id",
+                "value": ""
+              },
+              {
+                "name": "entity-type",
+                "value": ""
+              },
+              {
+                "name": "subscription-channel",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-id",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "notification-id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier provided by the requestor for each request."
+              }
+            ]
+          },
+          "docs": "Retrieves a specific notification using the notification Id"
+        },
+        {
+          "info": {
+            "name": "Get all notification event types available",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://mns-aws.jpmchase.com/v1/notificationTypes",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves all available notification event types and sub-types for subscription"
+        },
+        {
+          "info": {
+            "name": "Get all notifications within a date range by notification status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://mns-aws.jpmchase.com/v1/notifications",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "date-range-start",
+                "value": ""
+              },
+              {
+                "name": "date-range-end",
+                "value": ""
+              },
+              {
+                "name": "notification-status",
+                "value": ""
+              },
+              {
+                "name": "entity-id",
+                "value": ""
+              },
+              {
+                "name": "entity-type",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-id",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-type",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves all notifications within a date range for a particular notification status or no status provided"
+        },
+        {
+          "info": {
+            "name": "Get a notification public key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://mns-aws.jpmchase.com/v1/public-keys",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "This endpoint delivers public key information in JSON Web Key Set (JWKS) format, enabling clients to retrieve the keys needed to verify the signatures of received webhook messages."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Subscriptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all subscriptions by entity Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://mns-aws.jpmchase.com/v1/subscriptions",
+            "headers": [
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "entity-id",
+                "value": ""
+              },
+              {
+                "name": "entity-type",
+                "value": ""
+              },
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "notification-type",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-id",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-type",
+                "value": ""
+              },
+              {
+                "name": "email-address",
+                "value": ""
+              },
+              {
+                "name": "subscription-category",
+                "value": ""
+              },
+              {
+                "name": "subscription-channel",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves all subscriptions using the entity Id"
+        },
+        {
+          "info": {
+            "name": "Subscribe to a notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://mns-aws.jpmchase.com/v1/subscriptions",
+            "headers": [
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "entity-id",
+                "value": ""
+              },
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "entity-type",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-id",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create subscriptions to notification event types"
+        },
+        {
+          "info": {
+            "name": "Get a subscription by subscription Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://mns-aws.jpmchase.com/v1/subscriptions/:subscription-id",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "entity-id",
+                "value": ""
+              },
+              {
+                "name": "entity-type",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-id",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "subscription-id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier provided by the requestor for each request."
+              }
+            ]
+          },
+          "docs": "Retrieves a specific subscription using the subscription Id"
+        },
+        {
+          "info": {
+            "name": "Update a specific subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://mns-aws.jpmchase.com/v1/subscriptions/:subscription-id",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "entity-id",
+                "value": ""
+              },
+              {
+                "name": "entity-type",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-id",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "subscription-id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier provided by the requestor for each request."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific subscription. Keep in mind that excluded fields will be interpreted as `null`. To avoid inadvertently removing data, be sure to send the existing fields as-is in addition to the fields being updated."
+        },
+        {
+          "info": {
+            "name": "Delete a specific subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://mns-aws.jpmchase.com/v1/subscriptions/:subscription-id",
+            "headers": [
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "entity-id",
+                "value": ""
+              },
+              {
+                "name": "entity-type",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-id",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "subscription-id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier provided by the requestor for each request."
+              }
+            ]
+          },
+          "docs": "Delete a specific subscription"
+        },
+        {
+          "info": {
+            "name": "(***DEPRECATED***) Get a public key by entity Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://mns-aws.jpmchase.com/v1/publicKeys",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "entity-id",
+                "value": ""
+              },
+              {
+                "name": "entity-type",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-id",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "signingAlgorithm",
+                "value": "",
+                "type": "query",
+                "description": "Enumerates the Digital Signing Algorithm preferred by the Client, used to sign payloads and for identity verification.  For RSA key length will be 3072 and for EC key length will be 256."
+              }
+            ]
+          },
+          "docs": "(***DEPRECATED***)  Retrieve a public key using the Entity Id."
+        },
+        {
+          "info": {
+            "name": "Get pending subscription verification by request id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://mns-aws.jpmchase.com/v1/subscriptions/verifications/:id",
+            "headers": [
+              {
+                "name": "entity-id",
+                "value": ""
+              },
+              {
+                "name": "entity-type",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-id",
+                "value": ""
+              },
+              {
+                "name": "parent-entity-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The request id provided on the initial POST /subscriptions call which this GET call shall fetch."
+              }
+            ]
+          },
+          "docs": "Get a subscription by request ID before it has a UUID assigned when its status becomes ACTIVE."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

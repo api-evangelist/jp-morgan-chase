@@ -1,0 +1,2050 @@
+{
+  "item": [
+    {
+      "id": "f0daefae-eb75-43ca-a342-6a92a9bec5fd",
+      "name": "Authentication",
+      "description": {
+        "content": "Authentication",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "870c1882-c31e-4202-b844-95c5914a60c3",
+          "name": "Prepare a 3DS authentication",
+          "request": {
+            "name": "Prepare a 3DS authentication",
+            "description": {
+              "content": "Prepare a 3DS authentication",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authentications"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Identifier for the merchant account",
+                "key": "merchant-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Identifies the platform used to facilitate the transaction request",
+                "key": "platform-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<long>\",\n  \"currency\": \"<string>\",\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"accountNumber\": \"<string>\",\n      \"expiry\": {\n        \"month\": \"<integer>\",\n        \"year\": \"<integer>\"\n      },\n      \"maskedAccountNumber\": \"<string>\",\n      \"accountNumberType\": \"<string>\",\n      \"cardTypeName\": \"<string>\",\n      \"cardType\": \"<string>\",\n      \"cvv\": \"<string>\",\n      \"encryptionIntegrityCheck\": \"<string>\"\n    },\n    \"consumerProfile\": {\n      \"consumerProfileId\": \"<string>\",\n      \"paymentMethodId\": \"<string>\"\n    }\n  },\n  \"authenticationAccount\": {\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"email\": \"<string>\",\n    \"middleName\": \"<string>\",\n    \"phone\": {\n      \"phoneNumber\": \"<string>\",\n      \"countryCode\": \"<integer>\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"<string>\",\n      \"line2\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"countryCode\": \"<^[A-Za-z]*$>\",\n      \"addressTypeCode\": \"<string>\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"<string>\",\n    \"line2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"countryCode\": \"<^[A-Za-z]*$>\",\n    \"addressTypeCode\": \"<string>\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"<string>\",\n  \"authenticationType\": \"<string>\",\n  \"softMerchant\": {\n    \"name\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"email\": \"<string>\",\n    \"url\": \"<string>\",\n    \"address\": {\n      \"line1\": \"<string>\",\n      \"line2\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"countryCode\": \"<^[A-Za-z]*$>\",\n      \"addressTypeCode\": \"<string>\"\n    },\n    \"merchantPurchaseDescription\": \"<string>\",\n    \"visaMerchantVerificationValueId\": \"<string>\",\n    \"masterCardMerchantVerificationValueId\": \"<string>\",\n    \"merchantIncorporationStatus\": \"<string>\",\n    \"foreignMerchantIndicator\": \"<boolean>\",\n    \"foreignMerchantAmount\": \"<long>\",\n    \"visaEnablerVerificationValueIdentifier\": \"<string>\"\n  },\n  \"merchantCategoryCode\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e03ca83d-d130-490d-8c77-0f7445c0059c",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2031\n      },\n      \"accountNumber\": \"5112345112345114\"\n    }\n  },\n  \"amount\": 25000,\n  \"currency\": \"EUR\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationType\": \"DEFAULT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"10cc0270-7bed-11e9-a188-1763956dd7f6\",\n  \"authenticationId\": \"string\",\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"accountNumber\": \"<string>\",\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2020\n      },\n      \"maskedAccountNumber\": \"123456XXXXXX9876\",\n      \"accountNumberType\": \"<string>\",\n      \"cardTypeName\": \"VISA\",\n      \"cardType\": \"VI\",\n      \"paymentTokens\": [\n        {\n          \"tokenProvider\": \"SAFETECH\",\n          \"tokenNumber\": \"string\",\n          \"responseStatus\": \"SUCCESS\",\n          \"tokenServiceResponseMessage\": \"string\",\n          \"tokenServiceResponseCode\": \"string\"\n        },\n        {\n          \"tokenProvider\": \"WALLET\",\n          \"tokenNumber\": \"string\",\n          \"responseStatus\": \"ERROR\",\n          \"tokenServiceResponseMessage\": \"string\",\n          \"tokenServiceResponseCode\": \"string\"\n        }\n      ],\n      \"cvv\": \"<string>\",\n      \"encryptionIntegrityCheck\": \"<string>\"\n    },\n    \"consumerProfile\": {\n      \"consumerProfileId\": \"<string>\",\n      \"paymentMethodId\": \"<string>\"\n    }\n  },\n  \"responseCode\": \"strin\",\n  \"responseStatus\": \"ERROR\",\n  \"responseMessage\": \"string\",\n  \"authenticationResult\": {\n    \"threeDomainSecureExemption\": {\n      \"authenticationExemptionReason\": \"ONE_LEG_OUT\",\n      \"authenticationStatusReasonText\": \"string\",\n      \"updateTimestamp\": \"string\"\n    },\n    \"threeDomainSecureCreation\": {\n      \"authenticationStatusReasonText\": \"string\",\n      \"updateTimestamp\": \"string\",\n      \"threeDSMethodUrl\": \"string\",\n      \"threeDSVersion\": \"string\",\n      \"threeDSMethodDataForm\": \"eyJ0aHJlZURTTWV0aG9kTm90aWZpY2F0aW9uVVJMIjoiaHR0cDovL3d3dy4zZHMuY29tL25vdGlmaWNhdGlvbi11cmwiLCJ0aHJlZURTU2VydmVyVHJhbnNJRCI6IjhhODgwZGMwLWQyZDItNDA2Ny1iY2IxLWIwOGQxNjkwYjI2ZSJ9\"\n    },\n    \"threeDomainSecureChallenge\": {\n      \"authenticationStatusReasonText\": \"string\",\n      \"threeDSTransactionStatus\": \"A\",\n      \"updateTimestamp\": \"string\",\n      \"challengeWindowSize\": \"FULL_SCREEN\",\n      \"threeDSChallengeRequest\": \"string\",\n      \"threeDSMessageExtensions\": [\n        {\n          \"messageExtensionId\": \"string\",\n          \"messageExtensionName\": \"string\",\n          \"messageExtensionCriticality\": false,\n          \"messageExtensionData\": \"string\"\n        },\n        {\n          \"messageExtensionId\": \"string\",\n          \"messageExtensionName\": \"string\",\n          \"messageExtensionCriticality\": false,\n          \"messageExtensionData\": \"string\"\n        }\n      ],\n      \"threeDSAcsUrl\": \"string\"\n    },\n    \"threeDomainSecureCompletion\": {\n      \"authenticationStatusReasonText\": \"string\",\n      \"threeDSTransactionStatus\": \"I\",\n      \"threeDSTransactionStatusReasonText\": \"string\",\n      \"updateTimestamp\": \"string\",\n      \"threeDSDirectoryServerTransactionId\": \"string\",\n      \"threeDSVersion\": \"string\",\n      \"authenticationValue\": \"string\",\n      \"electronicCommerceIndicator\": \"05\",\n      \"threeDSAuthenticationValue\": \"string\",\n      \"challengeAuthenticationMethod\": \"OTHER\",\n      \"challengeAuthenticationType\": \"DECOUPLED\",\n      \"acsTransactionId\": \"string\",\n      \"issuerAssignedAuthenticationExemption\": \"RECURRING_PAYMENT\",\n      \"issuerAssignedAuthenticationExemptionEncoded\": \"stri\",\n      \"issuerAssignedAuthenticationFraudScore\": \"string\",\n      \"authenticationValueCalculationMethod\": \"0\",\n      \"threeDSMessageExtensions\": [\n        {\n          \"messageExtensionId\": \"string\",\n          \"messageExtensionName\": \"string\",\n          \"messageExtensionCriticality\": false,\n          \"messageExtensionData\": \"string\"\n        },\n        {\n          \"messageExtensionId\": \"string\",\n          \"messageExtensionName\": \"string\",\n          \"messageExtensionCriticality\": false,\n          \"messageExtensionData\": \"string\"\n        }\n      ],\n      \"threeDSTransactionStatusReasonCode\": \"01\"\n    },\n    \"threeDSServerTransactionId\": \"string\",\n    \"threeDSTransactionId\": \"8a880dc0-d2d2-4067-bcb1-b08d1690b26e\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"string\",\n  \"authenticationType\": \"<string>\",\n  \"threeDSSchemeId\": \"Diners\",\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  },\n  \"softMerchant\": {\n    \"name\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"email\": \"<string>\",\n    \"url\": \"<string>\",\n    \"address\": {\n      \"line1\": \"123 Some Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"99999\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"<string>\"\n    },\n    \"merchantPurchaseDescription\": \"<string>\",\n    \"visaMerchantVerificationValueId\": \"<string>\",\n    \"masterCardMerchantVerificationValueId\": \"<string>\",\n    \"merchantIncorporationStatus\": \"<string>\",\n    \"foreignMerchantIndicator\": \"<boolean>\",\n    \"isMerchantVerificationValueAccepted\": true,\n    \"foreignMerchantAmount\": \"<long>\",\n    \"visaEnablerVerificationValueIdentifier\": \"<string>\"\n  },\n  \"merchantCategoryCode\": \"4819\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8695809-2023-43bc-bac9-3271afd2f194",
+              "name": "Badly formatted request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2031\n      },\n      \"accountNumber\": \"5112345112345114\"\n    }\n  },\n  \"amount\": 25000,\n  \"currency\": \"EUR\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationType\": \"DEFAULT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e66d4669-df8b-41d2-867d-6b769d875658",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2031\n      },\n      \"accountNumber\": \"5112345112345114\"\n    }\n  },\n  \"amount\": 25000,\n  \"currency\": \"EUR\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationType\": \"DEFAULT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "af41221a-00da-4587-903d-56d8ad98e77d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2031\n      },\n      \"accountNumber\": \"5112345112345114\"\n    }\n  },\n  \"amount\": 25000,\n  \"currency\": \"EUR\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationType\": \"DEFAULT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b49fd3b6-1af0-4fd6-8d05-8bc2e8e157ac",
+              "name": "Precondition failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2031\n      },\n      \"accountNumber\": \"5112345112345114\"\n    }\n  },\n  \"amount\": 25000,\n  \"currency\": \"EUR\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationType\": \"DEFAULT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b398628-7d44-4c2a-a693-dc5d63823cee",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2031\n      },\n      \"accountNumber\": \"5112345112345114\"\n    }\n  },\n  \"amount\": 25000,\n  \"currency\": \"EUR\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationType\": \"DEFAULT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "818584b5-8277-4a43-98fe-018a49eebb06",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2031\n      },\n      \"accountNumber\": \"5112345112345114\"\n    }\n  },\n  \"amount\": 25000,\n  \"currency\": \"EUR\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationType\": \"DEFAULT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "730e0eb5-19a0-49dd-8d49-fd5a5d19ed53",
+              "name": "Timeout",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2031\n      },\n      \"accountNumber\": \"5112345112345114\"\n    }\n  },\n  \"amount\": 25000,\n  \"currency\": \"EUR\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"threeDSMethodMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationType\": \"DEFAULT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "92f81e16-4535-49be-a19c-951e371ad322",
+          "name": "Perform a 3DS authentication",
+          "request": {
+            "name": "Perform a 3DS authentication",
+            "description": {
+              "content": "Perform a 3DS authentication after completing preparation",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authentications",
+                ":authentication-id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "authentication-id",
+                  "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Identifier for the merchant account",
+                "key": "merchant-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Identifies the platform used to facilitate the transaction request",
+                "key": "platform-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"threeDSRequestorAuthenticationInfo\": {\n    \"authenticationPurpose\": \"<string>\",\n    \"threeDSAuthenticationTimestamp\": \"<dateTime>\",\n    \"threeDSAuthenticationData\": \"<string>\",\n    \"threeDSChallengeType\": \"<string>\",\n    \"requestorAuthenticationMethod\": \"<string>\",\n    \"authenticationUseCase\": \"<string>\"\n  },\n  \"threeDSPurchaseInfo\": {\n    \"purchaseDate\": \"<dateTime>\",\n    \"threeDomainSecureTransactionType\": \"<string>\",\n    \"consumerInstallmentAuthorizationCount\": \"<integer>\",\n    \"recurringAuthorizationExpirationDate\": \"<string>\",\n    \"recurringAuthorizationDayCount\": \"<integer>\",\n    \"purchasedItemCount\": \"<integer>\"\n  },\n  \"messageType\": \"<string>\",\n  \"channelType\": \"<string>\",\n  \"accountType\": \"<string>\",\n  \"threeDSRequestorPriorAuthenticationInfo\": {\n    \"priorAcsTransactionId\": \"<string>\",\n    \"authenticationMethod\": \"<string>\",\n    \"authenticationTimestamp\": \"<dateTime>\"\n  },\n  \"threeDSAccountAdditionalInfo\": {\n    \"consumerAccountCreateLength\": \"<string>\",\n    \"consumerAccountCreateTimestamp\": \"<string>\",\n    \"consumerAccountUpdateLength\": \"<string>\",\n    \"consumerAccountUpdateTimestamp\": \"<string>\",\n    \"consumerAccountPasswordUpdateTimestamp\": \"<date>\",\n    \"consumerAccountPasswordChangeLength\": \"<string>\",\n    \"consumerAccountShippingAddressLength\": \"<string>\",\n    \"consumerAccountFirstShippingDate\": \"<date>\",\n    \"twentyFourHoursTransactionCount\": \"<integer>\",\n    \"previousYearTransactionCount\": \"<integer>\",\n    \"consumerAccount24HoursAddCardCount\": \"<integer>\",\n    \"sixMonthTransactionCount\": \"<integer>\",\n    \"consumerAccountSuspiciousActivityIndicator\": \"<boolean>\",\n    \"consumerAccountShipNameIdenticalIndicator\": \"<boolean>\",\n    \"consumerPaymentAccountLength\": \"<string>\",\n    \"consumerPaymentAccountEnrollmentDate\": \"<string>\",\n    \"consumerAccountAddressIdenticalIndicator\": \"<boolean>\",\n    \"accountHolderReferenceId\": \"<string>\"\n  },\n  \"threeDSPurchaseRisk\": {\n    \"shipmentType\": \"<string>\",\n    \"deliveryTimeframe\": \"<string>\",\n    \"orderEmailAddress\": \"<string>\",\n    \"productRepurchaseIndicator\": \"<boolean>\",\n    \"productAvailabilityCode\": \"<string>\",\n    \"preOrderDate\": \"<date>\",\n    \"purchasedPrepaidCardTotalAmount\": \"<long>\",\n    \"purchasedPrepaidCardCount\": \"<integer>\",\n    \"prepaidCardCurrency\": \"<string>\",\n    \"requestorEstimatedTransactionFraudRiskScore\": \"<string>\"\n  },\n  \"browserInfo\": {\n    \"browserAcceptHeader\": \"<string>\",\n    \"deviceIPAddress\": \"<string>\",\n    \"browserLanguage\": \"<string>\",\n    \"browserColorDepth\": \"<string>\",\n    \"browserScreenHeight\": \"<string>\",\n    \"browserScreenWidth\": \"<string>\",\n    \"deviceLocalTimeZone\": \"<string>\",\n    \"browserUserAgent\": \"<string>\",\n    \"challengeWindowSize\": \"<string>\",\n    \"javaEnabled\": \"<boolean>\",\n    \"javaScriptEnabled\": \"<boolean>\"\n  },\n  \"threeDSMessageExtensions\": [\n    {\n      \"messageExtensionId\": \"<string>\",\n      \"messageExtensionName\": \"<string>\",\n      \"messageExtensionCriticality\": \"<boolean>\",\n      \"messageExtensionData\": \"<string>\"\n    },\n    {\n      \"messageExtensionId\": \"<string>\",\n      \"messageExtensionName\": \"<string>\",\n      \"messageExtensionCriticality\": \"<boolean>\",\n      \"messageExtensionData\": \"<string>\"\n    }\n  ],\n  \"threeDSChallengeMerchantNotificationUrl\": \"<string>\",\n  \"authenticationAccount\": {\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"email\": \"<string>\",\n    \"middleName\": \"<string>\",\n    \"phone\": {\n      \"phoneNumber\": \"<string>\",\n      \"countryCode\": \"<integer>\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"<string>\",\n      \"line2\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"countryCode\": \"<^[A-Za-z]*$>\",\n      \"addressTypeCode\": \"<string>\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"<string>\",\n    \"line2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"countryCode\": \"<^[A-Za-z]*$>\",\n    \"addressTypeCode\": \"<string>\"\n  },\n  \"authenticationSupportUrl\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3c417fe3-02a2-4890-8256-96d686a216c6",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelType\": \"BROWSER\",\n  \"accountType\": \"CREDIT\",\n  \"threeDSRequestorAuthenticationInfo\": {\n    \"threeDSAuthenticationTimestamp\": \"2023-08-21T15:12:12Z\",\n    \"threeDSChallengeType\": \"NO_CHALLENGE\",\n    \"authenticationPurpose\": \"PAYMENT_TRANSACTION\"\n  },\n  \"threeDSPurchaseInfo\": {\n    \"purchaseDate\": \"2023-08-21T15:12:12Z\",\n    \"threeDomainSecureTransactionType\": \"GOODS_SERVICES\"\n  },\n  \"browserInfo\": {\n    \"browserAcceptHeader\": \"application/json\",\n    \"deviceIPAddress\": \"192.168.1.11\",\n    \"browserLanguage\": \"EN\",\n    \"browserColorDepth\": \"8\",\n    \"browserScreenHeight\": \"480\",\n    \"browserScreenWidth\": \"640\",\n    \"deviceLocalTimeZone\": \"1\",\n    \"browserUserAgent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\",\n    \"javaEnabled\": true,\n    \"javaScriptEnabled\": true\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"authenticationSupportUrl\": \"https://merchantsupporturl.com\",\n  \"messageType\": \"PAYMENT_AUTHENTICATION\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"10cc0270-7bed-11e9-a188-1763956dd7f6\",\n  \"authenticationId\": \"string\",\n  \"responseCode\": \"st\",\n  \"responseStatus\": \"ERROR\",\n  \"responseMessage\": \"string\",\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"accountNumber\": \"<string>\",\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2020\n      },\n      \"maskedAccountNumber\": \"123456XXXXXX9876\",\n      \"accountNumberType\": \"<string>\",\n      \"cardTypeName\": \"VISA\",\n      \"cardType\": \"VI\",\n      \"paymentTokens\": [\n        {\n          \"tokenProvider\": \"WALLET\",\n          \"tokenNumber\": \"string\",\n          \"responseStatus\": \"SUCCESS\",\n          \"tokenServiceResponseMessage\": \"string\",\n          \"tokenServiceResponseCode\": \"string\"\n        },\n        {\n          \"tokenProvider\": \"SAFETECH\",\n          \"tokenNumber\": \"string\",\n          \"responseStatus\": \"SUCCESS\",\n          \"tokenServiceResponseMessage\": \"string\",\n          \"tokenServiceResponseCode\": \"string\"\n        }\n      ],\n      \"cvv\": \"<string>\",\n      \"encryptionIntegrityCheck\": \"<string>\"\n    },\n    \"consumerProfile\": {\n      \"consumerProfileId\": \"<string>\",\n      \"paymentMethodId\": \"<string>\"\n    }\n  },\n  \"authenticationResult\": {\n    \"threeDomainSecureExemption\": {\n      \"authenticationExemptionReason\": \"NOT_EXEMPTED\",\n      \"authenticationStatusReasonText\": \"string\",\n      \"updateTimestamp\": \"string\"\n    },\n    \"threeDomainSecureCreation\": {\n      \"authenticationStatusReasonText\": \"string\",\n      \"updateTimestamp\": \"string\",\n      \"threeDSMethodUrl\": \"string\",\n      \"threeDSVersion\": \"string\",\n      \"threeDSMethodDataForm\": \"eyJ0aHJlZURTTWV0aG9kTm90aWZpY2F0aW9uVVJMIjoiaHR0cDovL3d3dy4zZHMuY29tL25vdGlmaWNhdGlvbi11cmwiLCJ0aHJlZURTU2VydmVyVHJhbnNJRCI6IjhhODgwZGMwLWQyZDItNDA2Ny1iY2IxLWIwOGQxNjkwYjI2ZSJ9\"\n    },\n    \"threeDomainSecureChallenge\": {\n      \"authenticationStatusReasonText\": \"string\",\n      \"threeDSTransactionStatus\": \"R\",\n      \"updateTimestamp\": \"string\",\n      \"challengeWindowSize\": \"<string>\",\n      \"threeDSChallengeRequest\": \"string\",\n      \"threeDSMessageExtensions\": [\n        {\n          \"messageExtensionId\": \"<string>\",\n          \"messageExtensionName\": \"<string>\",\n          \"messageExtensionCriticality\": \"<boolean>\",\n          \"messageExtensionData\": \"<string>\"\n        },\n        {\n          \"messageExtensionId\": \"<string>\",\n          \"messageExtensionName\": \"<string>\",\n          \"messageExtensionCriticality\": \"<boolean>\",\n          \"messageExtensionData\": \"<string>\"\n        }\n      ],\n      \"threeDSAcsUrl\": \"string\"\n    },\n    \"threeDomainSecureCompletion\": {\n      \"authenticationStatusReasonText\": \"string\",\n      \"threeDSTransactionStatus\": \"E\",\n      \"threeDSTransactionStatusReasonText\": \"string\",\n      \"updateTimestamp\": \"string\",\n      \"threeDSDirectoryServerTransactionId\": \"string\",\n      \"threeDSVersion\": \"string\",\n      \"authenticationValue\": \"string\",\n      \"electronicCommerceIndicator\": \"05\",\n      \"threeDSAuthenticationValue\": \"string\",\n      \"challengeAuthenticationMethod\": \"OOB_LOGIN\",\n      \"challengeAuthenticationType\": \"STATIC\",\n      \"acsTransactionId\": \"string\",\n      \"issuerAssignedAuthenticationExemption\": \"RECURRING_PAYMENT\",\n      \"issuerAssignedAuthenticationExemptionEncoded\": \"stri\",\n      \"issuerAssignedAuthenticationFraudScore\": \"string\",\n      \"authenticationValueCalculationMethod\": \"2\",\n      \"threeDSMessageExtensions\": [\n        {\n          \"messageExtensionId\": \"<string>\",\n          \"messageExtensionName\": \"<string>\",\n          \"messageExtensionCriticality\": \"<boolean>\",\n          \"messageExtensionData\": \"<string>\"\n        },\n        {\n          \"messageExtensionId\": \"<string>\",\n          \"messageExtensionName\": \"<string>\",\n          \"messageExtensionCriticality\": \"<boolean>\",\n          \"messageExtensionData\": \"<string>\"\n        }\n      ],\n      \"threeDSTransactionStatusReasonCode\": \"01\"\n    },\n    \"threeDSServerTransactionId\": \"string\",\n    \"threeDSTransactionId\": \"8a880dc0-d2d2-4067-bcb1-b08d1690b26e\"\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"string\",\n  \"authenticationType\": \"<string>\",\n  \"threeDSSchemeId\": \"UnionPay\",\n  \"softMerchant\": {\n    \"name\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"email\": \"<string>\",\n    \"url\": \"<string>\",\n    \"address\": {\n      \"line1\": \"123 Some Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"99999\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"<string>\"\n    },\n    \"merchantPurchaseDescription\": \"<string>\",\n    \"visaMerchantVerificationValueId\": \"<string>\",\n    \"masterCardMerchantVerificationValueId\": \"<string>\",\n    \"merchantIncorporationStatus\": \"<string>\",\n    \"foreignMerchantIndicator\": \"<boolean>\",\n    \"isMerchantVerificationValueAccepted\": false,\n    \"foreignMerchantAmount\": \"<long>\",\n    \"visaEnablerVerificationValueIdentifier\": \"<string>\"\n  },\n  \"merchantCategoryCode\": \"4819\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "78238f2b-6f9c-4f7e-b42c-402fc7c43ae1",
+              "name": "Badly formatted request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelType\": \"BROWSER\",\n  \"accountType\": \"CREDIT\",\n  \"threeDSRequestorAuthenticationInfo\": {\n    \"threeDSAuthenticationTimestamp\": \"2023-08-21T15:12:12Z\",\n    \"threeDSChallengeType\": \"NO_CHALLENGE\",\n    \"authenticationPurpose\": \"PAYMENT_TRANSACTION\"\n  },\n  \"threeDSPurchaseInfo\": {\n    \"purchaseDate\": \"2023-08-21T15:12:12Z\",\n    \"threeDomainSecureTransactionType\": \"GOODS_SERVICES\"\n  },\n  \"browserInfo\": {\n    \"browserAcceptHeader\": \"application/json\",\n    \"deviceIPAddress\": \"192.168.1.11\",\n    \"browserLanguage\": \"EN\",\n    \"browserColorDepth\": \"8\",\n    \"browserScreenHeight\": \"480\",\n    \"browserScreenWidth\": \"640\",\n    \"deviceLocalTimeZone\": \"1\",\n    \"browserUserAgent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\",\n    \"javaEnabled\": true,\n    \"javaScriptEnabled\": true\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"authenticationSupportUrl\": \"https://merchantsupporturl.com\",\n  \"messageType\": \"PAYMENT_AUTHENTICATION\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31b4250b-ccdf-4470-97bb-3af56fdb9171",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelType\": \"BROWSER\",\n  \"accountType\": \"CREDIT\",\n  \"threeDSRequestorAuthenticationInfo\": {\n    \"threeDSAuthenticationTimestamp\": \"2023-08-21T15:12:12Z\",\n    \"threeDSChallengeType\": \"NO_CHALLENGE\",\n    \"authenticationPurpose\": \"PAYMENT_TRANSACTION\"\n  },\n  \"threeDSPurchaseInfo\": {\n    \"purchaseDate\": \"2023-08-21T15:12:12Z\",\n    \"threeDomainSecureTransactionType\": \"GOODS_SERVICES\"\n  },\n  \"browserInfo\": {\n    \"browserAcceptHeader\": \"application/json\",\n    \"deviceIPAddress\": \"192.168.1.11\",\n    \"browserLanguage\": \"EN\",\n    \"browserColorDepth\": \"8\",\n    \"browserScreenHeight\": \"480\",\n    \"browserScreenWidth\": \"640\",\n    \"deviceLocalTimeZone\": \"1\",\n    \"browserUserAgent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\",\n    \"javaEnabled\": true,\n    \"javaScriptEnabled\": true\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"authenticationSupportUrl\": \"https://merchantsupporturl.com\",\n  \"messageType\": \"PAYMENT_AUTHENTICATION\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "021861c2-16b4-4f82-9e09-5b262b7eead6",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelType\": \"BROWSER\",\n  \"accountType\": \"CREDIT\",\n  \"threeDSRequestorAuthenticationInfo\": {\n    \"threeDSAuthenticationTimestamp\": \"2023-08-21T15:12:12Z\",\n    \"threeDSChallengeType\": \"NO_CHALLENGE\",\n    \"authenticationPurpose\": \"PAYMENT_TRANSACTION\"\n  },\n  \"threeDSPurchaseInfo\": {\n    \"purchaseDate\": \"2023-08-21T15:12:12Z\",\n    \"threeDomainSecureTransactionType\": \"GOODS_SERVICES\"\n  },\n  \"browserInfo\": {\n    \"browserAcceptHeader\": \"application/json\",\n    \"deviceIPAddress\": \"192.168.1.11\",\n    \"browserLanguage\": \"EN\",\n    \"browserColorDepth\": \"8\",\n    \"browserScreenHeight\": \"480\",\n    \"browserScreenWidth\": \"640\",\n    \"deviceLocalTimeZone\": \"1\",\n    \"browserUserAgent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\",\n    \"javaEnabled\": true,\n    \"javaScriptEnabled\": true\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"authenticationSupportUrl\": \"https://merchantsupporturl.com\",\n  \"messageType\": \"PAYMENT_AUTHENTICATION\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4a3365eb-cffd-4bf3-ba40-422e7575d36f",
+              "name": "Precondition failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelType\": \"BROWSER\",\n  \"accountType\": \"CREDIT\",\n  \"threeDSRequestorAuthenticationInfo\": {\n    \"threeDSAuthenticationTimestamp\": \"2023-08-21T15:12:12Z\",\n    \"threeDSChallengeType\": \"NO_CHALLENGE\",\n    \"authenticationPurpose\": \"PAYMENT_TRANSACTION\"\n  },\n  \"threeDSPurchaseInfo\": {\n    \"purchaseDate\": \"2023-08-21T15:12:12Z\",\n    \"threeDomainSecureTransactionType\": \"GOODS_SERVICES\"\n  },\n  \"browserInfo\": {\n    \"browserAcceptHeader\": \"application/json\",\n    \"deviceIPAddress\": \"192.168.1.11\",\n    \"browserLanguage\": \"EN\",\n    \"browserColorDepth\": \"8\",\n    \"browserScreenHeight\": \"480\",\n    \"browserScreenWidth\": \"640\",\n    \"deviceLocalTimeZone\": \"1\",\n    \"browserUserAgent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\",\n    \"javaEnabled\": true,\n    \"javaScriptEnabled\": true\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"authenticationSupportUrl\": \"https://merchantsupporturl.com\",\n  \"messageType\": \"PAYMENT_AUTHENTICATION\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8af543ee-96e5-4323-9fbd-f1cf2bfc4c29",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelType\": \"BROWSER\",\n  \"accountType\": \"CREDIT\",\n  \"threeDSRequestorAuthenticationInfo\": {\n    \"threeDSAuthenticationTimestamp\": \"2023-08-21T15:12:12Z\",\n    \"threeDSChallengeType\": \"NO_CHALLENGE\",\n    \"authenticationPurpose\": \"PAYMENT_TRANSACTION\"\n  },\n  \"threeDSPurchaseInfo\": {\n    \"purchaseDate\": \"2023-08-21T15:12:12Z\",\n    \"threeDomainSecureTransactionType\": \"GOODS_SERVICES\"\n  },\n  \"browserInfo\": {\n    \"browserAcceptHeader\": \"application/json\",\n    \"deviceIPAddress\": \"192.168.1.11\",\n    \"browserLanguage\": \"EN\",\n    \"browserColorDepth\": \"8\",\n    \"browserScreenHeight\": \"480\",\n    \"browserScreenWidth\": \"640\",\n    \"deviceLocalTimeZone\": \"1\",\n    \"browserUserAgent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\",\n    \"javaEnabled\": true,\n    \"javaScriptEnabled\": true\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"authenticationSupportUrl\": \"https://merchantsupporturl.com\",\n  \"messageType\": \"PAYMENT_AUTHENTICATION\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e340a313-a188-4444-9e3b-0e800d755978",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelType\": \"BROWSER\",\n  \"accountType\": \"CREDIT\",\n  \"threeDSRequestorAuthenticationInfo\": {\n    \"threeDSAuthenticationTimestamp\": \"2023-08-21T15:12:12Z\",\n    \"threeDSChallengeType\": \"NO_CHALLENGE\",\n    \"authenticationPurpose\": \"PAYMENT_TRANSACTION\"\n  },\n  \"threeDSPurchaseInfo\": {\n    \"purchaseDate\": \"2023-08-21T15:12:12Z\",\n    \"threeDomainSecureTransactionType\": \"GOODS_SERVICES\"\n  },\n  \"browserInfo\": {\n    \"browserAcceptHeader\": \"application/json\",\n    \"deviceIPAddress\": \"192.168.1.11\",\n    \"browserLanguage\": \"EN\",\n    \"browserColorDepth\": \"8\",\n    \"browserScreenHeight\": \"480\",\n    \"browserScreenWidth\": \"640\",\n    \"deviceLocalTimeZone\": \"1\",\n    \"browserUserAgent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\",\n    \"javaEnabled\": true,\n    \"javaScriptEnabled\": true\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"authenticationSupportUrl\": \"https://merchantsupporturl.com\",\n  \"messageType\": \"PAYMENT_AUTHENTICATION\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "785d3bce-600a-4a66-b5e5-7c7f18ceb6b5",
+              "name": "Timeout",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"channelType\": \"BROWSER\",\n  \"accountType\": \"CREDIT\",\n  \"threeDSRequestorAuthenticationInfo\": {\n    \"threeDSAuthenticationTimestamp\": \"2023-08-21T15:12:12Z\",\n    \"threeDSChallengeType\": \"NO_CHALLENGE\",\n    \"authenticationPurpose\": \"PAYMENT_TRANSACTION\"\n  },\n  \"threeDSPurchaseInfo\": {\n    \"purchaseDate\": \"2023-08-21T15:12:12Z\",\n    \"threeDomainSecureTransactionType\": \"GOODS_SERVICES\"\n  },\n  \"browserInfo\": {\n    \"browserAcceptHeader\": \"application/json\",\n    \"deviceIPAddress\": \"192.168.1.11\",\n    \"browserLanguage\": \"EN\",\n    \"browserColorDepth\": \"8\",\n    \"browserScreenHeight\": \"480\",\n    \"browserScreenWidth\": \"640\",\n    \"deviceLocalTimeZone\": \"1\",\n    \"browserUserAgent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\",\n    \"javaEnabled\": true,\n    \"javaScriptEnabled\": true\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"https://returnurl.com\",\n  \"authenticationAccount\": {\n    \"email\": \"example@example.com\",\n    \"firstName\": \"FirstName\",\n    \"lastName\": \"LastName\",\n    \"middleName\": \"MiddleName\",\n    \"phone\": {\n      \"countryCode\": 1,\n      \"phoneNumber\": \"8131112222\"\n    },\n    \"billingAddress\": {\n      \"line1\": \"123 Main Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"33602\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"Doing Business As Address\"\n    }\n  },\n  \"shippingAddress\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 3b\",\n    \"city\": \"Tampa\",\n    \"state\": \"FL\",\n    \"postalCode\": \"33602\",\n    \"countryCode\": \"USA\",\n    \"addressTypeCode\": \"Doing Business As Address\"\n  },\n  \"authenticationSupportUrl\": \"https://merchantsupporturl.com\",\n  \"messageType\": \"PAYMENT_AUTHENTICATION\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9c79c990-f3b6-495d-b589-3bc37e12a7de",
+          "name": "Retrieve an authentication request",
+          "request": {
+            "name": "Retrieve an authentication request",
+            "description": {
+              "content": "Retrieve an authentication request",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authentications",
+                ":authentication-id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "authentication-id",
+                  "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Identifier for the merchant account",
+                "key": "merchant-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Identifies the platform used to facilitate the transaction request",
+                "key": "platform-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6bdce129-5a62-4882-8570-af4c8384e126",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"10cc0270-7bed-11e9-a188-1763956dd7f6\",\n  \"authenticationId\": \"string\",\n  \"responseCode\": \"st\",\n  \"responseStatus\": \"ERROR\",\n  \"responseMessage\": \"string\",\n  \"authenticationPaymentMethodType\": {\n    \"card\": {\n      \"accountNumber\": \"<string>\",\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2020\n      },\n      \"maskedAccountNumber\": \"123456XXXXXX9876\",\n      \"accountNumberType\": \"<string>\",\n      \"cardTypeName\": \"VISA\",\n      \"cardType\": \"VI\",\n      \"paymentTokens\": [\n        {\n          \"tokenProvider\": \"WALLET\",\n          \"tokenNumber\": \"string\",\n          \"responseStatus\": \"SUCCESS\",\n          \"tokenServiceResponseMessage\": \"string\",\n          \"tokenServiceResponseCode\": \"string\"\n        },\n        {\n          \"tokenProvider\": \"SAFETECH\",\n          \"tokenNumber\": \"string\",\n          \"responseStatus\": \"SUCCESS\",\n          \"tokenServiceResponseMessage\": \"string\",\n          \"tokenServiceResponseCode\": \"string\"\n        }\n      ],\n      \"cvv\": \"<string>\",\n      \"encryptionIntegrityCheck\": \"<string>\"\n    },\n    \"consumerProfile\": {\n      \"consumerProfileId\": \"<string>\",\n      \"paymentMethodId\": \"<string>\"\n    }\n  },\n  \"authenticationResult\": {\n    \"threeDomainSecureExemption\": {\n      \"authenticationExemptionReason\": \"NOT_EXEMPTED\",\n      \"authenticationStatusReasonText\": \"string\",\n      \"updateTimestamp\": \"string\"\n    },\n    \"threeDomainSecureCreation\": {\n      \"authenticationStatusReasonText\": \"string\",\n      \"updateTimestamp\": \"string\",\n      \"threeDSMethodUrl\": \"string\",\n      \"threeDSVersion\": \"string\",\n      \"threeDSMethodDataForm\": \"eyJ0aHJlZURTTWV0aG9kTm90aWZpY2F0aW9uVVJMIjoiaHR0cDovL3d3dy4zZHMuY29tL25vdGlmaWNhdGlvbi11cmwiLCJ0aHJlZURTU2VydmVyVHJhbnNJRCI6IjhhODgwZGMwLWQyZDItNDA2Ny1iY2IxLWIwOGQxNjkwYjI2ZSJ9\"\n    },\n    \"threeDomainSecureChallenge\": {\n      \"authenticationStatusReasonText\": \"string\",\n      \"threeDSTransactionStatus\": \"R\",\n      \"updateTimestamp\": \"string\",\n      \"challengeWindowSize\": \"<string>\",\n      \"threeDSChallengeRequest\": \"string\",\n      \"threeDSMessageExtensions\": [\n        {\n          \"messageExtensionId\": \"<string>\",\n          \"messageExtensionName\": \"<string>\",\n          \"messageExtensionCriticality\": \"<boolean>\",\n          \"messageExtensionData\": \"<string>\"\n        },\n        {\n          \"messageExtensionId\": \"<string>\",\n          \"messageExtensionName\": \"<string>\",\n          \"messageExtensionCriticality\": \"<boolean>\",\n          \"messageExtensionData\": \"<string>\"\n        }\n      ],\n      \"threeDSAcsUrl\": \"string\"\n    },\n    \"threeDomainSecureCompletion\": {\n      \"authenticationStatusReasonText\": \"string\",\n      \"threeDSTransactionStatus\": \"E\",\n      \"threeDSTransactionStatusReasonText\": \"string\",\n      \"updateTimestamp\": \"string\",\n      \"threeDSDirectoryServerTransactionId\": \"string\",\n      \"threeDSVersion\": \"string\",\n      \"authenticationValue\": \"string\",\n      \"electronicCommerceIndicator\": \"05\",\n      \"threeDSAuthenticationValue\": \"string\",\n      \"challengeAuthenticationMethod\": \"OOB_LOGIN\",\n      \"challengeAuthenticationType\": \"STATIC\",\n      \"acsTransactionId\": \"string\",\n      \"issuerAssignedAuthenticationExemption\": \"RECURRING_PAYMENT\",\n      \"issuerAssignedAuthenticationExemptionEncoded\": \"stri\",\n      \"issuerAssignedAuthenticationFraudScore\": \"string\",\n      \"authenticationValueCalculationMethod\": \"2\",\n      \"threeDSMessageExtensions\": [\n        {\n          \"messageExtensionId\": \"<string>\",\n          \"messageExtensionName\": \"<string>\",\n          \"messageExtensionCriticality\": \"<boolean>\",\n          \"messageExtensionData\": \"<string>\"\n        },\n        {\n          \"messageExtensionId\": \"<string>\",\n          \"messageExtensionName\": \"<string>\",\n          \"messageExtensionCriticality\": \"<boolean>\",\n          \"messageExtensionData\": \"<string>\"\n        }\n      ],\n      \"threeDSTransactionStatusReasonCode\": \"01\"\n    },\n    \"threeDSServerTransactionId\": \"string\",\n    \"threeDSTransactionId\": \"8a880dc0-d2d2-4067-bcb1-b08d1690b26e\"\n  },\n  \"threeDSChallengeMerchantNotificationUrl\": \"string\",\n  \"authenticationType\": \"<string>\",\n  \"threeDSSchemeId\": \"UnionPay\",\n  \"softMerchant\": {\n    \"name\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"email\": \"<string>\",\n    \"url\": \"<string>\",\n    \"address\": {\n      \"line1\": \"123 Some Street\",\n      \"line2\": \"Apartment 3b\",\n      \"city\": \"Tampa\",\n      \"state\": \"FL\",\n      \"postalCode\": \"99999\",\n      \"countryCode\": \"USA\",\n      \"addressTypeCode\": \"<string>\"\n    },\n    \"merchantPurchaseDescription\": \"<string>\",\n    \"visaMerchantVerificationValueId\": \"<string>\",\n    \"masterCardMerchantVerificationValueId\": \"<string>\",\n    \"merchantIncorporationStatus\": \"<string>\",\n    \"foreignMerchantIndicator\": \"<boolean>\",\n    \"isMerchantVerificationValueAccepted\": false,\n    \"foreignMerchantAmount\": \"<long>\",\n    \"visaEnablerVerificationValueIdentifier\": \"<string>\"\n  },\n  \"merchantCategoryCode\": \"4819\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7fee667c-3b7e-47e1-8e18-985dc1b6d29e",
+              "name": "Badly formatted request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3f4ff6bb-59b8-4e45-b347-f87cb30374a9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "514cd612-d40a-441c-bfb8-51bd039c71b6",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9261908-b5f4-43ad-b090-ca45eb57a6c8",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "541d0dd5-b00c-4706-adc6-da097d4815e5",
+              "name": "Precondition failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8536183-29b1-4e4d-853a-081df02e1d6d",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d69bfebc-86d3-4a96-85e2-3e03bd17be2d",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "026d0ccc-22a5-401a-90eb-2166db6bbd45",
+              "name": "Timeout",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authentications",
+                    ":authentication-id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authentication-id",
+                      "description": "(Required) Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "252f0171-9512-4f54-94e5-5c046dc55eab"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifies the platform used to facilitate the transaction request",
+                    "key": "platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"DENIED\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ],\n  \"information\": {\n    \"code\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ms.payments.jpmorgan.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3fc17cf7-d7da-4098-be20-de72abc4d8c6",
+    "name": "3-D Secure API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Standalone authentication API for processing consumer payments\n\nContact Support:\n Name: 3-D Secure API Support\n Email: ms.pit.team@jpmorgan.com",
+      "type": "text/plain"
+    }
+  }
+}

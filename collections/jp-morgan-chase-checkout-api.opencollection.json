@@ -1,0 +1,400 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Checkout API",
+    "version": "1.9.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health Check",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Validate the health of the service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/checkout/healthcheck"
+          },
+          "docs": "Healthcheck endpoint to validate the health of the service."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Checkout Intent",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Set up checkout intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/checkout/intent",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              },
+              {
+                "name": "segmentId",
+                "value": ""
+              },
+              {
+                "name": "platformId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a Checkout Session JWT to be used by follow-up requests to perform checkout operations."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Merchant Notification",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all notifications for a given time period",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/checkout/notifications",
+            "headers": [
+              {
+                "name": "MERCHANTID",
+                "value": ""
+              },
+              {
+                "name": "platformId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "periodStart",
+                "value": "",
+                "type": "query",
+                "description": "The notification period start. Should be less than period_ends value. Value must be within the last 30 days."
+              },
+              {
+                "name": "periodEnd",
+                "value": "",
+                "type": "query",
+                "description": "The notification period end. Should be greater than period_starts value. Value must be within the last 30 days."
+              },
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "query",
+                "description": "Allows merchants to query notifications by messageId."
+              },
+              {
+                "name": "notificationType",
+                "value": "",
+                "type": "query",
+                "description": "Allows merchants to query notifications by notification type."
+              },
+              {
+                "name": "hideAcknowledged",
+                "value": "",
+                "type": "query",
+                "description": "Allows merchants to filter out acknowledged notifications."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of notifications to return. The service may return fewer than this value.If unspecified, at most 50 notifications will be returned.The maximum value is 1000; values above 1000 will be corrected to 1000."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Token can be empty/left blank for initial request. Subsequent requests to get follow-up pages will need this value populated. This value can be obtained from results of the initial request."
+              },
+              {
+                "name": "merchantOrderNumber",
+                "value": "",
+                "type": "query",
+                "description": "A unique identifier assigned by the merchant or on behalf of the merchant for the intention to purchase goods and/or services. The merchant order provides the merchant a reference to the prices, quantity and description of goods and/or services to be delivered for all transactions included in the sale."
+              }
+            ]
+          },
+          "docs": "This endpoint should be used to list all notifications for a given time period"
+        },
+        {
+          "info": {
+            "name": "Acknowledge notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/checkout/notifications/ack",
+            "headers": [
+              {
+                "name": "MERCHANTID",
+                "value": ""
+              },
+              {
+                "name": "platformId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint should be used to acknowledge the receipt of notifications"
+        },
+        {
+          "info": {
+            "name": "Receive notifications for customer transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/checkout/notifications/receive",
+            "headers": [
+              {
+                "name": "MERCHANTID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "maxNumberMessages",
+                "value": "",
+                "type": "query",
+                "description": "Limits the number of messages to the specified value."
+              },
+              {
+                "name": "timeoutMs",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the timeout in milliseconds."
+              },
+              {
+                "name": "redeliveryDelaySeconds",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the duration in seconds that the messages received in the response will be hidden for, before it can be retrieved again."
+              },
+              {
+                "name": "autoAck",
+                "value": "",
+                "type": "query",
+                "description": "if auto_ack is true, message will be acked automatically when messages are read. Default value is false."
+              }
+            ]
+          },
+          "docs": "This endpoint should be used to get latest notifications for the transactions processed"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Merchant Catalog",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create product in Merchant catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/catalog/products",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a product to be used in Payment Links."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Links",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns the list of already created links",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/payment-links",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "platformId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of links requested."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Token can be empty/left blank for initial request. Subsequent requests to get follow-up pages will need this value populated. This value can be obtained from results of the initial request."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use <i>filter</i> to return payment links matching one or more comparison expressions. Each expression must be in the query string form:\n<br>\n&lt;field&gt;&lt;operator&gt;&lt;value&gt;\n<br>\nWhen multiple expressions are provided, results include payment links that satisfy the combined <i>filter</i> criteria.\n<table>\n   <tr>\n      <th>Field</th>\n      <th>Operators</th>\n      <th>Field/Values</th>\n  </tr>\n  <tr>\n      <td>status</td>\n      <td>\t= and != </td>\n      <td>link_status_active, link_status_paid, link_status_inactive, link_status_expired</td>\n  </tr>        \n<tr>\n      <td>order_id</td>\n      <td>\t= </td>\n      <td>merchantOrderNumber</td>\n</tr>\n<tr>\n      <td>amount</td>\n      <td>\t=, !=, &gt;, &gt;=, &lt;, &lt;= </td>\n      <td>totalTransactionAmount</td>\n</tr>  \n<tr>\n      <td>partial_paid</td>\n      <td>\t= </td>\n      <td> true, false </td>\n</tr>\n<tr>\n      <td>merchant_portal_username</td>\n      <td>\t= </td>\n      <td> merchantPortalUsername </td>\n</tr>\n</table>\n"
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "An expression which specifies field and order in which Payment Links should be listed."
+              }
+            ]
+          },
+          "docs": "This endpoint returns list of links, paged."
+        },
+        {
+          "info": {
+            "name": "Create a sharable payment link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/payment-links",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "platformId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a payment link to be shared with consumers."
+        },
+        {
+          "info": {
+            "name": "Retrieves a payment link",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/payment-links/:linkId",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "platformId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "linkId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the link to be retrieved"
+              }
+            ]
+          },
+          "docs": "This endpoint is used to fetch the payment link with given id."
+        },
+        {
+          "info": {
+            "name": "Updates a payment link",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://merchant-api.checkout.merchant.jpmorgan.com/v1/payment-links/:linkId",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "platformId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "linkId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the link to be updated"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "New status for the link. Can be LINK_STATUS_INACTIVE."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint is used to deactivate a payment link."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

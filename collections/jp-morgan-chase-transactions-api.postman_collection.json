@@ -1,0 +1,1761 @@
+{
+  "item": [
+    {
+      "id": "4672400f-da78-4e09-8dca-1170b50d5fe5",
+      "name": "Transactions",
+      "description": {
+        "content": "Initiate and track the movement of funds, including payments.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3611a49f-4f54-4351-ad32-e9737b82479f",
+          "name": "List transactions",
+          "request": {
+            "name": "List transactions",
+            "description": {
+              "content": "Lists transactions for a specific client, which can be filtered using optional parameters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Filters for types of transaction. Use a comma separated list to send the transaction types you require."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Filters for types of transaction. Use a comma separated list to send the transaction types you require."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filters by comma separated list of statuses for transactions."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filters by comma separated list of statuses for transactions."
+                },
+                {
+                  "disabled": false,
+                  "key": "accountId",
+                  "value": "<string>",
+                  "description": "Filters by the Embedded Finance account id connected to the transaction."
+                },
+                {
+                  "disabled": false,
+                  "key": "amountEquals",
+                  "value": "<string>",
+                  "description": "Filters by an exact amount."
+                },
+                {
+                  "disabled": false,
+                  "key": "amountGreaterThan",
+                  "value": "<string>",
+                  "description": "Filters by amounts greater than a specified value."
+                },
+                {
+                  "disabled": false,
+                  "key": "amountLessThan",
+                  "value": "<string>",
+                  "description": "Filters by amounts less than a specified value."
+                },
+                {
+                  "disabled": false,
+                  "key": "dateEquals",
+                  "value": "<string>",
+                  "description": "Filters transactions by an exact date."
+                },
+                {
+                  "disabled": false,
+                  "key": "dateGreaterThan",
+                  "value": "<string>",
+                  "description": "Filters for transactions made after this payment date."
+                },
+                {
+                  "disabled": false,
+                  "key": "dateLessThan",
+                  "value": "<string>",
+                  "description": "Filters for transactions made before this payment date."
+                },
+                {
+                  "disabled": false,
+                  "key": "dateTimeGreaterThan",
+                  "value": "<dateTime>",
+                  "description": "Filters for transactions created after this date and time."
+                },
+                {
+                  "disabled": false,
+                  "key": "dateTimeLessThan",
+                  "value": "<dateTime>",
+                  "description": "Filters for transactions created before this date and time."
+                },
+                {
+                  "disabled": false,
+                  "key": "recipientId",
+                  "value": "<string>",
+                  "description": "Filters for transactions from/to this recipientId."
+                },
+                {
+                  "disabled": false,
+                  "key": "transactionReferenceId",
+                  "value": "<string>",
+                  "description": "Filters for a transaction that matches a specific transaction reference ID provided by the client."
+                },
+                {
+                  "disabled": false,
+                  "key": "clientId",
+                  "value": "<string>",
+                  "description": "Unique Client identifier"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "JWT Client token",
+                "key": "token",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cc5f4ae8-a046-4826-8ad1-0c8677c98f41",
+              "name": "Ok.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "ACH"
+                    },
+                    {
+                      "key": "status",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "accountId",
+                      "value": "ae86b765e14741c5a44acc570af517ab"
+                    },
+                    {
+                      "key": "amountEquals",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountGreaterThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountLessThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "dateEquals",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateGreaterThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateLessThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateTimeGreaterThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "dateTimeLessThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "recipientId",
+                      "value": "616d93a1-ce53-4c71-b03b-02a11396db28"
+                    },
+                    {
+                      "key": "transactionReferenceId",
+                      "value": "inv-pay-1234"
+                    },
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"metadata\": {\n    \"page\": 0,\n    \"limit\": 10,\n    \"total_items\": 4\n  },\n  \"items\": [\n    {\n      \"id\": \"m6p8kqkk5hjne3\",\n      \"status\": \"COMPLETED\",\n      \"type\": \"TRANSFER\",\n      \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n      \"creditorAccountId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n      \"amount\": 3100,\n      \"currency\": \"USD\",\n      \"paymentDate\": \"2023-09-26\",\n      \"createdAt\": \"2023-09-26T15:55:49.560Z\",\n      \"transactionReferenceId\": \"39d222165fb1488c896b940321550f77\",\n      \"postingVersion\": 1,\n      \"effectiveDate\": \"2023-09-27\",\n      \"memo\": \"Invoice 123\"\n    },\n    {\n      \"id\": \"m6p8kqkk5hjn4\",\n      \"status\": \"PENDING\",\n      \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n      \"amount\": 3100,\n      \"currency\": \"USD\",\n      \"type\": \"ACH\",\n      \"paymentDate\": \"2023-10-31\",\n      \"createdAt\": \"2023-09-26T17:55:49.562Z\",\n      \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n      \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n      \"memo\": \"Memo for Transaction for 1000010400\"\n    },\n    {\n      \"id\": \"713f14e423f82a\",\n      \"status\": \"PENDING\",\n      \"type\": \"TRANSFER\",\n      \"creditorAccountId\": \"e423f82065c9486jfdf09lee09kllj\",\n      \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n      \"amount\": 3100,\n      \"currency\": \"USD\",\n      \"paymentDate\": \"2023-10-31\",\n      \"createdAt\": \"2023-09-26T17:55:49.562Z\",\n      \"transactionReferenceId\": \"5hjne3gfgD9qSA\",\n      \"memo\": \"Invoice 125\"\n    },\n    {\n      \"id\": \"WAL121QCDYYXS54\",\n      \"status\": \"PENDING\",\n      \"type\": \"TRANSFER\",\n      \"creditorAccountId\": \"71713f14e423f82065c9486ebe15bd33\",\n      \"debtorAccountId\": \"e423f82065c9486jfdf09lee09kllj\",\n      \"amount\": 3100,\n      \"currency\": \"USD\",\n      \"paymentDate\": \"2023-10-31\",\n      \"createdAt\": \"2023-09-07T17:55:49.562Z\",\n      \"transactionReferenceId\": \"oIctbxQ2pujoc8yc\",\n      \"memo\": \"Invoice 126\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "564aecba-e1ae-4f82-bcc5-03ccea8b8b20",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "ACH"
+                    },
+                    {
+                      "key": "status",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "accountId",
+                      "value": "ae86b765e14741c5a44acc570af517ab"
+                    },
+                    {
+                      "key": "amountEquals",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountGreaterThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountLessThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "dateEquals",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateGreaterThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateLessThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateTimeGreaterThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "dateTimeLessThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "recipientId",
+                      "value": "616d93a1-ce53-4c71-b03b-02a11396db28"
+                    },
+                    {
+                      "key": "transactionReferenceId",
+                      "value": "inv-pay-1234"
+                    },
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c88e318c-d1af-4f74-938e-2bc864a08531",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "ACH"
+                    },
+                    {
+                      "key": "status",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "accountId",
+                      "value": "ae86b765e14741c5a44acc570af517ab"
+                    },
+                    {
+                      "key": "amountEquals",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountGreaterThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountLessThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "dateEquals",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateGreaterThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateLessThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateTimeGreaterThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "dateTimeLessThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "recipientId",
+                      "value": "616d93a1-ce53-4c71-b03b-02a11396db28"
+                    },
+                    {
+                      "key": "transactionReferenceId",
+                      "value": "inv-pay-1234"
+                    },
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "207887d5-e993-41e9-bff1-185f33e43e44",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "ACH"
+                    },
+                    {
+                      "key": "status",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "accountId",
+                      "value": "ae86b765e14741c5a44acc570af517ab"
+                    },
+                    {
+                      "key": "amountEquals",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountGreaterThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountLessThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "dateEquals",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateGreaterThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateLessThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateTimeGreaterThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "dateTimeLessThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "recipientId",
+                      "value": "616d93a1-ce53-4c71-b03b-02a11396db28"
+                    },
+                    {
+                      "key": "transactionReferenceId",
+                      "value": "inv-pay-1234"
+                    },
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a28cbfee-fc72-4752-bbb1-ee262aa00057",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "ACH"
+                    },
+                    {
+                      "key": "status",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "accountId",
+                      "value": "ae86b765e14741c5a44acc570af517ab"
+                    },
+                    {
+                      "key": "amountEquals",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountGreaterThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountLessThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "dateEquals",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateGreaterThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateLessThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateTimeGreaterThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "dateTimeLessThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "recipientId",
+                      "value": "616d93a1-ce53-4c71-b03b-02a11396db28"
+                    },
+                    {
+                      "key": "transactionReferenceId",
+                      "value": "inv-pay-1234"
+                    },
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e2057bc-c45f-49b7-82f2-07124e6105c5",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "ACH"
+                    },
+                    {
+                      "key": "status",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "accountId",
+                      "value": "ae86b765e14741c5a44acc570af517ab"
+                    },
+                    {
+                      "key": "amountEquals",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountGreaterThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountLessThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "dateEquals",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateGreaterThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateLessThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateTimeGreaterThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "dateTimeLessThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "recipientId",
+                      "value": "616d93a1-ce53-4c71-b03b-02a11396db28"
+                    },
+                    {
+                      "key": "transactionReferenceId",
+                      "value": "inv-pay-1234"
+                    },
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51321dbe-73f3-4ff6-bc30-788a8a4091b4",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "ACH"
+                    },
+                    {
+                      "key": "status",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "accountId",
+                      "value": "ae86b765e14741c5a44acc570af517ab"
+                    },
+                    {
+                      "key": "amountEquals",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountGreaterThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "amountLessThan",
+                      "value": "100"
+                    },
+                    {
+                      "key": "dateEquals",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateGreaterThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateLessThan",
+                      "value": "2022-01-01"
+                    },
+                    {
+                      "key": "dateTimeGreaterThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "dateTimeLessThan",
+                      "value": "2022-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "recipientId",
+                      "value": "616d93a1-ce53-4c71-b03b-02a11396db28"
+                    },
+                    {
+                      "key": "transactionReferenceId",
+                      "value": "inv-pay-1234"
+                    },
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8360923f-a8c5-4f96-9955-925c4052c4da",
+          "name": "Create transaction",
+          "request": {
+            "name": "Create transaction",
+            "description": {
+              "content": "Creates a new transaction, such as a payment via ACH, Wire or Real Time Payments (RTP).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "JWT Client token",
+                "key": "token",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "503d74b2-ecdc-4751-bf31-0400c843cf9b",
+              "name": "Created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n  \"amount\": 3100,\n  \"currency\": \"USD\",\n  \"type\": \"ACH\",\n  \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n  \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n  \"memo\": \"Memo for Transaction for 1000010400\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"m6p8kqkk5hjne4\",\n  \"status\": \"PENDING\",\n  \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n  \"amount\": 3100,\n  \"currency\": \"USD\",\n  \"type\": \"ACH\",\n  \"paymentDate\": \"2023-10-31\",\n  \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n  \"createdAt\": \"2023-09-26T15:55:49.560Z\",\n  \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n  \"memo\": \"Memo for Transaction for 1000010400\",\n  \"localInstrumentCode\": \"PPD\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "152737e7-7560-48b5-b8fa-8f5a2ac9d4bb",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n  \"amount\": 3100,\n  \"currency\": \"USD\",\n  \"type\": \"ACH\",\n  \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n  \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n  \"memo\": \"Memo for Transaction for 1000010400\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "50fa5152-c937-4d43-a355-26d5c6cc9f55",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n  \"amount\": 3100,\n  \"currency\": \"USD\",\n  \"type\": \"ACH\",\n  \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n  \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n  \"memo\": \"Memo for Transaction for 1000010400\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1fe4cd0-d455-4ccf-a57b-16c7d8a27fca",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n  \"amount\": 3100,\n  \"currency\": \"USD\",\n  \"type\": \"ACH\",\n  \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n  \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n  \"memo\": \"Memo for Transaction for 1000010400\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2fdbbeb-5146-4294-a03e-d15efff75613",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n  \"amount\": 3100,\n  \"currency\": \"USD\",\n  \"type\": \"ACH\",\n  \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n  \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n  \"memo\": \"Memo for Transaction for 1000010400\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2aebd1f8-1497-42d9-bf29-59b5aad7ffa7",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n  \"amount\": 3100,\n  \"currency\": \"USD\",\n  \"type\": \"ACH\",\n  \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n  \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n  \"memo\": \"Memo for Transaction for 1000010400\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1233231b-3f2b-4807-8f38-54f32728fe68",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n  \"amount\": 3100,\n  \"currency\": \"USD\",\n  \"type\": \"ACH\",\n  \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n  \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n  \"memo\": \"Memo for Transaction for 1000010400\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "71279aa0-5ab1-4638-bb8d-614dd8b1f179",
+          "name": "Get transaction",
+          "request": {
+            "name": "Get transaction",
+            "description": {
+              "content": "Returns details for a specific transaction using its unique identifier.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transactions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique identifier for a transaction."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "JWT Client token",
+                "key": "token",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2f8fc92a-9654-43de-b6cc-9c78df229bf6",
+              "name": "Ok.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for a transaction."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"m6p8kqkk5hjne4\",\n  \"status\": \"PENDING\",\n  \"transactionReferenceId\": \"hisSuUVnakPD9qSA\",\n  \"amount\": 3100,\n  \"currency\": \"USD\",\n  \"type\": \"ACH\",\n  \"paymentDate\": \"2023-10-31\",\n  \"recipientId\": \"616d93a1-ce53-4c71-b03b-02a11396db39\",\n  \"debtorAccountId\": \"d3371713f14e423f82065c9486ebe15b\",\n  \"createdAt\": \"2023-09-26T15:55:49.560Z\",\n  \"memo\": \"Memo for Transaction for 1000010400\",\n  \"localInstrumentCode\": \"PPD\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "35a2abdf-6006-48d5-9946-b79070795948",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for a transaction."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4a19ac12-c7ae-4995-b325-9507279bb8a6",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for a transaction."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77bf66b8-d725-454b-998c-2fcad3ca1327",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for a transaction."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e6cf404-da9d-42bb-97f6-209b79bc69ee",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for a transaction."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81980bff-63e4-419a-92e4-ceaee3eaec07",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for a transaction."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "215e6fec-29d0-4df1-b033-c5451d4127d6",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for a transaction."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "JWT Client token",
+                    "key": "token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.payments.jpmorgan.com/embedded/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e5d0c456-95ac-4319-a036-0a0a381c47ee",
+    "name": "Transactions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Create, track, and manage payments, such as ACH, wire, and real-time transfers, while easily filtering and retrieving transaction details by type, status, account, or date. This lets you automate fund movement and gain real-time visibility into your payment activity, all through a secure and flexible interface.\n\nContact Support:\n Name: JPMC Technical Services Support",
+      "type": "text/plain"
+    }
+  }
+}

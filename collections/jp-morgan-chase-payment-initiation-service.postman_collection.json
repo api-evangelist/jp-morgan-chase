@@ -1,0 +1,1675 @@
+{
+  "item": [
+    {
+      "id": "52d1d7ae-8470-4b8d-b828-09a1307180e1",
+      "name": "Payments",
+      "description": {
+        "content": "Pay By Bank - Payments",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6e04859d-dff0-406d-9a5d-4319066b63f4",
+          "name": "Initiate Payments",
+          "request": {
+            "name": "Initiate Payments",
+            "description": {
+              "content": "Initiates a payment request to setup the money movement.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Client provided unique Idempotency Key.   **NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested,   or another random string to avoid collisions.*",
+                "key": "Idempotency-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentAmount\": {\n    \"value\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"paymentType\": \"<string>\",\n  \"market\": \"<string>\",\n  \"creditor\": \"<object>\",\n  \"reference\": \"<string>\",\n  \"redirectURL\": \"<uri-reference>\",\n  \"debtor\": \"<object>\",\n  \"providerName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "24b8214c-d680-4da5-b953-d91910cee893",
+              "name": "Accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.   **NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested,   or another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentAmount\": {\n    \"value\": \"100.00\",\n    \"currency\": \"GBP\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"market\": \"GB\",\n  \"redirectURL\": \"https://sites.obtest.com/sites/cib\",\n  \"debtor\": {\n    \"name\": \"Bala Thandapani\"\n  },\n  \"creditor\": {\n    \"name\": \"Newgen Media LLC\",\n    \"account\": {\n      \"accountId\": 6090887654321,\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"reference\": \"subscription - #78004300\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1b036f9c-8c84-4ce6-b1dd-5979472945a1\",\n  \"status\": \"NONE\",\n  \"statusUpdatedAt\": \"2023-08-20T13:31:25Z\",\n  \"createdAt\": \"2023-08-20T13:31:25Z\",\n  \"paymentAmount\": {\n    \"value\": \"100.00\",\n    \"currency\": \"GBP\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"market\": \"GB\",\n  \"redirectURL\": \"https://sites.obtest.com/sites/cib\",\n  \"paymentLinkURL\": \"https://paybybank.jpmorgan.com/1.0/pay/direct?client_id=9cd2e1c9527e4e18ad4756393e09cb2c&redirect_uri=https://sites.obtest.com/sites/cib&market=DE&payment_request_id=1b036f9c-8c84-4ce6-b1dd-5979472945a1\",\n  \"paymentQRCode\": \"https://paybybank.jpmorgan.com/api-proxy/api/enablement/v2/payments/qr/aHR0cHM6Ly9wYXlieWJhbmsuanBtb3JnYW4uY29tLzEuMC9wYXkvZGlyZWN0P21hcmtldD1HQiZyZWRpcmVjdF91cmk9aHR0cHM6Ly9zaXRlcy5vYnRlc3QuY29tL3NpdGVzL2NpYiZwYXltZW50X3JlcXVlc3RfaWQ9NWM0MjVjMjctMDVhNy00ODE5LWJkYjAtZGI3ZDU4Y2ZjNjYwJmxvY2FsZT1lbl9VUyZjbGllbnRfaWQ9M2QwZGNhN2RhZGE1NGUxOWI1YWYwMjRlZjk3Nzc0Mzg=\",\n  \"debtor\": {\n    \"name\": \"Bala Thandapani\"\n  },\n  \"creditor\": {\n    \"name\": \"Newgen Media LLC\",\n    \"account\": {\n      \"accountId\": \"11223387654321\",\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"reference\": \"subscription - #78004300\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6bd422e-797e-4761-a10a-196a32f204c2",
+              "name": "Bad Request. \n              \n**List of Error codes and Usage explanations.**\n              \n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency Check Failure                      |\n| 10199           | Other                                          |\n| 13000           | Uncategorized error                            |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.   **NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested,   or another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentAmount\": {\n    \"value\": \"100.00\",\n    \"currency\": \"GBP\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"market\": \"GB\",\n  \"redirectURL\": \"https://sites.obtest.com/sites/cib\",\n  \"debtor\": {\n    \"name\": \"Bala Thandapani\"\n  },\n  \"creditor\": {\n    \"name\": \"Newgen Media LLC\",\n    \"account\": {\n      \"accountId\": 6090887654321,\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"reference\": \"subscription - #78004300\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Invalid Data\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"message\": \"Property amount is mandatory.\",\n      \"field\": \"$.paymentAmount.amount\",\n      \"location\": \"BODY\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6186bd36-bd60-40f4-8b15-f480da7be59b",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.   **NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested,   or another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentAmount\": {\n    \"value\": \"100.00\",\n    \"currency\": \"GBP\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"market\": \"GB\",\n  \"redirectURL\": \"https://sites.obtest.com/sites/cib\",\n  \"debtor\": {\n    \"name\": \"Bala Thandapani\"\n  },\n  \"creditor\": {\n    \"name\": \"Newgen Media LLC\",\n    \"account\": {\n      \"accountId\": 6090887654321,\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"reference\": \"subscription - #78004300\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized\",\n  \"httpStatus\": 401,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab71d319-fc86-462a-b648-2e78ac1edcbb",
+              "name": "Forbidden. \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.   **NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested,   or another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentAmount\": {\n    \"value\": \"100.00\",\n    \"currency\": \"GBP\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"market\": \"GB\",\n  \"redirectURL\": \"https://sites.obtest.com/sites/cib\",\n  \"debtor\": {\n    \"name\": \"Bala Thandapani\"\n  },\n  \"creditor\": {\n    \"name\": \"Newgen Media LLC\",\n    \"account\": {\n      \"accountId\": 6090887654321,\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"reference\": \"subscription - #78004300\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Security Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"5914f136-4544-4b1c-8004-6c2388ba76b4\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Invalid client profile\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17ddfeba-159f-4131-8a57-e5b84c337622",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.   **NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested,   or another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentAmount\": {\n    \"value\": \"100.00\",\n    \"currency\": \"GBP\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"market\": \"GB\",\n  \"redirectURL\": \"https://sites.obtest.com/sites/cib\",\n  \"debtor\": {\n    \"name\": \"Bala Thandapani\"\n  },\n  \"creditor\": {\n    \"name\": \"Newgen Media LLC\",\n    \"account\": {\n      \"accountId\": 6090887654321,\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"reference\": \"subscription - #78004300\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Idempotency Check Failure\",\n  \"httpStatus\": 409,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10106\",\n      \"message\": \"The request conflicts with the current state of the server. Please ensure your request is unique.\",\n      \"location\": \"BODY\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1db27e6f-7817-46e9-a510-6992637878f6",
+              "name": "Service Unavailable.\n              \n*List of Error codes and Rule definitions.* \n| Error Code    | Description       |\n|---------------|-------------------|\n|   12000       | System error      |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.   **NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested,   or another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentAmount\": {\n    \"value\": \"100.00\",\n    \"currency\": \"GBP\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"market\": \"GB\",\n  \"redirectURL\": \"https://sites.obtest.com/sites/cib\",\n  \"debtor\": {\n    \"name\": \"Bala Thandapani\"\n  },\n  \"creditor\": {\n    \"name\": \"Newgen Media LLC\",\n    \"account\": {\n      \"accountId\": 6090887654321,\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"reference\": \"subscription - #78004300\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"System Error\",\n  \"httpStatus\": 503,\n  \"traceId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable. Please try again.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f7e34d8b-2d0b-4000-9f7c-36471c90416f",
+          "name": "Acknowledge Payments",
+          "request": {
+            "name": "Acknowledge Payments",
+            "description": {
+              "content": "Acknowledges the payment request that was previously setup.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                ":id",
+                "acknowledge"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) A unique ID of the payment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "16a0f4e8-d0f5-4a12-bddf-9b9dcb9eeea5",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id",
+                    "acknowledge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1b036f9c-8c84-4ce6-b1dd-5979472945a1\",\n  \"status\": \"SENT\",\n  \"statusUpdatedAt\": \"2023-08-20T13:31:25Z\",\n  \"createdAt\": \"2023-08-20T13:31:25Z\",\n  \"paymentAmount\": {\n    \"value\": \"100.00\",\n    \"currency\": \"GBP\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"market\": \"GB\",\n  \"redirectURL\": \"https://sites.obtest.com/sites/cib\",\n  \"paymentLinkURL\": \"https://paybybank.jpmorgan.com/1.0/pay/direct?client_id=9cd2e1c9527e4e18ad4756393e09cb2c&redirect_uri=https://sites.obtest.com/sites/cib&market=DE&payment_request_id=1b036f9c-8c84-4ce6-b1dd-5979472945a1\",\n  \"paymentQRCode\": \"https://paybybank.jpmorgan.com/api-proxy/api/enablement/v2/payments/qr/aHR0cHM6Ly9wYXlieWJhbmsuanBtb3JnYW4uY29tLzEuMC9wYXkvZGlyZWN0P21hcmtldD1HQiZyZWRpcmVjdF91cmk9aHR0cHM6Ly9zaXRlcy5vYnRlc3QuY29tL3NpdGVzL2NpYiZwYXltZW50X3JlcXVlc3RfaWQ9NWM0MjVjMjctMDVhNy00ODE5LWJkYjAtZGI3ZDU4Y2ZjNjYwJmxvY2FsZT1lbl9VUyZjbGllbnRfaWQ9M2QwZGNhN2RhZGE1NGUxOWI1YWYwMjRlZjk3Nzc0Mzg=\",\n  \"debtor\": {\n    \"name\": \"Bala Thandapani\",\n    \"account\": {\n      \"accountId\": 6080912311871,\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"creditor\": {\n    \"name\": \"Newgen Media LLC\",\n    \"account\": {\n      \"accountId\": \"11223387654321\",\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"reference\": \"subscription - #78004300\",\n  \"acknowledged\": \"ACKNOWLEDGED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e9a6c0e0-dae7-46e1-8f87-98dd9a3e0bd9",
+              "name": "Bad Request. \n              \n**List of Error codes and Usage explanations.**\n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10103           | Bad format                                     |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id",
+                    "acknowledge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Format\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10103\",\n      \"message\": \"The identifier provided is not a valid format.\",\n      \"field\": \"id\",\n      \"location\": \"PATH\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "13726cab-a85e-4898-b8f0-51d43ece019b",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id",
+                    "acknowledge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized\",\n  \"httpStatus\": 401,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b55451a-731c-4041-a209-5cedcd8e1ac1",
+              "name": "Forbidden. \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id",
+                    "acknowledge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Security Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"5914f136-4544-4b1c-8004-6c2388ba76b4\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Invalid client profile\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2b336199-9301-4d00-83a5-da60096f6f63",
+              "name": "Resource Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id",
+                    "acknowledge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Resource Not Found\",\n  \"httpStatus\": 404,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"message\": \"Invalid resource identifier provided.\",\n      \"field\": \"id\",\n      \"location\": \"PATH\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "82dcaa5c-23a3-4882-920f-5562f2df113d",
+              "name": "Service Unavailable.\n              \n*List of Error codes and Rule definitions.* \n| Error Code    | Description       |\n|---------------|-------------------|\n|   12000       | System error      |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id",
+                    "acknowledge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"System Error\",\n  \"httpStatus\": 503,\n  \"traceId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable. Please try again.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2e1cbddf-8faf-477e-a0a3-e573ffbf04d7",
+          "name": "Retrieve Payments",
+          "request": {
+            "name": "Retrieve Payments",
+            "description": {
+              "content": "Retrieves the details of the payment request by Id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) A unique ID of the payment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3adc372c-38bb-4a25-af84-d601c44cb260",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1b036f9c-8c84-4ce6-b1dd-5979472945a1\",\n  \"status\": \"SENT\",\n  \"statusUpdatedAt\": \"2023-08-20T13:31:25Z\",\n  \"createdAt\": \"2023-08-20T13:31:25Z\",\n  \"paymentAmount\": {\n    \"value\": \"100.00\",\n    \"currency\": \"GBP\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"market\": \"GB\",\n  \"redirectURL\": \"https://sites.obtest.com/sites/cib\",\n  \"paymentLinkURL\": \"https://paybybank.jpmorgan.com/1.0/pay/direct?client_id=9cd2e1c9527e4e18ad4756393e09cb2c&redirect_uri=https://sites.obtest.com/sites/cib&market=DE&payment_request_id=1b036f9c-8c84-4ce6-b1dd-5979472945a1\",\n  \"paymentQRCode\": \"https://paybybank.jpmorgan.com/api-proxy/api/enablement/v2/payments/qr/aHR0cHM6Ly9wYXlieWJhbmsuanBtb3JnYW4uY29tLzEuMC9wYXkvZGlyZWN0P21hcmtldD1HQiZyZWRpcmVjdF91cmk9aHR0cHM6Ly9zaXRlcy5vYnRlc3QuY29tL3NpdGVzL2NpYiZwYXltZW50X3JlcXVlc3RfaWQ9NWM0MjVjMjctMDVhNy00ODE5LWJkYjAtZGI3ZDU4Y2ZjNjYwJmxvY2FsZT1lbl9VUyZjbGllbnRfaWQ9M2QwZGNhN2RhZGE1NGUxOWI1YWYwMjRlZjk3Nzc0Mzg=\",\n  \"debtor\": {\n    \"name\": \"Bala Thandapani\",\n    \"account\": {\n      \"accountId\": 6080912311871,\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"creditor\": {\n    \"name\": \"Newgen Media LLC\",\n    \"account\": {\n      \"accountId\": \"11223387654321\",\n      \"accountIdType\": \"SORT_CODE\"\n    }\n  },\n  \"reference\": \"subscription - #78004300\",\n  \"acknowledged\": \"ACKNOWLEDGED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8786a4de-048a-457d-a440-228c5c621f1a",
+              "name": "Bad Request. \n              \n**List of Error codes and Usage explanations.**\n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10103           | Bad format                                     |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Format\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10103\",\n      \"message\": \"The identifier provided is not a valid format.\",\n      \"field\": \"id\",\n      \"location\": \"PATH\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a5a2aa6-5c6d-48f2-97f6-f94e0d634ea4",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized\",\n  \"httpStatus\": 401,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7bc9ae69-dc09-4029-9796-10b3db860a4a",
+              "name": "Forbidden. \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Security Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"5914f136-4544-4b1c-8004-6c2388ba76b4\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Invalid client profile\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4626bb87-5563-45c2-9cae-b5f8a5441125",
+              "name": "Resource Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Resource Not Found\",\n  \"httpStatus\": 404,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"message\": \"Invalid resource identifier provided.\",\n      \"field\": \"id\",\n      \"location\": \"PATH\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97b77058-a9cc-4eea-ad1a-829de434ed97",
+              "name": "Service Unavailable.\n              \n*List of Error codes and Rule definitions.* \n| Error Code    | Description       |\n|---------------|-------------------|\n|   12000       | System error      |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"System Error\",\n  \"httpStatus\": 503,\n  \"traceId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable. Please try again.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "252db788-bcd7-4fe3-9fa3-24eb9e9a8f00",
+      "name": "Payouts",
+      "description": {
+        "content": "Pay By Bank - PayoutsPayments",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "58f4e893-6cf7-4574-a476-b3a936b855ca",
+          "name": "Create Payouts",
+          "request": {
+            "name": "Create Payouts",
+            "description": {
+              "content": "Creates a payout for a specific payment transaction as a refund or a withdrawal.\n\n> The Pay By Bank - Payouts API facilitates businesses to carry out payments to beneficiaries efficiently within the context of Open Banking. By capitalizing on the secure infrastructure of Open Banking, it offers a robust, streamlined, and secure mechanism to process payouts, categorized into two types - Refunds and Withdrawals.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payouts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Client provided unique Idempotency Key.\n          \n          \n**NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested, \n          \nor another random string to avoid collisions.*",
+                "key": "Idempotency-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payoutReference\": \"<string>\",\n  \"payoutType\": \"<string>\",\n  \"paymentType\": \"<string>\",\n  \"payoutAmount\": {\n    \"value\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"sourcePaymentId\": \"<string>\",\n  \"payoutReason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a45f35ee-637e-4336-8d9c-221ee2d33959",
+              "name": "Payout successfully Initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.\n          \n          \n**NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested, \n          \nor another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payoutReference\": \"Refund 220-1z008\",\n  \"payoutType\": \"REFUND\",\n  \"payoutReason\": \"PARTIAL_REFUND\",\n  \"payoutAmount\": {\n    \"value\": \"10.50\",\n    \"currency\": \"EUR\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"sourcePaymentId\": \"a14a49b4-b21e-416e-ab8d-c0e57efbd2ea\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"0f7d8749-555e-41fc-a947-98bca7f7310b\",\n  \"payoutReference\": \"Refund 220-1z008\",\n  \"payoutType\": \"REFUND\",\n  \"payoutReason\": \"PARTIAL_REFUND\",\n  \"payoutAmount\": {\n    \"value\": \"10.50\",\n    \"currency\": \"EUR\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"sourcePaymentId\": \"a14a49b4-b21e-416e-ab8d-c0e57efbd2ea\",\n  \"status\": \"PENDING\",\n  \"createdAt\": \"2023-07-24T14:15:22Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cfae278c-67c8-40cd-827f-6485d95b6846",
+              "name": "Bad Request. \n              \n**List of Error codes and Usage explanations.**\n              \n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency Check Failure                      |\n| 10199           | Other                                          |\n| 13000           | Uncategorized error                            |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.\n          \n          \n**NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested, \n          \nor another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payoutReference\": \"Refund 220-1z008\",\n  \"payoutType\": \"REFUND\",\n  \"payoutReason\": \"PARTIAL_REFUND\",\n  \"payoutAmount\": {\n    \"value\": \"10.50\",\n    \"currency\": \"EUR\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"sourcePaymentId\": \"a14a49b4-b21e-416e-ab8d-c0e57efbd2ea\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Invalid Data\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"message\": \"Property amount is mandatory.\",\n      \"field\": \"$.paymentAmount.amount\",\n      \"location\": \"BODY\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4becc5c-4058-4e39-8ed2-d6e66c0e7598",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.\n          \n          \n**NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested, \n          \nor another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payoutReference\": \"Refund 220-1z008\",\n  \"payoutType\": \"REFUND\",\n  \"payoutReason\": \"PARTIAL_REFUND\",\n  \"payoutAmount\": {\n    \"value\": \"10.50\",\n    \"currency\": \"EUR\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"sourcePaymentId\": \"a14a49b4-b21e-416e-ab8d-c0e57efbd2ea\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized\",\n  \"httpStatus\": 401,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"message\": \"Unauthorized\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8a59811c-f580-41f6-9f4c-eb0641214d91",
+              "name": "Forbidden. \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.\n          \n          \n**NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested, \n          \nor another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payoutReference\": \"Refund 220-1z008\",\n  \"payoutType\": \"REFUND\",\n  \"payoutReason\": \"PARTIAL_REFUND\",\n  \"payoutAmount\": {\n    \"value\": \"10.50\",\n    \"currency\": \"EUR\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"sourcePaymentId\": \"a14a49b4-b21e-416e-ab8d-c0e57efbd2ea\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Security Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"5914f136-4544-4b1c-8004-6c2388ba76b4\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Invalid client profile\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf27b378-1b5c-441f-a38a-1f7d28e8db68",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.\n          \n          \n**NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested, \n          \nor another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payoutReference\": \"Refund 220-1z008\",\n  \"payoutType\": \"REFUND\",\n  \"payoutReason\": \"PARTIAL_REFUND\",\n  \"payoutAmount\": {\n    \"value\": \"10.50\",\n    \"currency\": \"EUR\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"sourcePaymentId\": \"a14a49b4-b21e-416e-ab8d-c0e57efbd2ea\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Idempotency Check Failure\",\n  \"httpStatus\": 409,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10106\",\n      \"message\": \"The request conflicts with the current state of the server. Please ensure your request is unique.\",\n      \"location\": \"BODY\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad0bc1a7-fa6d-4e30-bc04-4247e9bb1de1",
+              "name": "Service Unavailable.\n              \n*List of Error codes and Rule definitions.* \n| Error Code    | Description       |\n|---------------|-------------------|\n|   12000       | System error      |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Client provided unique Idempotency Key.\n          \n          \n**NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested, \n          \nor another random string to avoid collisions.*",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payoutReference\": \"Refund 220-1z008\",\n  \"payoutType\": \"REFUND\",\n  \"payoutReason\": \"PARTIAL_REFUND\",\n  \"payoutAmount\": {\n    \"value\": \"10.50\",\n    \"currency\": \"EUR\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"sourcePaymentId\": \"a14a49b4-b21e-416e-ab8d-c0e57efbd2ea\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"System Error\",\n  \"httpStatus\": 503,\n  \"traceId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable. Please try again.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7e636365-1bd9-455a-bd19-7d43a1e4a282",
+          "name": "Retrieve Payouts",
+          "request": {
+            "name": "Retrieve Payouts",
+            "description": {
+              "content": "Retrieves the details of a given payout by Id.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payouts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) A unique ID of the payout"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e8a22026-910b-4670-a2c4-914d31950a99",
+              "name": "Payout Status Retrieval",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payout"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"0f7d8749-555e-41fc-a947-98bca7f7310b\",\n  \"payoutReference\": \"Refund 220-1z008\",\n  \"payoutType\": \"REFUND\",\n  \"payoutReason\": \"PARTIAL_REFUND\",\n  \"payoutAmount\": {\n    \"value\": \"10.50\",\n    \"currency\": \"EUR\"\n  },\n  \"paymentType\": \"REAL_TIME_PAYMENTS\",\n  \"sourcePaymentId\": \"a14a49b4-b21e-416e-ab8d-c0e57efbd2ea\",\n  \"status\": \"PENDING\",\n  \"createdAt\": \"2023-07-24T14:15:22Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "98823f5a-a2cf-4244-8c74-87e03568cce7",
+              "name": "Bad Request. \n              \n**List of Error codes and Usage explanations.**\n              \n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency Check Failure                      |\n| 10199           | Other                                          |\n| 13000           | Uncategorized error                            |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payout"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Invalid Data\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"message\": \"Property amount is mandatory.\",\n      \"field\": \"$.paymentAmount.amount\",\n      \"location\": \"BODY\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "723b1951-7547-4158-b785-856809d64440",
+              "name": "Resource Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payout"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Resource Not Found\",\n  \"httpStatus\": 404,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"message\": \"Invalid resource identifier provided.\",\n      \"field\": \"id\",\n      \"location\": \"PATH\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5e9b0b1f-97d9-4732-8767-181945d42a5e",
+              "name": "Service Unavailable.\n              \n*List of Error codes and Rule definitions.* \n| Error Code    | Description       |\n|---------------|-------------------|\n|   12000       | System error      |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) A unique ID of the payout"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"System Error\",\n  \"httpStatus\": 503,\n  \"traceId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable. Please try again.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "026fee9f-debf-489a-8a04-22c53e8727c9",
+      "name": "Connectivity",
+      "description": {
+        "content": "Pay By Bank - Connectivity",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a2c10387-b786-42e2-8d9d-8177e882ea24",
+          "name": "List providers for a market",
+          "request": {
+            "name": "List providers for a market",
+            "description": {
+              "content": "Lists all providers on a specified market.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "market",
+                  "value": "<string>",
+                  "description": "(Required) The ISO 3166-1 alpha-2 market code."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a1a58560-510f-4f9b-ba17-babbfc3a9ee6",
+              "name": "List Providers response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "market",
+                      "value": "DE"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"providers\": [\n    {\n      \"accessType\": \"OPEN_BANKING\",\n      \"authenticationFlow\": \"REDIRECT\",\n      \"authenticationUserType\": \"PERSONAL\",\n      \"capabilities\": [\n        \"CHECKING_ACCOUNTS\"\n      ],\n      \"credentialsType\": \"THIRD_PARTY_APP\",\n      \"currency\": \"SEK\",\n      \"displayDescription\": \"Bink authentication app\",\n      \"displayName\": \"Bink\",\n      \"fields\": [\n        {\n          \"name\": \"password\",\n          \"description\": \"PIN\",\n          \"sensitive\": true,\n          \"masked\": true\n        }\n      ],\n      \"financialInstitutionId\": \"01234567-1234-1234-1234-123456789123\",\n      \"financialInstitutionName\": \"Bink\",\n      \"financialServices\": [\n        {\n          \"segment\": \"PERSONAL\",\n          \"shortName\": \"Personal Banking\"\n        }\n      ],\n      \"groupDisplayName\": \"Bink Corp.\",\n      \"hasAuthenticationOptions\": false,\n      \"healthStatus\": {\n        \"providerLogin\": {\n          \"status\": \"HEALTHY\"\n        }\n      },\n      \"images\": {\n        \"banner\": \"https://www.jpmorgan.com/content/dam/jpmorgan/images/logos/jpm-logo-brown-062322.svg\",\n        \"icon\": \"https://www.jpmorgan.com/content/dam/jpmorgan/images/logos/jpm-logo-brown-062322.svg\"\n      },\n      \"loginHeaderColour\": \"#FF0000\",\n      \"market\": \"SE\",\n      \"multiFactor\": true,\n      \"name\": \"se-bink-thirdpartyapp\",\n      \"passwordHelpText\": \"Use the same password as you would in your bank's mobile app.\",\n      \"pisCapabilities\": [\n        \"SEPA_CREDIT_TRANSFER\"\n      ],\n      \"popular\": false,\n      \"releaseStatus\": \"BETA\",\n      \"status\": \"ENABLED\",\n      \"transactional\": false,\n      \"type\": \"BANK\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://apigateway.jpmorgan.com/tsapi/paybybank/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "91b59a96-7fa7-4b95-8063-d6a048ad530c",
+    "name": "Payment Initiation Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Enable and manage payments, refunds, withdrawals, and provider connectivity across multiple markets using secure open banking infrastructure.\n\nContact Support:\n Name: JPMorgan Chase & Co. API Support\n Email: imsd.security.operations@jpmorgan.com",
+      "type": "text/plain"
+    }
+  }
+}

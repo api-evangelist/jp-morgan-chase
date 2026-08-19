@@ -1,0 +1,149 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Alerts and Decisioning API",
+    "version": "1.0.5"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Shallow Health Check",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/trust-safety/v1/health"
+          },
+          "docs": "**Shallow Health Check**\n\nReturns the health status of the API service. This endpoint performs a lightweight check\nto confirm the service is running and able to accept requests. It does not verify\ndownstream dependencies.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Holds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve Payment Holds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/trust-safety/v1/holds",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "One or more hold statuses to filter by. If substatus is used, this must not be provided. If multiple values are specified (comma-separated), treated as OR. If not provided, returns holds for any status."
+              },
+              {
+                "name": "substatus",
+                "value": "",
+                "type": "query",
+                "description": "One or more hold sub-statuses. If status is used, substatus must not be provided. If multiple values are specified (comma-separated), treated as OR. If not provided, returns holds for any sub-status."
+              },
+              {
+                "name": "startDateTime",
+                "value": "2026-01-01T00:00:00+00:00",
+                "type": "query",
+                "description": "Start of hold date/time range (inclusive). If only startDateTime provided, returns anything >= startDateTime. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC"
+              },
+              {
+                "name": "endDateTime",
+                "value": "2026-02-01T00:00:00+00:00",
+                "type": "query",
+                "description": "End of hold date/time range (inclusive). If only endDateTime provided, returns anything <= endDateTime. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for the collection results. Uses the format field.`direction` where direction is `asc` (ascending) or `desc` (descending).\n\nSupported sort fields: `heldAt`, `cutOffAt`, `status`.\n\nIf not provided, defaults to heldAt.`desc` (most recently held first).\n"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Page offset for pagination (0-based)"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page"
+              }
+            ]
+          },
+          "docs": "**Retrieve payment holds**\n\nReturns a paginated list of payment holds, optionally filtered by status, substatus, and date range.\n\n#### Filtering by `status` vs `substatus`\nThe `status` and `substatus` query parameters are **mutually exclusive** — you may use one or the other, but not both in the same request. If both are provided, the API will return a `400 Bad Request` error.\n\nUse **`status`** for broad filtering based on the high-level state of a hold:\n\n| Value | Description |\n|-------|-------"
+        },
+        {
+          "info": {
+            "name": "Retrieve details of a payment hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/trust-safety/v1/holds/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the payment hold"
+              }
+            ]
+          },
+          "docs": "**Retrieve details of a single payment hold by identifier**"
+        },
+        {
+          "info": {
+            "name": "Decision Single Payment Hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/trust-safety/v1/holds/:id/decision",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the payment hold"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Decision Single Payment Hold**\nThis endpoint allows users to take action on a single payment hold by approving or rejecting it.  Users can specify the decision action (APPROVE or REJECT), provide a reason for rejection, and  indicate the type of confirmed fraud if applicable. For bulk processing of multiple hold decisions,  use the `/holds/decision/bulk` endpoint instead."
+        },
+        {
+          "info": {
+            "name": "Decision Multiple Payment Holds (Bulk)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/trust-safety/v1/holds/decision/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Decision Multiple Payment Holds (Bulk)**\nThis endpoint allows users to take action on multiple payment holds simultaneously by approving or rejecting them.  The API supports batch processing of multiple hold decisions, enabling efficient processing of large volumes of holds.  Each decision in the batch can have its own action (APPROVE or REJECT), rejection reason, and confirmed fraud type.  For processing a single hold decision, use the `/holds/{id}/decision` endpoint instead."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

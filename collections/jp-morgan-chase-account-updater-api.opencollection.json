@@ -1,0 +1,97 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Account Updater API",
+    "version": "1.4.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health Check",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Health check for the Account Updater service.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ms.payments.jpmorgan.com/api/v1/healthcheck"
+          },
+          "docs": "Health check endpoint to validate that the Account Updater service is running."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account Updates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query Account Updater service.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ms.payments.jpmorgan.com/api/v1/account-updates",
+            "headers": [
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "request-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request an update to an account. Check for updated account information."
+        },
+        {
+          "info": {
+            "name": "Get information about an account update.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ms.payments.jpmorgan.com/api/v1/account-updates/:account-identifier",
+            "headers": [
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "request-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account-identifier",
+                "value": "",
+                "type": "path",
+                "description": "UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+              }
+            ]
+          },
+          "docs": "Get information about an account update."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

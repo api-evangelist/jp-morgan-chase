@@ -1,0 +1,927 @@
+{
+  "item": [
+    {
+      "id": "5d180933-8ec1-4674-b92b-0f77a259bde6",
+      "name": "Balances",
+      "description": {
+        "content": "Balance Information",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "18614d16-2012-46ec-9a1b-7d4816774cba",
+          "name": "Retrieve Balances of All Eligible Accounts",
+          "request": {
+            "name": "Retrieve Balances of All Eligible Accounts",
+            "description": {
+              "content": "Returns the current date balances of all eligible accounts\n\nThe following constraints apply when sending requests to this endpoint:  \n- Supported J.P. Morgan account type(s) :BDA \n- The maximum number of accounts (pageSize) that can be returned in single API call is 100. If the pageSize is not provided, the default is 25 accounts.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                "balances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "25",
+                  "description": "For pagination, the total number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<uuid>",
+                  "description": "For selecting a cursor when using pagination"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                "key": "Request-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "efdc9e25-4784-4f7a-b71c-474953b527e7",
+              "name": "Successful Account Balances Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountBalances\": [\n    {\n      \"account\": {\n        \"number\": \"1234567890\",\n        \"type\": \"BDA\",\n        \"currency\": \"USD\",\n        \"name\": \"Customer BDA Account\",\n        \"financialInstitutionIds\": [\n          {\n            \"id\": \"CHASUS33MCY\",\n            \"idType\": \"BIC\"\n          }\n        ]\n      },\n      \"balances\": [\n        {\n          \"type\": \"INTERIM_AVAILABLE\",\n          \"amount\": \"5000.00\",\n          \"bookDate\": \"2024-10-06\"\n        },\n        {\n          \"type\": \"INTERIM_BOOKED\",\n          \"amount\": \"5000.00\",\n          \"bookDate\": \"2024-10-06\"\n        }\n      ]\n    }\n  ],\n  \"metadata\": {\n    \"cursor\": {\n      \"first\": \"9c0af3e7-0375-4343-a8bb-a2fc9ee51621\",\n      \"this\": \"9c0af3e7-0375-4343-a8bb-a2fc9ee51621\",\n      \"goodUntil\": \"2024-10-06T00:00:00.000Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4ca9faf-6f6d-4f60-93d6-b6ccb6f6be08",
+              "name": "Bad Request \n\nList of error codes and usage descriptions\n  | Error Code        |            Usage            |  \n  |-------------------|-----------------------------|\n  | `10001`           | Mandatory field missing     | \n  | `10002`           | Minimum length violation \t  |     \n  | `10003`           | Maximum length violation\t  |  \n  | `10100`           | Minimum value violation     |   \n  | `10101`           | Maximum value violation     | \n  | `10102`           | Range violation             |  \n  | `10103`           | Bad format                  |  \n  | `10104`           | Bad value                   |  \n  | `10105`           | Unexpected field            |  \n  | `10199`           | Other                       |  ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d803b922-eb0a-4904-a663-8fef8002d5cc",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c4c6401-2a82-4138-867e-db5e0b43ab37",
+              "name": "Forbidden. \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           | ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "061e57e9-a920-47d5-982d-8bd249f4ad1d",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce789388-7d84-4d13-9749-08c50907626f",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "20e8715e-d548-42f8-8446-bcfa8af27eaf",
+          "name": "Inquire Balances",
+          "request": {
+            "name": "Inquire Balances",
+            "description": {
+              "content": "Returns the historical day account balances that match valid request criteria. The following constraints apply when sending requests to this endpoint: \n- Supported J.P. Morgan account type(s) : BDA \n- The API supports the retrieval of account balances data for up to 45 days for BDA\n- When querying using date range (fromDate & toDate), the range can not exceed 45 days\n- The dates queried represent the current business day of the location of an account \n- The maximum number of accounts (pageSize) that can be returned in single API call is 100. If the pageSize is not provided, the default is 25 accounts.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                "balances",
+                "inquiry"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "25",
+                  "description": "For pagination, the total number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<uuid>",
+                  "description": "For selecting a cursor when using pagination"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                "key": "Request-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountIdentifiers\": [\n    {\n      \"number\": \"<string>\",\n      \"financialInstitutionId\": {\n        \"id\": \"<string>\",\n        \"idType\": \"<string>\"\n      }\n    }\n  ],\n  \"balanceTypes\": [\n    \"<string>\"\n  ],\n  \"fromDate\": \"<date>\",\n  \"toDate\": \"<date>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f83855ec-fc5b-44eb-afe4-6d82ff0f336e",
+              "name": "Successful Account Balances Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances",
+                    "inquiry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountIdentifiers\": [\n    {\n      \"number\": \"1234567890\",\n      \"financialInstitutionId\": {\n        \"id\": \"CHASUS33MCY\",\n        \"idType\": \"BIC\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountBalances\": [\n    {\n      \"account\": {\n        \"number\": \"1234567890\",\n        \"type\": \"BDA\",\n        \"currency\": \"USD\",\n        \"name\": \"Customer BDA Account\",\n        \"financialInstitutionIds\": [\n          {\n            \"id\": \"CHASUS33MCY\",\n            \"idType\": \"BIC\"\n          }\n        ]\n      },\n      \"balances\": [\n        {\n          \"type\": \"INTERIM_AVAILABLE\",\n          \"amount\": \"5000.00\",\n          \"bookDate\": \"2024-10-06\"\n        },\n        {\n          \"type\": \"INTERIM_BOOKED\",\n          \"amount\": \"5000.00\",\n          \"bookDate\": \"2024-10-06\"\n        }\n      ]\n    }\n  ],\n  \"metadata\": {\n    \"cursor\": {\n      \"first\": \"9c0af3e7-0375-4343-a8bb-a2fc9ee51621\",\n      \"this\": \"9c0af3e7-0375-4343-a8bb-a2fc9ee51621\",\n      \"goodUntil\": \"2024-10-06T00:00:00.000Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bca2c8a6-0877-40de-bc4e-8982c8af5cf8",
+              "name": "Bad Request. \n        List of error codes and usage descriptions\n   \n  | Error Code        |            Usage            |  \n  |-------------------|-----------------------------|\n  | `10001`           | Mandatory field missing     | \n  | `10002`           | Minimum length violation \t  |     \n  | `10003`           | Maximum length violation\t  |  \n  | `10100`           | Minimum value violation     |   \n  | `10101`           | Maximum value violation     | \n  | `10102`           | Range violation             |  \n  | `10103`           | Bad format                  |  \n  | `10104`           | Bad value                   |  \n  | `10105`           | Unexpected field            |  \n  | `10199`           | Other                       |  ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances",
+                    "inquiry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountIdentifiers\": [\n    {\n      \"number\": \"1234567890\",\n      \"financialInstitutionId\": {\n        \"id\": \"CHASUS33MCY\",\n        \"idType\": \"BIC\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48fab53b-b894-4677-a911-24cff23e4bd2",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances",
+                    "inquiry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountIdentifiers\": [\n    {\n      \"number\": \"1234567890\",\n      \"financialInstitutionId\": {\n        \"id\": \"CHASUS33MCY\",\n        \"idType\": \"BIC\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd0f636b-e4d3-405e-b7b6-956b687814ec",
+              "name": "Forbidden \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           | ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances",
+                    "inquiry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountIdentifiers\": [\n    {\n      \"number\": \"1234567890\",\n      \"financialInstitutionId\": {\n        \"id\": \"CHASUS33MCY\",\n        \"idType\": \"BIC\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "985bb807-8804-4c32-acc9-cea74668fc20",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances",
+                    "inquiry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountIdentifiers\": [\n    {\n      \"number\": \"1234567890\",\n      \"financialInstitutionId\": {\n        \"id\": \"CHASUS33MCY\",\n        \"idType\": \"BIC\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ef4371e-b25b-4790-b25e-d690cb21e8ec",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "balances",
+                    "inquiry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client provided identifier used to distinguish and track individual requests.  \n***When provided in the request, the id is also returned in the response during error cases for troubleshooting. Our recommendation is to use UUIDv4***",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountIdentifiers\": [\n    {\n      \"number\": \"1234567890\",\n      \"financialInstitutionId\": {\n        \"id\": \"CHASUS33MCY\",\n        \"idType\": \"BIC\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"httpStatus\": 6570,\n  \"traceId\": \"string\",\n  \"requestId\": \"string\",\n  \"context\": [\n    {\n      \"message\": \"string\",\n      \"code\": \"strin\",\n      \"field\": \"string\",\n      \"location\": \"HEADER\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.payments.jpmorgan.com/account/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "efb680f7-9da3-4a6a-a8b9-869b28532e17",
+    "name": "Blockchain Deposit Account Balances API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Access real-time and historical balances for your eligible J.P. Morgan accounts, so you can easily track cash positions and reconcile transactions across up to 100 accounts per request. This API lets you retrieve both current-day and up to 45 days of balance history, helping you streamline your treasury operations and reporting.",
+      "type": "text/plain"
+    }
+  }
+}

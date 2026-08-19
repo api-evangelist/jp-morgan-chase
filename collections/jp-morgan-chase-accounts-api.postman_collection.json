@@ -1,0 +1,3632 @@
+{
+  "item": [
+    {
+      "id": "8c060fbb-5242-42c5-a91d-684e1c627122",
+      "name": "Accounts",
+      "description": {
+        "content": "Create, organize and manage accounts.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9a8a60a4-96d9-427b-a1be-989fe0089de1",
+          "name": "List accounts",
+          "request": {
+            "name": "List accounts",
+            "description": {
+              "content": "Returns a list of accounts for a specific client.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "clientId",
+                  "value": "<string>",
+                  "description": "Unique Client identifier"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Number of records per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page Number"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fec90458-96aa-43ca-8b17-5374246880df",
+              "name": "List of accounts for a specific client",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"metadata\": {\n    \"page\": 0,\n    \"limit\": 25,\n    \"total_items\": 8\n  },\n  \"items\": [\n    {\n      \"id\": \"3ad88d43983f4312b1e67615e5aed6dd\",\n      \"clientId\": 5199987,\n      \"label\": \"FUNDING\",\n      \"state\": \"OPEN\",\n      \"category\": \"DDA\",\n      \"paymentRoutingInformation\": {\n        \"accountNumber\": \"10000000123\",\n        \"country\": \"US\",\n        \"routingInformation\": [\n          {\n            \"routingCodeType\": \"ABA\",\n            \"routingNumber\": 28000024\n          }\n        ]\n      },\n      \"createdAt\": \"2025-04-14T08:57:21.529997Z\",\n      \"updatedAt\": \"2025-04-14T08:57:21.434213Z\"\n    },\n    {\n      \"id\": \"1753d04e42514cd8af07032585643ad9\",\n      \"clientId\": 5199987,\n      \"label\": \"PRIMARY_PROCESSING\",\n      \"state\": \"OPEN\",\n      \"category\": \"PROCESSING\",\n      \"paymentRoutingInformation\": {\n        \"accountNumber\": \"10000000001035\",\n        \"country\": \"US\",\n        \"routingInformation\": [\n          {\n            \"routingCodeType\": \"ABA\",\n            \"routingNumber\": 28000024\n          }\n        ]\n      },\n      \"createdAt\": \"2025-04-14T08:57:21.434213Z\",\n      \"updatedAt\": \"2025-04-14T08:57:21.434213Z\"\n    },\n    {\n      \"id\": \"b4bc60637efe4ea28fb68727a321dbea\",\n      \"clientId\": 5199987,\n      \"label\": \"PROCESSING_OFFSET\",\n      \"state\": \"OPEN\",\n      \"category\": \"PROCESSING_OFFSET\",\n      \"paymentRoutingInformation\": {\n        \"accountNumber\": \"10000000001035\",\n        \"country\": \"US\",\n        \"routingInformation\": [\n          {\n            \"routingCodeType\": \"ABA\",\n            \"routingNumber\": 28000024\n          }\n        ]\n      },\n      \"createdAt\": \"2025-04-14T08:57:21.495392Z\",\n      \"updatedAt\": \"2025-04-14T08:57:21.434213Z\"\n    },\n    {\n      \"id\": \"5af7ff19b6024604a4b801c805aaaa12\",\n      \"clientId\": 5199987,\n      \"label\": \"TAXES\",\n      \"state\": \"OPEN\",\n      \"category\": \"MANAGEMENT\",\n      \"paymentRoutingInformation\": {\n        \"accountNumber\": \"10000000001035\",\n        \"country\": \"US\",\n        \"routingInformation\": [\n          {\n            \"routingCodeType\": \"ABA\",\n            \"routingNumber\": 28000024\n          }\n        ]\n      },\n      \"createdAt\": \"2025-04-14T08:57:21.592681Z\",\n      \"updatedAt\": \"2025-04-14T08:57:21.434213Z\"\n    },\n    {\n      \"id\": \"e627a5350fa3412ba121c4a26fc1b2ff\",\n      \"clientId\": 5199987,\n      \"label\": \"CLIENT_OFFSET\",\n      \"state\": \"OPEN\",\n      \"category\": \"CLIENT_OFFSET\",\n      \"paymentRoutingInformation\": {\n        \"accountNumber\": \"10000000001032\",\n        \"country\": \"US\",\n        \"routingInformation\": [\n          {\n            \"routingCodeType\": \"ABA\",\n            \"routingNumber\": 28000024\n          }\n        ]\n      },\n      \"createdAt\": \"2025-04-14T08:57:21.644832Z\",\n      \"updatedAt\": \"2025-04-14T08:57:21.434213Z\"\n    },\n    {\n      \"id\": \"94ad2e29486d4fe8b78f2c778370f5fe\",\n      \"clientId\": 85199987,\n      \"label\": \"MAIN3919\",\n      \"state\": \"OPEN\",\n      \"category\": \"LIMITED_DDA\",\n      \"paymentRoutingInformation\": {\n        \"accountNumber\": \"20000057603919\",\n        \"country\": \"US\",\n        \"routingInformation\": [\n          {\n            \"routingCodeType\": \"ABA\",\n            \"routingNumber\": 28000024\n          }\n        ]\n      },\n      \"createdAt\": \"2025-04-14T08:57:21.792272Z\",\n      \"updatedAt\": \"2025-04-14T08:57:21.434213Z\"\n    },\n    {\n      \"id\": \"aemano765e14741c5a44acc570af517ab\",\n      \"clientId\": \"1000013296\",\n      \"label\": \"MAIN3229\",\n      \"state\": \"OPEN\",\n      \"category\": \"LIMITED_DDA\",\n      \"paymentRoutingInformation\": {\n        \"accountNumber\": \"20000057603229\",\n        \"country\": \"US\",\n        \"routingInformation\": [\n          {\n            \"routingCodeType\": \"ABA\",\n            \"routingNumber\": 28000024\n          }\n        ]\n      },\n      \"createdAt\": \"2025-04-14T08:57:21.862978Z\",\n      \"updatedAt\": \"2025-04-14T08:57:21.434213Z\"\n    },\n    {\n      \"id\": \"akrsm765e14741c5a48acc570af517da\",\n      \"clientId\": \"1000012400\",\n      \"label\": \"MAIN3212\",\n      \"state\": \"OPEN\",\n      \"category\": \"LIMITED_DDA_PAYMENTS\",\n      \"paymentRoutingInformation\": {\n        \"accountNumber\": \"20000097603212\",\n        \"country\": \"US\",\n        \"routingInformation\": [\n          {\n            \"routingCodeType\": \"ABA\",\n            \"routingNumber\": 28000024\n          }\n        ]\n      },\n      \"createdAt\": \"2025-04-14T08:57:21.913631Z\",\n      \"updatedAt\": \"2025-04-14T08:57:21.434213Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5666e9ad-adbc-4597-81f4-2741e3b4f8f8",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17ec8bd1-b35c-4e82-9421-c9335002fae6",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31893d7b-6952-4631-b861-201c88797cc4",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "37c22e1b-2bca-4ffa-aac0-ebebb0c1b9c2",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "471c4263-9616-4ece-96da-26c306147b63",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8609a9ee-0295-429e-867f-dc5339bc5b91",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "clientId",
+                      "value": "9000000001"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "181281e9-66df-4a5c-993a-92a95801afe9",
+          "name": "Create account",
+          "request": {
+            "name": "Create account",
+            "description": {
+              "content": "Create an account for a specific client",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Unique identifier for the program configuration used for the request.",
+                "key": "configuration-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"<string>\",\n  \"parentAccountId\": \"<string>\",\n  \"state\": \"<string>\",\n  \"balanceLimits\": {\n    \"minimumBalance\": \"<string>\",\n    \"maximumBalance\": \"<string>\"\n  },\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": \"<boolean>\"\n  },\n  \"label\": \"<string>\",\n  \"clientId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dd11289a-f5ae-43aa-bdb7-56ac5dfbfad2",
+              "name": "Account Request Accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category\": \"SUMMARY_ACCOUNT\",\n  \"state\": \"OPEN\",\n  \"parentAccountId\": \"05bd6de816ea4f75a7d7e9d6b3988070\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"b316151f575e4c1e9f548f1b40aae462\",\n  \"category\": \"SUMMARY_ACCOUNT\",\n  \"state\": \"OPEN\",\n  \"parentAccountId\": \"05bd6de816ea4f75a7d7e9d6b3988070\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "751c34db-86a5-4507-bdc5-c04bcd285274",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category\": \"SUMMARY_ACCOUNT\",\n  \"state\": \"OPEN\",\n  \"parentAccountId\": \"05bd6de816ea4f75a7d7e9d6b3988070\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2f6150f-0d37-4617-ab6c-ff1d43e0c149",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category\": \"SUMMARY_ACCOUNT\",\n  \"state\": \"OPEN\",\n  \"parentAccountId\": \"05bd6de816ea4f75a7d7e9d6b3988070\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc7011c2-efdc-4ae6-b703-91161c0df641",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category\": \"SUMMARY_ACCOUNT\",\n  \"state\": \"OPEN\",\n  \"parentAccountId\": \"05bd6de816ea4f75a7d7e9d6b3988070\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd091aa3-01d3-4f98-9957-332de0d7d0b0",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category\": \"SUMMARY_ACCOUNT\",\n  \"state\": \"OPEN\",\n  \"parentAccountId\": \"05bd6de816ea4f75a7d7e9d6b3988070\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bba32709-1ae2-4b4b-a165-4f87ae04f8d5",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category\": \"SUMMARY_ACCOUNT\",\n  \"state\": \"OPEN\",\n  \"parentAccountId\": \"05bd6de816ea4f75a7d7e9d6b3988070\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "052560e8-f57e-4eb5-b3fe-cabb36a2dd08",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category\": \"SUMMARY_ACCOUNT\",\n  \"state\": \"OPEN\",\n  \"parentAccountId\": \"05bd6de816ea4f75a7d7e9d6b3988070\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ad501022-4f1c-4bde-a839-7b1d737c6d22",
+          "name": "Get account",
+          "request": {
+            "name": "Get account",
+            "description": {
+              "content": "Look up a single account by account ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique account identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Unique identifier for the program configuration used for the request.",
+                "key": "configuration-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3449f615-6ffc-4575-87ef-ff8240a81ffe",
+              "name": "Account Details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"b316151f575e4c1e9f548f1b40aae462\",\n  \"category\": \"SUMMARY_ACCOUNT\",\n  \"state\": \"OPEN\",\n  \"parentAccountId\": \"2af30efd0d8e4432bc271cb38e9da567\",\n  \"createdAt\": \"2024-09-19T17:33:42.732Z\",\n  \"updatedAt\": \"2024-10-20T15:08:31.654Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3923b074-e67d-4359-b159-462a5eb5bf65",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4fea398d-553a-4527-9bd1-e833b0d38447",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7402e229-9252-47c9-839f-6d9e9be2d607",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c90b43b9-c4e7-4af7-bc39-0fc5a8cc4f54",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d165163-8db6-453f-998a-ea6c7e0c30d3",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f71f0108-3985-41cd-b8a5-490b0788c700",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "64d1b2dc-e83e-4a85-99da-01aff38293c3",
+          "name": "Manage account",
+          "request": {
+            "name": "Manage account",
+            "description": {
+              "content": "Manage account",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique account identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Unique identifier for the program configuration used for the request.",
+                "key": "configuration-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"state\": \"<string>\",\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": \"<boolean>\"\n  },\n  \"balanceLimits\": {\n    \"minimumBalance\": \"<string>\",\n    \"maximumBalance\": \"<string>\"\n  },\n  \"closureReason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d85757e0-58af-4062-ae59-adf294cb1648",
+              "name": "Account request accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"state\": \"OPEN\",\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": true\n  },\n  \"balanceLimits\": {\n    \"minimumBalance\": \"5000\",\n    \"maximumBalance\": \"550000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"40386addf40e4b8a825bc3847d84c260\",\n  \"state\": \"OPEN\",\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": true\n  },\n  \"balanceLimits\": {\n    \"minimumBalance\": \"5000\",\n    \"maximumBalance\": \"550000\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac439470-b714-4df9-ab62-6e17c43954b5",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"state\": \"OPEN\",\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": true\n  },\n  \"balanceLimits\": {\n    \"minimumBalance\": \"5000\",\n    \"maximumBalance\": \"550000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "610d5678-ef09-46b6-a4cf-764589fce443",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"state\": \"OPEN\",\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": true\n  },\n  \"balanceLimits\": {\n    \"minimumBalance\": \"5000\",\n    \"maximumBalance\": \"550000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cdcbafd9-fc0d-4d55-be3d-8150bccf33ef",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"state\": \"OPEN\",\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": true\n  },\n  \"balanceLimits\": {\n    \"minimumBalance\": \"5000\",\n    \"maximumBalance\": \"550000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8149a6bb-55dd-4aea-9248-210be98c9666",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"state\": \"OPEN\",\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": true\n  },\n  \"balanceLimits\": {\n    \"minimumBalance\": \"5000\",\n    \"maximumBalance\": \"550000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1b9ef12-7433-46a6-95d4-34e99a27acc1",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"state\": \"OPEN\",\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": true\n  },\n  \"balanceLimits\": {\n    \"minimumBalance\": \"5000\",\n    \"maximumBalance\": \"550000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eda6d558-c873-4436-815e-e5d0c5499333",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"state\": \"OPEN\",\n  \"paymentRoutingInformation\": {\n    \"enableAccountNumber\": true\n  },\n  \"balanceLimits\": {\n    \"minimumBalance\": \"5000\",\n    \"maximumBalance\": \"550000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b82fdca7-5138-4d08-ac42-a862b84c70d7",
+          "name": "Get an account balance",
+          "request": {
+            "name": "Get an account balance",
+            "description": {
+              "content": "Get the balance details for an account",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":id",
+                "balances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique account identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Unique identifier for the program configuration used for the request.",
+                "key": "configuration-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "679ba055-ba96-44b3-b839-fa25dc1da161",
+              "name": "Account balance details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"ae86b765e14741c5a44acc570af517ab\",\n  \"items\": [\n    {\n      \"effectiveDate\": \"2025-01-02\",\n      \"currency\": \"USD\",\n      \"balances\": [\n        {\n          \"type\": \"INTERIM_AVAILABLE\",\n          \"amount\": \"245645.65\"\n        },\n        {\n          \"type\": \"INTERIM_BOOKED\",\n          \"amount\": \"552145.33\"\n        },\n        {\n          \"type\": \"INTERIM_EXPECTED\",\n          \"amount\": \"204023.65\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8b6ccd9-6b9f-4fa9-8ed0-2d01f51e23e7",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aafb0e8b-ebfa-4de9-8a90-59a05945f976",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e2cf6ddd-1a2e-4fcd-8a9c-d5ee609b9ae8",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8975cf9f-68e1-4a82-b484-780cfe0e06da",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc685b63-db62-4b2b-b2f8-7e6b5cf7962b",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "74b688b8-8813-446f-8713-f7c69e9d1529",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b8a70107-7138-44c5-a19f-44577347a15f",
+      "name": "Account Restrictions",
+      "description": {
+        "content": "Add, Remove restrictions on the accounts.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "47fcb96d-b847-4c45-b768-767d2b56f133",
+          "name": "Add a new restriction on an account",
+          "request": {
+            "name": "Add a new restriction on an account",
+            "description": {
+              "content": "Post an account restriction request to add a new restriction on an account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":id",
+                "restrictions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique account identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Unique identifier for the program configuration used for the request.",
+                "key": "configuration-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restrictionType\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aacc752c-6b85-43fd-932f-4919465cde0b",
+              "name": "Accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"restrictionType\": \"DIRECT_DEBIT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"22f51825-9397-4eba-be5e-60ce37dbad97\",\n  \"requestId\": \"c548d951-61ad-47eb-ad5e-13809617738d\",\n  \"restrictionId\": \"4c89fa2f-f452-4ca3-86cf-851362370357\",\n  \"restrictionType\": \"DIRECT_DEBIT\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "508127ad-e0e4-4031-b599-7d2b82eceb0b",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"restrictionType\": \"DIRECT_DEBIT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be8d0568-472b-422c-9263-a7d66bd4d912",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"restrictionType\": \"DIRECT_DEBIT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff7d2a39-3bbc-4ab9-a5c0-db51dce341d3",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"restrictionType\": \"DIRECT_DEBIT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6eaa89cb-727f-4749-ad1a-54f2d0c4a9e4",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"restrictionType\": \"DIRECT_DEBIT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97035ef2-05d9-4c1a-83db-e5842b8fa99d",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"restrictionType\": \"DIRECT_DEBIT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "50face61-98f6-4294-b667-4c4dab33213f",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"restrictionType\": \"DIRECT_DEBIT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8a6b1010-807b-4a79-a1ca-10d619be5fae",
+          "name": "Remove an account restriction",
+          "request": {
+            "name": "Remove an account restriction",
+            "description": {
+              "content": "Remove the given restriction for an account",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":id",
+                "restrictions",
+                ":restrictionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique account identifier"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "restrictionId",
+                  "description": "(Required) Unique identifier for the restriction"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Unique identifier for the program configuration used for the request.",
+                "key": "configuration-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e704309d-34a4-4f51-9e16-9bf98c127496",
+              "name": "Accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions",
+                    ":restrictionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "restrictionId",
+                      "description": "(Required) Unique identifier for the restriction"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"22f51825-9397-4eba-be5e-60ce37dbad97\",\n  \"requestId\": \"c548d951-61ad-47eb-ad5e-13809617738d\",\n  \"restrictionId\": \"4c89fa2f-f452-4ca3-86cf-851362370357\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf6bea26-087f-49bb-af89-f4eca5db8abd",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions",
+                    ":restrictionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "restrictionId",
+                      "description": "(Required) Unique identifier for the restriction"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "665ccf5c-43fa-45b9-bb0d-c68929639318",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions",
+                    ":restrictionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "restrictionId",
+                      "description": "(Required) Unique identifier for the restriction"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized Request\",\n  \"httpStatus\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "afee3b41-ad43-467b-a138-b4a7b1deadd6",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions",
+                    ":restrictionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "restrictionId",
+                      "description": "(Required) Unique identifier for the restriction"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fbae7c24-d2a4-428d-b245-82b9c9d8c0a2",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions",
+                    ":restrictionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "restrictionId",
+                      "description": "(Required) Unique identifier for the restriction"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ade38c0b-b197-4186-9de3-949ddaa419a2",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions",
+                    ":restrictionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "restrictionId",
+                      "description": "(Required) Unique identifier for the restriction"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Internal Server Error\",\n  \"httpStatus\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cab65237-9fb8-4273-9207-cfc6ea404a36",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "restrictions",
+                    ":restrictionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique account identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "restrictionId",
+                      "description": "(Required) Unique identifier for the restriction"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the program configuration used for the request.",
+                    "key": "configuration-id",
+                    "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                    "key": "request-id",
+                    "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided",
+                  "key": "request-id",
+                  "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.payments.jpmorgan.com/embedded/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ee559722-88f2-491d-987c-c19edb4c4812",
+    "name": "Accounts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Manage your accounts programmatically. Create new accounts, retrieve details and balances, and organize all your client accounts in one place. This allows you to automate account operations and keep your financial data up to date with ease.\n\nContact Support:\n Name: JPMC Technical Services Support",
+      "type": "text/plain"
+    }
+  }
+}

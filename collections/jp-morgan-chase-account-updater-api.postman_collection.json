@@ -1,0 +1,1391 @@
+{
+  "item": [
+    {
+      "id": "d9b1adf3-e009-4be7-8848-1091bd82e650",
+      "name": "Account Updates",
+      "description": {
+        "content": "Request updates to an account.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "362dca9c-31c5-43fa-ac4c-ada5fcd5d575",
+          "name": "Query Account Updater service.",
+          "request": {
+            "name": "Query Account Updater service.",
+            "description": {
+              "content": "Request an update to an account. Check for updated account information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "account-updates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                "key": "merchant-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                "key": "request-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountInformation\": {\n    \"cardNumber\": \"<string>\",\n    \"expiry\": {\n      \"month\": \"<integer>\",\n      \"year\": \"<integer>\"\n    },\n    \"accountNumberType\": \"<string>\"\n  },\n  \"cardAccountAction\": \"<string>\",\n  \"subMerchantId\": \"<string>\",\n  \"merchantRecordIdentifier\": \"<string>\",\n  \"bypassBrandCheckIndicator\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a3e3a704-c669-4ccc-9ac5-1e25cb50e915",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990941725627"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "12cc0270-7bed-11e9-a188-1763956dd7f7"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountInformation\": {\n    \"cardNumber\": \"4111111111111111\",\n    \"expiry\": {\n      \"month\": 8,\n      \"year\": 2026\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestCreateTimestamp\": \"2024-10-30T14:30:00.000Z\",\n  \"responseId\": \"fe663508-8040-4880-bfc6-1212932837bc\",\n  \"requestId\": \"98c21399-a3f6-41ce-881a-9c5aeb586932\",\n  \"response\": \"SUCCESS\",\n  \"requestStatus\": \"REGISTERED\",\n  \"accountUpdaterResult\": {\n    \"oldAccountInformation\": {\n      \"cardNumber\": \"4012888888881881\",\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2020\n      },\n      \"cardTypeName\": \"string\",\n      \"accountNumberType\": \"<string>\"\n    },\n    \"newAccountInformation\": {\n      \"cardNumber\": \"4012888888881881\",\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2020\n      },\n      \"cardTypeName\": \"string\",\n      \"paymentMethodChanged\": true,\n      \"accountNumberType\": \"<string>\"\n    },\n    \"networkResponse\": {\n      \"networkReasonMessage\": \"string\",\n      \"networkResponseCode\": \"string\"\n    },\n    \"reasonMessage\": \"NEW_ACCOUNT_AND_EXPIRY\",\n    \"responseMessage\": \"Request Accepted\",\n    \"expectedRecordUpdateTimestamp\": \"2024-10-30T14:30:00.000Z\"\n  },\n  \"merchantRecordIdentifier\": \"45becd4d-b0d9-4904-9958-49aba52f1280\",\n  \"cardAccountAction\": \"REGISTER\",\n  \"subMerchantId\": \"991234567890\",\n  \"bypassBrandCheckIndicator\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "59dfadeb-8f11-4721-8801-023522cd36e8",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990941725627"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "12cc0270-7bed-11e9-a188-1763956dd7f7"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountInformation\": {\n    \"cardNumber\": \"4111111111111111\",\n    \"expiry\": {\n      \"month\": 8,\n      \"year\": 2026\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8a8528ad-3974-4e0d-a6f6-ddb9008b1203",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990941725627"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "12cc0270-7bed-11e9-a188-1763956dd7f7"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountInformation\": {\n    \"cardNumber\": \"4111111111111111\",\n    \"expiry\": {\n      \"month\": 8,\n      \"year\": 2026\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80941998-4db1-4285-9bfe-d446d31eb9d3",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990941725627"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "12cc0270-7bed-11e9-a188-1763956dd7f7"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountInformation\": {\n    \"cardNumber\": \"4111111111111111\",\n    \"expiry\": {\n      \"month\": 8,\n      \"year\": 2026\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad07f79c-c449-4cae-963c-cf102d2d3e76",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990941725627"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "12cc0270-7bed-11e9-a188-1763956dd7f7"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountInformation\": {\n    \"cardNumber\": \"4111111111111111\",\n    \"expiry\": {\n      \"month\": 8,\n      \"year\": 2026\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "28a76067-2f6f-4663-be97-d5acff249546",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990941725627"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "12cc0270-7bed-11e9-a188-1763956dd7f7"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountInformation\": {\n    \"cardNumber\": \"4111111111111111\",\n    \"expiry\": {\n      \"month\": 8,\n      \"year\": 2026\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "82c04831-b8b0-4ddf-ab82-031fbb0c8691",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990941725627"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "12cc0270-7bed-11e9-a188-1763956dd7f7"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountInformation\": {\n    \"cardNumber\": \"4111111111111111\",\n    \"expiry\": {\n      \"month\": 8,\n      \"year\": 2026\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cfbccc3-d4b3-4d39-a139-6e7fb812012c",
+              "name": "Gateway Timeout",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990941725627"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "12cc0270-7bed-11e9-a188-1763956dd7f7"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accountInformation\": {\n    \"cardNumber\": \"4111111111111111\",\n    \"expiry\": {\n      \"month\": 8,\n      \"year\": 2026\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3587c123-7039-4f75-aca2-15253ca300cc",
+          "name": "Get information about an account update.",
+          "request": {
+            "name": "Get information about an account update.",
+            "description": {
+              "content": "Get information about an account update.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "account-updates",
+                ":account-identifier"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "account-identifier",
+                  "description": "(Required) UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                "key": "merchant-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                "key": "request-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "08167856-b8bb-4c08-864e-5d89887deafe",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates",
+                    ":account-identifier"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "account-identifier",
+                      "description": "(Required) UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990000000020"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "c0f1f1c2-9b6a-4db8-a8bb-f2d6d4b6ee20"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"recordUpdateTimestamp\": \"2024-10-30T14:30:00.000Z\",\n  \"responseId\": \"fe663508-8040-4880-bfc6-1212932837bc\",\n  \"requestId\": \"98c21399-a3f6-41ce-881a-9c5aeb586932\",\n  \"response\": \"SUCCESS\",\n  \"requestStatus\": \"REGISTERED\",\n  \"callbackDeliveredTimestamp\": \"2024-10-30T14:30:00.000Z\",\n  \"merchantRecordIdentifier\": \"45becd4d-b0d9-4904-9958-49aba52f1280\",\n  \"resultsMessage\": {\n    \"oldAccountInformation\": {\n      \"cardNumber\": \"4012888888881881\",\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2020\n      },\n      \"cardTypeName\": \"string\",\n      \"accountNumberType\": \"<string>\"\n    },\n    \"newAccountInformation\": {\n      \"cardNumber\": \"4012888888881881\",\n      \"expiry\": {\n        \"month\": 5,\n        \"year\": 2020\n      },\n      \"cardTypeName\": \"string\",\n      \"paymentMethodChanged\": false,\n      \"accountNumberType\": \"<string>\"\n    },\n    \"networkResponse\": \"string\",\n    \"reason\": \"string\",\n    \"reasonMessage\": \"NEW_ACCOUNT_AND_EXPIRY\",\n    \"responseMessage\": \"string\",\n    \"expectedRecordUpdateTimestamp\": \"2024-10-30T14:30:00.000Z\",\n    \"networkResponseCode\": \"string\"\n  },\n  \"subMerchantId\": \"991234567890\",\n  \"bypassBrandCheckIndicator\": false,\n  \"cardAccountAction\": \"REGISTER\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "32ab13d1-f220-4e4e-8bb6-ecabc6b8fb59",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates",
+                    ":account-identifier"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "account-identifier",
+                      "description": "(Required) UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990000000020"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "c0f1f1c2-9b6a-4db8-a8bb-f2d6d4b6ee20"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8d3538e-5d49-44ae-9ead-2f1b6adfccb6",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates",
+                    ":account-identifier"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "account-identifier",
+                      "description": "(Required) UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990000000020"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "c0f1f1c2-9b6a-4db8-a8bb-f2d6d4b6ee20"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33ecf3b9-2096-489b-9b73-2fcee92e99f0",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates",
+                    ":account-identifier"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "account-identifier",
+                      "description": "(Required) UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990000000020"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "c0f1f1c2-9b6a-4db8-a8bb-f2d6d4b6ee20"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "98f84bcf-22e8-4e7b-b0d0-18b5e10f9b07",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates",
+                    ":account-identifier"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "account-identifier",
+                      "description": "(Required) UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990000000020"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "c0f1f1c2-9b6a-4db8-a8bb-f2d6d4b6ee20"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57e775e7-5fd3-4269-9f55-e582b403d561",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates",
+                    ":account-identifier"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "account-identifier",
+                      "description": "(Required) UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990000000020"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "c0f1f1c2-9b6a-4db8-a8bb-f2d6d4b6ee20"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8bfe501-1b48-41d7-98e7-3ced833000f7",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates",
+                    ":account-identifier"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "account-identifier",
+                      "description": "(Required) UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990000000020"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "c0f1f1c2-9b6a-4db8-a8bb-f2d6d4b6ee20"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f3d40ea9-2afb-43e1-b448-cd5c19911e94",
+              "name": "Gateway Timeout",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "account-updates",
+                    ":account-identifier"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "account-identifier",
+                      "description": "(Required) UUID referencing a prior account update request. Used to retrieve update status or results for a specific account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.",
+                    "key": "merchant-id",
+                    "value": "990000000020"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.",
+                    "key": "request-id",
+                    "value": "c0f1f1c2-9b6a-4db8-a8bb-f2d6d4b6ee20"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "475412b8-f1a5-4e22-9a52-81919f5dad74",
+      "name": "Health Check",
+      "description": {
+        "content": "Validate the health of the service.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f276ae28-b0fd-44a8-8e02-57c19f6cf72b",
+          "name": "Health check for the Account Updater service.",
+          "request": {
+            "name": "Health check for the Account Updater service.",
+            "description": {
+              "content": "Health check endpoint to validate that the Account Updater service is running.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "healthcheck"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "54652b74-a679-4c0b-87ce-bfd3bffc7aba",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "healthcheck"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"UP\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b3b6120e-388d-406c-beb5-0f6bb8250a0b",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "healthcheck"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef2d90bb-60d0-4bcb-99db-2feec6b11221",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "healthcheck"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b897ce15-2bf2-4359-86e5-ec3abb823f40",
+              "name": "Gateway Timeout",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "healthcheck"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"SUCCESS\",\n  \"responseCode\": \"ACCEPTED\",\n  \"responseMessage\": \"Request Accepted\",\n  \"validationErrors\": [\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    },\n    {\n      \"code\": \"1001\",\n      \"message\": \"A required field is empty.\",\n      \"entity\": \"Request Validator\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ms.payments.jpmorgan.com/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "97447065-5adb-46ce-bb38-e0aabd15dd60",
+    "name": "Account Updater API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Account Updater API provides recurring and stored payment merchants with their customers latest card account credentials.\n\nContact Support:\n Name: Merchant Services Account Updater API Support",
+      "type": "text/plain"
+    }
+  }
+}

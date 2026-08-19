@@ -1,0 +1,90 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockchain Deposit Account Balances API",
+    "version": "2.0.7"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Balances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve Balances of All Eligible Accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/account/v2/accounts/balances",
+            "headers": [
+              {
+                "name": "Request-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "For pagination, the total number of results to return"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "For selecting a cursor when using pagination"
+              }
+            ]
+          },
+          "docs": "Returns the current date balances of all eligible accounts\n\nThe following constraints apply when sending requests to this endpoint:  \n- Supported J.P. Morgan account type(s) :BDA \n- The maximum number of accounts (pageSize) that can be returned in single API call is 100. If the pageSize is not provided, the default is 25 accounts."
+        },
+        {
+          "info": {
+            "name": "Inquire Balances",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/account/v2/accounts/balances/inquiry",
+            "headers": [
+              {
+                "name": "Request-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "For pagination, the total number of results to return"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "For selecting a cursor when using pagination"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the historical day account balances that match valid request criteria. The following constraints apply when sending requests to this endpoint: \n- Supported J.P. Morgan account type(s) : BDA \n- The API supports the retrieval of account balances data for up to 45 days for BDA\n- When querying using date range (fromDate & toDate), the range can not exceed 45 days\n- The dates queried represent the current business day of the location of an account \n- The maximum number of accounts (pageSize) "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

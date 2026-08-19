@@ -1,0 +1,454 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tokenization API",
+    "version": "1.5.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health Check",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Health check for the Tokenization service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/healthcheck"
+          },
+          "docs": "Healthcheck endpoint to validate that the service is running."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Token Processing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Token provisioning request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/tokens",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Provision a token for a payment instrument."
+        },
+        {
+          "info": {
+            "name": "Request token information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/tokens/:token-reference-id",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              },
+              {
+                "name": "tokenRequestorId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "token-reference-id",
+                "value": "",
+                "type": "path",
+                "description": "Reference identifier for a specific token."
+              }
+            ]
+          },
+          "docs": "Request information about a token."
+        },
+        {
+          "info": {
+            "name": "Request token details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/tokens/:token-reference-id/details",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              },
+              {
+                "name": "tokenRequestorId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "token-reference-id",
+                "value": "",
+                "type": "path",
+                "description": "Reference identifier for a specific token."
+              }
+            ]
+          },
+          "docs": "Request details about a token."
+        },
+        {
+          "info": {
+            "name": "Request token assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/tokens/:token-reference-id/assets/:asset-reference-id",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              },
+              {
+                "name": "tokenRequestorId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "token-reference-id",
+                "value": "",
+                "type": "path",
+                "description": "Reference identifier for a specific token."
+              },
+              {
+                "name": "asset-reference-id",
+                "value": "",
+                "type": "path",
+                "description": "Reference identifier for a specific asset."
+              }
+            ]
+          },
+          "docs": "Request token assets containing card art and other details."
+        },
+        {
+          "info": {
+            "name": "Provision a acquirer token for a payment instrument",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/acquirertokens",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Provision a acquirer token for a payment instrument."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Cryptograms Request",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Token cryptogram request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/cryptograms",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a cryptogram for a network token. The request can be initiated using either the tokenNumber or tokenReferenceIdentifier field."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Token Lifecycle Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request token states",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/tokens/:token-reference-id/lifecycle-states",
+            "headers": [
+              {
+                "name": "tokenRequestorId",
+                "value": ""
+              },
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "token-reference-id",
+                "value": "",
+                "type": "path",
+                "description": "Reference identifier for a specific token."
+              }
+            ]
+          },
+          "docs": "Request token lifecycle state information."
+        },
+        {
+          "info": {
+            "name": "Token lifecycle management request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/tokens/:token-reference-id/lifecycle-states",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "token-reference-id",
+                "value": "",
+                "type": "path",
+                "description": "Reference identifier for a specific token."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Manages the token lifecycle state."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Bulk Operation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Process Bulk Tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/bulk-tokens",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              },
+              {
+                "name": "isEncrypted",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request bulk upload of token request"
+        },
+        {
+          "info": {
+            "name": "Retrieve the status of a bulk file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/bulk-tokens/:merchant-file-identifier",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "merchant-file-identifier",
+                "value": "",
+                "type": "path",
+                "description": "This is used for specifying individual parameters under API endpoint methods."
+              }
+            ]
+          },
+          "docs": "Request bulk upload of token request"
+        },
+        {
+          "info": {
+            "name": "Retrieve details of a bulk file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/bulk-tokens/:merchant-file-identifier/download",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "merchant-file-identifier",
+                "value": "",
+                "type": "path",
+                "description": "This is used for specifying individual parameters under API endpoint methods."
+              }
+            ]
+          },
+          "docs": "Request bulk upload of token request"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Bulk Key Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Provide public key to a merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/bulk-tokens/encryption-key",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Request to provide the public key from firm to a merchant for bulk tokenization"
+        },
+        {
+          "info": {
+            "name": "Create encryption key from a merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.merchant.jpmorgan.com/payments/v1/bulk-tokens/encryption-key",
+            "headers": [
+              {
+                "name": "merchantId",
+                "value": ""
+              },
+              {
+                "name": "requestId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request to create the public key from a merchant to firm for bulk tokenization"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

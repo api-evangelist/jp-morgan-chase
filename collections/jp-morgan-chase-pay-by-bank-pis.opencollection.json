@@ -1,0 +1,278 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Pay By Bank PIS",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "PIS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request for Providers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/pisp/providers",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "- Clients can request a list of ASPSPs reachable using J.P. Morgan's PISP\nservices in each country.\n- For the purposes of this API, ASPSPs are referred to as 'Providers.' \n- The request for retrieving a particular country's list of supported providers must contain the correct country code."
+        },
+        {
+          "info": {
+            "name": "Request for Payment Initiation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/pisp/payment/request",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request initiates a payment on a PSU's behalf."
+        },
+        {
+          "info": {
+            "name": "Request for Payment Authorization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/pisp/payment/authorize",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request is used to authorize a payment.    \n\n**NOTE: The request payload MUST be digitally signed and encrypted using the Signing Certificate**"
+        },
+        {
+          "info": {
+            "name": "Request for Payment Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/pisp/payment/status",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request retrieves the current status of a previously initiated\npayment."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Refunds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request for Payment refunds",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/pisp/payments/refunds",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request initiates a refund on the payments made before"
+        },
+        {
+          "info": {
+            "name": "Retrieve refund status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/pisp/payments/refunds/:refundId",
+            "params": [
+              {
+                "name": "refundId",
+                "value": "45f452df-f84a-4fc1-acee-d024f5fede98",
+                "type": "path",
+                "description": "A unique refund identifier in UUID (version 4) format."
+              }
+            ]
+          },
+          "docs": "This request retrieves the refund status and details based on the given refund Id"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "AIS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request for Providers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/aisp/providers",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<!-- theme: warning-->\n> Deprecated\n>\n> Sunset: 30 May 2026\n- This request retrieves a list of ASPSPs reachable using J.P. Morgan's AISP services in each country.\n- For the purposes of this API, ASPSPs are referred to as Providers.\n- The request for retrieving a particular country's list of supported Providers must contain the correct country code"
+        },
+        {
+          "info": {
+            "name": "Request to Access Account Information Services",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/aisp/consent/provider",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<!-- theme: warning-->\n> Deprecated\n>\n> Sunset: 30 May 2026\n- This request allows the PSU to consent to J.P. Morgan accessing their\naccount information at a particular `Provider`."
+        },
+        {
+          "info": {
+            "name": "Send Authorized Token Issued by Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/aisp/authorize",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<!-- theme: warning-->\n> Deprecated\n>\n> Sunset: 30 May 2026\n- Following the PSUs authorization and confirmation of information sharing with their provider, the provider issues a token\n  that permits access to the PSUs data. \n- This token must be transmitted to J.P. Morgan to complete the account information\n  request and digitally sign the request payload."
+        },
+        {
+          "info": {
+            "name": "Request for Account Information",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/aisp/accounts",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<!-- theme: warning-->\n> Deprecated\n>\n> Sunset: 30 May 2026\n- This request retrieves the account information for a given combination\nof PSU and Provider. \n- An active authorization token is required or access will be denied"
+        },
+        {
+          "info": {
+            "name": "Request for Transaction Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/aisp/transactions",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<!-- theme: warning-->\n> Deprecated\n>\n> Sunset: 30 May 2026\nThis request retrieves the transaction details for a given combination\nProvider and PSU. An active authorization token is required."
+        },
+        {
+          "info": {
+            "name": "Request for Account Holder Information",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/aisp/holderinfo",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<!-- theme: warning-->\n> Deprecated\n>\n> Sunset: 30 Jun 2026\nThis request retrieves information about the account holder based on a\ngiven Provider and Customer ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

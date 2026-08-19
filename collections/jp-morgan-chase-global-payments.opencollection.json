@@ -1,0 +1,169 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Global Payments",
+    "version": "2.5.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query Payments by `endToEndId` or `paymentId`",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/payment/v2/payments",
+            "headers": [
+              {
+                "name": "Request-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "endToEndId",
+                "value": "",
+                "type": "query",
+                "description": "Customer assigned Unique identifier to unambiguously identify the Payment transaction.\nThis identification is passed on, unchanged, throughout the entire end-to-end chain."
+              },
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "query",
+                "description": "JPMC generated payment identifier"
+              },
+              {
+                "name": "view",
+                "value": "",
+                "type": "query",
+                "description": "Determines the level of detail in the response."
+              },
+              {
+                "name": "paymentType",
+                "value": "",
+                "type": "query",
+                "description": "Payment type.\n**Providing paymentType is optional but when provided, it enhances both query efficiency and response times.**\n"
+              }
+            ]
+          },
+          "docs": "<!-- theme: success -->\n\n> Query Payments by `endToEndId` or `paymentId`. \n\n> Optionally, specify `view=FULL` to get an expanded representation for each payment."
+        },
+        {
+          "info": {
+            "name": "Initiate Payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/payment/v2/payments",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              },
+              {
+                "name": "Request-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate Payments\n\n> Mock responses displayed with JOSE are signed and encrypted and may not be human-readable. Use the JSON toggle to view the underlying mock payload data in a readable format.\n>\n> Payment Initiation requests must use the `Content-Type: application/jose` header"
+        },
+        {
+          "info": {
+            "name": "Retrieve Payment by `paymentId`",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/payment/v2/payments/:paymentId",
+            "headers": [
+              {
+                "name": "Request-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "JPMC generated payment identifier"
+              },
+              {
+                "name": "view",
+                "value": "",
+                "type": "query",
+                "description": "Determines the level of detail in the response."
+              }
+            ]
+          },
+          "docs": "Retrieves a payment resource by providing the `paymentId`; \noptionally, specify `view=FULL` to get an expanded representation for the payment."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Returns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Payment Returns",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/payment/v2/payments/returns",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              },
+              {
+                "name": "Request-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Payment Returns"
+        },
+        {
+          "info": {
+            "name": "Retrieve Payment Return",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/payment/v2/payments/returns/:returnId",
+            "params": [
+              {
+                "name": "returnId",
+                "value": "",
+                "type": "path",
+                "description": "JPMC generated unique payment return identifier"
+              }
+            ]
+          },
+          "docs": "<!-- theme: success -->\nRetrieve payment return details using ReturnId"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

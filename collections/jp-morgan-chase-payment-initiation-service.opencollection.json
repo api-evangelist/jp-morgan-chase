@@ -1,0 +1,152 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Payment Initiation Service",
+    "version": "2.0.8"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate Payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/paybybank/v2/payments",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a payment request to setup the money movement."
+        },
+        {
+          "info": {
+            "name": "Acknowledge Payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/paybybank/v2/payments/:id/acknowledge",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "A unique ID of the payment"
+              }
+            ]
+          },
+          "docs": "Acknowledges the payment request that was previously setup."
+        },
+        {
+          "info": {
+            "name": "Retrieve Payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://apigateway.jpmorgan.com/tsapi/paybybank/v2/payments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "A unique ID of the payment"
+              }
+            ]
+          },
+          "docs": "Retrieves the details of the payment request by Id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payouts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Payouts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/paybybank/v2/payouts",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a payout for a specific payment transaction as a refund or a withdrawal.\n\n> The Pay By Bank - Payouts API facilitates businesses to carry out payments to beneficiaries efficiently within the context of Open Banking. By capitalizing on the secure infrastructure of Open Banking, it offers a robust, streamlined, and secure mechanism to process payouts, categorized into two types - Refunds and Withdrawals.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve Payouts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://apigateway.jpmorgan.com/tsapi/paybybank/v2/payouts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "A unique ID of the payout"
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a given payout by Id.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Connectivity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List providers for a market",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://apigateway.jpmorgan.com/tsapi/paybybank/v2/providers",
+            "params": [
+              {
+                "name": "market",
+                "value": "",
+                "type": "query",
+                "description": "The ISO 3166-1 alpha-2 market code."
+              }
+            ]
+          },
+          "docs": "Lists all providers on a specified market."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

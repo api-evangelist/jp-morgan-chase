@@ -1,0 +1,1926 @@
+{
+  "item": [
+    {
+      "id": "de1b2009-9ee8-4413-b124-646b10fc7dbe",
+      "name": "Health",
+      "description": {
+        "content": "Service Health Checks",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "99f5895e-119a-455f-a4c2-698c8e053eda",
+          "name": "Shallow Health Check",
+          "request": {
+            "name": "Shallow Health Check",
+            "description": {
+              "content": "**Shallow Health Check**\n\nReturns the health status of the API service. This endpoint performs a lightweight check\nto confirm the service is running and able to accept requests. It does not verify\ndownstream dependencies.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6c1401f6-76b1-4994-a28a-8992acaf53a7",
+              "name": "Service is healthy",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"UP\",\n  \"isReady\": true,\n  \"version\": \"2.1.0\",\n  \"applicationName\": \"Example App\",\n  \"statusUpdatedAt\": \"2025-09-25T12:00:00Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "90ec8886-be35-4e92-a2f3-25515b20456c",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Invalid Data\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10104\",\n      \"message\": \"Bad Value\",\n      \"location\": \"BODY\",\n      \"field\": \"type\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83040813-0d4b-4996-9a34-f28a40b7c3ab",
+              "name": "Unauthorized - Authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authentication Failure\",\n  \"httpStatus\": 401,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client could not be authenticated\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8d27231-93db-4a01-b195-97db50558f0b",
+              "name": "Forbidden. The client does not have the required permissions to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authorization Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client forbidden from accessing the requested resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21405bc5-17d7-461c-be31-4a01d5903068",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "939ec69f-c2cc-4370-814f-8723de3ef697",
+      "name": "Payment Holds",
+      "description": {
+        "content": "Manage Payment Holds",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1c52c3f5-eb26-4f5e-b098-734a0215ddec",
+          "name": "Retrieve Payment Holds",
+          "request": {
+            "name": "Retrieve Payment Holds",
+            "description": {
+              "content": "**Retrieve payment holds**\n\nReturns a paginated list of payment holds, optionally filtered by status, substatus, and date range.\n\n#### Filtering by `status` vs `substatus`\nThe `status` and `substatus` query parameters are **mutually exclusive** — you may use one or the other, but not both in the same request. If both are provided, the API will return a `400 Bad Request` error.\n\nUse **`status`** for broad filtering based on the high-level state of a hold:\n\n| Value | Description |\n|-------|-------------|\n| `PENDING` | Returns all holds awaiting a decision, regardless of whether they are pending client action or bank review |\n| `APPROVED` | Returns holds that have been approved |\n| `REJECTED` | Returns holds that have been rejected. Can use both `APPROVED` and `REJECTED` together to retrieve all decisioned holds. |\n\nUse **`substatus`** for more granular filtering when you need to distinguish _who_ needs to act or _how_ a hold was resolved:\n\n| Value | Description |\n|-------|-------------|\n| `PENDING_ACTION_CLIENT` | Holds awaiting a decision by the client |\n| `PENDING_ACTION_JPM` | Holds under review by the bank |\n\nCan also use substatus to filter for holds decisioned by specific entity (client or JPM) or for a particular reason.\n\nIf neither parameter is provided, holds across all statuses are returned.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "holds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>",
+                  "description": "One or more hold statuses to filter by. If substatus is used, this must not be provided. If multiple values are specified (comma-separated), treated as OR. If not provided, returns holds for any status."
+                },
+                {
+                  "disabled": false,
+                  "key": "substatus",
+                  "value": "<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>,<string>",
+                  "description": "One or more hold sub-statuses. If status is used, substatus must not be provided. If multiple values are specified (comma-separated), treated as OR. If not provided, returns holds for any sub-status."
+                },
+                {
+                  "disabled": false,
+                  "key": "startDateTime",
+                  "value": "<dateTime>",
+                  "description": "Start of hold date/time range (inclusive). If only startDateTime provided, returns anything >= startDateTime. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC"
+                },
+                {
+                  "disabled": false,
+                  "key": "endDateTime",
+                  "value": "<dateTime>",
+                  "description": "End of hold date/time range (inclusive). If only endDateTime provided, returns anything <= endDateTime. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "heldAt.desc",
+                  "description": "Sort order for the collection results. Uses the format field.`direction` where direction is `asc` (ascending) or `desc` (descending).\n\nSupported sort fields: `heldAt`, `cutOffAt`, `status`.\n\nIf not provided, defaults to heldAt.`desc` (most recently held first).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Page offset for pagination (0-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "25",
+                  "description": "The number of records per page"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fc35f997-7d73-4b42-94bd-b9af48564fd1",
+              "name": "Retrieve Payment Holds",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": ""
+                    },
+                    {
+                      "key": "substatus",
+                      "value": "PENDING_ACTION_CLIENT"
+                    },
+                    {
+                      "key": "startDateTime",
+                      "value": "2026-01-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "endDateTime",
+                      "value": "2026-02-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "heldAt.desc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Caching directive for sensitive financial data",
+                  "key": "Cache-Control",
+                  "value": "no-store"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"06bca14f-1fc0-4cd7-9e0b-8bb7e06334f7\",\n      \"status\": \"PENDING\",\n      \"substatus\": \"PENDING_ACTION_CLIENT\",\n      \"exceptionType\": \"BANK_RULE\",\n      \"heldAt\": \"2026-02-01T14:15:22Z\",\n      \"cutOffAt\": \"2026-02-06T14:15:22Z\",\n      \"rules\": [\n        {\n          \"id\": \"59be9844-3a70-4fbc-8d58-9637c1b34b18\",\n          \"name\": \"Client ABC Rule for Suspicious Beneficiary\",\n          \"effectiveAt\": \"2019-08-24\"\n        }\n      ],\n      \"payment\": {\n        \"requestedExecutionDate\": \"2026-02-01\",\n        \"paymentIdentifiers\": {\n          \"endToEndId\": \"E2E3000113WEBXX\"\n        },\n        \"value\": {\n          \"currency\": \"USD\",\n          \"amount\": \"10.50\"\n        },\n        \"transferType\": \"DEBIT\",\n        \"paymentType\": \"WIRE\",\n        \"debtorAgent\": {\n          \"financialInstitutionIds\": [\n            {\n              \"id\": \"CHASUS33XXX\",\n              \"idType\": \"BIC\"\n            }\n          ]\n        },\n        \"debtor\": {\n          \"name\": \"Nicholas Tesla\",\n          \"account\": {\n            \"accountNumber\": \"987654321\",\n            \"accountCurrency\": \"USD\"\n          },\n          \"postalAddress\": {\n            \"type\": \"HOME\",\n            \"addressLines\": [\n              \"10007 S. Lake Drive\"\n            ],\n            \"streetName\": \"10007 Lake Dr\",\n            \"postalCode\": \"48035\",\n            \"city\": \"Clinton Township\",\n            \"countrySubDivision\": \"MI\",\n            \"country\": \"US\"\n          }\n        },\n        \"creditor\": {\n          \"name\": \"Comrade Musics\",\n          \"account\": {\n            \"accountNumber\": \"123456011\",\n            \"accountCurrency\": \"USD\"\n          },\n          \"postalAddress\": {\n            \"country\": \"US\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"06bca14f-1fc0-4cd7-9e0b-8bb7e06334f7\",\n      \"status\": \"PENDING\",\n      \"substatus\": \"PENDING_ACTION_CLIENT\",\n      \"exceptionType\": \"BANK_RULE\",\n      \"heldAt\": \"2026-03-01T14:15:22Z\",\n      \"cutOffAt\": \"2026-03-15T14:15:22Z\",\n      \"rules\": [\n        {\n          \"id\": \"59be9844-3a70-4fbc-8d58-9637c1b34b18\",\n          \"name\": \"Client ABC Rule for Suspicious Beneficiary\",\n          \"effectiveAt\": \"2019-08-24\"\n        }\n      ],\n      \"payment\": {\n        \"requestedExecutionDate\": \"2026-03-10\",\n        \"paymentIdentifiers\": {\n          \"endToEndId\": \"E2E5908713WEBXX\"\n        },\n        \"value\": {\n          \"currency\": \"USD\",\n          \"amount\": \"250000\"\n        },\n        \"transferType\": \"DEBIT\",\n        \"paymentType\": \"WIRE\",\n        \"debtorAgent\": {\n          \"financialInstitutionIds\": [\n            {\n              \"id\": \"CHASUS33XXX\",\n              \"idType\": \"BIC\"\n            }\n          ]\n        },\n        \"debtor\": {\n          \"name\": \"Thomas Edison\",\n          \"account\": {\n            \"accountNumber\": \"123456789\",\n            \"accountCurrency\": \"USD\"\n          },\n          \"postalAddress\": {\n            \"type\": \"HOME\",\n            \"addressLines\": [\n              \"10007 W Shore Drive\"\n            ],\n            \"streetName\": \"10007 Shore Dr\",\n            \"postalCode\": \"20147\",\n            \"city\": \"Union City\",\n            \"countrySubDivision\": \"NJ\",\n            \"country\": \"US\"\n          }\n        },\n        \"creditor\": {\n          \"name\": \"Superior Cleaning LLC\",\n          \"account\": {\n            \"accountNumber\": \"556677889\",\n            \"accountCurrency\": \"USD\"\n          },\n          \"postalAddress\": {\n            \"country\": \"US\"\n          }\n        }\n      }\n    }\n  ],\n  \"metadata\": {\n    \"pagination\": {\n      \"page\": 1,\n      \"size\": 25,\n      \"totalCount\": 2,\n      \"totalPages\": 1\n    },\n    \"asOf\": \"2026-04-01T00:00:00+00:00\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2524b87-46bd-499e-906e-93376f8fa40f",
+              "name": "Bad Request. \n\n**List of error codes and descriptions**\n\n| Error Code      |          Description                           |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing or invalid             |\n| 10103           | Bad Format                                      |\n| 10104           | Bad Value                                      |\n| 10108           | Mutually exclusive fields violation            |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": ""
+                    },
+                    {
+                      "key": "substatus",
+                      "value": "PENDING_ACTION_CLIENT"
+                    },
+                    {
+                      "key": "startDateTime",
+                      "value": "2026-01-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "endDateTime",
+                      "value": "2026-02-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "heldAt.desc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"10103\",\n      \"message\": \"Invalid resource identifier format.\",\n      \"field\": \"id\",\n      \"location\": \"PATH\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e10f5b68-dca3-4cb6-99f6-19826af33eb5",
+              "name": "Unauthorized - Authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": ""
+                    },
+                    {
+                      "key": "substatus",
+                      "value": "PENDING_ACTION_CLIENT"
+                    },
+                    {
+                      "key": "startDateTime",
+                      "value": "2026-01-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "endDateTime",
+                      "value": "2026-02-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "heldAt.desc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized\",\n  \"httpStatus\": 401,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"context\": [\n    {\n      \"code\": \"14001\",\n      \"message\": \"Authentication credentials are missing or invalid\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ea7db154-737a-4a60-8e8f-757e1caffb87",
+              "name": "Forbidden. The client does not have the required permissions to access this resource. Verify that the correct entitlements and scopes have been granted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": ""
+                    },
+                    {
+                      "key": "substatus",
+                      "value": "PENDING_ACTION_CLIENT"
+                    },
+                    {
+                      "key": "startDateTime",
+                      "value": "2026-01-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "endDateTime",
+                      "value": "2026-02-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "heldAt.desc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403,\n  \"traceId\": \"5914f136-4544-4b1c-8004-6c2388ba76b4\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Invalid client profile\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd2e0b54-1626-4e23-8d4e-912698003194",
+              "name": "Too Many Requests - Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": ""
+                    },
+                    {
+                      "key": "substatus",
+                      "value": "PENDING_ACTION_CLIENT"
+                    },
+                    {
+                      "key": "startDateTime",
+                      "value": "2026-01-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "endDateTime",
+                      "value": "2026-02-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "heldAt.desc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Too Many Requests\",\n  \"httpStatus\": 429,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"context\": [\n    {\n      \"code\": \"10109\",\n      \"message\": \"Rate limit exceeded. Please retry after some time.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63da9ea2-ce48-4dfe-9896-cb986401ed2e",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": ""
+                    },
+                    {
+                      "key": "substatus",
+                      "value": "PENDING_ACTION_CLIENT"
+                    },
+                    {
+                      "key": "startDateTime",
+                      "value": "2026-01-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "endDateTime",
+                      "value": "2026-02-01T00:00:00+00:00"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "heldAt.desc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "98e4d4d4-2cba-4c34-a750-d5a890699739",
+          "name": "Retrieve details of a payment hold",
+          "request": {
+            "name": "Retrieve details of a payment hold",
+            "description": {
+              "content": "**Retrieve details of a single payment hold by identifier**",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "holds",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique identifier for the payment hold"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5107a917-4fd0-4335-8b73-87d8e75d409d",
+              "name": "Payment Hold Details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Caching directive for sensitive financial data",
+                  "key": "Cache-Control",
+                  "value": "no-store"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"06bca14f-1fc0-4cd7-9e0b-8bb7e06334f7\",\n  \"status\": \"PENDING\",\n  \"substatus\": \"PENDING_ACTION_CLIENT\",\n  \"exceptionType\": \"BANK_RULE\",\n  \"heldAt\": \"2026-02-01T14:15:22Z\",\n  \"cutOffAt\": \"2026-02-06T14:15:22Z\",\n  \"rules\": [\n    {\n      \"id\": \"59be9844-3a70-4fbc-8d58-9637c1b34b18\",\n      \"name\": \"Client ABC Rule for Suspicious Beneficiary\",\n      \"effectiveAt\": \"2019-08-24\"\n    }\n  ],\n  \"payment\": {\n    \"requestedExecutionDate\": \"2026-02-01\",\n    \"paymentIdentifiers\": {\n      \"endToEndId\": \"E2E3000113WEBXX\"\n    },\n    \"value\": {\n      \"currency\": \"USD\",\n      \"amount\": \"10.50\"\n    },\n    \"transferType\": \"DEBIT\",\n    \"paymentType\": \"WIRE\",\n    \"debtorAgent\": {\n      \"financialInstitutionIds\": [\n        {\n          \"id\": \"CHASUS33XXX\",\n          \"idType\": \"BIC\"\n        }\n      ]\n    },\n    \"debtor\": {\n      \"name\": \"Nicholas Tesla\",\n      \"account\": {\n        \"accountNumber\": \"987654321\",\n        \"accountCurrency\": \"USD\"\n      },\n      \"postalAddress\": {\n        \"type\": \"HOME\",\n        \"addressLines\": [\n          \"10007 S. Lake Drive\"\n        ],\n        \"streetName\": \"10007 Lake Dr\",\n        \"postalCode\": \"48035\",\n        \"city\": \"Clinton Township\",\n        \"countrySubDivision\": \"MI\",\n        \"country\": \"US\"\n      }\n    },\n    \"creditor\": {\n      \"name\": \"Comrade Musics\",\n      \"account\": {\n        \"accountNumber\": \"123456011\",\n        \"accountCurrency\": \"USD\"\n      },\n      \"postalAddress\": {\n        \"country\": \"US\"\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b760bcb2-d6e3-475a-a831-358f9c4cf80d",
+              "name": "Bad Request.\n\n**List of error codes and descriptions**\n\n| Error Code      |          Description                           |\n| --------------  |------------------------------------------------|\n| 10103           | Bad Format                                      |\n| 11004           | Wrong channel for hold                          |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"10103\",\n      \"message\": \"Invalid resource identifier format.\",\n      \"field\": \"id\",\n      \"location\": \"PATH\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9fcc397-9c25-4042-9be2-4367995ef6ef",
+              "name": "Unauthorized - Authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized\",\n  \"httpStatus\": 401,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"context\": [\n    {\n      \"code\": \"14001\",\n      \"message\": \"Authentication credentials are missing or invalid\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "605dc8ab-23ef-4710-b295-3200138f04de",
+              "name": "Forbidden. The client does not have the required permissions to access this resource. Verify that the correct entitlements and scopes have been granted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403,\n  \"traceId\": \"5914f136-4544-4b1c-8004-6c2388ba76b4\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Invalid client profile\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe6e7e67-03f5-4583-8995-e48b875b5955",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "064b5b80-cf6a-4104-a810-95b552cd586a",
+              "name": "Too Many Requests - Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Too Many Requests\",\n  \"httpStatus\": 429,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"context\": [\n    {\n      \"code\": \"10109\",\n      \"message\": \"Rate limit exceeded. Please retry after some time.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0be88df-b299-463c-a966-82af329d0ba6",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "63f1b5d4-ca01-4bab-b138-0678f3e6ec47",
+          "name": "Decision Single Payment Hold",
+          "request": {
+            "name": "Decision Single Payment Hold",
+            "description": {
+              "content": "**Decision Single Payment Hold**\nThis endpoint allows users to take action on a single payment hold by approving or rejecting it.  Users can specify the decision action (APPROVE or REJECT), provide a reason for rejection, and  indicate the type of confirmed fraud if applicable. For bulk processing of multiple hold decisions,  use the `/holds/decision/bulk` endpoint instead.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "holds",
+                ":id",
+                "decision"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique identifier for the payment hold"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"<string>\",\n  \"rejectReason\": \"<string>\",\n  \"fraud\": {\n    \"type\": \"<string>\",\n    \"additionalInformation\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "65f550c0-dd51-4cfc-8520-b86700d96b0f",
+              "name": "Decision response for the payment hold action",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id",
+                    "decision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"APPROVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"holdId\": \"a1000001-aaaa-4aaa-aaaa-000000000001\",\n  \"result\": \"SUCCESS\",\n  \"status\": \"APPROVED\",\n  \"substatus\": \"APPROVED_CLIENT\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "19aceba5-0c88-47c9-9b3a-042139a678a2",
+              "name": "Bad Request. \n\n**List of error codes and descriptions**\n\n| Error Code      |          Description                                     |\n| --------------  |----------------------------------------------------------|\n| 10001           | Mandatory field missing                                  |\n| 10103           | Bad format                                               |\n| 10104           | Bad Value                                                |\n| 11003           | Field only allowed for specific value of other field     |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id",
+                    "decision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"APPROVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"10103\",\n      \"message\": \"Invalid resource identifier format.\",\n      \"field\": \"id\",\n      \"location\": \"PATH\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21352dfe-fdb5-4ad3-b724-4bf306541804",
+              "name": "Unauthorized - Authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id",
+                    "decision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"APPROVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized\",\n  \"httpStatus\": 401,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"context\": [\n    {\n      \"code\": \"14001\",\n      \"message\": \"Authentication credentials are missing or invalid\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6de11e84-b49d-49ba-852c-c1740235aa97",
+              "name": "Forbidden. The client does not have the required permissions to access this resource. Verify that the correct entitlements and scopes have been granted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id",
+                    "decision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"APPROVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403,\n  \"traceId\": \"5914f136-4544-4b1c-8004-6c2388ba76b4\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Invalid client profile\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8fcc52b0-e13b-4845-96b9-af0f0cf28624",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id",
+                    "decision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"APPROVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9cca1ead-8caa-4097-b1ee-a709f54a2bfc",
+              "name": "Conflict\n\n**List of error codes and descriptions**\n\n| Error Code      |           Description                          |\n| --------------  |------------------------------------------------|\n| 11000           | Hold has expired                               |\n| 11001           | Hold already decisioned                        |\n| 11004           | Wrong channel for hold                         |\n\n**Hold Already Decisioned (11001):** A payment hold may only be decisioned once. In rare cases, two users may attempt to decision the same hold at nearly the same time. When this occurs, only the first request will succeed — the subsequent request will receive a `409 Conflict` with error code `11001`. While this scenario is uncommon, API consumers must handle this response gracefully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id",
+                    "decision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"APPROVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Conflict\",\n  \"httpStatus\": 409,\n  \"traceId\": \"00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01\",\n  \"requestId\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"context\": [\n    {\n      \"code\": \"11000\",\n      \"message\": \"Hold has expired\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b7bef84-d180-47bf-a120-99080ee31a47",
+              "name": "Too Many Requests - Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id",
+                    "decision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"APPROVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Too Many Requests\",\n  \"httpStatus\": 429,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"context\": [\n    {\n      \"code\": \"10109\",\n      \"message\": \"Rate limit exceeded. Please retry after some time.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5667d3a6-c529-4857-b1a1-7ea4084f2262",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    ":id",
+                    "decision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the payment hold"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"APPROVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3691d7dd-b67a-4025-9131-b97c21ae5c2c",
+          "name": "Decision Multiple Payment Holds (Bulk)",
+          "request": {
+            "name": "Decision Multiple Payment Holds (Bulk)",
+            "description": {
+              "content": "**Decision Multiple Payment Holds (Bulk)**\nThis endpoint allows users to take action on multiple payment holds simultaneously by approving or rejecting them.  The API supports batch processing of multiple hold decisions, enabling efficient processing of large volumes of holds.  Each decision in the batch can have its own action (APPROVE or REJECT), rejection reason, and confirmed fraud type.  For processing a single hold decision, use the `/holds/{id}/decision` endpoint instead.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "holds",
+                "decision",
+                "bulk"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"holdId\": \"<string>\",\n      \"action\": \"<string>\",\n      \"rejectReason\": \"<string>\",\n      \"fraud\": {\n        \"type\": \"<string>\",\n        \"additionalInformation\": \"<string>\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "eca4b425-0413-4f07-90a3-87526e38e546",
+              "name": "Bulk response object containing decision responses for each hold",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    "decision",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"holdId\": \"6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54\",\n      \"action\": \"REJECT\",\n      \"rejectReason\": \"DUPLICATE_TRANSACTION\"\n    },\n    {\n      \"holdId\": \"a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31\",\n      \"action\": \"APPROVE\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"holdId\": \"6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54\",\n      \"result\": \"SUCCESS\",\n      \"status\": \"REJECTED\",\n      \"substatus\": \"REJECTED_DUPLICATE_TXN_CLIENT\"\n    },\n    {\n      \"holdId\": \"a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31\",\n      \"result\": \"FAILURE\",\n      \"failureReason\": {\n        \"code\": \"11001\",\n        \"message\": \"Hold already decisioned\"\n      },\n      \"status\": \"PENDING\",\n      \"substatus\": \"PENDING_ACTION_CLIENT\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bfe38642-de0f-4503-b226-519e9a0ca02b",
+              "name": "Bad Request.\n\n**List of error codes and descriptions**\n\n| Error Code      |          Description                           |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing or invalid             |\n| 10103           | Bad Format                                      |\n| 10104           | Bad Value                                      |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    "decision",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"holdId\": \"6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54\",\n      \"action\": \"REJECT\",\n      \"rejectReason\": \"DUPLICATE_TRANSACTION\"\n    },\n    {\n      \"holdId\": \"a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31\",\n      \"action\": \"APPROVE\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Bad Request\",\n  \"httpStatus\": 400,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"10103\",\n      \"message\": \"Invalid resource identifier format.\",\n      \"field\": \"id\",\n      \"location\": \"PATH\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f68e6cc7-651b-4f8f-b8ad-132f1b2ff1d8",
+              "name": "Unauthorized - Authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    "decision",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"holdId\": \"6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54\",\n      \"action\": \"REJECT\",\n      \"rejectReason\": \"DUPLICATE_TRANSACTION\"\n    },\n    {\n      \"holdId\": \"a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31\",\n      \"action\": \"APPROVE\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Unauthorized\",\n  \"httpStatus\": 401,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"context\": [\n    {\n      \"code\": \"14001\",\n      \"message\": \"Authentication credentials are missing or invalid\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "129bef47-d8ac-403c-a8ea-15fe855259f4",
+              "name": "Forbidden. The client does not have the required permissions to access this resource. Verify that the correct entitlements and scopes have been granted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    "decision",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"holdId\": \"6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54\",\n      \"action\": \"REJECT\",\n      \"rejectReason\": \"DUPLICATE_TRANSACTION\"\n    },\n    {\n      \"holdId\": \"a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31\",\n      \"action\": \"APPROVE\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Forbidden\",\n  \"httpStatus\": 403,\n  \"traceId\": \"5914f136-4544-4b1c-8004-6c2388ba76b4\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Invalid client profile\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dfb12ded-12d0-4e57-b5af-e967aa0f82e4",
+              "name": "Conflict\n\n**List of error codes and descriptions**\n\n| Error Code      |           Description                          |\n| --------------  |------------------------------------------------|\n| 11000           | Hold has expired                               |\n| 11001           | Hold already decisioned                        |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    "decision",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"holdId\": \"6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54\",\n      \"action\": \"REJECT\",\n      \"rejectReason\": \"DUPLICATE_TRANSACTION\"\n    },\n    {\n      \"holdId\": \"a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31\",\n      \"action\": \"APPROVE\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Conflict\",\n  \"httpStatus\": 409,\n  \"traceId\": \"00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01\",\n  \"requestId\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"context\": [\n    {\n      \"code\": \"11000\",\n      \"message\": \"Hold has expired\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9e10e9b-eb7e-4a17-8cc6-dd37f4c25d0c",
+              "name": "Too Many Requests - Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    "decision",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"holdId\": \"6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54\",\n      \"action\": \"REJECT\",\n      \"rejectReason\": \"DUPLICATE_TRANSACTION\"\n    },\n    {\n      \"holdId\": \"a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31\",\n      \"action\": \"APPROVE\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Too Many Requests\",\n  \"httpStatus\": 429,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"context\": [\n    {\n      \"code\": \"10109\",\n      \"message\": \"Rate limit exceeded. Please retry after some time.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c9072501-7dcc-4232-bee3-ef51d16bbaf4",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "holds",
+                    "decision",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"holdId\": \"6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54\",\n      \"action\": \"REJECT\",\n      \"rejectReason\": \"DUPLICATE_TRANSACTION\"\n    },\n    {\n      \"holdId\": \"a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31\",\n      \"action\": \"APPROVE\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4\",\n  \"requestId\": \"UK202109202311354152\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.payments.jpmorgan.com/trust-safety/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fcd1a3af-d65d-42c6-ba57-00f91eeda061",
+    "name": "Alerts and Decisioning API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Programmatically receives and decisions Payment Holds, automating your fraud review and hold resolution workflow to minimize operational delays while adhering to corporate IT standards.\n\n\nContact Support:\n Name: JPMorgan Chase & Co. API support\n Email: ismd.security.operations@jpmorgan.com",
+      "type": "text/plain"
+    }
+  }
+}

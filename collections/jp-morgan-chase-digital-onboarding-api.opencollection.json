@@ -1,0 +1,779 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Digital Onboarding API",
+    "version": "1.0.18"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clients",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List clients",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/clients",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number."
+              }
+            ]
+          },
+          "docs": "Returns a list of clients associated with your platform."
+        },
+        {
+          "info": {
+            "name": "Create client",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/clients",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a client."
+        },
+        {
+          "info": {
+            "name": "Get client",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/clients/:id",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "1000010400",
+                "type": "path",
+                "description": "Unique identifier for a client."
+              }
+            ]
+          },
+          "docs": "Retrieve client details by its ID."
+        },
+        {
+          "info": {
+            "name": "Update client",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/clients/:id",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "1000010400",
+                "type": "path",
+                "description": "Unique identifier for a client."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a client."
+        },
+        {
+          "info": {
+            "name": "Update client",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/clients/:id",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "1000010400",
+                "type": "path",
+                "description": "Unique identifier for a client."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a client."
+        },
+        {
+          "info": {
+            "name": "Perform client verifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/clients/:id/verifications",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "1000010400",
+                "type": "path",
+                "description": "Unique identifier for a client."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Performs client verifications"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Questions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List questions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/questions",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "questionIds",
+                "value": "30001,30002,30003",
+                "type": "query",
+                "description": "Comma-separated list of Question IDs."
+              }
+            ]
+          },
+          "docs": "Lists customer due diligence questions.\n"
+        },
+        {
+          "info": {
+            "name": "Get question",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/questions/:id",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "300001",
+                "type": "path",
+                "description": "Unique Question identifier."
+              }
+            ]
+          },
+          "docs": "Get a customer due diligence question.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Document requests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List document requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/document-requests",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3000000001",
+                "type": "query",
+                "description": "Unique Client identifier."
+              },
+              {
+                "name": "partyId",
+                "value": "2000000555",
+                "type": "query",
+                "description": "Unique Party identifier."
+              }
+            ]
+          },
+          "docs": "Get a list of document requests.\n"
+        },
+        {
+          "info": {
+            "name": "Get document request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/document-requests/:id",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "50040",
+                "type": "path",
+                "description": "Unique identifier for a document request."
+              }
+            ]
+          },
+          "docs": "Returns details for a document request using its unique identifier."
+        },
+        {
+          "info": {
+            "name": "Submit a document request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/document-requests/:id/submit",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "50040",
+                "type": "path",
+                "description": "Unique identifier for a document request."
+              }
+            ]
+          },
+          "docs": "Submit a document request after documents that fulfill the request have been submitted."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List document details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/documents",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3000000001",
+                "type": "query",
+                "description": "Unique Client identifier."
+              },
+              {
+                "name": "partyId",
+                "value": "2000000555",
+                "type": "query",
+                "description": "Unique Party identifier."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of document details.\n"
+        },
+        {
+          "info": {
+            "name": "Upload document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/documents",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "documentData",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "This section allows the user to attach the binary file upload and meta-data associated with the document.\n"
+        },
+        {
+          "info": {
+            "name": "Get document details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/documents/:id",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "62d29548-f55a-458e-b9bb-ed32a6a05a1b",
+                "type": "path",
+                "description": "Unique document identifier."
+              }
+            ]
+          },
+          "docs": "Retrieve details of a document.\n"
+        },
+        {
+          "info": {
+            "name": "Download a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/documents/:id/file",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "745ed6ce-c9e4-4d89-a1f9-74865e12cfc6",
+                "type": "path",
+                "description": "Unique Document identifier."
+              }
+            ]
+          },
+          "docs": "Download a document using its unique identifier."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Party",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List parties",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/parties",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "parentPartyId",
+                "value": "2000000555",
+                "type": "query",
+                "description": "Unique party identifier."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of parties."
+        },
+        {
+          "info": {
+            "name": "Create party",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/parties",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new party."
+        },
+        {
+          "info": {
+            "name": "Get party",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/parties/:partyId",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "partyId",
+                "value": "2000000555",
+                "type": "path",
+                "description": "Unique party identifier."
+              }
+            ]
+          },
+          "docs": "Details a party by its unique identifier."
+        },
+        {
+          "info": {
+            "name": "Update party",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/parties/:partyId",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "partyId",
+                "value": "2000000555",
+                "type": "path",
+                "description": "Unique party identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a party."
+        },
+        {
+          "info": {
+            "name": "Update party",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/parties/:partyId",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "partyId",
+                "value": "2000000555",
+                "type": "path",
+                "description": "Unique party identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a party."
+        },
+        {
+          "info": {
+            "name": "Start party validation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/parties/:partyId/validations",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "partyId",
+                "value": "2000000555",
+                "type": "path",
+                "description": "Unique party identifier."
+              }
+            ]
+          },
+          "docs": "Start validation for a Party."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Session",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/sessions",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number."
+              },
+              {
+                "name": "targetId",
+                "value": "2000000001",
+                "type": "query",
+                "description": "Id of the party or client"
+              }
+            ]
+          },
+          "docs": "Returns a list of sessions for a client."
+        },
+        {
+          "info": {
+            "name": "Create session.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/sessions",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create session."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Recommendations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate Recommendations.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/onboarding/v1/recommendations",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates recommendations based on the provided input."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

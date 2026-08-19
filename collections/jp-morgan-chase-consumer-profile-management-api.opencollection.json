@@ -1,0 +1,838 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Consumer Profile Management API",
+    "version": "2.4.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health Check",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Health check for CPM API",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/healthcheck"
+          },
+          "docs": "Healthcheck endpoint to validate that the service is running."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Consumer Profiles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a consumer profile using the consumer details."
+        },
+        {
+          "info": {
+            "name": "Retrieve a consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              }
+            ]
+          },
+          "docs": "Retrieve a consumer profile using the consumer profile ID."
+        },
+        {
+          "info": {
+            "name": "Update a consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a consumer profile using the consumer profile ID."
+        },
+        {
+          "info": {
+            "name": "Delete a consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              }
+            ]
+          },
+          "docs": "Delete a consumer profile using the consumer profile ID."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Methods",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a new payment method to an existing consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/payment-methods",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a new payment method to an existing consumer profile."
+        },
+        {
+          "info": {
+            "name": "Update a payment method to default on an existing consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/payment-methods/:payment-method-id/default",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              },
+              {
+                "name": "payment-method-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account."
+              }
+            ]
+          },
+          "docs": "Update a payment method to default on an existing consumer profile."
+        },
+        {
+          "info": {
+            "name": "Update a payment method on an existing consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/payment-methods/:payment-method-id",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              },
+              {
+                "name": "payment-method-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a payment method on a consumer profile using the payment method ID."
+        },
+        {
+          "info": {
+            "name": "Delete a payment method",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/payment-methods/:payment-method-id",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              },
+              {
+                "name": "payment-method-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account."
+              }
+            ]
+          },
+          "docs": "Delete a payment method on a consumer profile using the payment method ID."
+        },
+        {
+          "info": {
+            "name": "Retrieve 3DS status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/payment-methods/:payment-method-id/status",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              },
+              {
+                "name": "payment-method-id",
+                "value": "",
+                "type": "path",
+                "description": "A unique key produced by the initial entry of a customer by the originating source system, that will provide a linkage between independent events. This will allow events from multiple applications to be linked together to represent a single string of events or a customer contact experience. This field should be considered generic (aka ability to use for document event tracking) to allow correlation of events not specific to customer contacts. This is unique per customer experience and should be passed between applications."
+              }
+            ]
+          },
+          "docs": "This endpoint is to retrieve 3DS status details"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Addresses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a new address to an existing consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/addresses",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a new address to an existing consumer profile."
+        },
+        {
+          "info": {
+            "name": "Update an address on an existing consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/addresses/:address-id",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "address-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies an interaction between a customer and a representative with the Firm within a given application tool."
+              },
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an address on a consumer profile using the address ID."
+        },
+        {
+          "info": {
+            "name": "Delete an address",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/addresses/:address-id",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "address-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies an interaction between a customer and a representative with the Firm within a given application tool."
+              },
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              }
+            ]
+          },
+          "docs": "Delete an address on a consumer profile using the address ID."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Communication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a new communication to an existing consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/communication",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a new communication to an existing consumer profile."
+        },
+        {
+          "info": {
+            "name": "Update a communication method to default on an existing consumer profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/communication/:communication-id/default",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              },
+              {
+                "name": "communication-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account."
+              }
+            ]
+          },
+          "docs": "Update default communication for a profile."
+        },
+        {
+          "info": {
+            "name": "Update a communication attributes based on communication id provided; either email or phone",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/communication/:communication-id",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              },
+              {
+                "name": "communication-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update communication method for a profile."
+        },
+        {
+          "info": {
+            "name": "Delete a communication method",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/consumer-profiles/:consumer-profile-id/communication/:communication-id",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "userIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer-profile-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of a merchant's customer profile"
+              },
+              {
+                "name": "communication-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account."
+              }
+            ]
+          },
+          "docs": "Delete a communication method on a consumer profile using the communication ID."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Bulk Import",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve the status of a bulk import file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://profiles-api.merchant.jpmorgan.com/api/v2/mmp/bulk-import/status",
+            "headers": [
+              {
+                "name": "merchantIdentifier",
+                "value": ""
+              },
+              {
+                "name": "correlationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "requestIdentifier",
+                "value": ""
+              },
+              {
+                "name": "applicationIdentifier",
+                "value": ""
+              },
+              {
+                "name": "merchantFileName",
+                "value": ""
+              },
+              {
+                "name": "submitterIdentifier",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieve the status of a bulk import file."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

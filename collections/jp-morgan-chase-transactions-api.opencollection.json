@@ -1,0 +1,167 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Transactions API",
+    "version": "2.0.55"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/transactions",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filters for types of transaction. Use a comma separated list to send the transaction types you require."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filters by comma separated list of statuses for transactions."
+              },
+              {
+                "name": "accountId",
+                "value": "ae86b765e14741c5a44acc570af517ab",
+                "type": "query",
+                "description": "Filters by the Embedded Finance account id connected to the transaction."
+              },
+              {
+                "name": "amountEquals",
+                "value": "100",
+                "type": "query",
+                "description": "Filters by an exact amount."
+              },
+              {
+                "name": "amountGreaterThan",
+                "value": "100",
+                "type": "query",
+                "description": "Filters by amounts greater than a specified value."
+              },
+              {
+                "name": "amountLessThan",
+                "value": "100",
+                "type": "query",
+                "description": "Filters by amounts less than a specified value."
+              },
+              {
+                "name": "dateEquals",
+                "value": "2022-01-01",
+                "type": "query",
+                "description": "Filters transactions by an exact date."
+              },
+              {
+                "name": "dateGreaterThan",
+                "value": "2022-01-01",
+                "type": "query",
+                "description": "Filters for transactions made after this payment date."
+              },
+              {
+                "name": "dateLessThan",
+                "value": "2022-01-01",
+                "type": "query",
+                "description": "Filters for transactions made before this payment date."
+              },
+              {
+                "name": "dateTimeGreaterThan",
+                "value": "2022-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Filters for transactions created after this date and time."
+              },
+              {
+                "name": "dateTimeLessThan",
+                "value": "2022-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Filters for transactions created before this date and time."
+              },
+              {
+                "name": "recipientId",
+                "value": "616d93a1-ce53-4c71-b03b-02a11396db28",
+                "type": "query",
+                "description": "Filters for transactions from/to this recipientId."
+              },
+              {
+                "name": "transactionReferenceId",
+                "value": "inv-pay-1234",
+                "type": "query",
+                "description": "Filters for a transaction that matches a specific transaction reference ID provided by the client."
+              },
+              {
+                "name": "clientId",
+                "value": "9000000001",
+                "type": "query",
+                "description": "Unique Client identifier"
+              }
+            ]
+          },
+          "docs": "Lists transactions for a specific client, which can be filtered using optional parameters."
+        },
+        {
+          "info": {
+            "name": "Create transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/transactions",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new transaction, such as a payment via ACH, Wire or Real Time Payments (RTP)."
+        },
+        {
+          "info": {
+            "name": "Get transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/transactions/:id",
+            "headers": [
+              {
+                "name": "token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "m6p8kqkk5hjne3",
+                "type": "path",
+                "description": "Unique identifier for a transaction."
+              }
+            ]
+          },
+          "docs": "Returns details for a specific transaction using its unique identifier."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

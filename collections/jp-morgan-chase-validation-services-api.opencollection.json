@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Validation Services API",
+    "version": "2.2.3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Entity Validation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Entity validation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v2/validations/entities",
+            "headers": [
+              {
+                "name": "x-client-id",
+                "value": ""
+              },
+              {
+                "name": "x-program-id",
+                "value": ""
+              },
+              {
+                "name": "x-program-id-type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validate an entity"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account Validation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Account validation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v2/validations/accounts",
+            "headers": [
+              {
+                "name": "x-client-id",
+                "value": ""
+              },
+              {
+                "name": "x-program-id",
+                "value": ""
+              },
+              {
+                "name": "x-program-id-type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validate an account"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

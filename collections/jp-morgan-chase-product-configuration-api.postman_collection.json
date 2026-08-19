@@ -1,0 +1,1669 @@
+{
+  "item": [
+    {
+      "id": "7922a5f0-0076-4255-9116-5f57c7f3aba2",
+      "name": "Merchant Onboarding API",
+      "description": {
+        "content": "Merchant Profile Onboarding Information",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "2d05b41a-717b-468c-a57e-b43946626f1f",
+      "name": "Merchant",
+      "description": {
+        "content": "Merchant entity information",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1fbfeecc-e95f-4d20-ad96-87115e59fd72",
+          "name": "Retrieve merchant details",
+          "request": {
+            "name": "Retrieve merchant details",
+            "description": {
+              "content": "Use this endpoint to retrieve the current configurations and processing status for a given merchant account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "merchant-accounts",
+                ":merchantAccountId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "merchantAccountId",
+                  "description": "(Required) This is the merchant Id for which the data will be fetched."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1b174bab-f76c-4368-a06e-cc36e8e43328",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-accounts",
+                    ":merchantAccountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "merchantAccountId",
+                      "description": "(Required) This is the merchant Id for which the data will be fetched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"merchantAccountId\": \"string\",\n  \"merchantCategoryCode\": \"string\",\n  \"clientId\": \"6656656656\",\n  \"accountName\": \"í)\",\n  \"accountAlias\": \"£HËTÆýsæÞ~þâg_úMË'×\",\n  \"locationAddress\": {\n    \"city\": \"cvXg0\\\\s\",\n    \"countryCode\": \"RHZ\",\n    \"line1\": \"U@#^Ja<3cJPe;+6.5\\\\t>`2=vxRS}Fv@'r+?9\",\n    \"line2\": \"x!o:$`a0\\\"2HE*BnAXL5RH\\\\J[[*.X0GV86]LEa}@Hj\\\\.(|ksPH]zllg9Ih\",\n    \"postalCode\": \"нᯝষ೽ṁ\",\n    \"state\": \"fww\",\n    \"line3\": \"vuRb%<=D8g!5WPxa!\\\\xD+SAsG2u'txq3ICI WqWWe\"\n  },\n  \"pricingTemplate\": \".oU1mzuwUmhueV5PD0128v'D=Z|QQ'OKu:;MS!11c7f\",\n  \"processingTemplate\": \"S*ZBo'j-ft4b/}R>4bxG`.)b5/,h.x~~DSG~<|tc\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": true,\n      \"website\": \"string\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 100,\n      \"deviceLanguageCode\": \"dj-OI\"\n    },\n    \"businessDescription\": \"string\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 203207920,\n    \"annualSalesTotal\": 313777842,\n    \"annualCreditSales\": 46982497,\n    \"currency\": \"TUP\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"LP BztE(g\\\\?\\\"m^BE&$gc)l9)xL:BjdbNz6j-:]@l L\\\"FDYNDh=l(nB:ODmae{?.*PNM.Phnvh2fJ]iW.F#U$(^$.vy\",\n    \"accountOwnerName\": \"^/i-uJ}<w[]%)]^MY0oLJUfcL1`[zudvq*>qd^\",\n    \"accountType\": \"CORPORATE_CHECKING\",\n    \"routingNumber\": \"030349077\",\n    \"accountNumber\": \"337303576156966\",\n    \"countryCode\": \"GOK\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"\\u000bZB\",\n      \"metadataAttributeValueText\": \"zMz\"\n    },\n    {\n      \"metadataAttributeName\": \"\\ty2QwU 6e\",\n      \"metadataAttributeValueText\": \"_\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"string\",\n    \"phone\": {\n      \"phoneNumber\": \"4682949438\",\n      \"countryCode\": \"+21\"\n    }\n  },\n  \"payoutTemplate\": \"3_EJ no,5A!`%s15DaqB(nJ$>oQGS\",\n  \"enterprisePlatformIdentifier\": \"7933713967\",\n  \"onboardRequestId\": \"string\",\n  \"merchantAccountStatus\": \"SUSPENDED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4852415d-d5a5-45c9-b21d-e745c939c2fb",
+              "name": "Badly formatted request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-accounts",
+                    ":merchantAccountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "merchantAccountId",
+                      "description": "(Required) This is the merchant Id for which the data will be fetched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f9c4724-6dc7-4774-9095-b2bfbc84ed71",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-accounts",
+                    ":merchantAccountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "merchantAccountId",
+                      "description": "(Required) This is the merchant Id for which the data will be fetched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2a91bea-94f0-4a99-8d4c-b4cea4f3b4cb",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-accounts",
+                    ":merchantAccountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "merchantAccountId",
+                      "description": "(Required) This is the merchant Id for which the data will be fetched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da13556f-830e-4f75-acb8-ad6fd29c4d02",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-accounts",
+                    ":merchantAccountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "merchantAccountId",
+                      "description": "(Required) This is the merchant Id for which the data will be fetched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fdb65e92-0876-4ffa-8308-71971bc242be",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-accounts",
+                    ":merchantAccountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "merchantAccountId",
+                      "description": "(Required) This is the merchant Id for which the data will be fetched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "953d2da3-65cd-42ed-84f0-284cdf494a82",
+      "name": "Health",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ae120dd7-d6ba-4a27-9f55-3506926f9aa9",
+          "name": "Health check",
+          "request": {
+            "name": "Health check",
+            "description": {
+              "content": "Provides health status of the application",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e3f4ea8b-8199-49a1-acd8-850424154a55",
+              "name": "Health status information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"UP\",\n  \"version\": \"1.0.0\",\n  \"applicationName\": \"Merchant Onboarding API\",\n  \"statusUpdatedAt\": \"2025-10-24T12:00:00Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b61ac8c7-7750-467b-ab3a-e25ed9328500",
+              "name": "Forbidden - client forbidden from accessing the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authorization Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client forbidden from accessing the requested resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2038a33-2dc8-4ad7-836d-93b7477488bd",
+              "name": "Service Unavailable - Service temporarily unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\",\n  \"context\": [\n    {\n      \"code\": \"12000\",\n      \"message\": \"Service Unavailable, refer to the `retry-after` response header.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "d03270f4-1a52-4aeb-bdf9-85dc894cb258",
+      "name": "Merchant Onboarding",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "060eef91-d396-48be-8072-e05157f32b1e",
+          "name": "Create a merchant onboarding request",
+          "request": {
+            "name": "Create a merchant onboarding request",
+            "description": {
+              "content": "Use this endpoint to initiate a merchant onboarding request. If you have all necessary data upfront, you can submit this request simultaneously.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "merchant-boarding-requests"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"enterprisePlatformIdentifier\": \"<string>\",\n  \"clientId\": \"<string>\",\n  \"accountName\": \"<string>\",\n  \"onboardRequestStatus\": \"<string>\",\n  \"accountAlias\": \"<string>\",\n  \"locationAddress\": {\n    \"city\": \"<string>\",\n    \"countryCode\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"line2\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line3\": \"<string>\"\n  },\n  \"pricingTemplate\": \"<string>\",\n  \"processingTemplate\": \"<string>\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": \"<boolean>\",\n      \"website\": \"<string>\"\n    },\n    \"terminalSales\": {\n      \"usage\": \"<boolean>\",\n      \"merchantManualKeyedTransactionsPercentage\": \"<integer>\",\n      \"deviceLanguageCode\": \"<string>\"\n    },\n    \"businessDescription\": \"<string>\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": \"<integer>\",\n    \"annualSalesTotal\": \"<integer>\",\n    \"annualCreditSales\": \"<integer>\",\n    \"currency\": \"<string>\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"<string>\",\n    \"accountOwnerName\": \"<string>\",\n    \"accountType\": \"<string>\",\n    \"routingNumber\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"countryCode\": \"<string>\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"<string>\",\n      \"metadataAttributeValueText\": \"<string>\"\n    },\n    {\n      \"metadataAttributeName\": \"<string>\",\n      \"metadataAttributeValueText\": \"<string>\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"<string>\",\n    \"phone\": {\n      \"phoneNumber\": \"<string>\",\n      \"countryCode\": \"<string>\"\n    }\n  },\n  \"payoutTemplate\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "17da30f8-dbe1-45b3-9c4d-45bd0c47087b",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"DRAFT\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"onboardRequestId\": \"stringstri\",\n  \"onboardRequestStatus\": \"SUBMITTED\",\n  \"merchantId\": \"string\",\n  \"clientId\": \"1608756727\",\n  \"accountName\": \"ùÀvyÛ~V1­|©°ADTÄí¯¾*Nëñ·æEi¯´ÇÛuÕ§\",\n  \"accountAlias\": \"ÄÚx\",\n  \"locationAddress\": {\n    \"city\": \"_O: VSX6?eJ5r0.dBz{&IH$tPc)bp\",\n    \"countryCode\": \"SFI\",\n    \"line1\": \"ZcR>)Ch aS3=>E?$F\",\n    \"line2\": \"IFPYdoCB#nAGM9C$m'+\",\n    \"postalCode\": \"ᨚભ᫔Ἕᢠ஻௳᭢ᒞؖ\",\n    \"state\": \"jsB\",\n    \"line3\": \"Y-V7v\\\"898+yS2&={UYF7rD2lK6($rHnco+6Nvej94\"\n  },\n  \"pricingTemplate\": \"$%3,9Hj%Jm$h3+:pc@,,NMrx4e(SA\",\n  \"processingTemplate\": \"w<stag4vLyH0SMlM|;P\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": true,\n      \"website\": \"string\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 100,\n      \"deviceLanguageCode\": \"ls-KH\"\n    },\n    \"businessDescription\": \"string\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 194372211,\n    \"annualSalesTotal\": 218483124,\n    \"annualCreditSales\": 634454930,\n    \"currency\": \"JES\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"G'~6xOH+$EKPF_?Jw\",\n    \"accountOwnerName\": \"_v<f,w*Q4\\\\N%|d:9xgFkcw/29baDVvX9f4|h]f|5d1<jf.\",\n    \"accountType\": \"CORPORATE_SAVINGS\",\n    \"routingNumber\": \"059335028\",\n    \"accountNumber\": \"76098\",\n    \"countryCode\": \"IAS\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"d\",\n      \"metadataAttributeValueText\": \"GD\"\n    },\n    {\n      \"metadataAttributeName\": \"V\\rOQ\",\n      \"metadataAttributeValueText\": \"89tbE\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"string\",\n    \"phone\": {\n      \"phoneNumber\": \"9464252830\",\n      \"countryCode\": \"+34\"\n    }\n  },\n  \"payoutTemplate\": \"Kpp}Z?k~qwiD2LeE/_2_Sqnv^a`{r*\",\n  \"enterprisePlatformIdentifier\": \"1484642148\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bc6142d-b2b6-4391-8f1d-4761d3b12f5a",
+              "name": "Badly formatted request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"DRAFT\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6510c99b-aba8-4b61-9f17-809c9396ff3e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"DRAFT\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff9f9008-9e0e-4c07-866a-4df492f65497",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"DRAFT\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5451321-3c54-405b-b3d3-f9e7721edc84",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"DRAFT\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2801c91a-d014-40ad-be14-87ee45c025d6",
+          "name": "Update a merchant onboarding request",
+          "request": {
+            "name": "Update a merchant onboarding request",
+            "description": {
+              "content": "Use this endpoint to append additional client data to their merchant onboarding request, or submit the request to create a merchant account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "merchant-boarding-requests",
+                ":onboardRequestId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "onboardRequestId",
+                  "description": "(Required) This is used for specifying individual parameters under API endpoint methods."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"onboardRequestStatus\": \"<string>\",\n  \"clientId\": \"<string>\",\n  \"accountName\": \"<string>\",\n  \"accountAlias\": \"<string>\",\n  \"locationAddress\": {\n    \"city\": \"<string>\",\n    \"countryCode\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"line2\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line3\": \"<string>\"\n  },\n  \"pricingTemplate\": \"<string>\",\n  \"processingTemplate\": \"<string>\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": \"<boolean>\",\n      \"website\": \"<string>\"\n    },\n    \"terminalSales\": {\n      \"usage\": \"<boolean>\",\n      \"merchantManualKeyedTransactionsPercentage\": \"<integer>\",\n      \"deviceLanguageCode\": \"<string>\"\n    },\n    \"businessDescription\": \"<string>\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": \"<integer>\",\n    \"annualSalesTotal\": \"<integer>\",\n    \"annualCreditSales\": \"<integer>\",\n    \"currency\": \"<string>\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"<string>\",\n    \"accountOwnerName\": \"<string>\",\n    \"accountType\": \"<string>\",\n    \"routingNumber\": \"<string>\",\n    \"accountNumber\": \"<string>\",\n    \"countryCode\": \"<string>\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"<string>\",\n      \"metadataAttributeValueText\": \"<string>\"\n    },\n    {\n      \"metadataAttributeName\": \"<string>\",\n      \"metadataAttributeValueText\": \"<string>\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"<string>\",\n    \"phone\": {\n      \"phoneNumber\": \"<string>\",\n      \"countryCode\": \"<string>\"\n    }\n  },\n  \"payoutTemplate\": \"<string>\",\n  \"enterprisePlatformIdentifier\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "042ab0a5-bee7-4bac-a914-46791440bd7d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"SUBMITTED\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"accountAlias\": \"Dannys Donuts\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false,\n      \"website\": \"www.google.com\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"onboardRequestId\": \"stringstri\",\n  \"onboardRequestStatus\": \"SUBMITTED\",\n  \"merchantId\": \"string\",\n  \"clientId\": \"1608756727\",\n  \"accountName\": \"ùÀvyÛ~V1­|©°ADTÄí¯¾*Nëñ·æEi¯´ÇÛuÕ§\",\n  \"accountAlias\": \"ÄÚx\",\n  \"locationAddress\": {\n    \"city\": \"_O: VSX6?eJ5r0.dBz{&IH$tPc)bp\",\n    \"countryCode\": \"SFI\",\n    \"line1\": \"ZcR>)Ch aS3=>E?$F\",\n    \"line2\": \"IFPYdoCB#nAGM9C$m'+\",\n    \"postalCode\": \"ᨚભ᫔Ἕᢠ஻௳᭢ᒞؖ\",\n    \"state\": \"jsB\",\n    \"line3\": \"Y-V7v\\\"898+yS2&={UYF7rD2lK6($rHnco+6Nvej94\"\n  },\n  \"pricingTemplate\": \"$%3,9Hj%Jm$h3+:pc@,,NMrx4e(SA\",\n  \"processingTemplate\": \"w<stag4vLyH0SMlM|;P\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": true,\n      \"website\": \"string\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 100,\n      \"deviceLanguageCode\": \"ls-KH\"\n    },\n    \"businessDescription\": \"string\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 194372211,\n    \"annualSalesTotal\": 218483124,\n    \"annualCreditSales\": 634454930,\n    \"currency\": \"JES\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"G'~6xOH+$EKPF_?Jw\",\n    \"accountOwnerName\": \"_v<f,w*Q4\\\\N%|d:9xgFkcw/29baDVvX9f4|h]f|5d1<jf.\",\n    \"accountType\": \"CORPORATE_SAVINGS\",\n    \"routingNumber\": \"059335028\",\n    \"accountNumber\": \"76098\",\n    \"countryCode\": \"IAS\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"d\",\n      \"metadataAttributeValueText\": \"GD\"\n    },\n    {\n      \"metadataAttributeName\": \"V\\rOQ\",\n      \"metadataAttributeValueText\": \"89tbE\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"string\",\n    \"phone\": {\n      \"phoneNumber\": \"9464252830\",\n      \"countryCode\": \"+34\"\n    }\n  },\n  \"payoutTemplate\": \"Kpp}Z?k~qwiD2LeE/_2_Sqnv^a`{r*\",\n  \"enterprisePlatformIdentifier\": \"1484642148\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e2d1895-fc20-4475-be3d-65673229b4b5",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"SUBMITTED\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"accountAlias\": \"Dannys Donuts\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false,\n      \"website\": \"www.google.com\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "34f3639e-7e09-4a82-a9d9-71a6534ee419",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"SUBMITTED\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"accountAlias\": \"Dannys Donuts\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false,\n      \"website\": \"www.google.com\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8e77495-43d1-471f-a85c-d4b594f281be",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"SUBMITTED\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"accountAlias\": \"Dannys Donuts\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false,\n      \"website\": \"www.google.com\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa458b17-0b09-482c-aad2-3a56b07ac058",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"SUBMITTED\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"accountAlias\": \"Dannys Donuts\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false,\n      \"website\": \"www.google.com\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f6a8107-207d-452a-a5be-853eaa7a88e5",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"enterprisePlatformIdentifier\": \"6019573573\",\n  \"onboardRequestStatus\": \"SUBMITTED\",\n  \"clientId\": \"3002035472\",\n  \"accountName\": \"Dannys Donuts Downtown Location\",\n  \"accountAlias\": \"Dannys Donuts\",\n  \"locationAddress\": {\n    \"city\": \"Plano\",\n    \"countryCode\": \"USA\",\n    \"line1\": \"123 ABI Street\",\n    \"postalCode\": \"71301-7610\",\n    \"state\": \"TX\"\n  },\n  \"pricingTemplate\": \"STANDARD_PRICING\",\n  \"processingTemplate\": \"ACH_PROCESSING_SETUP\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": false,\n      \"website\": \"www.google.com\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 10\n    },\n    \"businessDescription\": \"Donut shop with exotic pastries\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 7,\n    \"annualSalesTotal\": 500000,\n    \"annualCreditSales\": 400000,\n    \"currency\": \"CAD\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"JP Morgan Chase\",\n    \"accountOwnerName\": \"Leigh Dennis\",\n    \"routingNumber\": \"122199983\",\n    \"accountNumber\": \"3990188838\",\n    \"countryCode\": \"USA\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"BackBookMigration\",\n      \"metadataAttributeValueText\": \"Y\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"customersupport@dannysdonuts.com\",\n    \"phone\": {\n      \"phoneNumber\": \"7894561551\",\n      \"countryCode\": \"+1\"\n    }\n  },\n  \"payoutTemplate\": \"GROSS_PURCHASE_FUNDING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f49a49fa-b751-468f-ac45-1e8b8e87382c",
+          "name": "Retrieve merchant onboarding request details",
+          "request": {
+            "name": "Retrieve merchant onboarding request details",
+            "description": {
+              "content": "Use this endpoint to retrieve the full set of data collected for a merchant onboarding request.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "merchant-boarding-requests",
+                ":onboardRequestId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "onboardRequestId",
+                  "description": "(Required) This is used for specifying individual parameters  for the merchant account under API endpoint methods."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "27a5a5c2-6723-4c28-bbc6-cde67c882d8d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters  for the merchant account under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"onboardRequestId\": \"stringstri\",\n  \"onboardRequestStatus\": \"SUBMITTED\",\n  \"merchantId\": \"string\",\n  \"clientId\": \"1608756727\",\n  \"accountName\": \"ùÀvyÛ~V1­|©°ADTÄí¯¾*Nëñ·æEi¯´ÇÛuÕ§\",\n  \"accountAlias\": \"ÄÚx\",\n  \"locationAddress\": {\n    \"city\": \"_O: VSX6?eJ5r0.dBz{&IH$tPc)bp\",\n    \"countryCode\": \"SFI\",\n    \"line1\": \"ZcR>)Ch aS3=>E?$F\",\n    \"line2\": \"IFPYdoCB#nAGM9C$m'+\",\n    \"postalCode\": \"ᨚભ᫔Ἕᢠ஻௳᭢ᒞؖ\",\n    \"state\": \"jsB\",\n    \"line3\": \"Y-V7v\\\"898+yS2&={UYF7rD2lK6($rHnco+6Nvej94\"\n  },\n  \"pricingTemplate\": \"$%3,9Hj%Jm$h3+:pc@,,NMrx4e(SA\",\n  \"processingTemplate\": \"w<stag4vLyH0SMlM|;P\",\n  \"businessProfile\": {\n    \"digitalSales\": {\n      \"usage\": true,\n      \"website\": \"string\"\n    },\n    \"terminalSales\": {\n      \"usage\": true,\n      \"merchantManualKeyedTransactionsPercentage\": 100,\n      \"deviceLanguageCode\": \"ls-KH\"\n    },\n    \"businessDescription\": \"string\"\n  },\n  \"projectedSalesInfo\": {\n    \"averageTicketSize\": 194372211,\n    \"annualSalesTotal\": 218483124,\n    \"annualCreditSales\": 634454930,\n    \"currency\": \"JES\"\n  },\n  \"payoutAccount\": {\n    \"financialInstitutionName\": \"G'~6xOH+$EKPF_?Jw\",\n    \"accountOwnerName\": \"_v<f,w*Q4\\\\N%|d:9xgFkcw/29baDVvX9f4|h]f|5d1<jf.\",\n    \"accountType\": \"CORPORATE_SAVINGS\",\n    \"routingNumber\": \"059335028\",\n    \"accountNumber\": \"76098\",\n    \"countryCode\": \"IAS\"\n  },\n  \"merchantMetadataList\": [\n    {\n      \"metadataAttributeName\": \"d\",\n      \"metadataAttributeValueText\": \"GD\"\n    },\n    {\n      \"metadataAttributeName\": \"V\\rOQ\",\n      \"metadataAttributeValueText\": \"89tbE\"\n    }\n  ],\n  \"contactInfo\": {\n    \"email\": \"string\",\n    \"phone\": {\n      \"phoneNumber\": \"9464252830\",\n      \"countryCode\": \"+34\"\n    }\n  },\n  \"payoutTemplate\": \"Kpp}Z?k~qwiD2LeE/_2_Sqnv^a`{r*\",\n  \"enterprisePlatformIdentifier\": \"1484642148\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be3699f1-63b4-4554-8e90-257029a744b2",
+              "name": "Badly formatted request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters  for the merchant account under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e49510f2-98da-4952-b5f1-38f637ef76c9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters  for the merchant account under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22b468ad-a62c-4d51-a2ac-8e23f10fdbe9",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters  for the merchant account under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c225296b-33eb-4eba-996b-92460c89e458",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters  for the merchant account under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95cb19f6-11d4-43e1-8f4d-8a805354bbc9",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "merchant-boarding-requests",
+                    ":onboardRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "onboardRequestId",
+                      "description": "(Required) This is used for specifying individual parameters  for the merchant account under API endpoint methods."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"field\": \"notificationId\",\n      \"location\": \"BODY\",\n      \"message\": \"Required field missing - ensure the path, body and headers matches the specification\"\n    }\n  ],\n  \"httpStatus\": 400,\n  \"requestId\": \"trace-123456\",\n  \"title\": \"Invaliddata\",\n  \"traceId\": \"0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.payments.jpmorgan.com/commerce/configuration/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "10f9bbab-3ca0-4f6d-a3d0-fe620b7e366d",
+    "name": "Product Configuration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Product configuration APIs that can be used to create, configure and maintain Commerce platform accounts.",
+      "type": "text/plain"
+    }
+  }
+}

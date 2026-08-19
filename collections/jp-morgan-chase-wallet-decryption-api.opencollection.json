@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wallet Decryption API",
+    "version": "2.4.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health Check",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Validate the health of the service.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ms.payments.jpmorgan.com/api/v2/healthcheck"
+          },
+          "docs": "Healthcheck endpoint to validate the health of the service."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Decrypt a Paze, Google Pay, or Apple Pay encrypted wallet bundle",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ms.payments.jpmorgan.com/api/v2/wallet-decryptions",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the payment information from an encrypted wallet"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

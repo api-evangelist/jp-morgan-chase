@@ -1,0 +1,123 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "3-D Secure API",
+    "version": "2.5.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Prepare a 3DS authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ms.payments.jpmorgan.com/api/v2/authentications",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Prepare a 3DS authentication"
+        },
+        {
+          "info": {
+            "name": "Retrieve an authentication request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ms.payments.jpmorgan.com/api/v2/authentications/:authentication-id",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "authentication-id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+              }
+            ]
+          },
+          "docs": "Retrieve an authentication request"
+        },
+        {
+          "info": {
+            "name": "Perform a 3DS authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ms.payments.jpmorgan.com/api/v2/authentications/:authentication-id",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "authentication-id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the card owner authentication provided by global authentication solution designed to make eCommerce transactions more secure and reduce fraud."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Perform a 3DS authentication after completing preparation"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

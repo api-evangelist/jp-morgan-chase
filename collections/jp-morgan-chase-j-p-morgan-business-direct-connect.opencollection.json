@@ -1,0 +1,435 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "J.P. Morgan Business Direct Connect",
+    "version": "6.5.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account Information",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search for accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/fdx/v6/accounts",
+            "headers": [
+              {
+                "name": "x-fapi-interaction-id",
+                "value": ""
+              },
+              {
+                "name": "Fdx-Api-Actor-Type",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Client-Public-Key",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Provider-Id",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Recipient-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountIds",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of account ids. Optional. Default \"all eligible accounts are returned\""
+              },
+              {
+                "name": "resultType",
+                "value": "",
+                "type": "query",
+                "description": "Flag to indicate if you want a lightweight array of metadata (AccountDescriptor or Tax or Operations)  or full item details (Account or a Tax subclass or Availability details). If set to 'lightweight', should only return the fields associated with the metadata entity. This field is not required, defaults to lightweight"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Page number that can be used to fetch a specific page for paginated results. This parameter is optional. If specified, it returns the requested page. default: 0, returns the first page. OffsetQuery is not supported for /transactions. Use links to retrieve the next page."
+              },
+              {
+                "name": "pageKey",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor used by the provider to send the next set of records. Pagination can be implemented per provider's preference PageKeyQuery is not supported for /transactions. Use links to retrieve the next page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of elements consumer wishes to receive per page. This parameter is optional. If limit is less than minimum, then the minimum specified below applies as the limit. If limit is greater than maximum, then the maximum specified below applies as the limit. minimum: 100 or return all records default: 100 maximum: 100 for /transactions, and 500 for /accounts. Transactions are always set to a fixed max page size of 100."
+              }
+            ]
+          },
+          "docs": "Return information for all of the customer's consented accounts or just those accounts identified in the `accountIds` request parameter. Use `ResultTypeQuery` parameter value of `lightweight` to retrieve minimal descriptive information and the `accountId` for each account. The `accountId` can then be used in the `getAccount` operation's path `/accounts/{accountId}` to retrieve full details about each account"
+        },
+        {
+          "info": {
+            "name": "Retrieve account details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/fdx/v6/accounts/:accountId",
+            "headers": [
+              {
+                "name": "x-fapi-interaction-id",
+                "value": ""
+              },
+              {
+                "name": "Fdx-Api-Actor-Type",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Client-Public-Key",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Provider-Id",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Recipient-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "AccountId as returned in the call to /accounts. This parameter is required."
+              }
+            ]
+          },
+          "docs": "Retrieve full details about the account identified by `{accountId}` parameter"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search for account transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/fdx/v6/accounts/:accountId/transactions",
+            "headers": [
+              {
+                "name": "x-fapi-interaction-id",
+                "value": ""
+              },
+              {
+                "name": "Fdx-Api-Actor-Type",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Client-Public-Key",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Provider-Id",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Recipient-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "AccountId as returned in the call to /accounts. This parameter is required."
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Start time for use in retrieval of elements (ISO 8601). This parameter is required and must be less than or equal to endTime."
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "End time for use in retrieval of elements (ISO 8601). This parameter is required and must be greater than or equal to startTime."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Page number that can be used to fetch a specific page for paginated results. This parameter is optional. If specified, it returns the requested page. default: 0, returns the first page. OffsetQuery is not supported for /transactions. Use links to retrieve the next page."
+              },
+              {
+                "name": "pageKey",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor used by the provider to send the next set of records. Pagination can be implemented per provider's preference PageKeyQuery is not supported for /transactions. Use links to retrieve the next page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of elements consumer wishes to receive per page. This parameter is optional. If limit is less than minimum, then the minimum specified below applies as the limit. If limit is greater than maximum, then the maximum specified below applies as the limit. minimum: 100 or return all records default: 100 maximum: 100 for /transactions, and 500 for /accounts. Transactions are always set to a fixed max page size of 100."
+              }
+            ]
+          },
+          "docs": "Search for account transactions. Example: /accounts/{accountId}/transactions?startTime=value1 endTime=value2"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Money Movement",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get payment networks supported by the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/fdx/v6/accounts/:accountId/payment-networks",
+            "headers": [
+              {
+                "name": "x-fapi-interaction-id",
+                "value": ""
+              },
+              {
+                "name": "Fdx-Api-Actor-Type",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Client-Public-Key",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Provider-Id",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Recipient-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "AccountId as returned in the call to /accounts. This parameter is required."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Page number that can be used to fetch a specific page for paginated results. This parameter is optional. If specified, it returns the requested page. default: 0, returns the first page. OffsetQuery is not supported for /transactions. Use links to retrieve the next page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of elements consumer wishes to receive per page. This parameter is optional. If limit is less than minimum, then the minimum specified below applies as the limit. If limit is greater than maximum, then the maximum specified below applies as the limit. minimum: 100 or return all records default: 100 maximum: 100 for /transactions, and 500 for /accounts. Transactions are always set to a fixed max page size of 100."
+              }
+            ]
+          },
+          "docs": "Get payment networks supported by the account"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Personal Information",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an account's contact information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/fdx/v6/accounts/:accountId/contact",
+            "headers": [
+              {
+                "name": "x-fapi-interaction-id",
+                "value": ""
+              },
+              {
+                "name": "Fdx-Api-Actor-Type",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Client-Public-Key",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Provider-Id",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Recipient-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "AccountId as returned in the call to /accounts. This parameter is required."
+              }
+            ]
+          },
+          "docs": "Get contact information on the account"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account Statements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search for statements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/fdx/v6/accounts/:accountId/statements",
+            "headers": [
+              {
+                "name": "x-fapi-interaction-id",
+                "value": ""
+              },
+              {
+                "name": "Fdx-Api-Actor-Type",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Provider-Id",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Recipient-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "AccountId as returned in the call to /accounts. This parameter is required."
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Start time for use in retrieval of elements (ISO 8601). This parameter is required and must be less than or equal to endTime."
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "End time for use in retrieval of elements (ISO 8601). This parameter is required and must be greater than or equal to startTime."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Page number that can be used to fetch a specific page for paginated results. This parameter is optional. If specified, it returns the requested page. default: 0, returns the first page. OffsetQuery is not supported for /transactions. Use links to retrieve the next page."
+              },
+              {
+                "name": "pageKey",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor used by the provider to send the next set of records. Pagination can be implemented per provider's preference PageKeyQuery is not supported for /transactions. Use links to retrieve the next page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of elements consumer wishes to receive per page. This parameter is optional. If limit is less than minimum, then the minimum specified below applies as the limit. If limit is greater than maximum, then the maximum specified below applies as the limit. minimum: 100 or return all records default: 100 maximum: 100 for /transactions, and 500 for /accounts. Transactions are always set to a fixed max page size of 100."
+              }
+            ]
+          },
+          "docs": "Get account statements. Example: GET /accounts/{accountId}/statements?startTime=value1 endTime=value2"
+        },
+        {
+          "info": {
+            "name": "Get an account statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/fdx/v6/accounts/:accountId/statements/:statementId",
+            "headers": [
+              {
+                "name": "x-fapi-interaction-id",
+                "value": ""
+              },
+              {
+                "name": "Fdx-Api-Actor-Type",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Client-Public-Key",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Provider-Id",
+                "value": ""
+              },
+              {
+                "name": "FDX-API-Data-Recipient-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "AccountId as returned in the call to /accounts. This parameter is required."
+              },
+              {
+                "name": "statementId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Id for each statement."
+              }
+            ]
+          },
+          "docs": "Gets a PDF account statement.  Note: This endpoint does not validate statement content."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

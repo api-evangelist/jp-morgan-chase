@@ -1,0 +1,97 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Global Payments API",
+    "version": "1.2.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Information Retrieval",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve payment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/payments",
+            "params": [
+              {
+                "name": "endToEndId",
+                "value": "",
+                "type": "query",
+                "description": "Customer assigned reference to the transaction."
+              },
+              {
+                "name": "firmRootId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification, as assigned by the first instructing agent or initiatingParty, to unambiguously identify the transaction that is passed on, unchanged, throughout the entire interbank chain."
+              }
+            ]
+          },
+          "docs": "Retrieve details of your transaction by either `firmRootId` or `endToEndId`."
+        },
+        {
+          "info": {
+            "name": "Retrieve payment status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/payments/status",
+            "params": [
+              {
+                "name": "endToEndId",
+                "value": "",
+                "type": "query",
+                "description": "Customer assigned reference to the transaction."
+              },
+              {
+                "name": "firmRootId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification, as assigned by the first instructing agent or initiatingParty, to unambiguously identify the transaction that is passed on, unchanged, throughout the entire interbank chain."
+              }
+            ]
+          },
+          "docs": "Retrieve status of your transaction by either `firmRootId` or `endToEndId`."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Initiation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Payments Initiation API",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apigateway.jpmorgan.com/tsapi/v1/payments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate Payments"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

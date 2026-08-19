@@ -1,0 +1,2011 @@
+{
+  "item": [
+    {
+      "id": "0db617af-664e-4eb7-88b5-429a03da287d",
+      "name": "Payments",
+      "description": {
+        "content": "API to initiate payments",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1ac87efa-7656-4ee4-9b07-920366a642c0",
+          "name": "Initiate Payments",
+          "request": {
+            "name": "Initiate Payments",
+            "description": {
+              "content": "Initiate Payments\n\n> Mock responses displayed with JOSE are signed and encrypted and may not be human-readable. Use the JSON toggle to view the underlying mock payload data in a readable format.\n>\n> Payment Initiation requests must use the `Content-Type: application/jose` header",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                "key": "Idempotency-Key",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                "key": "Request-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestedExecutionDate\": \"<date>\",\n  \"paymentIdentifiers\": {\n    \"endToEndId\": \"<string>\",\n    \"otherPaymentReferences\": {\n      \"relatedReferenceId\": \"<string>\",\n      \"uetr\": \"<string>\"\n    }\n  },\n  \"value\": {\n    \"currency\": \"<string>\",\n    \"amount\": \"<string>\"\n  },\n  \"transferType\": \"<string>\",\n  \"paymentType\": \"DEFAULT\",\n  \"debtor\": {\n    \"account\": {\n      \"accountNumber\": \"<string>\",\n      \"accountType\": \"<string>\",\n      \"accountCurrency\": \"<string>\",\n      \"companyId\": \"<string>\"\n    },\n    \"name\": \"<string>\",\n    \"postalAddress\": {\n      \"type\": \"<string>\",\n      \"addressLines\": [\n        \"<string>\"\n      ],\n      \"buildingName\": \"<string>\",\n      \"buildingNumber\": \"<string>\",\n      \"department\": \"<string>\",\n      \"subDepartment\": \"<string>\",\n      \"floor\": \"<string>\",\n      \"postBox\": \"<string>\",\n      \"room\": \"<string>\",\n      \"streetName\": \"<string>\",\n      \"district\": \"<string>\",\n      \"city\": \"<string>\",\n      \"cityLocation\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"countrySubDivision\": \"<string>\",\n      \"country\": \"<string>\"\n    },\n    \"contactDetails\": {\n      \"phoneNumber\": \"<string>\",\n      \"mobileNumber\": \"<string>\",\n      \"faxNumber\": \"<string>\",\n      \"emailAddress\": \"<string>\",\n      \"emailPurpose\": \"<string>\",\n      \"jobTitle\": \"<string>\",\n      \"responsibility\": \"<string>\",\n      \"department\": \"<string>\"\n    },\n    \"dateAndPlaceOfBirth\": {\n      \"city\": \"<string>\",\n      \"countrySubDivision\": \"<string>\",\n      \"country\": \"<string>\",\n      \"birthDate\": \"<date>\"\n    },\n    \"countryOfResidence\": \"<string>\",\n    \"device\": {\n      \"ipAddress\": \"<string>\",\n      \"geoCoordinates\": {\n        \"latitude\": \"<string>\",\n        \"longitude\": \"<string>\"\n      }\n    },\n    \"partyId\": {\n      \"organizationIds\": [\n        {\n          \"organizationId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bic\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemeName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  },\n  \"debtorAgent\": {\n    \"name\": \"<string>\",\n    \"financialInstitutionIds\": [\n      {\n        \"id\": \"<string>\",\n        \"idType\": \"<string>\",\n        \"branchNumber\": \"<string>\"\n      }\n    ],\n    \"postalAddress\": {\n      \"type\": \"<string>\",\n      \"addressLines\": [\n        \"<string>\"\n      ],\n      \"buildingName\": \"<string>\",\n      \"buildingNumber\": \"<string>\",\n      \"department\": \"<string>\",\n      \"subDepartment\": \"<string>\",\n      \"floor\": \"<string>\",\n      \"postBox\": \"<string>\",\n      \"room\": \"<string>\",\n      \"streetName\": \"<string>\",\n      \"district\": \"<string>\",\n      \"city\": \"<string>\",\n      \"cityLocation\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"countrySubDivision\": \"<string>\",\n      \"country\": \"<string>\"\n    },\n    \"additionalInstitutions\": [\n      {\n        \"id\": \"<string>\",\n        \"idType\": \"<string>\",\n        \"name\": \"<string>\",\n        \"isForeignParty\": \"<boolean>\",\n        \"postalAddress\": {\n          \"type\": \"<string>\",\n          \"addressLines\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingName\": \"<string>\",\n          \"buildingNumber\": \"<string>\",\n          \"department\": \"<string>\",\n          \"subDepartment\": \"<string>\",\n          \"floor\": \"<string>\",\n          \"postBox\": \"<string>\",\n          \"room\": \"<string>\",\n          \"streetName\": \"<string>\",\n          \"district\": \"<string>\",\n          \"city\": \"<string>\",\n          \"cityLocation\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"countrySubDivision\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    ]\n  },\n  \"creditor\": {\n    \"account\": {\n      \"accountNumber\": \"<string>\",\n      \"accountType\": \"<string>\",\n      \"accountCurrency\": \"<string>\",\n      \"companyId\": \"<string>\"\n    },\n    \"name\": \"<string>\",\n    \"postalAddress\": {\n      \"type\": \"<string>\",\n      \"addressLines\": [\n        \"<string>\"\n      ],\n      \"buildingName\": \"<string>\",\n      \"buildingNumber\": \"<string>\",\n      \"department\": \"<string>\",\n      \"subDepartment\": \"<string>\",\n      \"floor\": \"<string>\",\n      \"postBox\": \"<string>\",\n      \"room\": \"<string>\",\n      \"streetName\": \"<string>\",\n      \"district\": \"<string>\",\n      \"city\": \"<string>\",\n      \"cityLocation\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"countrySubDivision\": \"<string>\",\n      \"country\": \"<string>\"\n    },\n    \"contactDetails\": {\n      \"phoneNumber\": \"<string>\",\n      \"mobileNumber\": \"<string>\",\n      \"faxNumber\": \"<string>\",\n      \"emailAddress\": \"<string>\",\n      \"emailPurpose\": \"<string>\",\n      \"jobTitle\": \"<string>\",\n      \"responsibility\": \"<string>\",\n      \"department\": \"<string>\"\n    },\n    \"dateAndPlaceOfBirth\": {\n      \"city\": \"<string>\",\n      \"countrySubDivision\": \"<string>\",\n      \"country\": \"<string>\",\n      \"birthDate\": \"<date>\"\n    },\n    \"countryOfResidence\": \"<string>\",\n    \"device\": {\n      \"ipAddress\": \"<string>\",\n      \"geoCoordinates\": {\n        \"latitude\": \"<string>\",\n        \"longitude\": \"<string>\"\n      }\n    },\n    \"partyId\": {\n      \"organizationIds\": [\n        {\n          \"organizationId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bic\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemeName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  },\n  \"paymentTypeInformation\": {\n    \"serviceLevelCode\": \"<string>\",\n    \"localInstrumentCode\": {\n      \"code\": \"<string>\",\n      \"proprietary\": \"<string>\"\n    },\n    \"paymentContext\": \"<string>\",\n    \"clearingSystem\": {\n      \"name\": \"<string>\"\n    }\n  },\n  \"creditorAgent\": {\n    \"financialInstitutionIds\": [\n      {\n        \"id\": \"<string>\",\n        \"idType\": \"<string>\",\n        \"branchNumber\": \"<string>\"\n      }\n    ],\n    \"name\": \"<string>\",\n    \"postalAddress\": {\n      \"type\": \"<string>\",\n      \"addressLines\": [\n        \"<string>\"\n      ],\n      \"buildingName\": \"<string>\",\n      \"buildingNumber\": \"<string>\",\n      \"department\": \"<string>\",\n      \"subDepartment\": \"<string>\",\n      \"floor\": \"<string>\",\n      \"postBox\": \"<string>\",\n      \"room\": \"<string>\",\n      \"streetName\": \"<string>\",\n      \"district\": \"<string>\",\n      \"city\": \"<string>\",\n      \"cityLocation\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"countrySubDivision\": \"<string>\",\n      \"country\": \"<string>\"\n    },\n    \"additionalInstitutions\": [\n      {\n        \"id\": \"<string>\",\n        \"idType\": \"<string>\",\n        \"name\": \"<string>\",\n        \"isForeignParty\": \"<boolean>\",\n        \"postalAddress\": {\n          \"type\": \"<string>\",\n          \"addressLines\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buildingName\": \"<string>\",\n          \"buildingNumber\": \"<string>\",\n          \"department\": \"<string>\",\n          \"subDepartment\": \"<string>\",\n          \"floor\": \"<string>\",\n          \"postBox\": \"<string>\",\n          \"room\": \"<string>\",\n          \"streetName\": \"<string>\",\n          \"district\": \"<string>\",\n          \"city\": \"<string>\",\n          \"cityLocation\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"countrySubDivision\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    ]\n  },\n  \"additionalParties\": {\n    \"ultimateDebtor\": {\n      \"partyId\": {\n        \"organizationIds\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"name\": \"<string>\",\n      \"account\": {\n        \"accountNumber\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accountType\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accountCurrency\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"companyId\": \"<string>\"\n      },\n      \"countriesOfNationality\": [\n        \"<string>\"\n      ],\n      \"dateAndPlaceOfBirth\": {\n        \"city\": \"<string>\",\n        \"countrySubDivision\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"birthDate\": \"<date>\"\n      },\n      \"countryOfResidence\": \"<string>\",\n      \"postalAddress\": {\n        \"type\": \"<string>\",\n        \"addressLines\": [\n          \"<string>\"\n        ],\n        \"buildingName\": \"<string>\",\n        \"buildingNumber\": \"<string>\",\n        \"department\": \"<string>\",\n        \"subDepartment\": \"<string>\",\n        \"floor\": \"<string>\",\n        \"postBox\": \"<string>\",\n        \"room\": \"<string>\",\n        \"streetName\": \"<string>\",\n        \"district\": \"<string>\",\n        \"city\": \"<string>\",\n        \"cityLocation\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"countrySubDivision\": \"<string>\",\n        \"country\": \"<string>\"\n      },\n      \"contactDetails\": {\n        \"phoneNumber\": \"<string>\",\n        \"mobileNumber\": \"<string>\",\n        \"faxNumber\": \"<string>\",\n        \"emailAddress\": \"<string>\",\n        \"emailPurpose\": \"<string>\",\n        \"jobTitle\": \"<string>\",\n        \"responsibility\": \"<string>\",\n        \"department\": \"<string>\"\n      }\n    },\n    \"ultimateCreditor\": {\n      \"partyId\": {\n        \"organizationIds\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"name\": \"<string>\",\n      \"account\": {\n        \"accountNumber\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accountType\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accountCurrency\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"companyId\": \"<string>\"\n      },\n      \"countriesOfNationality\": [\n        \"<string>\"\n      ],\n      \"dateAndPlaceOfBirth\": {\n        \"city\": \"<string>\",\n        \"countrySubDivision\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"birthDate\": \"<date>\"\n      },\n      \"countryOfResidence\": \"<string>\",\n      \"postalAddress\": {\n        \"type\": \"<string>\",\n        \"addressLines\": [\n          \"<string>\"\n        ],\n        \"buildingName\": \"<string>\",\n        \"buildingNumber\": \"<string>\",\n        \"department\": \"<string>\",\n        \"subDepartment\": \"<string>\",\n        \"floor\": \"<string>\",\n        \"postBox\": \"<string>\",\n        \"room\": \"<string>\",\n        \"streetName\": \"<string>\",\n        \"district\": \"<string>\",\n        \"city\": \"<string>\",\n        \"cityLocation\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"countrySubDivision\": \"<string>\",\n        \"country\": \"<string>\"\n      },\n      \"contactDetails\": {\n        \"phoneNumber\": \"<string>\",\n        \"mobileNumber\": \"<string>\",\n        \"faxNumber\": \"<string>\",\n        \"emailAddress\": \"<string>\",\n        \"emailPurpose\": \"<string>\",\n        \"jobTitle\": \"<string>\",\n        \"responsibility\": \"<string>\",\n        \"department\": \"<string>\"\n      }\n    },\n    \"initiatingParty\": {\n      \"partyId\": {\n        \"organizationIds\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"name\": \"<string>\",\n      \"dateAndPlaceOfBirth\": {\n        \"city\": \"<string>\",\n        \"countrySubDivision\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"birthDate\": \"<date>\"\n      },\n      \"countryOfResidence\": \"<string>\",\n      \"postalAddress\": {\n        \"type\": \"<string>\",\n        \"addressLines\": [\n          \"<string>\"\n        ],\n        \"buildingName\": \"<string>\",\n        \"buildingNumber\": \"<string>\",\n        \"department\": \"<string>\",\n        \"subDepartment\": \"<string>\",\n        \"floor\": \"<string>\",\n        \"postBox\": \"<string>\",\n        \"room\": \"<string>\",\n        \"streetName\": \"<string>\",\n        \"district\": \"<string>\",\n        \"city\": \"<string>\",\n        \"cityLocation\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"countrySubDivision\": \"<string>\",\n        \"country\": \"<string>\"\n      }\n    },\n    \"instructedAgent\": {\n      \"id\": \"<string>\",\n      \"idType\": \"<string>\",\n      \"branchNumber\": \"<string>\"\n    },\n    \"previousInstructingAgents\": [\n      {\n        \"name\": \"<string>\",\n        \"position\": \"<integer>\",\n        \"account\": {\n          \"accountNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": \"<string>\",\n          \"accountType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"accountCurrency\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"financialInstitutionIds\": [\n          {\n            \"id\": \"<string>\",\n            \"idType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"branchNumber\": \"<string>\"\n          }\n        ],\n        \"postalAddress\": {\n          \"type\": \"<string>\",\n          \"addressLines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"buildingName\": \"<string>\",\n          \"buildingNumber\": \"<string>\",\n          \"department\": \"<string>\",\n          \"subDepartment\": \"<string>\",\n          \"floor\": \"<string>\",\n          \"postBox\": \"<string>\",\n          \"room\": \"<string>\",\n          \"streetName\": \"<string>\",\n          \"district\": \"<string>\",\n          \"city\": \"<string>\",\n          \"cityLocation\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"countrySubDivision\": \"<string>\",\n          \"country\": \"<string>\"\n        },\n        \"isForeignParty\": \"<boolean>\"\n      }\n    ],\n    \"additionalCreditors\": [\n      {\n        \"name\": \"<string>\",\n        \"organizationIds\": [\n          {\n            \"organizationId\": \"<string>\",\n            \"bic\": \"<string>\",\n            \"issuer\": \"<string>\",\n            \"schemeName\": {\n              \"code\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"dateAndPlaceOfBirth\": {\n          \"city\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"countrySubDivision\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"birthDate\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"countryOfResidence\": \"<string>\",\n        \"postalAddress\": {\n          \"type\": \"<string>\",\n          \"addressLines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"buildingName\": \"<string>\",\n          \"buildingNumber\": \"<string>\",\n          \"department\": \"<string>\",\n          \"subDepartment\": \"<string>\",\n          \"floor\": \"<string>\",\n          \"postBox\": \"<string>\",\n          \"room\": \"<string>\",\n          \"streetName\": \"<string>\",\n          \"district\": \"<string>\",\n          \"city\": \"<string>\",\n          \"cityLocation\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"countrySubDivision\": \"<string>\",\n          \"country\": \"<string>\"\n        },\n        \"contactDetails\": {\n          \"phoneNumber\": \"<string>\",\n          \"mobileNumber\": \"<string>\",\n          \"faxNumber\": \"<string>\",\n          \"emailAddress\": \"<string>\",\n          \"emailPurpose\": \"<string>\",\n          \"jobTitle\": \"<string>\",\n          \"responsibility\": \"<string>\",\n          \"department\": \"<string>\"\n        },\n        \"financialInstitutionIds\": [\n          {\n            \"id\": \"<string>\",\n            \"idType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"branchNumber\": \"<string>\"\n          }\n        ]\n      }\n    ],\n    \"intermediaryAgents\": [\n      {\n        \"position\": \"<integer>\",\n        \"name\": \"<string>\",\n        \"financialInstitutionIds\": [\n          {\n            \"id\": \"<string>\",\n            \"idType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"branchNumber\": \"<string>\"\n          }\n        ],\n        \"postalAddress\": {\n          \"type\": \"<string>\",\n          \"addressLines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"buildingName\": \"<string>\",\n          \"buildingNumber\": \"<string>\",\n          \"department\": \"<string>\",\n          \"subDepartment\": \"<string>\",\n          \"floor\": \"<string>\",\n          \"postBox\": \"<string>\",\n          \"room\": \"<string>\",\n          \"streetName\": \"<string>\",\n          \"district\": \"<string>\",\n          \"city\": \"<string>\",\n          \"cityLocation\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"countrySubDivision\": \"<string>\",\n          \"country\": \"<string>\"\n        }\n      }\n    ]\n  },\n  \"paymentPurpose\": {\n    \"purpose\": {\n      \"code\": \"<string>\"\n    },\n    \"categoryPurpose\": {\n      \"code\": \"<string>\"\n    }\n  },\n  \"remittanceInformation\": {\n    \"unstructuredInformation\": [\n      {\n        \"text\": \"<string>\",\n        \"valueType\": \"<string>\"\n      }\n    ],\n    \"structuredInformation\": [\n      {\n        \"creditReference\": {\n          \"reference\": \"<string>\",\n          \"issuer\": \"<string>\",\n          \"type\": {\n            \"code\": \"<string>\"\n          }\n        },\n        \"additionalRemittanceInformation\": \"<string>\",\n        \"referredDocumentInformation\": {\n          \"type\": {\n            \"code\": \"<string>\"\n          },\n          \"documentDate\": \"<date>\",\n          \"documentIdentifier\": \"<string>\",\n          \"issuer\": \"<string>\"\n        },\n        \"referredDocumentAmount\": [\n          {\n            \"type\": \"<string>\",\n            \"value\": {\n              \"currency\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"amount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"additionalInformation\": \"<string>\"\n          }\n        ],\n        \"invoicer\": {\n          \"partyId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": \"<string>\",\n          \"dateAndPlaceOfBirth\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"countryOfResidence\": \"<string>\",\n          \"postalAddress\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"buildingName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"buildingNumber\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"department\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"subDepartment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"floor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postBox\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"room\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"streetName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"district\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"cityLocation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"countrySubDivision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"invoicee\": {\n          \"partyId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": \"<string>\",\n          \"dateAndPlaceOfBirth\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"countryOfResidence\": \"<string>\",\n          \"postalAddress\": {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"buildingName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"buildingNumber\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"department\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"subDepartment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"floor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postBox\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"room\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"streetName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"district\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"cityLocation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"countrySubDivision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"deliveryDetails\": {\n          \"deliveryMethod\": \"<string>\",\n          \"deliveryAddress\": \"<string>\"\n        }\n      }\n    ],\n    \"agentInstructions\": {\n      \"nextAgentInstructions\": [\n        {\n          \"code\": \"<string>\",\n          \"instruction\": \"<string>\"\n        }\n      ],\n      \"creditorAgentInstructions\": [\n        {\n          \"code\": \"<string>\",\n          \"instruction\": \"<string>\"\n        }\n      ],\n      \"debtorAgentInstructions\": [\n        {\n          \"code\": \"<string>\",\n          \"instruction\": \"<string>\"\n        }\n      ]\n    },\n    \"foreignCurrency\": \"<string>\",\n    \"fx\": {\n      \"appliedRate\": \"<string>\"\n    }\n  },\n  \"taxInformation\": {\n    \"type\": \"<string>\",\n    \"taxAmount\": {\n      \"currency\": \"<string>\",\n      \"amount\": \"<string>\"\n    },\n    \"creditorTaxInformation\": {\n      \"taxId\": \"<string>\",\n      \"taxpayerCategory\": \"<string>\",\n      \"vatBranchCode\": \"<string>\"\n    },\n    \"debtorTaxInformation\": {\n      \"taxId\": \"<string>\",\n      \"taxpayerCategory\": \"<string>\",\n      \"vatBranchCode\": \"<string>\"\n    },\n    \"taxEntries\": [\n      {\n        \"invoicePriorTax\": \"<string>\",\n        \"incomeCode\": \"<string>\",\n        \"vatAmount\": \"<string>\",\n        \"taxAmount\": {\n          \"currency\": \"<string>\",\n          \"amount\": \"<string>\"\n        }\n      }\n    ]\n  },\n  \"regulatoryReporting\": {\n    \"authority\": {\n      \"name\": \"<string>\",\n      \"country\": \"<string>\"\n    },\n    \"details\": [\n      {\n        \"type\": \"<string>\",\n        \"country\": \"<string>\",\n        \"code\": \"<string>\",\n        \"additionalInfo\": [\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ]\n  },\n  \"settlementInformation\": {\n    \"settlementAccount\": {\n      \"accountNumber\": \"<string>\",\n      \"accountType\": \"<string>\",\n      \"accountCurrency\": \"<string>\",\n      \"companyId\": \"<string>\"\n    },\n    \"interbankSettlementAmount\": {\n      \"currency\": \"<string>\",\n      \"amount\": \"<string>\"\n    }\n  },\n  \"mandateInformation\": {\n    \"mandateId\": \"<string>\",\n    \"sequenceType\": \"<string>\",\n    \"signatureDate\": \"<date>\",\n    \"electronicSignature\": \"<string>\",\n    \"amendmentInformation\": {\n      \"originalMandateId\": \"<string>\",\n      \"originalCreditorId\": {\n        \"partyId\": {\n          \"organizationIds\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"name\": \"<string>\"\n      },\n      \"originalDebtor\": {\n        \"accountNumber\": \"<string>\",\n        \"accountType\": \"<string>\",\n        \"accountCurrency\": \"<string>\",\n        \"companyId\": \"<string>\"\n      }\n    }\n  },\n  \"fxInformation\": {\n    \"exchangeRate\": \"<string>\",\n    \"exchangeRateType\": \"<string>\",\n    \"rateId\": \"<string>\",\n    \"contractId\": \"<string>\"\n  },\n  \"secureVerification\": [\n    {\n      \"key\": \"<string>\",\n      \"secret\": \"<string>\"\n    }\n  ],\n  \"paymentExpiresAt\": \"<dateTime>\",\n  \"chargesInformation\": {\n    \"chargeBearer\": \"<string>\",\n    \"value\": {\n      \"currency\": \"<string>\",\n      \"amount\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6c7322b8-7b0c-4c68-aecb-1344f51d35dd",
+              "name": "Ok",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) Indicates that the request is a duplicate of a previous request",
+                  "key": "Duplicate-Request",
+                  "value": "true"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) URI (Relative URI) of the referenced resource.",
+                  "key": "Location",
+                  "value": "/payment/v2/payments/95364018-be32-4c71-9618-f1ceba78f28c"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"duplicateOf\": {\n    \"paymentId\": \"95364018-be32-4c71-9618-f1ceba78f28c\",\n    \"paymentIdentifiers\": {\n      \"endToEndId\": \"E2E1234567890\"\n    }\n  },\n  \"links\": {\n    \"payment\": \"/payment/v2/payments/95364018-be32-4c71-9618-f1ceba78f28c\"\n  },\n  \"reason\": {\n    \"code\": \"11909\",\n    \"location\": \"BODY\",\n    \"message\": \"This is a business duplicate, refer to documentation.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e242081-ad52-4a52-a323-927d880d1a40",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) URI (Relative URI) of the referenced resource.",
+                  "key": "Location",
+                  "value": "/payment/v2/payments/95364018-be32-4c71-9618-f1ceba78f28c"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"b1e4c092-b90d-4b33-bd19-1a3843370cda\",\n  \"paymentStatus\": \"PROCESSING\",\n  \"paymentSubStatus\": \"PROCESSING_BY_JPM\",\n  \"statusUpdatedAt\": \"2024-10-07T14:15:22Z\",\n  \"requestedExecutionDate\": \"2024-10-07\",\n  \"paymentIdentifiers\": {\n    \"endToEndId\": \"BRPIXTEST\"\n  },\n  \"transferType\": \"CREDIT\",\n  \"paymentType\": \"RTP\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cf5521fd-23ad-46af-9141-e506aeb3a9f9",
+              "name": "Bad Request \n\n**List of Error codes and Usage explanations.**\n\n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency failure                            |\n| 10107           | Concurrent request failure                     |\n| 10199           | Other                                          |\n| 11000 - 11499   | Account/Permission Problems                    |\n| 11500 - 11999   | General Business Errors                        |\n| 12000 - 12499   | Timeouts                                       |\n| 12500 - 12999   | Service Offline                                |\n| 13000           | Other Errors                                   |\n| 14000           | Security Failure                               |\n| 15000           | System Error                                   |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Invalid Data\",\n  \"httpStatus\": 400,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"message\": \"Mandatory field is missing\",\n      \"location\": \"BODY\",\n      \"field\": \"$.creditor.account\",\n      \"additionalContext\": [\n        {\n          \"code\": \"AC03\",\n          \"type\": \"ISO20022\",\n          \"message\": \"Creditor account number is missing or invalid\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e43ae4e0-6fdf-4ce4-bb11-4d4af4296930",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authentication Failure\",\n  \"httpStatus\": 401,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client could not be authenticated\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2c5cf2a7-d467-4fcf-a0c3-4ca293a283dc",
+              "name": "Forbidden \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authorization Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client forbidden from accessing the requested resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbfc9d57-4e1d-4e43-98f1-22e86caeefd5",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Malformed PAN\",\n  \"httpStatus\": 422,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"123e4567-e89b-12d3-a456-426614174001\",\n  \"context\": [\n    {\n      \"code\": \"10104\",\n      \"message\": \"pan must have the expected value\",\n      \"location\": \"BODY\",\n      \"field\": \"$.payments.creditor.account.card.pan\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0caf3fc3-2295-4ba8-a231-da027c932731",
+              "name": "Service Unavailable\n\n| Error Code    | Description                                |\n|---------------|----------------------------------------------------------------------------------------------|\n|  12995        | Service is temporarily unavailable. Please try again after sometime.( Accompanied by Retry-After Header)                      |\n|  12999        | Service is temporarily unavailable. Please try again after sometime.                                                           |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The number of seconds to wait before retrying the request.",
+                  "key": "Retry-After",
+                  "value": "600"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12999\",\n      \"message\": \"API is currently unavailable for usage. Please try again after some time\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "79109557-897b-40fb-9426-5d401e6feaf0",
+          "name": "Query Payments by `endToEndId` or `paymentId`",
+          "request": {
+            "name": "Query Payments by `endToEndId` or `paymentId`",
+            "description": {
+              "content": "<!-- theme: success -->\n\n> Query Payments by `endToEndId` or `paymentId`. \n\n> Optionally, specify `view=FULL` to get an expanded representation for each payment.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "endToEndId",
+                  "value": "<string>",
+                  "description": "Customer assigned Unique identifier to unambiguously identify the Payment transaction.\nThis identification is passed on, unchanged, throughout the entire end-to-end chain."
+                },
+                {
+                  "disabled": false,
+                  "key": "paymentId",
+                  "value": "<string>",
+                  "description": "JPMC generated payment identifier"
+                },
+                {
+                  "disabled": false,
+                  "key": "view",
+                  "value": "SUMMARY",
+                  "description": "Determines the level of detail in the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "paymentType",
+                  "value": "DEFAULT",
+                  "description": "Payment type.\n**Providing paymentType is optional but when provided, it enhances both query efficiency and response times.**\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                "key": "Request-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6477d18a-b4f0-42c3-989e-2cc080c91740",
+              "name": "Ok",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "endToEndId",
+                      "value": "SEPAINSTANTTEST"
+                    },
+                    {
+                      "key": "paymentId",
+                      "value": "253f67f3-b640-44cb-aabd-2cc348b52678"
+                    },
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    },
+                    {
+                      "key": "paymentType",
+                      "value": "DEFAULT"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"payments\": [\n    {\n      \"paymentId\": \"98275a2d-1e88-beed-6938-0521a7e0xatt\",\n      \"paymentStatus\": \"PROCESSING\",\n      \"paymentSubStatus\": \"PROCESSING_BY_JPM\",\n      \"statusUpdatedAt\": \"2024-10-15T14:15:22Z\",\n      \"requestedExecutionDate\": \"2024-10-15\",\n      \"paymentIdentifiers\": {\n        \"endToEndId\": \"SEPAINSTANTTEST-XBRD\"\n      },\n      \"value\": {\n        \"currency\": \"EUR\",\n        \"amount\": \"40.01\"\n      },\n      \"transferType\": \"CREDIT\",\n      \"paymentType\": \"RTP\",\n      \"debtor\": {\n        \"account\": {\n          \"accountNumber\": \"DE12345678912345678963\"\n        },\n        \"name\": \"JPM Client Corp\",\n        \"postalAddress\": {\n          \"city\": \"Frankfurt\",\n          \"country\": \"DE\"\n        }\n      },\n      \"debtorAgent\": {\n        \"financialInstitutionIds\": [\n          {\n            \"id\": \"CHASDEFX\",\n            \"idType\": \"BIC\"\n          }\n        ]\n      },\n      \"creditor\": {\n        \"account\": {\n          \"accountNumber\": \"DE4564567891234567899\"\n        },\n        \"name\": \"TEST ACCOUNT\",\n        \"postalAddress\": {\n          \"city\": \"Berlin\",\n          \"country\": \"DE\"\n        }\n      },\n      \"creditorAgent\": {\n        \"financialInstitutionIds\": [\n          {\n            \"id\": \"CHASDEFX\",\n            \"idType\": \"BIC\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6fea253a-2287-4ed9-bf8a-4ce6f41a2cb5",
+              "name": "Bad Request \n\n**List of Error codes and Usage explanations.**\n\n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency failure                            |\n| 10107           | Concurrent request failure                     |\n| 10199           | Other                                          |\n| 11000 - 11499   | Account/Permission Problems                    |\n| 11500 - 11999   | General Business Errors                        |\n| 12000 - 12499   | Timeouts                                       |\n| 12500 - 12999   | Service Offline                                |\n| 13000           | Other Errors                                   |\n| 14000           | Security Failure                               |\n| 15000           | System Error                                   |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "endToEndId",
+                      "value": "SEPAINSTANTTEST"
+                    },
+                    {
+                      "key": "paymentId",
+                      "value": "253f67f3-b640-44cb-aabd-2cc348b52678"
+                    },
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    },
+                    {
+                      "key": "paymentType",
+                      "value": "DEFAULT"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Invalid Data\",\n  \"httpStatus\": 400,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"message\": \"Mandatory field is missing\",\n      \"location\": \"BODY\",\n      \"field\": \"$.creditor.account\",\n      \"additionalContext\": [\n        {\n          \"code\": \"AC03\",\n          \"type\": \"ISO20022\",\n          \"message\": \"Creditor account number is missing or invalid\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72109078-af9a-418a-a447-46cd44814600",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "endToEndId",
+                      "value": "SEPAINSTANTTEST"
+                    },
+                    {
+                      "key": "paymentId",
+                      "value": "253f67f3-b640-44cb-aabd-2cc348b52678"
+                    },
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    },
+                    {
+                      "key": "paymentType",
+                      "value": "DEFAULT"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authentication Failure\",\n  \"httpStatus\": 401,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client could not be authenticated\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6752ec80-ce4b-430d-9de6-40a3aa4c247c",
+              "name": "Forbidden \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "endToEndId",
+                      "value": "SEPAINSTANTTEST"
+                    },
+                    {
+                      "key": "paymentId",
+                      "value": "253f67f3-b640-44cb-aabd-2cc348b52678"
+                    },
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    },
+                    {
+                      "key": "paymentType",
+                      "value": "DEFAULT"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authorization Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client forbidden from accessing the requested resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "240691c5-16c1-48d2-a531-9e9b82bf33db",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "endToEndId",
+                      "value": "SEPAINSTANTTEST"
+                    },
+                    {
+                      "key": "paymentId",
+                      "value": "253f67f3-b640-44cb-aabd-2cc348b52678"
+                    },
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    },
+                    {
+                      "key": "paymentType",
+                      "value": "DEFAULT"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fb52655c-c3fa-4608-b0fa-814b4f9a4dc3",
+              "name": "Service Unavailable\n\n| Error Code    | Description                                |\n|---------------|----------------------------------------------------------------------------------------------|\n|  12995        | Service is temporarily unavailable. Please try again after sometime.( Accompanied by Retry-After Header)                      |\n|  12999        | Service is temporarily unavailable. Please try again after sometime.                                                           |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "endToEndId",
+                      "value": "SEPAINSTANTTEST"
+                    },
+                    {
+                      "key": "paymentId",
+                      "value": "253f67f3-b640-44cb-aabd-2cc348b52678"
+                    },
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    },
+                    {
+                      "key": "paymentType",
+                      "value": "DEFAULT"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The number of seconds to wait before retrying the request.",
+                  "key": "Retry-After",
+                  "value": "600"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12999\",\n      \"message\": \"API is currently unavailable for usage. Please try again after some time\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "00e1d3f4-33d7-401b-8d20-eefd5baca5c0",
+          "name": "Retrieve Payment by `paymentId`",
+          "request": {
+            "name": "Retrieve Payment by `paymentId`",
+            "description": {
+              "content": "Retrieves a payment resource by providing the `paymentId`; \noptionally, specify `view=FULL` to get an expanded representation for the payment.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                ":paymentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "view",
+                  "value": "SUMMARY",
+                  "description": "Determines the level of detail in the response."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "paymentId",
+                  "description": "(Required) JPMC generated payment identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                "key": "Request-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "211c5acb-2067-43fb-99d3-7259f75e5c16",
+              "name": "Ok",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) JPMC generated payment identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"98275a2d-1e88-beed-6938-0521a7e0xatt\",\n  \"paymentStatus\": \"PROCESSING\",\n  \"paymentSubStatus\": \"PROCESSING_BY_JPM\",\n  \"statusUpdatedAt\": \"2024-10-15T14:15:22Z\",\n  \"requestedExecutionDate\": \"2024-10-15\",\n  \"paymentIdentifiers\": {\n    \"endToEndId\": \"SEPAINSTANTTEST-XBRD\"\n  },\n  \"value\": {\n    \"currency\": \"EUR\",\n    \"amount\": \"40.01\"\n  },\n  \"transferType\": \"CREDIT\",\n  \"paymentType\": \"RTP\",\n  \"debtor\": {\n    \"account\": {\n      \"accountNumber\": \"DE12345678912345678963\"\n    },\n    \"name\": \"JPM Client Corp\",\n    \"postalAddress\": {\n      \"city\": \"Frankfurt\",\n      \"country\": \"DE\"\n    }\n  },\n  \"debtorAgent\": {\n    \"financialInstitutionIds\": [\n      {\n        \"id\": \"CHASDEFX\",\n        \"idType\": \"BIC\"\n      }\n    ]\n  },\n  \"creditor\": {\n    \"account\": {\n      \"accountNumber\": \"DE4564567891234567899\"\n    },\n    \"name\": \"TEST ACCOUNT\",\n    \"postalAddress\": {\n      \"city\": \"Berlin\",\n      \"country\": \"DE\"\n    }\n  },\n  \"creditorAgent\": {\n    \"financialInstitutionIds\": [\n      {\n        \"id\": \"CHASDEFX\",\n        \"idType\": \"BIC\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2b45b5ba-80b6-4a35-a498-6640e0af6e76",
+              "name": "Bad Request \n\n**List of Error codes and Usage explanations.**\n\n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency failure                            |\n| 10107           | Concurrent request failure                     |\n| 10199           | Other                                          |\n| 11000 - 11499   | Account/Permission Problems                    |\n| 11500 - 11999   | General Business Errors                        |\n| 12000 - 12499   | Timeouts                                       |\n| 12500 - 12999   | Service Offline                                |\n| 13000           | Other Errors                                   |\n| 14000           | Security Failure                               |\n| 15000           | System Error                                   |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) JPMC generated payment identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Invalid Data\",\n  \"httpStatus\": 400,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"message\": \"Mandatory field is missing\",\n      \"location\": \"BODY\",\n      \"field\": \"$.creditor.account\",\n      \"additionalContext\": [\n        {\n          \"code\": \"AC03\",\n          \"type\": \"ISO20022\",\n          \"message\": \"Creditor account number is missing or invalid\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5de37b49-4261-4490-ba8c-cee33cc77400",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) JPMC generated payment identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authentication Failure\",\n  \"httpStatus\": 401,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client could not be authenticated\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "27af0a14-e1e5-4b77-a9b2-cf107196e13c",
+              "name": "Forbidden \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) JPMC generated payment identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authorization Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client forbidden from accessing the requested resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d88adebe-fe9e-4c3e-bb63-04733efa203b",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) JPMC generated payment identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "299912cd-ee31-4524-9283-899d7362b251",
+              "name": "Service Unavailable\n\n| Error Code    | Description                                |\n|---------------|----------------------------------------------------------------------------------------------|\n|  12995        | Service is temporarily unavailable. Please try again after sometime.( Accompanied by Retry-After Header)                      |\n|  12999        | Service is temporarily unavailable. Please try again after sometime.                                                           |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "view",
+                      "value": "SUMMARY"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) JPMC generated payment identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The number of seconds to wait before retrying the request.",
+                  "key": "Retry-After",
+                  "value": "600"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12999\",\n      \"message\": \"API is currently unavailable for usage. Please try again after some time\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "4f478e79-275d-46a9-9a5c-60466ff5fd0e",
+      "name": "Payment Returns",
+      "description": {
+        "content": "API to initiate payment returns",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4051089b-a22a-4d85-9256-bd0b9de45164",
+          "name": "Payment Returns",
+          "request": {
+            "name": "Payment Returns",
+            "description": {
+              "content": "Payment Returns",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                "returns"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                "key": "Idempotency-Key",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                "key": "Request-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentType\": \"<string>\",\n  \"originalPaymentIdentifiers\": {\n    \"bankReferenceNumber\": \"<string>\",\n    \"account\": {\n      \"accountNumber\": \"<string>\",\n      \"financialInstitutionId\": {\n        \"id\": \"<string>\",\n        \"idType\": \"<string>\"\n      }\n    },\n    \"clearingSystemReference\": \"<string>\",\n    \"paymentId\": \"<string>\",\n    \"endToEndId\": \"<string>\",\n    \"originalValue\": {\n      \"currency\": \"<string>\",\n      \"amount\": \"<string>\"\n    },\n    \"valueDate\": \"<date>\"\n  },\n  \"country\": \"<string>\",\n  \"paymentIdentifiers\": {\n    \"endToEndId\": \"<string>\"\n  },\n  \"chargeBearer\": \"<string>\",\n  \"returnType\": \"<string>\",\n  \"value\": {\n    \"amount\": \"<string>\",\n    \"currency\": \"<string>\"\n  },\n  \"reason\": {\n    \"code\": \"<string>\"\n  },\n  \"additionalInformation\": [\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "91d8d7ba-ede0-4ef7-b0d7-ec65c3c1068f",
+              "name": "Ok",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) Indicates that the request is a duplicate of a previous request",
+                  "key": "Duplicate-Request",
+                  "value": "true"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) URI (Relative URI) of the referenced resource.",
+                  "key": "Location",
+                  "value": "/payment/v2/payments/95364018-be32-4c71-9618-f1ceba78f28c"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"duplicateOf\": {\n    \"returnId\": \"253f67f3-b640-44cb-aabd-2cc348b52678\",\n    \"paymentIdentifiers\": {\n      \"endToEndId\": \"AD202109311354152\"\n    }\n  },\n  \"links\": {\n    \"paymentReturn\": \"/payment/v2/payments/returns/95364018-be32-4c71-9618-f1ceba78f28c\"\n  },\n  \"reason\": {\n    \"code\": \"11909\",\n    \"location\": \"BODY\",\n    \"message\": \"This is a business duplicate, refer to documentation.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "259fba62-152d-471f-b26d-fe6d316b25bc",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) URI (Relative URI) of the referenced resource.",
+                  "key": "Location",
+                  "value": "/payment/v2/payments/95364018-be32-4c71-9618-f1ceba78f28c"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"returnId\": \"bre4c092-b90d-4b33-bd19-1a3843370bpt\",\n  \"returnStatus\": \"ACCEPTED\",\n  \"returnSubStatus\": \"ACCEPTED\",\n  \"paymentIdentifiers\": {\n    \"endToEndId\": \"RT202109311350000\"\n  },\n  \"paymentType\": \"RTP\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5a26aaa-ab93-4705-b485-8be925349b1e",
+              "name": "Bad Request \n\n**List of Error codes and Usage explanations.**\n\n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency failure                            |\n| 10107           | Concurrent request failure                     |\n| 10199           | Other                                          |\n| 11000 - 11499   | Account/Permission Problems                    |\n| 11500 - 11999   | General Business Errors                        |\n| 12000 - 12499   | Timeouts                                       |\n| 12500 - 12999   | Service Offline                                |\n| 13000           | Other Errors                                   |\n| 14000           | Security Failure                               |\n| 15000           | System Error                                   |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Invalid Data\",\n  \"httpStatus\": 400,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"message\": \"Mandatory field is missing\",\n      \"location\": \"BODY\",\n      \"field\": \"$.creditor.account\",\n      \"additionalContext\": [\n        {\n          \"code\": \"AC03\",\n          \"type\": \"ISO20022\",\n          \"message\": \"Creditor account number is missing or invalid\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4272f102-b753-42f4-b327-4e00428008d7",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authentication Failure\",\n  \"httpStatus\": 401,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client could not be authenticated\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cbdb0504-f8bb-4045-abdc-89b85ab6829b",
+              "name": "Forbidden \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authorization Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client forbidden from accessing the requested resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c9d2f7a6-6031-41b1-8d56-bff9c7ee9dd3",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Idempotency Failure\",\n  \"httpStatus\": 422,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"e59b912a-9c00-11ed-a8fc-0242ac120002\",\n  \"context\": [\n    {\n      \"code\": \"10106\",\n      \"message\": \"Idempotency Key must not be reused across different payloads of this operation\",\n      \"location\": \"HEADER\",\n      \"field\": \"Idempotency-Key\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a25fbd25-792f-48c1-a4bd-44e83dd4fbb6",
+              "name": "Service Unavailable\n\n| Error Code    | Description                                |\n|---------------|----------------------------------------------------------------------------------------------|\n|  12995        | Service is temporarily unavailable. Please try again after sometime.( Accompanied by Retry-After Header)                      |\n|  12999        | Service is temporarily unavailable. Please try again after sometime.                                                           |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Client generated unique idempotency key used in recognizing consecutive retries of the same request\n\n**Usage of V4 UUIDs is recommended.**",
+                    "key": "Idempotency-Key",
+                    "value": "1b036f9c-8c84-4ce6-b1dd-5979472945a1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client generated identifier for the current request invocation.\nIf provided, this identifier will be included in error responses to assist in problem diagnosis.",
+                    "key": "Request-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The number of seconds to wait before retrying the request.",
+                  "key": "Retry-After",
+                  "value": "600"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12999\",\n      \"message\": \"API is currently unavailable for usage. Please try again after some time\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "30d6a6d7-44a1-426a-9e42-bfb40f99ca39",
+          "name": "Retrieve Payment Return",
+          "request": {
+            "name": "Retrieve Payment Return",
+            "description": {
+              "content": "<!-- theme: success -->\nRetrieve payment return details using ReturnId",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                "returns",
+                ":returnId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "returnId",
+                  "description": "(Required) JPMC generated unique payment return identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dc8b6589-9db9-44df-bcae-73edbf021539",
+              "name": "Ok",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns",
+                    ":returnId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "returnId",
+                      "description": "(Required) JPMC generated unique payment return identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"returnId\": \"bre4c092-b90d-4b33-bd19-1a3843370bpt\",\n  \"returnStatus\": \"ACCEPTED\",\n  \"returnSubStatus\": \"ACCEPTED\",\n  \"paymentType\": \"RTP\",\n  \"originalPaymentIdentifiers\": {\n    \"bankReferenceNumber\": \"ABC12346000\"\n  },\n  \"paymentIdentifiers\": {\n    \"endToEndId\": \"RT202109311350000\"\n  },\n  \"chargeBearer\": \"DEBTOR\",\n  \"country\": \"BR\",\n  \"returnType\": \"PARTIAL\",\n  \"value\": {\n    \"amount\": \"50.00\"\n  },\n  \"additionalInformation\": [\n    \"OrderNumber:OD-1234000\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5dd5bdae-f360-4e7a-a37f-4a2bc6a0ab12",
+              "name": "Bad Request \n\n**List of Error codes and Usage explanations.**\n\n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency failure                            |\n| 10107           | Concurrent request failure                     |\n| 10199           | Other                                          |\n| 11000 - 11499   | Account/Permission Problems                    |\n| 11500 - 11999   | General Business Errors                        |\n| 12000 - 12499   | Timeouts                                       |\n| 12500 - 12999   | Service Offline                                |\n| 13000           | Other Errors                                   |\n| 14000           | Security Failure                               |\n| 15000           | System Error                                   |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns",
+                    ":returnId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "returnId",
+                      "description": "(Required) JPMC generated unique payment return identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Invalid Data\",\n  \"httpStatus\": 400,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"10001\",\n      \"message\": \"Mandatory field is missing\",\n      \"location\": \"BODY\",\n      \"field\": \"$.creditor.account\",\n      \"additionalContext\": [\n        {\n          \"code\": \"AC03\",\n          \"type\": \"ISO20022\",\n          \"message\": \"Creditor account number is missing or invalid\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "717b1b9c-1675-41b3-8f08-358674c19b98",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns",
+                    ":returnId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "returnId",
+                      "description": "(Required) JPMC generated unique payment return identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authentication Failure\",\n  \"httpStatus\": 401,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client could not be authenticated\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69db1b4e-ce12-4ec8-baee-6ba8b58c0fa3",
+              "name": "Forbidden \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns",
+                    ":returnId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "returnId",
+                      "description": "(Required) JPMC generated unique payment return identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Authorization Failure\",\n  \"httpStatus\": 403,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"14000\",\n      \"message\": \"Client forbidden from accessing the requested resource\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a52c6800-7de2-4895-b4cd-e90d0a942087",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns",
+                    ":returnId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "returnId",
+                      "description": "(Required) JPMC generated unique payment return identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Not Found\",\n  \"httpStatus\": 404,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d817cc7e-49cb-4cf1-9f66-96968ab60ccb",
+              "name": "Service Unavailable\n\n| Error Code    | Description                                |\n|---------------|----------------------------------------------------------------------------------------------|\n|  12995        | Service is temporarily unavailable. Please try again after sometime.( Accompanied by Retry-After Header)                      |\n|  12999        | Service is temporarily unavailable. Please try again after sometime.                                                           |",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "returns",
+                    ":returnId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "returnId",
+                      "description": "(Required) JPMC generated unique payment return identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The number of seconds to wait before retrying the request.",
+                  "key": "Retry-After",
+                  "value": "600"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Service Unavailable\",\n  \"httpStatus\": 503,\n  \"traceId\": \"00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01\",\n  \"requestId\": \"d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1\",\n  \"context\": [\n    {\n      \"code\": \"12999\",\n      \"message\": \"API is currently unavailable for usage. Please try again after some time\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.payments.jpmorgan.com/payment/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "37667a90-d831-45f0-8264-d32b17bb16df",
+    "name": "Global Payments",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Initiate, track, and manage payments and payment returns across a wide range of payment types, including ACH, wires, real-time payments, cards, and digital wallets, so you can automate your payment workflows and easily retrieve detailed status and transaction information for reconciliation and reporting.\n\nContact Support:\n Name: JPMorgan Chase & Co. API Support\n Email: imsd.security.operations@jpmorgan.com",
+      "type": "text/plain"
+    }
+  }
+}

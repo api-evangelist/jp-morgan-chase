@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Webhooks API",
+    "version": "1.0.55"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List webhooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/webhooks",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page Number"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              }
+            ]
+          },
+          "docs": "List all your webhooks"
+        },
+        {
+          "info": {
+            "name": "Create a webhook subscription.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/webhooks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a webhook subscription"
+        },
+        {
+          "info": {
+            "name": "Get a webhook subscription by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/webhooks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "944803b0-f1c2-4b28-91ce-8985b1f317a7",
+                "type": "path",
+                "description": "Unique identifier for webhook subscription."
+              }
+            ]
+          },
+          "docs": "Get details of your subscription to a specific webhook."
+        },
+        {
+          "info": {
+            "name": "Update a webhook by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/webhooks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "944803b0-f1c2-4b28-91ce-8985b1f317a7",
+                "type": "path",
+                "description": "Unique identifier of the webhook to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add or Remove webhook subscriptions and change a webhook status to ACTIVE or INACTIVE"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

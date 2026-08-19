@@ -1,0 +1,717 @@
+{
+  "item": [
+    {
+      "id": "4671f6a8-4ca4-40ae-8ce5-7dbaca924b70",
+      "name": "Transactions",
+      "description": {
+        "content": "Initiating and processing a payment",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0ac94327-cb62-4e15-abaf-60beeabd4f5b",
+          "name": "Decrypt a Paze, Google Pay, or Apple Pay encrypted wallet bundle",
+          "request": {
+            "name": "Decrypt a Paze, Google Pay, or Apple Pay encrypted wallet bundle",
+            "description": {
+              "content": "Returns the payment information from an encrypted wallet",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "wallet-decryptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Merchant identifier for the request. The value must be unique.",
+                "key": "request-id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Identifier for the merchant account",
+                "key": "merchant-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"encryptedPayloadText\": \"<string>\",\n  \"walletTransactionId\": \"<string>\",\n  \"walletApplicationData\": \"<string>\",\n  \"publicKey\": \"<string>\",\n  \"version\": \"<string>\",\n  \"walletProvider\": \"<string>\",\n  \"keyHash\": \"<string>\",\n  \"digitalSignature\": \"<string>\",\n  \"accountNumberMaskingIndicator\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "45683a09-4dd2-4c98-932b-1dbc06959529",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wallet-decryptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "b57b4b67-0642-4bf0-ab5f-c4bd48e9c418"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "998482157632"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"encryptedPayloadText\": \"eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTtYWRkMy0yZDEwOTQ2NDc4NWMiLCJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5kaWdpdGFsd2FsbGV0LmVhcmx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTIzNjczMjEsImlhdCI6MTY5MjE5NDUyMSwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdDQkVERjM4MDBhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIifQ.eyJwYXlsb2FkSWQiOiJhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIiLCJzZXNzaW9uSWQiOiJsbGRzdTVxb3Rjd291Y3VuaGciLCJzZWN1cmVkUGF5bG9hZCI6ImV5SmhkV1FpT2lKbWFXeGxPbHd2WEM4aUxDSnJhV1FpT2lKamFHRnpaUzF3WVhwbExVWTRkWFVyUm5GeVVtSlBVRUkzVVc4MlRuTXlZMlpXUVZOWlVVbHVNamRUVlVSa2IwMW9aMFJQTmxrOUlpd2lhWE56SWpvaWFIUjBjSE02WEM5Y0wzTmhibVJpYjNndVpHbG5hWFJoYkhkaGJHeGxkQzVsWVhKc2VYZGhjbTVwYm1jdVkyOXRJaXdpWTNSNUlqb2lTbGRVSWl3aWRIbHdJam9pU2xkVUlpd2laVzVqSWpvaVFUSTFOa2REVFNJc0ltVjRjQ0k2TVRZNU1qTTJOek15TVN3aWFXRjBJam94TmpreU1UazBOVEl4TENKaGJHY2lPaUpTVTBFdFQwRkZVQzB5TlRZaUxDSnFkR2tpT2lKaE1UWmlOR1poT1MwMk4ySTBMV0ZsTW1NdFpUTTVaUzB4TWprMlltRTFORFZrTURJaWZRLlBHOTBXR1M2Yy1vY2FnVUp0S2w2dEw0NW5SX2tHTmptZUVtXzZ4LUdDaURGWEpucVNWYzIzT3I2VTNvVG5YSFNIN2NMZ1Z1X0dfbGVWQzRSMTZmOEZmazVpSG9kai1wY3lwdXBaLWpXU0w1eHFBSk5Gc04tZkVwSTJJajhUR0lNVjhzNHNKQlBOYVd6cGxJRUJkUFZrZmdmdllBQlJtZ0pPaHlyQ2Q4UmE2ZFN2cUhDOU81bkZ6bndHa3c1TE14elBXWXlJQTNJdlZBUGRJOHR4cGZaaXBfZHBwVEloM0h3S0UxRlg2Y2pPa252dGhQVjRLZGVBSlh3MDRiNGdRZUV1LWp3QWtSYk4waDRwLXZ5c2wyVUxoNTVlaXMwcnhhaHJQdFc0ZEpPUG9qVlhDRWRmRnM3MlRRUmFhc1dUYTFqcUlEMzAtdG9fWTBWRFBkaVJTeTNGZy5UMHozemdsQVpTandoVHBSLlJWODN3OUF4Q19LSGVkYVBjalBtSEZ6UDl6UWhuR1hsVlVrOTZyaDN3SFJJdDZ3TDgyM1lhNzVtSEJOYl8wVXVMcVRvbHJrTGNhSXk1MDFrV2NkMjJLYno5WXc2T0k1MkJlZ3pYYUNoVXNVM0hDYmYza2ZqZGl3Sk1lVXh3ZnZqdWZybnZjM2xRVVlGNEhTSXpFVmNsNTQwTk01T3dYSHZJYzRVT3hldVE5Z3lUbTFWejV5VnpzQ21sU2QxNjE4aUFoTUlfSDJlLXFVd3h6OHNESEJZSE9Ddms0WkRBal9UcjItcmJjbGZpOHl3SlhxRWIwZ1BnUkt0QjlrLVpONm4wS3BOR0MzZ0lSLXZRY09wMnZDNDc3d3NaWmNCVGdWRWNfRlNVS3BQNXMwU3VBaGVac1ZIa0MxTnJVNzhEVTRtYnl2dFhrWko4UExPejdYTl9uWWE0bFNIa0Q2Q3NKd2lZS1V3SlhmX1R4SWJhWTl6dGplN0hXM0l1SkpxcHd1dGtYeWRaaEk3VjFMdms0UXhlSnVhNk1mbEtnay1LZ0Y0RnR5MUo3Y0h6SFlPMld6bGluOVlWRVVNdThPaFRGV3FBVjNOWXdxTnBwT0ZIekxjZHU4WmZMcS1wc0VLY3c5cjVxY2F0QWRUUkQxZEhlQnVySFFoMmlfS0hDbktkM0hfOHJOVG0zQVpNQUJiYzV6ZjB1SWlNYjREZEdQSUxrUmdiWlBGQUh4cVdfMGVWS3NiYU1JdXViUnFLSTd5S212SmRvSjk3MlE5bFJHMmVvckF2YkdSb2VBNmtmYmpMaEl5S1ZqOVpxS1FTdWtIdU9KRV9LeFJ6VmRFeERpdkpGS3VHTkFCQ3BKTkhDaTl6ck1JZk5Qck1lZ25qLVNYVTU1WHp1eWE0TzZMaTB3TDRKSXZuZHNwTTI5THFGYTktRW5PR3lRblN5djdZWDNPRHRwazNxcGIwN1liQTJtaEoxR05jV0pOTWEta2dhckRsZGlWSmd4Qi16Z2RMaGFPVlZVRHhMa0FaRUFmMXdXZmFmQmhPSjV3U0REanVfSjhZMVU2V0kxVUdjVmY3MDBPVEtHRmMzR1Yxa3RKN2xMbjA1dUVJVWdHeEJidVJ0SExsU0NJLVMzVDJkLUllYjlJeS16SHdETWpOLXFRUno4U2ZVRFZFend5QjA4eTMwRUlFWF9LaUZ0U3MtZ3RWY2MtOElKOVZ5ZXd4TW5wcUlpejRzS29WS0kxNmpnZDZKTUpHdFRVbFFSWTROVzNiWDBmbU1nczJLLUtKWHB1VUpzM3RxZGJWaEp3cU13cVVLdHh4MFRkeGdWa3FRVWtaNlAyZ1BQUGd1VTZ4dHNGeTFaY2dnZWpwdU9GUkxkVE5FN1d1V3FGSzYzUjRPMTZ6bjZWeGtrZElIV0tsWFlCNHJuMTJtQTFvRjNiR0ZIb21OclMzQ1ltbW92a2ZIcnpCdWEteFdfb3V0dk9BTkNCQmlHdTNoSUQzZV9QdWd3OXZCXzlkdm4wOW1scHktVzJQNGVQSXdBSGY3SWNBcE5yVUNYS3dmYlNqRTdSU0ZwVEhnYkFQb0hlQ211OFhNOFp1c1R1VGR6bGVKVFFLc0tYcWtha2E0NDZjUi1QMEQtWFZ5QzRKc0NWR1FJVmVPd0h6eklOZXVaVERpZHJjV2NlbEJQYWp5X0QzbnVsVTVUWHhuYzhpeEE1d2JuM0lxRjdVTzEtV0tFRTBQeTVfVlpnRGhncEZyM3ZWVE5GXzBWUVJOZjY2cV80eXZmUmNyYTlSMnZ0N3lFTHd2WlNDYWpOV0N3eUJPekkta1hRR3QySUFJRnduWjMzellpamwwMjJsQ3Z5V0pEVTBKMXFjajE0V29XTEF6X2t3QjVCcnhUbjluS0hGaXRsNlVJUDIwc184eTBlWlZEU1JyZnA1bi1JMWJYLUJwWUVKeWs4X0UwQkg3U0p6V3J2V0NnM0hSY1FKaHk2ZlJPTlQ2Ujg5bW4zNjB4UkxTcHhQdGZkUjVSVFRXZGdCelpOUDhSSUxoVm5SQVZOQXJOSzZHZ0l2UmpLd0dlMEVhenB0M0Q3d2pEVjVtdXJqaXBoMC1VYVlraDFrTW9jbTlYOWdXZ3VIbkdRWDFDUUVKV0poN09BcEFrdWljZnpEbDRZOFo4a25oVG5XbFZDdlBJdlN3bWthZnpsX2RiMDJvTzNqSm5NOHR5Qks4WHRHUFI4RUtkX0Nta2Itdmc5MzZTRDBWc2pZdnFqNEFLVWdqUDlnVFpmWWM1UlBqNTJIdm83SWpQWG1qQldISm1LbE1lX0Rib1FKNUM5Xy13bHpmYTlCTmd1elBYWG1KbkE4cmFyR0RyeUU3YlNFRG5UMVZBNXlCUFQ5S3JYVlJLN3JMeHZNckRuVG42X0w2RXBDQnVCTk5IRVhUUm5XTUsxdWtNMG5XMUFkN2gyR0FDRE5jWHAwUW5SR1J3Y3RlbmxnVmJhWG9YN29OSktTMTh6WUlqUlhEaXBQTGRxYWpOQUtjbHhtZ1lhM1ZZZnhwZEllbERTbHg3MmFrZVYyb1o4dnctNUxNUE9JNXgyb2lRcmdaNmhxSklHU0IzNU1kQ2pBdkQ1dEd3d0FDenN6WGZ1MTU0TUhJRkstWm41YmNOUEFlc2gtbVhlaEJqSndZeFl3eVdWTjc1bkVQYnI0SVBMNVN0M2trbGFyQUl2cTFHUDdFRG5vSTJyT040UjRiU1ZxWkN3czBXRXdEMFVKSVpzYnRXZENkZzJvZlhjbG5KZ0JzbE8xdGFyMmEzdEp0MlMzTXJQc0FsVTY5V0NJUG91TXpTTlh4RmNnLUxaTjk0Z05YOVhUb2ZJSEhhbDlqdXNwdXhodlRrYTJZOVlJeC1rc2lnNGZYOFFZamZtLlpPNnNkTzJTSHlQdkdFdnA5eGJBWmcifQ.K8EAidhF0cOG_N1HcvmvYyeCHIcsmVB6ACDMxVnnZqIGlusl0ixHnOitap6lfkKAg080WYAzi4Fc2cyU2uDm23L_TiH2mS0CYaCRFvid_1p8SUmtkEkfEgVGLy-dNrYKOuzE9t6d0sfYI8a71OgYg5N9Ef2BMNAtz1kTloS83rAhIhWxNbIUE7OZn7dHir8Yh1dKvk0cYngi8P1t6AvTc6MTR8US-L8mzgjxODqVWnBjW7xGjxnUQatsBuZj-jz9w26OqHkz72182defw6\",\n  \"walletProvider\": \"PAZE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"string\",\n  \"walletTransactionId\": \"<string>\",\n  \"messages\": {\n    \"responseStatus\": \"string\",\n    \"responseCode\": \"string\",\n    \"responseMessage\": \"string\",\n    \"validationErrors\": [\n      {\n        \"code\": \"string\",\n        \"message\": \"string\",\n        \"entity\": \"string\"\n      },\n      {\n        \"code\": \"string\",\n        \"message\": \"string\",\n        \"entity\": \"string\"\n      }\n    ]\n  },\n  \"accountHolder\": {\n    \"accountNumber\": \"string\",\n    \"accountNumberType\": \"string\",\n    \"expiry\": {\n      \"monthNumber\": \"string\",\n      \"yearNumber\": \"string\"\n    },\n    \"authenticationMethod\": \"string\",\n    \"transactionAmount\": 1914,\n    \"currencyCode\": \"string\",\n    \"paymentAccountReference\": \"string\",\n    \"billingAddress\": {\n      \"addressType\": \"string\",\n      \"line1\": \"string\",\n      \"line2\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"string\",\n      \"postalCode\": \"string\",\n      \"countryCode\": \"string\"\n    },\n    \"consumerInfo\": {\n      \"firstName\": \"string\",\n      \"lastName\": \"string\",\n      \"fullName\": \"string\",\n      \"emailAddress\": \"string\",\n      \"countryCode\": \"string\",\n      \"languageCode\": \"string\",\n      \"mobileTelephoneNumber\": \"string\"\n    },\n    \"walletCardData\": {\n      \"cardArtList\": [\n        {\n          \"name\": \"string\",\n          \"type\": \"string\",\n          \"url\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"type\": \"string\",\n          \"url\": \"string\"\n        }\n      ],\n      \"cardMetadata\": {\n        \"expirationDate\": \"string\",\n        \"accountSuffixNumber\": \"string\"\n      },\n      \"walletMerchantTokenReferenceId\": \"string\"\n    }\n  },\n  \"cryptogramDetail\": {\n    \"tokenAuthenticationValue\": \"string\",\n    \"authenticationValue\": \"string\",\n    \"applicationTransactionCounter\": 5936,\n    \"cryptogramInformationData\": \"string\",\n    \"deviceManufacturerId\": \"string\",\n    \"paymentDataType\": \"string\",\n    \"messageId\": \"string\",\n    \"gatewayMerchantId\": \"string\",\n    \"electronicCommerceIndicator\": \"string\",\n    \"cryptogramExpirationTimestamp\": \"string\",\n    \"tokenProvisioningVerificationValue\": \"string\",\n    \"tokenProvisioningVerificationExpirationTimestamp\": \"string\"\n  },\n  \"multiTokenAuthenticationResponses\": [\n    {\n      \"externalMerchantId\": \"string\",\n      \"walletServiceProviderCryptogram\": \"string\",\n      \"transactionAmount\": 6609\n    },\n    {\n      \"externalMerchantId\": \"string\",\n      \"walletServiceProviderCryptogram\": \"string\",\n      \"transactionAmount\": 3001\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f9b94bc-25e1-4398-abf9-8407f206e847",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wallet-decryptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "b57b4b67-0642-4bf0-ab5f-c4bd48e9c418"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "998482157632"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"encryptedPayloadText\": \"eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTtYWRkMy0yZDEwOTQ2NDc4NWMiLCJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5kaWdpdGFsd2FsbGV0LmVhcmx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTIzNjczMjEsImlhdCI6MTY5MjE5NDUyMSwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdDQkVERjM4MDBhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIifQ.eyJwYXlsb2FkSWQiOiJhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIiLCJzZXNzaW9uSWQiOiJsbGRzdTVxb3Rjd291Y3VuaGciLCJzZWN1cmVkUGF5bG9hZCI6ImV5SmhkV1FpT2lKbWFXeGxPbHd2WEM4aUxDSnJhV1FpT2lKamFHRnpaUzF3WVhwbExVWTRkWFVyUm5GeVVtSlBVRUkzVVc4MlRuTXlZMlpXUVZOWlVVbHVNamRUVlVSa2IwMW9aMFJQTmxrOUlpd2lhWE56SWpvaWFIUjBjSE02WEM5Y0wzTmhibVJpYjNndVpHbG5hWFJoYkhkaGJHeGxkQzVsWVhKc2VYZGhjbTVwYm1jdVkyOXRJaXdpWTNSNUlqb2lTbGRVSWl3aWRIbHdJam9pU2xkVUlpd2laVzVqSWpvaVFUSTFOa2REVFNJc0ltVjRjQ0k2TVRZNU1qTTJOek15TVN3aWFXRjBJam94TmpreU1UazBOVEl4TENKaGJHY2lPaUpTVTBFdFQwRkZVQzB5TlRZaUxDSnFkR2tpT2lKaE1UWmlOR1poT1MwMk4ySTBMV0ZsTW1NdFpUTTVaUzB4TWprMlltRTFORFZrTURJaWZRLlBHOTBXR1M2Yy1vY2FnVUp0S2w2dEw0NW5SX2tHTmptZUVtXzZ4LUdDaURGWEpucVNWYzIzT3I2VTNvVG5YSFNIN2NMZ1Z1X0dfbGVWQzRSMTZmOEZmazVpSG9kai1wY3lwdXBaLWpXU0w1eHFBSk5Gc04tZkVwSTJJajhUR0lNVjhzNHNKQlBOYVd6cGxJRUJkUFZrZmdmdllBQlJtZ0pPaHlyQ2Q4UmE2ZFN2cUhDOU81bkZ6bndHa3c1TE14elBXWXlJQTNJdlZBUGRJOHR4cGZaaXBfZHBwVEloM0h3S0UxRlg2Y2pPa252dGhQVjRLZGVBSlh3MDRiNGdRZUV1LWp3QWtSYk4waDRwLXZ5c2wyVUxoNTVlaXMwcnhhaHJQdFc0ZEpPUG9qVlhDRWRmRnM3MlRRUmFhc1dUYTFqcUlEMzAtdG9fWTBWRFBkaVJTeTNGZy5UMHozemdsQVpTandoVHBSLlJWODN3OUF4Q19LSGVkYVBjalBtSEZ6UDl6UWhuR1hsVlVrOTZyaDN3SFJJdDZ3TDgyM1lhNzVtSEJOYl8wVXVMcVRvbHJrTGNhSXk1MDFrV2NkMjJLYno5WXc2T0k1MkJlZ3pYYUNoVXNVM0hDYmYza2ZqZGl3Sk1lVXh3ZnZqdWZybnZjM2xRVVlGNEhTSXpFVmNsNTQwTk01T3dYSHZJYzRVT3hldVE5Z3lUbTFWejV5VnpzQ21sU2QxNjE4aUFoTUlfSDJlLXFVd3h6OHNESEJZSE9Ddms0WkRBal9UcjItcmJjbGZpOHl3SlhxRWIwZ1BnUkt0QjlrLVpONm4wS3BOR0MzZ0lSLXZRY09wMnZDNDc3d3NaWmNCVGdWRWNfRlNVS3BQNXMwU3VBaGVac1ZIa0MxTnJVNzhEVTRtYnl2dFhrWko4UExPejdYTl9uWWE0bFNIa0Q2Q3NKd2lZS1V3SlhmX1R4SWJhWTl6dGplN0hXM0l1SkpxcHd1dGtYeWRaaEk3VjFMdms0UXhlSnVhNk1mbEtnay1LZ0Y0RnR5MUo3Y0h6SFlPMld6bGluOVlWRVVNdThPaFRGV3FBVjNOWXdxTnBwT0ZIekxjZHU4WmZMcS1wc0VLY3c5cjVxY2F0QWRUUkQxZEhlQnVySFFoMmlfS0hDbktkM0hfOHJOVG0zQVpNQUJiYzV6ZjB1SWlNYjREZEdQSUxrUmdiWlBGQUh4cVdfMGVWS3NiYU1JdXViUnFLSTd5S212SmRvSjk3MlE5bFJHMmVvckF2YkdSb2VBNmtmYmpMaEl5S1ZqOVpxS1FTdWtIdU9KRV9LeFJ6VmRFeERpdkpGS3VHTkFCQ3BKTkhDaTl6ck1JZk5Qck1lZ25qLVNYVTU1WHp1eWE0TzZMaTB3TDRKSXZuZHNwTTI5THFGYTktRW5PR3lRblN5djdZWDNPRHRwazNxcGIwN1liQTJtaEoxR05jV0pOTWEta2dhckRsZGlWSmd4Qi16Z2RMaGFPVlZVRHhMa0FaRUFmMXdXZmFmQmhPSjV3U0REanVfSjhZMVU2V0kxVUdjVmY3MDBPVEtHRmMzR1Yxa3RKN2xMbjA1dUVJVWdHeEJidVJ0SExsU0NJLVMzVDJkLUllYjlJeS16SHdETWpOLXFRUno4U2ZVRFZFend5QjA4eTMwRUlFWF9LaUZ0U3MtZ3RWY2MtOElKOVZ5ZXd4TW5wcUlpejRzS29WS0kxNmpnZDZKTUpHdFRVbFFSWTROVzNiWDBmbU1nczJLLUtKWHB1VUpzM3RxZGJWaEp3cU13cVVLdHh4MFRkeGdWa3FRVWtaNlAyZ1BQUGd1VTZ4dHNGeTFaY2dnZWpwdU9GUkxkVE5FN1d1V3FGSzYzUjRPMTZ6bjZWeGtrZElIV0tsWFlCNHJuMTJtQTFvRjNiR0ZIb21OclMzQ1ltbW92a2ZIcnpCdWEteFdfb3V0dk9BTkNCQmlHdTNoSUQzZV9QdWd3OXZCXzlkdm4wOW1scHktVzJQNGVQSXdBSGY3SWNBcE5yVUNYS3dmYlNqRTdSU0ZwVEhnYkFQb0hlQ211OFhNOFp1c1R1VGR6bGVKVFFLc0tYcWtha2E0NDZjUi1QMEQtWFZ5QzRKc0NWR1FJVmVPd0h6eklOZXVaVERpZHJjV2NlbEJQYWp5X0QzbnVsVTVUWHhuYzhpeEE1d2JuM0lxRjdVTzEtV0tFRTBQeTVfVlpnRGhncEZyM3ZWVE5GXzBWUVJOZjY2cV80eXZmUmNyYTlSMnZ0N3lFTHd2WlNDYWpOV0N3eUJPekkta1hRR3QySUFJRnduWjMzellpamwwMjJsQ3Z5V0pEVTBKMXFjajE0V29XTEF6X2t3QjVCcnhUbjluS0hGaXRsNlVJUDIwc184eTBlWlZEU1JyZnA1bi1JMWJYLUJwWUVKeWs4X0UwQkg3U0p6V3J2V0NnM0hSY1FKaHk2ZlJPTlQ2Ujg5bW4zNjB4UkxTcHhQdGZkUjVSVFRXZGdCelpOUDhSSUxoVm5SQVZOQXJOSzZHZ0l2UmpLd0dlMEVhenB0M0Q3d2pEVjVtdXJqaXBoMC1VYVlraDFrTW9jbTlYOWdXZ3VIbkdRWDFDUUVKV0poN09BcEFrdWljZnpEbDRZOFo4a25oVG5XbFZDdlBJdlN3bWthZnpsX2RiMDJvTzNqSm5NOHR5Qks4WHRHUFI4RUtkX0Nta2Itdmc5MzZTRDBWc2pZdnFqNEFLVWdqUDlnVFpmWWM1UlBqNTJIdm83SWpQWG1qQldISm1LbE1lX0Rib1FKNUM5Xy13bHpmYTlCTmd1elBYWG1KbkE4cmFyR0RyeUU3YlNFRG5UMVZBNXlCUFQ5S3JYVlJLN3JMeHZNckRuVG42X0w2RXBDQnVCTk5IRVhUUm5XTUsxdWtNMG5XMUFkN2gyR0FDRE5jWHAwUW5SR1J3Y3RlbmxnVmJhWG9YN29OSktTMTh6WUlqUlhEaXBQTGRxYWpOQUtjbHhtZ1lhM1ZZZnhwZEllbERTbHg3MmFrZVYyb1o4dnctNUxNUE9JNXgyb2lRcmdaNmhxSklHU0IzNU1kQ2pBdkQ1dEd3d0FDenN6WGZ1MTU0TUhJRkstWm41YmNOUEFlc2gtbVhlaEJqSndZeFl3eVdWTjc1bkVQYnI0SVBMNVN0M2trbGFyQUl2cTFHUDdFRG5vSTJyT040UjRiU1ZxWkN3czBXRXdEMFVKSVpzYnRXZENkZzJvZlhjbG5KZ0JzbE8xdGFyMmEzdEp0MlMzTXJQc0FsVTY5V0NJUG91TXpTTlh4RmNnLUxaTjk0Z05YOVhUb2ZJSEhhbDlqdXNwdXhodlRrYTJZOVlJeC1rc2lnNGZYOFFZamZtLlpPNnNkTzJTSHlQdkdFdnA5eGJBWmcifQ.K8EAidhF0cOG_N1HcvmvYyeCHIcsmVB6ACDMxVnnZqIGlusl0ixHnOitap6lfkKAg080WYAzi4Fc2cyU2uDm23L_TiH2mS0CYaCRFvid_1p8SUmtkEkfEgVGLy-dNrYKOuzE9t6d0sfYI8a71OgYg5N9Ef2BMNAtz1kTloS83rAhIhWxNbIUE7OZn7dHir8Yh1dKvk0cYngi8P1t6AvTc6MTR8US-L8mzgjxODqVWnBjW7xGjxnUQatsBuZj-jz9w26OqHkz72182defw6\",\n  \"walletProvider\": \"PAZE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"string\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "96325a41-9e77-437e-a329-b76fb7617091",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wallet-decryptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "b57b4b67-0642-4bf0-ab5f-c4bd48e9c418"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "998482157632"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"encryptedPayloadText\": \"eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTtYWRkMy0yZDEwOTQ2NDc4NWMiLCJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5kaWdpdGFsd2FsbGV0LmVhcmx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTIzNjczMjEsImlhdCI6MTY5MjE5NDUyMSwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdDQkVERjM4MDBhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIifQ.eyJwYXlsb2FkSWQiOiJhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIiLCJzZXNzaW9uSWQiOiJsbGRzdTVxb3Rjd291Y3VuaGciLCJzZWN1cmVkUGF5bG9hZCI6ImV5SmhkV1FpT2lKbWFXeGxPbHd2WEM4aUxDSnJhV1FpT2lKamFHRnpaUzF3WVhwbExVWTRkWFVyUm5GeVVtSlBVRUkzVVc4MlRuTXlZMlpXUVZOWlVVbHVNamRUVlVSa2IwMW9aMFJQTmxrOUlpd2lhWE56SWpvaWFIUjBjSE02WEM5Y0wzTmhibVJpYjNndVpHbG5hWFJoYkhkaGJHeGxkQzVsWVhKc2VYZGhjbTVwYm1jdVkyOXRJaXdpWTNSNUlqb2lTbGRVSWl3aWRIbHdJam9pU2xkVUlpd2laVzVqSWpvaVFUSTFOa2REVFNJc0ltVjRjQ0k2TVRZNU1qTTJOek15TVN3aWFXRjBJam94TmpreU1UazBOVEl4TENKaGJHY2lPaUpTVTBFdFQwRkZVQzB5TlRZaUxDSnFkR2tpT2lKaE1UWmlOR1poT1MwMk4ySTBMV0ZsTW1NdFpUTTVaUzB4TWprMlltRTFORFZrTURJaWZRLlBHOTBXR1M2Yy1vY2FnVUp0S2w2dEw0NW5SX2tHTmptZUVtXzZ4LUdDaURGWEpucVNWYzIzT3I2VTNvVG5YSFNIN2NMZ1Z1X0dfbGVWQzRSMTZmOEZmazVpSG9kai1wY3lwdXBaLWpXU0w1eHFBSk5Gc04tZkVwSTJJajhUR0lNVjhzNHNKQlBOYVd6cGxJRUJkUFZrZmdmdllBQlJtZ0pPaHlyQ2Q4UmE2ZFN2cUhDOU81bkZ6bndHa3c1TE14elBXWXlJQTNJdlZBUGRJOHR4cGZaaXBfZHBwVEloM0h3S0UxRlg2Y2pPa252dGhQVjRLZGVBSlh3MDRiNGdRZUV1LWp3QWtSYk4waDRwLXZ5c2wyVUxoNTVlaXMwcnhhaHJQdFc0ZEpPUG9qVlhDRWRmRnM3MlRRUmFhc1dUYTFqcUlEMzAtdG9fWTBWRFBkaVJTeTNGZy5UMHozemdsQVpTandoVHBSLlJWODN3OUF4Q19LSGVkYVBjalBtSEZ6UDl6UWhuR1hsVlVrOTZyaDN3SFJJdDZ3TDgyM1lhNzVtSEJOYl8wVXVMcVRvbHJrTGNhSXk1MDFrV2NkMjJLYno5WXc2T0k1MkJlZ3pYYUNoVXNVM0hDYmYza2ZqZGl3Sk1lVXh3ZnZqdWZybnZjM2xRVVlGNEhTSXpFVmNsNTQwTk01T3dYSHZJYzRVT3hldVE5Z3lUbTFWejV5VnpzQ21sU2QxNjE4aUFoTUlfSDJlLXFVd3h6OHNESEJZSE9Ddms0WkRBal9UcjItcmJjbGZpOHl3SlhxRWIwZ1BnUkt0QjlrLVpONm4wS3BOR0MzZ0lSLXZRY09wMnZDNDc3d3NaWmNCVGdWRWNfRlNVS3BQNXMwU3VBaGVac1ZIa0MxTnJVNzhEVTRtYnl2dFhrWko4UExPejdYTl9uWWE0bFNIa0Q2Q3NKd2lZS1V3SlhmX1R4SWJhWTl6dGplN0hXM0l1SkpxcHd1dGtYeWRaaEk3VjFMdms0UXhlSnVhNk1mbEtnay1LZ0Y0RnR5MUo3Y0h6SFlPMld6bGluOVlWRVVNdThPaFRGV3FBVjNOWXdxTnBwT0ZIekxjZHU4WmZMcS1wc0VLY3c5cjVxY2F0QWRUUkQxZEhlQnVySFFoMmlfS0hDbktkM0hfOHJOVG0zQVpNQUJiYzV6ZjB1SWlNYjREZEdQSUxrUmdiWlBGQUh4cVdfMGVWS3NiYU1JdXViUnFLSTd5S212SmRvSjk3MlE5bFJHMmVvckF2YkdSb2VBNmtmYmpMaEl5S1ZqOVpxS1FTdWtIdU9KRV9LeFJ6VmRFeERpdkpGS3VHTkFCQ3BKTkhDaTl6ck1JZk5Qck1lZ25qLVNYVTU1WHp1eWE0TzZMaTB3TDRKSXZuZHNwTTI5THFGYTktRW5PR3lRblN5djdZWDNPRHRwazNxcGIwN1liQTJtaEoxR05jV0pOTWEta2dhckRsZGlWSmd4Qi16Z2RMaGFPVlZVRHhMa0FaRUFmMXdXZmFmQmhPSjV3U0REanVfSjhZMVU2V0kxVUdjVmY3MDBPVEtHRmMzR1Yxa3RKN2xMbjA1dUVJVWdHeEJidVJ0SExsU0NJLVMzVDJkLUllYjlJeS16SHdETWpOLXFRUno4U2ZVRFZFend5QjA4eTMwRUlFWF9LaUZ0U3MtZ3RWY2MtOElKOVZ5ZXd4TW5wcUlpejRzS29WS0kxNmpnZDZKTUpHdFRVbFFSWTROVzNiWDBmbU1nczJLLUtKWHB1VUpzM3RxZGJWaEp3cU13cVVLdHh4MFRkeGdWa3FRVWtaNlAyZ1BQUGd1VTZ4dHNGeTFaY2dnZWpwdU9GUkxkVE5FN1d1V3FGSzYzUjRPMTZ6bjZWeGtrZElIV0tsWFlCNHJuMTJtQTFvRjNiR0ZIb21OclMzQ1ltbW92a2ZIcnpCdWEteFdfb3V0dk9BTkNCQmlHdTNoSUQzZV9QdWd3OXZCXzlkdm4wOW1scHktVzJQNGVQSXdBSGY3SWNBcE5yVUNYS3dmYlNqRTdSU0ZwVEhnYkFQb0hlQ211OFhNOFp1c1R1VGR6bGVKVFFLc0tYcWtha2E0NDZjUi1QMEQtWFZ5QzRKc0NWR1FJVmVPd0h6eklOZXVaVERpZHJjV2NlbEJQYWp5X0QzbnVsVTVUWHhuYzhpeEE1d2JuM0lxRjdVTzEtV0tFRTBQeTVfVlpnRGhncEZyM3ZWVE5GXzBWUVJOZjY2cV80eXZmUmNyYTlSMnZ0N3lFTHd2WlNDYWpOV0N3eUJPekkta1hRR3QySUFJRnduWjMzellpamwwMjJsQ3Z5V0pEVTBKMXFjajE0V29XTEF6X2t3QjVCcnhUbjluS0hGaXRsNlVJUDIwc184eTBlWlZEU1JyZnA1bi1JMWJYLUJwWUVKeWs4X0UwQkg3U0p6V3J2V0NnM0hSY1FKaHk2ZlJPTlQ2Ujg5bW4zNjB4UkxTcHhQdGZkUjVSVFRXZGdCelpOUDhSSUxoVm5SQVZOQXJOSzZHZ0l2UmpLd0dlMEVhenB0M0Q3d2pEVjVtdXJqaXBoMC1VYVlraDFrTW9jbTlYOWdXZ3VIbkdRWDFDUUVKV0poN09BcEFrdWljZnpEbDRZOFo4a25oVG5XbFZDdlBJdlN3bWthZnpsX2RiMDJvTzNqSm5NOHR5Qks4WHRHUFI4RUtkX0Nta2Itdmc5MzZTRDBWc2pZdnFqNEFLVWdqUDlnVFpmWWM1UlBqNTJIdm83SWpQWG1qQldISm1LbE1lX0Rib1FKNUM5Xy13bHpmYTlCTmd1elBYWG1KbkE4cmFyR0RyeUU3YlNFRG5UMVZBNXlCUFQ5S3JYVlJLN3JMeHZNckRuVG42X0w2RXBDQnVCTk5IRVhUUm5XTUsxdWtNMG5XMUFkN2gyR0FDRE5jWHAwUW5SR1J3Y3RlbmxnVmJhWG9YN29OSktTMTh6WUlqUlhEaXBQTGRxYWpOQUtjbHhtZ1lhM1ZZZnhwZEllbERTbHg3MmFrZVYyb1o4dnctNUxNUE9JNXgyb2lRcmdaNmhxSklHU0IzNU1kQ2pBdkQ1dEd3d0FDenN6WGZ1MTU0TUhJRkstWm41YmNOUEFlc2gtbVhlaEJqSndZeFl3eVdWTjc1bkVQYnI0SVBMNVN0M2trbGFyQUl2cTFHUDdFRG5vSTJyT040UjRiU1ZxWkN3czBXRXdEMFVKSVpzYnRXZENkZzJvZlhjbG5KZ0JzbE8xdGFyMmEzdEp0MlMzTXJQc0FsVTY5V0NJUG91TXpTTlh4RmNnLUxaTjk0Z05YOVhUb2ZJSEhhbDlqdXNwdXhodlRrYTJZOVlJeC1rc2lnNGZYOFFZamZtLlpPNnNkTzJTSHlQdkdFdnA5eGJBWmcifQ.K8EAidhF0cOG_N1HcvmvYyeCHIcsmVB6ACDMxVnnZqIGlusl0ixHnOitap6lfkKAg080WYAzi4Fc2cyU2uDm23L_TiH2mS0CYaCRFvid_1p8SUmtkEkfEgVGLy-dNrYKOuzE9t6d0sfYI8a71OgYg5N9Ef2BMNAtz1kTloS83rAhIhWxNbIUE7OZn7dHir8Yh1dKvk0cYngi8P1t6AvTc6MTR8US-L8mzgjxODqVWnBjW7xGjxnUQatsBuZj-jz9w26OqHkz72182defw6\",\n  \"walletProvider\": \"PAZE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"string\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f3857dc8-f8e0-49cd-af36-e5e72dbc44db",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wallet-decryptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "b57b4b67-0642-4bf0-ab5f-c4bd48e9c418"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "998482157632"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"encryptedPayloadText\": \"eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTtYWRkMy0yZDEwOTQ2NDc4NWMiLCJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5kaWdpdGFsd2FsbGV0LmVhcmx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTIzNjczMjEsImlhdCI6MTY5MjE5NDUyMSwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdDQkVERjM4MDBhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIifQ.eyJwYXlsb2FkSWQiOiJhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIiLCJzZXNzaW9uSWQiOiJsbGRzdTVxb3Rjd291Y3VuaGciLCJzZWN1cmVkUGF5bG9hZCI6ImV5SmhkV1FpT2lKbWFXeGxPbHd2WEM4aUxDSnJhV1FpT2lKamFHRnpaUzF3WVhwbExVWTRkWFVyUm5GeVVtSlBVRUkzVVc4MlRuTXlZMlpXUVZOWlVVbHVNamRUVlVSa2IwMW9aMFJQTmxrOUlpd2lhWE56SWpvaWFIUjBjSE02WEM5Y0wzTmhibVJpYjNndVpHbG5hWFJoYkhkaGJHeGxkQzVsWVhKc2VYZGhjbTVwYm1jdVkyOXRJaXdpWTNSNUlqb2lTbGRVSWl3aWRIbHdJam9pU2xkVUlpd2laVzVqSWpvaVFUSTFOa2REVFNJc0ltVjRjQ0k2TVRZNU1qTTJOek15TVN3aWFXRjBJam94TmpreU1UazBOVEl4TENKaGJHY2lPaUpTVTBFdFQwRkZVQzB5TlRZaUxDSnFkR2tpT2lKaE1UWmlOR1poT1MwMk4ySTBMV0ZsTW1NdFpUTTVaUzB4TWprMlltRTFORFZrTURJaWZRLlBHOTBXR1M2Yy1vY2FnVUp0S2w2dEw0NW5SX2tHTmptZUVtXzZ4LUdDaURGWEpucVNWYzIzT3I2VTNvVG5YSFNIN2NMZ1Z1X0dfbGVWQzRSMTZmOEZmazVpSG9kai1wY3lwdXBaLWpXU0w1eHFBSk5Gc04tZkVwSTJJajhUR0lNVjhzNHNKQlBOYVd6cGxJRUJkUFZrZmdmdllBQlJtZ0pPaHlyQ2Q4UmE2ZFN2cUhDOU81bkZ6bndHa3c1TE14elBXWXlJQTNJdlZBUGRJOHR4cGZaaXBfZHBwVEloM0h3S0UxRlg2Y2pPa252dGhQVjRLZGVBSlh3MDRiNGdRZUV1LWp3QWtSYk4waDRwLXZ5c2wyVUxoNTVlaXMwcnhhaHJQdFc0ZEpPUG9qVlhDRWRmRnM3MlRRUmFhc1dUYTFqcUlEMzAtdG9fWTBWRFBkaVJTeTNGZy5UMHozemdsQVpTandoVHBSLlJWODN3OUF4Q19LSGVkYVBjalBtSEZ6UDl6UWhuR1hsVlVrOTZyaDN3SFJJdDZ3TDgyM1lhNzVtSEJOYl8wVXVMcVRvbHJrTGNhSXk1MDFrV2NkMjJLYno5WXc2T0k1MkJlZ3pYYUNoVXNVM0hDYmYza2ZqZGl3Sk1lVXh3ZnZqdWZybnZjM2xRVVlGNEhTSXpFVmNsNTQwTk01T3dYSHZJYzRVT3hldVE5Z3lUbTFWejV5VnpzQ21sU2QxNjE4aUFoTUlfSDJlLXFVd3h6OHNESEJZSE9Ddms0WkRBal9UcjItcmJjbGZpOHl3SlhxRWIwZ1BnUkt0QjlrLVpONm4wS3BOR0MzZ0lSLXZRY09wMnZDNDc3d3NaWmNCVGdWRWNfRlNVS3BQNXMwU3VBaGVac1ZIa0MxTnJVNzhEVTRtYnl2dFhrWko4UExPejdYTl9uWWE0bFNIa0Q2Q3NKd2lZS1V3SlhmX1R4SWJhWTl6dGplN0hXM0l1SkpxcHd1dGtYeWRaaEk3VjFMdms0UXhlSnVhNk1mbEtnay1LZ0Y0RnR5MUo3Y0h6SFlPMld6bGluOVlWRVVNdThPaFRGV3FBVjNOWXdxTnBwT0ZIekxjZHU4WmZMcS1wc0VLY3c5cjVxY2F0QWRUUkQxZEhlQnVySFFoMmlfS0hDbktkM0hfOHJOVG0zQVpNQUJiYzV6ZjB1SWlNYjREZEdQSUxrUmdiWlBGQUh4cVdfMGVWS3NiYU1JdXViUnFLSTd5S212SmRvSjk3MlE5bFJHMmVvckF2YkdSb2VBNmtmYmpMaEl5S1ZqOVpxS1FTdWtIdU9KRV9LeFJ6VmRFeERpdkpGS3VHTkFCQ3BKTkhDaTl6ck1JZk5Qck1lZ25qLVNYVTU1WHp1eWE0TzZMaTB3TDRKSXZuZHNwTTI5THFGYTktRW5PR3lRblN5djdZWDNPRHRwazNxcGIwN1liQTJtaEoxR05jV0pOTWEta2dhckRsZGlWSmd4Qi16Z2RMaGFPVlZVRHhMa0FaRUFmMXdXZmFmQmhPSjV3U0REanVfSjhZMVU2V0kxVUdjVmY3MDBPVEtHRmMzR1Yxa3RKN2xMbjA1dUVJVWdHeEJidVJ0SExsU0NJLVMzVDJkLUllYjlJeS16SHdETWpOLXFRUno4U2ZVRFZFend5QjA4eTMwRUlFWF9LaUZ0U3MtZ3RWY2MtOElKOVZ5ZXd4TW5wcUlpejRzS29WS0kxNmpnZDZKTUpHdFRVbFFSWTROVzNiWDBmbU1nczJLLUtKWHB1VUpzM3RxZGJWaEp3cU13cVVLdHh4MFRkeGdWa3FRVWtaNlAyZ1BQUGd1VTZ4dHNGeTFaY2dnZWpwdU9GUkxkVE5FN1d1V3FGSzYzUjRPMTZ6bjZWeGtrZElIV0tsWFlCNHJuMTJtQTFvRjNiR0ZIb21OclMzQ1ltbW92a2ZIcnpCdWEteFdfb3V0dk9BTkNCQmlHdTNoSUQzZV9QdWd3OXZCXzlkdm4wOW1scHktVzJQNGVQSXdBSGY3SWNBcE5yVUNYS3dmYlNqRTdSU0ZwVEhnYkFQb0hlQ211OFhNOFp1c1R1VGR6bGVKVFFLc0tYcWtha2E0NDZjUi1QMEQtWFZ5QzRKc0NWR1FJVmVPd0h6eklOZXVaVERpZHJjV2NlbEJQYWp5X0QzbnVsVTVUWHhuYzhpeEE1d2JuM0lxRjdVTzEtV0tFRTBQeTVfVlpnRGhncEZyM3ZWVE5GXzBWUVJOZjY2cV80eXZmUmNyYTlSMnZ0N3lFTHd2WlNDYWpOV0N3eUJPekkta1hRR3QySUFJRnduWjMzellpamwwMjJsQ3Z5V0pEVTBKMXFjajE0V29XTEF6X2t3QjVCcnhUbjluS0hGaXRsNlVJUDIwc184eTBlWlZEU1JyZnA1bi1JMWJYLUJwWUVKeWs4X0UwQkg3U0p6V3J2V0NnM0hSY1FKaHk2ZlJPTlQ2Ujg5bW4zNjB4UkxTcHhQdGZkUjVSVFRXZGdCelpOUDhSSUxoVm5SQVZOQXJOSzZHZ0l2UmpLd0dlMEVhenB0M0Q3d2pEVjVtdXJqaXBoMC1VYVlraDFrTW9jbTlYOWdXZ3VIbkdRWDFDUUVKV0poN09BcEFrdWljZnpEbDRZOFo4a25oVG5XbFZDdlBJdlN3bWthZnpsX2RiMDJvTzNqSm5NOHR5Qks4WHRHUFI4RUtkX0Nta2Itdmc5MzZTRDBWc2pZdnFqNEFLVWdqUDlnVFpmWWM1UlBqNTJIdm83SWpQWG1qQldISm1LbE1lX0Rib1FKNUM5Xy13bHpmYTlCTmd1elBYWG1KbkE4cmFyR0RyeUU3YlNFRG5UMVZBNXlCUFQ5S3JYVlJLN3JMeHZNckRuVG42X0w2RXBDQnVCTk5IRVhUUm5XTUsxdWtNMG5XMUFkN2gyR0FDRE5jWHAwUW5SR1J3Y3RlbmxnVmJhWG9YN29OSktTMTh6WUlqUlhEaXBQTGRxYWpOQUtjbHhtZ1lhM1ZZZnhwZEllbERTbHg3MmFrZVYyb1o4dnctNUxNUE9JNXgyb2lRcmdaNmhxSklHU0IzNU1kQ2pBdkQ1dEd3d0FDenN6WGZ1MTU0TUhJRkstWm41YmNOUEFlc2gtbVhlaEJqSndZeFl3eVdWTjc1bkVQYnI0SVBMNVN0M2trbGFyQUl2cTFHUDdFRG5vSTJyT040UjRiU1ZxWkN3czBXRXdEMFVKSVpzYnRXZENkZzJvZlhjbG5KZ0JzbE8xdGFyMmEzdEp0MlMzTXJQc0FsVTY5V0NJUG91TXpTTlh4RmNnLUxaTjk0Z05YOVhUb2ZJSEhhbDlqdXNwdXhodlRrYTJZOVlJeC1rc2lnNGZYOFFZamZtLlpPNnNkTzJTSHlQdkdFdnA5eGJBWmcifQ.K8EAidhF0cOG_N1HcvmvYyeCHIcsmVB6ACDMxVnnZqIGlusl0ixHnOitap6lfkKAg080WYAzi4Fc2cyU2uDm23L_TiH2mS0CYaCRFvid_1p8SUmtkEkfEgVGLy-dNrYKOuzE9t6d0sfYI8a71OgYg5N9Ef2BMNAtz1kTloS83rAhIhWxNbIUE7OZn7dHir8Yh1dKvk0cYngi8P1t6AvTc6MTR8US-L8mzgjxODqVWnBjW7xGjxnUQatsBuZj-jz9w26OqHkz72182defw6\",\n  \"walletProvider\": \"PAZE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"string\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6da7ce6-6c89-4c41-8091-05c099770838",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wallet-decryptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "b57b4b67-0642-4bf0-ab5f-c4bd48e9c418"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "998482157632"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"encryptedPayloadText\": \"eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTtYWRkMy0yZDEwOTQ2NDc4NWMiLCJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5kaWdpdGFsd2FsbGV0LmVhcmx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTIzNjczMjEsImlhdCI6MTY5MjE5NDUyMSwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdDQkVERjM4MDBhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIifQ.eyJwYXlsb2FkSWQiOiJhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIiLCJzZXNzaW9uSWQiOiJsbGRzdTVxb3Rjd291Y3VuaGciLCJzZWN1cmVkUGF5bG9hZCI6ImV5SmhkV1FpT2lKbWFXeGxPbHd2WEM4aUxDSnJhV1FpT2lKamFHRnpaUzF3WVhwbExVWTRkWFVyUm5GeVVtSlBVRUkzVVc4MlRuTXlZMlpXUVZOWlVVbHVNamRUVlVSa2IwMW9aMFJQTmxrOUlpd2lhWE56SWpvaWFIUjBjSE02WEM5Y0wzTmhibVJpYjNndVpHbG5hWFJoYkhkaGJHeGxkQzVsWVhKc2VYZGhjbTVwYm1jdVkyOXRJaXdpWTNSNUlqb2lTbGRVSWl3aWRIbHdJam9pU2xkVUlpd2laVzVqSWpvaVFUSTFOa2REVFNJc0ltVjRjQ0k2TVRZNU1qTTJOek15TVN3aWFXRjBJam94TmpreU1UazBOVEl4TENKaGJHY2lPaUpTVTBFdFQwRkZVQzB5TlRZaUxDSnFkR2tpT2lKaE1UWmlOR1poT1MwMk4ySTBMV0ZsTW1NdFpUTTVaUzB4TWprMlltRTFORFZrTURJaWZRLlBHOTBXR1M2Yy1vY2FnVUp0S2w2dEw0NW5SX2tHTmptZUVtXzZ4LUdDaURGWEpucVNWYzIzT3I2VTNvVG5YSFNIN2NMZ1Z1X0dfbGVWQzRSMTZmOEZmazVpSG9kai1wY3lwdXBaLWpXU0w1eHFBSk5Gc04tZkVwSTJJajhUR0lNVjhzNHNKQlBOYVd6cGxJRUJkUFZrZmdmdllBQlJtZ0pPaHlyQ2Q4UmE2ZFN2cUhDOU81bkZ6bndHa3c1TE14elBXWXlJQTNJdlZBUGRJOHR4cGZaaXBfZHBwVEloM0h3S0UxRlg2Y2pPa252dGhQVjRLZGVBSlh3MDRiNGdRZUV1LWp3QWtSYk4waDRwLXZ5c2wyVUxoNTVlaXMwcnhhaHJQdFc0ZEpPUG9qVlhDRWRmRnM3MlRRUmFhc1dUYTFqcUlEMzAtdG9fWTBWRFBkaVJTeTNGZy5UMHozemdsQVpTandoVHBSLlJWODN3OUF4Q19LSGVkYVBjalBtSEZ6UDl6UWhuR1hsVlVrOTZyaDN3SFJJdDZ3TDgyM1lhNzVtSEJOYl8wVXVMcVRvbHJrTGNhSXk1MDFrV2NkMjJLYno5WXc2T0k1MkJlZ3pYYUNoVXNVM0hDYmYza2ZqZGl3Sk1lVXh3ZnZqdWZybnZjM2xRVVlGNEhTSXpFVmNsNTQwTk01T3dYSHZJYzRVT3hldVE5Z3lUbTFWejV5VnpzQ21sU2QxNjE4aUFoTUlfSDJlLXFVd3h6OHNESEJZSE9Ddms0WkRBal9UcjItcmJjbGZpOHl3SlhxRWIwZ1BnUkt0QjlrLVpONm4wS3BOR0MzZ0lSLXZRY09wMnZDNDc3d3NaWmNCVGdWRWNfRlNVS3BQNXMwU3VBaGVac1ZIa0MxTnJVNzhEVTRtYnl2dFhrWko4UExPejdYTl9uWWE0bFNIa0Q2Q3NKd2lZS1V3SlhmX1R4SWJhWTl6dGplN0hXM0l1SkpxcHd1dGtYeWRaaEk3VjFMdms0UXhlSnVhNk1mbEtnay1LZ0Y0RnR5MUo3Y0h6SFlPMld6bGluOVlWRVVNdThPaFRGV3FBVjNOWXdxTnBwT0ZIekxjZHU4WmZMcS1wc0VLY3c5cjVxY2F0QWRUUkQxZEhlQnVySFFoMmlfS0hDbktkM0hfOHJOVG0zQVpNQUJiYzV6ZjB1SWlNYjREZEdQSUxrUmdiWlBGQUh4cVdfMGVWS3NiYU1JdXViUnFLSTd5S212SmRvSjk3MlE5bFJHMmVvckF2YkdSb2VBNmtmYmpMaEl5S1ZqOVpxS1FTdWtIdU9KRV9LeFJ6VmRFeERpdkpGS3VHTkFCQ3BKTkhDaTl6ck1JZk5Qck1lZ25qLVNYVTU1WHp1eWE0TzZMaTB3TDRKSXZuZHNwTTI5THFGYTktRW5PR3lRblN5djdZWDNPRHRwazNxcGIwN1liQTJtaEoxR05jV0pOTWEta2dhckRsZGlWSmd4Qi16Z2RMaGFPVlZVRHhMa0FaRUFmMXdXZmFmQmhPSjV3U0REanVfSjhZMVU2V0kxVUdjVmY3MDBPVEtHRmMzR1Yxa3RKN2xMbjA1dUVJVWdHeEJidVJ0SExsU0NJLVMzVDJkLUllYjlJeS16SHdETWpOLXFRUno4U2ZVRFZFend5QjA4eTMwRUlFWF9LaUZ0U3MtZ3RWY2MtOElKOVZ5ZXd4TW5wcUlpejRzS29WS0kxNmpnZDZKTUpHdFRVbFFSWTROVzNiWDBmbU1nczJLLUtKWHB1VUpzM3RxZGJWaEp3cU13cVVLdHh4MFRkeGdWa3FRVWtaNlAyZ1BQUGd1VTZ4dHNGeTFaY2dnZWpwdU9GUkxkVE5FN1d1V3FGSzYzUjRPMTZ6bjZWeGtrZElIV0tsWFlCNHJuMTJtQTFvRjNiR0ZIb21OclMzQ1ltbW92a2ZIcnpCdWEteFdfb3V0dk9BTkNCQmlHdTNoSUQzZV9QdWd3OXZCXzlkdm4wOW1scHktVzJQNGVQSXdBSGY3SWNBcE5yVUNYS3dmYlNqRTdSU0ZwVEhnYkFQb0hlQ211OFhNOFp1c1R1VGR6bGVKVFFLc0tYcWtha2E0NDZjUi1QMEQtWFZ5QzRKc0NWR1FJVmVPd0h6eklOZXVaVERpZHJjV2NlbEJQYWp5X0QzbnVsVTVUWHhuYzhpeEE1d2JuM0lxRjdVTzEtV0tFRTBQeTVfVlpnRGhncEZyM3ZWVE5GXzBWUVJOZjY2cV80eXZmUmNyYTlSMnZ0N3lFTHd2WlNDYWpOV0N3eUJPekkta1hRR3QySUFJRnduWjMzellpamwwMjJsQ3Z5V0pEVTBKMXFjajE0V29XTEF6X2t3QjVCcnhUbjluS0hGaXRsNlVJUDIwc184eTBlWlZEU1JyZnA1bi1JMWJYLUJwWUVKeWs4X0UwQkg3U0p6V3J2V0NnM0hSY1FKaHk2ZlJPTlQ2Ujg5bW4zNjB4UkxTcHhQdGZkUjVSVFRXZGdCelpOUDhSSUxoVm5SQVZOQXJOSzZHZ0l2UmpLd0dlMEVhenB0M0Q3d2pEVjVtdXJqaXBoMC1VYVlraDFrTW9jbTlYOWdXZ3VIbkdRWDFDUUVKV0poN09BcEFrdWljZnpEbDRZOFo4a25oVG5XbFZDdlBJdlN3bWthZnpsX2RiMDJvTzNqSm5NOHR5Qks4WHRHUFI4RUtkX0Nta2Itdmc5MzZTRDBWc2pZdnFqNEFLVWdqUDlnVFpmWWM1UlBqNTJIdm83SWpQWG1qQldISm1LbE1lX0Rib1FKNUM5Xy13bHpmYTlCTmd1elBYWG1KbkE4cmFyR0RyeUU3YlNFRG5UMVZBNXlCUFQ5S3JYVlJLN3JMeHZNckRuVG42X0w2RXBDQnVCTk5IRVhUUm5XTUsxdWtNMG5XMUFkN2gyR0FDRE5jWHAwUW5SR1J3Y3RlbmxnVmJhWG9YN29OSktTMTh6WUlqUlhEaXBQTGRxYWpOQUtjbHhtZ1lhM1ZZZnhwZEllbERTbHg3MmFrZVYyb1o4dnctNUxNUE9JNXgyb2lRcmdaNmhxSklHU0IzNU1kQ2pBdkQ1dEd3d0FDenN6WGZ1MTU0TUhJRkstWm41YmNOUEFlc2gtbVhlaEJqSndZeFl3eVdWTjc1bkVQYnI0SVBMNVN0M2trbGFyQUl2cTFHUDdFRG5vSTJyT040UjRiU1ZxWkN3czBXRXdEMFVKSVpzYnRXZENkZzJvZlhjbG5KZ0JzbE8xdGFyMmEzdEp0MlMzTXJQc0FsVTY5V0NJUG91TXpTTlh4RmNnLUxaTjk0Z05YOVhUb2ZJSEhhbDlqdXNwdXhodlRrYTJZOVlJeC1rc2lnNGZYOFFZamZtLlpPNnNkTzJTSHlQdkdFdnA5eGJBWmcifQ.K8EAidhF0cOG_N1HcvmvYyeCHIcsmVB6ACDMxVnnZqIGlusl0ixHnOitap6lfkKAg080WYAzi4Fc2cyU2uDm23L_TiH2mS0CYaCRFvid_1p8SUmtkEkfEgVGLy-dNrYKOuzE9t6d0sfYI8a71OgYg5N9Ef2BMNAtz1kTloS83rAhIhWxNbIUE7OZn7dHir8Yh1dKvk0cYngi8P1t6AvTc6MTR8US-L8mzgjxODqVWnBjW7xGjxnUQatsBuZj-jz9w26OqHkz72182defw6\",\n  \"walletProvider\": \"PAZE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"string\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "135d6697-5a4b-487b-9f19-1ba05c4b2065",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wallet-decryptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "b57b4b67-0642-4bf0-ab5f-c4bd48e9c418"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "998482157632"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"encryptedPayloadText\": \"eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTtYWRkMy0yZDEwOTQ2NDc4NWMiLCJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5kaWdpdGFsd2FsbGV0LmVhcmx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTIzNjczMjEsImlhdCI6MTY5MjE5NDUyMSwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdDQkVERjM4MDBhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIifQ.eyJwYXlsb2FkSWQiOiJhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIiLCJzZXNzaW9uSWQiOiJsbGRzdTVxb3Rjd291Y3VuaGciLCJzZWN1cmVkUGF5bG9hZCI6ImV5SmhkV1FpT2lKbWFXeGxPbHd2WEM4aUxDSnJhV1FpT2lKamFHRnpaUzF3WVhwbExVWTRkWFVyUm5GeVVtSlBVRUkzVVc4MlRuTXlZMlpXUVZOWlVVbHVNamRUVlVSa2IwMW9aMFJQTmxrOUlpd2lhWE56SWpvaWFIUjBjSE02WEM5Y0wzTmhibVJpYjNndVpHbG5hWFJoYkhkaGJHeGxkQzVsWVhKc2VYZGhjbTVwYm1jdVkyOXRJaXdpWTNSNUlqb2lTbGRVSWl3aWRIbHdJam9pU2xkVUlpd2laVzVqSWpvaVFUSTFOa2REVFNJc0ltVjRjQ0k2TVRZNU1qTTJOek15TVN3aWFXRjBJam94TmpreU1UazBOVEl4TENKaGJHY2lPaUpTVTBFdFQwRkZVQzB5TlRZaUxDSnFkR2tpT2lKaE1UWmlOR1poT1MwMk4ySTBMV0ZsTW1NdFpUTTVaUzB4TWprMlltRTFORFZrTURJaWZRLlBHOTBXR1M2Yy1vY2FnVUp0S2w2dEw0NW5SX2tHTmptZUVtXzZ4LUdDaURGWEpucVNWYzIzT3I2VTNvVG5YSFNIN2NMZ1Z1X0dfbGVWQzRSMTZmOEZmazVpSG9kai1wY3lwdXBaLWpXU0w1eHFBSk5Gc04tZkVwSTJJajhUR0lNVjhzNHNKQlBOYVd6cGxJRUJkUFZrZmdmdllBQlJtZ0pPaHlyQ2Q4UmE2ZFN2cUhDOU81bkZ6bndHa3c1TE14elBXWXlJQTNJdlZBUGRJOHR4cGZaaXBfZHBwVEloM0h3S0UxRlg2Y2pPa252dGhQVjRLZGVBSlh3MDRiNGdRZUV1LWp3QWtSYk4waDRwLXZ5c2wyVUxoNTVlaXMwcnhhaHJQdFc0ZEpPUG9qVlhDRWRmRnM3MlRRUmFhc1dUYTFqcUlEMzAtdG9fWTBWRFBkaVJTeTNGZy5UMHozemdsQVpTandoVHBSLlJWODN3OUF4Q19LSGVkYVBjalBtSEZ6UDl6UWhuR1hsVlVrOTZyaDN3SFJJdDZ3TDgyM1lhNzVtSEJOYl8wVXVMcVRvbHJrTGNhSXk1MDFrV2NkMjJLYno5WXc2T0k1MkJlZ3pYYUNoVXNVM0hDYmYza2ZqZGl3Sk1lVXh3ZnZqdWZybnZjM2xRVVlGNEhTSXpFVmNsNTQwTk01T3dYSHZJYzRVT3hldVE5Z3lUbTFWejV5VnpzQ21sU2QxNjE4aUFoTUlfSDJlLXFVd3h6OHNESEJZSE9Ddms0WkRBal9UcjItcmJjbGZpOHl3SlhxRWIwZ1BnUkt0QjlrLVpONm4wS3BOR0MzZ0lSLXZRY09wMnZDNDc3d3NaWmNCVGdWRWNfRlNVS3BQNXMwU3VBaGVac1ZIa0MxTnJVNzhEVTRtYnl2dFhrWko4UExPejdYTl9uWWE0bFNIa0Q2Q3NKd2lZS1V3SlhmX1R4SWJhWTl6dGplN0hXM0l1SkpxcHd1dGtYeWRaaEk3VjFMdms0UXhlSnVhNk1mbEtnay1LZ0Y0RnR5MUo3Y0h6SFlPMld6bGluOVlWRVVNdThPaFRGV3FBVjNOWXdxTnBwT0ZIekxjZHU4WmZMcS1wc0VLY3c5cjVxY2F0QWRUUkQxZEhlQnVySFFoMmlfS0hDbktkM0hfOHJOVG0zQVpNQUJiYzV6ZjB1SWlNYjREZEdQSUxrUmdiWlBGQUh4cVdfMGVWS3NiYU1JdXViUnFLSTd5S212SmRvSjk3MlE5bFJHMmVvckF2YkdSb2VBNmtmYmpMaEl5S1ZqOVpxS1FTdWtIdU9KRV9LeFJ6VmRFeERpdkpGS3VHTkFCQ3BKTkhDaTl6ck1JZk5Qck1lZ25qLVNYVTU1WHp1eWE0TzZMaTB3TDRKSXZuZHNwTTI5THFGYTktRW5PR3lRblN5djdZWDNPRHRwazNxcGIwN1liQTJtaEoxR05jV0pOTWEta2dhckRsZGlWSmd4Qi16Z2RMaGFPVlZVRHhMa0FaRUFmMXdXZmFmQmhPSjV3U0REanVfSjhZMVU2V0kxVUdjVmY3MDBPVEtHRmMzR1Yxa3RKN2xMbjA1dUVJVWdHeEJidVJ0SExsU0NJLVMzVDJkLUllYjlJeS16SHdETWpOLXFRUno4U2ZVRFZFend5QjA4eTMwRUlFWF9LaUZ0U3MtZ3RWY2MtOElKOVZ5ZXd4TW5wcUlpejRzS29WS0kxNmpnZDZKTUpHdFRVbFFSWTROVzNiWDBmbU1nczJLLUtKWHB1VUpzM3RxZGJWaEp3cU13cVVLdHh4MFRkeGdWa3FRVWtaNlAyZ1BQUGd1VTZ4dHNGeTFaY2dnZWpwdU9GUkxkVE5FN1d1V3FGSzYzUjRPMTZ6bjZWeGtrZElIV0tsWFlCNHJuMTJtQTFvRjNiR0ZIb21OclMzQ1ltbW92a2ZIcnpCdWEteFdfb3V0dk9BTkNCQmlHdTNoSUQzZV9QdWd3OXZCXzlkdm4wOW1scHktVzJQNGVQSXdBSGY3SWNBcE5yVUNYS3dmYlNqRTdSU0ZwVEhnYkFQb0hlQ211OFhNOFp1c1R1VGR6bGVKVFFLc0tYcWtha2E0NDZjUi1QMEQtWFZ5QzRKc0NWR1FJVmVPd0h6eklOZXVaVERpZHJjV2NlbEJQYWp5X0QzbnVsVTVUWHhuYzhpeEE1d2JuM0lxRjdVTzEtV0tFRTBQeTVfVlpnRGhncEZyM3ZWVE5GXzBWUVJOZjY2cV80eXZmUmNyYTlSMnZ0N3lFTHd2WlNDYWpOV0N3eUJPekkta1hRR3QySUFJRnduWjMzellpamwwMjJsQ3Z5V0pEVTBKMXFjajE0V29XTEF6X2t3QjVCcnhUbjluS0hGaXRsNlVJUDIwc184eTBlWlZEU1JyZnA1bi1JMWJYLUJwWUVKeWs4X0UwQkg3U0p6V3J2V0NnM0hSY1FKaHk2ZlJPTlQ2Ujg5bW4zNjB4UkxTcHhQdGZkUjVSVFRXZGdCelpOUDhSSUxoVm5SQVZOQXJOSzZHZ0l2UmpLd0dlMEVhenB0M0Q3d2pEVjVtdXJqaXBoMC1VYVlraDFrTW9jbTlYOWdXZ3VIbkdRWDFDUUVKV0poN09BcEFrdWljZnpEbDRZOFo4a25oVG5XbFZDdlBJdlN3bWthZnpsX2RiMDJvTzNqSm5NOHR5Qks4WHRHUFI4RUtkX0Nta2Itdmc5MzZTRDBWc2pZdnFqNEFLVWdqUDlnVFpmWWM1UlBqNTJIdm83SWpQWG1qQldISm1LbE1lX0Rib1FKNUM5Xy13bHpmYTlCTmd1elBYWG1KbkE4cmFyR0RyeUU3YlNFRG5UMVZBNXlCUFQ5S3JYVlJLN3JMeHZNckRuVG42X0w2RXBDQnVCTk5IRVhUUm5XTUsxdWtNMG5XMUFkN2gyR0FDRE5jWHAwUW5SR1J3Y3RlbmxnVmJhWG9YN29OSktTMTh6WUlqUlhEaXBQTGRxYWpOQUtjbHhtZ1lhM1ZZZnhwZEllbERTbHg3MmFrZVYyb1o4dnctNUxNUE9JNXgyb2lRcmdaNmhxSklHU0IzNU1kQ2pBdkQ1dEd3d0FDenN6WGZ1MTU0TUhJRkstWm41YmNOUEFlc2gtbVhlaEJqSndZeFl3eVdWTjc1bkVQYnI0SVBMNVN0M2trbGFyQUl2cTFHUDdFRG5vSTJyT040UjRiU1ZxWkN3czBXRXdEMFVKSVpzYnRXZENkZzJvZlhjbG5KZ0JzbE8xdGFyMmEzdEp0MlMzTXJQc0FsVTY5V0NJUG91TXpTTlh4RmNnLUxaTjk0Z05YOVhUb2ZJSEhhbDlqdXNwdXhodlRrYTJZOVlJeC1rc2lnNGZYOFFZamZtLlpPNnNkTzJTSHlQdkdFdnA5eGJBWmcifQ.K8EAidhF0cOG_N1HcvmvYyeCHIcsmVB6ACDMxVnnZqIGlusl0ixHnOitap6lfkKAg080WYAzi4Fc2cyU2uDm23L_TiH2mS0CYaCRFvid_1p8SUmtkEkfEgVGLy-dNrYKOuzE9t6d0sfYI8a71OgYg5N9Ef2BMNAtz1kTloS83rAhIhWxNbIUE7OZn7dHir8Yh1dKvk0cYngi8P1t6AvTc6MTR8US-L8mzgjxODqVWnBjW7xGjxnUQatsBuZj-jz9w26OqHkz72182defw6\",\n  \"walletProvider\": \"PAZE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Request Timeout",
+              "code": 408,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"string\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "23fb9411-f5f4-4b8c-9382-9d3770cc893c",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wallet-decryptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Merchant identifier for the request. The value must be unique.",
+                    "key": "request-id",
+                    "value": "b57b4b67-0642-4bf0-ab5f-c4bd48e9c418"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Identifier for the merchant account",
+                    "key": "merchant-id",
+                    "value": "998482157632"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"encryptedPayloadText\": \"eyJhdWQiOiJmaWxlOlwvXC8iLCJraWQiOiI4MzYyODY2ZC1kODE2LTtYWRkMy0yZDEwOTQ2NDc4NWMiLCJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5kaWdpdGFsd2FsbGV0LmVhcmx5d2FybmluZy5jb20iLCJ0eXAiOiJKV1QiLCJleHAiOjE2OTIzNjczMjEsImlhdCI6MTY5MjE5NDUyMSwiYWxnIjoiUlMyNTYiLCJqdGkiOiI1QzdDQkVERjM4MDBhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIifQ.eyJwYXlsb2FkSWQiOiJhMTZiNGZhOS02N2I0LWFlMmMtZTM5ZS0xMjk2YmE1NDVkMDIiLCJzZXNzaW9uSWQiOiJsbGRzdTVxb3Rjd291Y3VuaGciLCJzZWN1cmVkUGF5bG9hZCI6ImV5SmhkV1FpT2lKbWFXeGxPbHd2WEM4aUxDSnJhV1FpT2lKamFHRnpaUzF3WVhwbExVWTRkWFVyUm5GeVVtSlBVRUkzVVc4MlRuTXlZMlpXUVZOWlVVbHVNamRUVlVSa2IwMW9aMFJQTmxrOUlpd2lhWE56SWpvaWFIUjBjSE02WEM5Y0wzTmhibVJpYjNndVpHbG5hWFJoYkhkaGJHeGxkQzVsWVhKc2VYZGhjbTVwYm1jdVkyOXRJaXdpWTNSNUlqb2lTbGRVSWl3aWRIbHdJam9pU2xkVUlpd2laVzVqSWpvaVFUSTFOa2REVFNJc0ltVjRjQ0k2TVRZNU1qTTJOek15TVN3aWFXRjBJam94TmpreU1UazBOVEl4TENKaGJHY2lPaUpTVTBFdFQwRkZVQzB5TlRZaUxDSnFkR2tpT2lKaE1UWmlOR1poT1MwMk4ySTBMV0ZsTW1NdFpUTTVaUzB4TWprMlltRTFORFZrTURJaWZRLlBHOTBXR1M2Yy1vY2FnVUp0S2w2dEw0NW5SX2tHTmptZUVtXzZ4LUdDaURGWEpucVNWYzIzT3I2VTNvVG5YSFNIN2NMZ1Z1X0dfbGVWQzRSMTZmOEZmazVpSG9kai1wY3lwdXBaLWpXU0w1eHFBSk5Gc04tZkVwSTJJajhUR0lNVjhzNHNKQlBOYVd6cGxJRUJkUFZrZmdmdllBQlJtZ0pPaHlyQ2Q4UmE2ZFN2cUhDOU81bkZ6bndHa3c1TE14elBXWXlJQTNJdlZBUGRJOHR4cGZaaXBfZHBwVEloM0h3S0UxRlg2Y2pPa252dGhQVjRLZGVBSlh3MDRiNGdRZUV1LWp3QWtSYk4waDRwLXZ5c2wyVUxoNTVlaXMwcnhhaHJQdFc0ZEpPUG9qVlhDRWRmRnM3MlRRUmFhc1dUYTFqcUlEMzAtdG9fWTBWRFBkaVJTeTNGZy5UMHozemdsQVpTandoVHBSLlJWODN3OUF4Q19LSGVkYVBjalBtSEZ6UDl6UWhuR1hsVlVrOTZyaDN3SFJJdDZ3TDgyM1lhNzVtSEJOYl8wVXVMcVRvbHJrTGNhSXk1MDFrV2NkMjJLYno5WXc2T0k1MkJlZ3pYYUNoVXNVM0hDYmYza2ZqZGl3Sk1lVXh3ZnZqdWZybnZjM2xRVVlGNEhTSXpFVmNsNTQwTk01T3dYSHZJYzRVT3hldVE5Z3lUbTFWejV5VnpzQ21sU2QxNjE4aUFoTUlfSDJlLXFVd3h6OHNESEJZSE9Ddms0WkRBal9UcjItcmJjbGZpOHl3SlhxRWIwZ1BnUkt0QjlrLVpONm4wS3BOR0MzZ0lSLXZRY09wMnZDNDc3d3NaWmNCVGdWRWNfRlNVS3BQNXMwU3VBaGVac1ZIa0MxTnJVNzhEVTRtYnl2dFhrWko4UExPejdYTl9uWWE0bFNIa0Q2Q3NKd2lZS1V3SlhmX1R4SWJhWTl6dGplN0hXM0l1SkpxcHd1dGtYeWRaaEk3VjFMdms0UXhlSnVhNk1mbEtnay1LZ0Y0RnR5MUo3Y0h6SFlPMld6bGluOVlWRVVNdThPaFRGV3FBVjNOWXdxTnBwT0ZIekxjZHU4WmZMcS1wc0VLY3c5cjVxY2F0QWRUUkQxZEhlQnVySFFoMmlfS0hDbktkM0hfOHJOVG0zQVpNQUJiYzV6ZjB1SWlNYjREZEdQSUxrUmdiWlBGQUh4cVdfMGVWS3NiYU1JdXViUnFLSTd5S212SmRvSjk3MlE5bFJHMmVvckF2YkdSb2VBNmtmYmpMaEl5S1ZqOVpxS1FTdWtIdU9KRV9LeFJ6VmRFeERpdkpGS3VHTkFCQ3BKTkhDaTl6ck1JZk5Qck1lZ25qLVNYVTU1WHp1eWE0TzZMaTB3TDRKSXZuZHNwTTI5THFGYTktRW5PR3lRblN5djdZWDNPRHRwazNxcGIwN1liQTJtaEoxR05jV0pOTWEta2dhckRsZGlWSmd4Qi16Z2RMaGFPVlZVRHhMa0FaRUFmMXdXZmFmQmhPSjV3U0REanVfSjhZMVU2V0kxVUdjVmY3MDBPVEtHRmMzR1Yxa3RKN2xMbjA1dUVJVWdHeEJidVJ0SExsU0NJLVMzVDJkLUllYjlJeS16SHdETWpOLXFRUno4U2ZVRFZFend5QjA4eTMwRUlFWF9LaUZ0U3MtZ3RWY2MtOElKOVZ5ZXd4TW5wcUlpejRzS29WS0kxNmpnZDZKTUpHdFRVbFFSWTROVzNiWDBmbU1nczJLLUtKWHB1VUpzM3RxZGJWaEp3cU13cVVLdHh4MFRkeGdWa3FRVWtaNlAyZ1BQUGd1VTZ4dHNGeTFaY2dnZWpwdU9GUkxkVE5FN1d1V3FGSzYzUjRPMTZ6bjZWeGtrZElIV0tsWFlCNHJuMTJtQTFvRjNiR0ZIb21OclMzQ1ltbW92a2ZIcnpCdWEteFdfb3V0dk9BTkNCQmlHdTNoSUQzZV9QdWd3OXZCXzlkdm4wOW1scHktVzJQNGVQSXdBSGY3SWNBcE5yVUNYS3dmYlNqRTdSU0ZwVEhnYkFQb0hlQ211OFhNOFp1c1R1VGR6bGVKVFFLc0tYcWtha2E0NDZjUi1QMEQtWFZ5QzRKc0NWR1FJVmVPd0h6eklOZXVaVERpZHJjV2NlbEJQYWp5X0QzbnVsVTVUWHhuYzhpeEE1d2JuM0lxRjdVTzEtV0tFRTBQeTVfVlpnRGhncEZyM3ZWVE5GXzBWUVJOZjY2cV80eXZmUmNyYTlSMnZ0N3lFTHd2WlNDYWpOV0N3eUJPekkta1hRR3QySUFJRnduWjMzellpamwwMjJsQ3Z5V0pEVTBKMXFjajE0V29XTEF6X2t3QjVCcnhUbjluS0hGaXRsNlVJUDIwc184eTBlWlZEU1JyZnA1bi1JMWJYLUJwWUVKeWs4X0UwQkg3U0p6V3J2V0NnM0hSY1FKaHk2ZlJPTlQ2Ujg5bW4zNjB4UkxTcHhQdGZkUjVSVFRXZGdCelpOUDhSSUxoVm5SQVZOQXJOSzZHZ0l2UmpLd0dlMEVhenB0M0Q3d2pEVjVtdXJqaXBoMC1VYVlraDFrTW9jbTlYOWdXZ3VIbkdRWDFDUUVKV0poN09BcEFrdWljZnpEbDRZOFo4a25oVG5XbFZDdlBJdlN3bWthZnpsX2RiMDJvTzNqSm5NOHR5Qks4WHRHUFI4RUtkX0Nta2Itdmc5MzZTRDBWc2pZdnFqNEFLVWdqUDlnVFpmWWM1UlBqNTJIdm83SWpQWG1qQldISm1LbE1lX0Rib1FKNUM5Xy13bHpmYTlCTmd1elBYWG1KbkE4cmFyR0RyeUU3YlNFRG5UMVZBNXlCUFQ5S3JYVlJLN3JMeHZNckRuVG42X0w2RXBDQnVCTk5IRVhUUm5XTUsxdWtNMG5XMUFkN2gyR0FDRE5jWHAwUW5SR1J3Y3RlbmxnVmJhWG9YN29OSktTMTh6WUlqUlhEaXBQTGRxYWpOQUtjbHhtZ1lhM1ZZZnhwZEllbERTbHg3MmFrZVYyb1o4dnctNUxNUE9JNXgyb2lRcmdaNmhxSklHU0IzNU1kQ2pBdkQ1dEd3d0FDenN6WGZ1MTU0TUhJRkstWm41YmNOUEFlc2gtbVhlaEJqSndZeFl3eVdWTjc1bkVQYnI0SVBMNVN0M2trbGFyQUl2cTFHUDdFRG5vSTJyT040UjRiU1ZxWkN3czBXRXdEMFVKSVpzYnRXZENkZzJvZlhjbG5KZ0JzbE8xdGFyMmEzdEp0MlMzTXJQc0FsVTY5V0NJUG91TXpTTlh4RmNnLUxaTjk0Z05YOVhUb2ZJSEhhbDlqdXNwdXhodlRrYTJZOVlJeC1rc2lnNGZYOFFZamZtLlpPNnNkTzJTSHlQdkdFdnA5eGJBWmcifQ.K8EAidhF0cOG_N1HcvmvYyeCHIcsmVB6ACDMxVnnZqIGlusl0ixHnOitap6lfkKAg080WYAzi4Fc2cyU2uDm23L_TiH2mS0CYaCRFvid_1p8SUmtkEkfEgVGLy-dNrYKOuzE9t6d0sfYI8a71OgYg5N9Ef2BMNAtz1kTloS83rAhIhWxNbIUE7OZn7dHir8Yh1dKvk0cYngi8P1t6AvTc6MTR8US-L8mzgjxODqVWnBjW7xGjxnUQatsBuZj-jz9w26OqHkz72182defw6\",\n  \"walletProvider\": \"PAZE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseStatus\": \"string\",\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\",\n  \"validationErrors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\",\n      \"entity\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "16e55d34-0965-4530-bcb0-1781ca6a4a82",
+      "name": "Health Check",
+      "description": {
+        "content": "Check if a particular service is available",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c5a75c7d-2b3a-4ee9-9b0b-8454e762b2bd",
+          "name": "Validate the health of the service.",
+          "request": {
+            "name": "Validate the health of the service.",
+            "description": {
+              "content": "Healthcheck endpoint to validate the health of the service.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "healthcheck"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9750a1f4-e5cf-495b-8c8b-8d91e0ce66c1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "healthcheck"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"PASS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "533b8c97-8b0c-4603-9537-bfb5c2cdbf41",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "healthcheck"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"PASS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "681f33e9-2569-4b3f-bef2-cedbab23b1ac",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "healthcheck"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"PASS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ms.payments.jpmorgan.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "022826e7-72e2-45c2-85c7-39fa1374bd0a",
+    "name": "Wallet Decryption API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Wallet Decryption API decrypts the Apple Pay, Google Pay, and Paze wallet encrypted payment bundles to obtain network tokens, cryptograms, electronic commerce indicators (ECIs), and other payment instrument data.\n\nContact Support:\n Name: Online Payments API Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Accounts API",
+    "version": "2.0.55"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/accounts",
+            "params": [
+              {
+                "name": "clientId",
+                "value": "9000000001",
+                "type": "query",
+                "description": "Unique Client identifier"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page Number"
+              }
+            ]
+          },
+          "docs": "Returns a list of accounts for a specific client."
+        },
+        {
+          "info": {
+            "name": "Create account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/accounts",
+            "headers": [
+              {
+                "name": "configuration-id",
+                "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+              },
+              {
+                "name": "request-id",
+                "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an account for a specific client"
+        },
+        {
+          "info": {
+            "name": "Get account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/accounts/:id",
+            "headers": [
+              {
+                "name": "configuration-id",
+                "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+              },
+              {
+                "name": "request-id",
+                "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "b316151f575e4c1e9f548f1b40aae462",
+                "type": "path",
+                "description": "Unique account identifier"
+              }
+            ]
+          },
+          "docs": "Look up a single account by account ID"
+        },
+        {
+          "info": {
+            "name": "Manage account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/accounts/:id",
+            "headers": [
+              {
+                "name": "configuration-id",
+                "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+              },
+              {
+                "name": "request-id",
+                "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "b316151f575e4c1e9f548f1b40aae462",
+                "type": "path",
+                "description": "Unique account identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Manage account"
+        },
+        {
+          "info": {
+            "name": "Get an account balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/accounts/:id/balances",
+            "headers": [
+              {
+                "name": "configuration-id",
+                "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+              },
+              {
+                "name": "request-id",
+                "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "b316151f575e4c1e9f548f1b40aae462",
+                "type": "path",
+                "description": "Unique account identifier"
+              }
+            ]
+          },
+          "docs": "Get the balance details for an account"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account Restrictions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a new restriction on an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/accounts/:id/restrictions",
+            "headers": [
+              {
+                "name": "configuration-id",
+                "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+              },
+              {
+                "name": "request-id",
+                "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "b316151f575e4c1e9f548f1b40aae462",
+                "type": "path",
+                "description": "Unique account identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Post an account restriction request to add a new restriction on an account."
+        },
+        {
+          "info": {
+            "name": "Remove an account restriction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.payments.jpmorgan.com/embedded/v2/accounts/:id/restrictions/:restrictionId",
+            "headers": [
+              {
+                "name": "configuration-id",
+                "value": "549ccb74-708d-4f6b-ab21-64054abd828d"
+              },
+              {
+                "name": "request-id",
+                "value": "efeacff8-fd2c-4f54-a12e-2a8f90d4d325"
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "b316151f575e4c1e9f548f1b40aae462",
+                "type": "path",
+                "description": "Unique account identifier"
+              },
+              {
+                "name": "restrictionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the restriction"
+              }
+            ]
+          },
+          "docs": "Remove the given restriction for an account"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

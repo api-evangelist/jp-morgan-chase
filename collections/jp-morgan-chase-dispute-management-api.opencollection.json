@@ -1,0 +1,278 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dispute Management API",
+    "version": "1.1.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health Check",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Validate the health of the service.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/commerce/v1/disputes/health"
+          },
+          "docs": "Healthcheck endpoint to validate the health of the service."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Disputes Data Retrieval",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve a list of disputes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/commerce/v1/disputes",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This API endpoint allows consumers to retrieve a list of disputes, including chargebacks, retrieval requests, and pre-arbitration cases. Users can filter disputes by providing one or more Transaction Division IDs, Processing Entity IDs, or Company IDs. The response is paginated, with a maximum of 5,000 records per page. Disputes are sorted by due date in ascending order when available; otherwise, they are sorted by the initiated date in ascending order. If no date range is specified, the API ret"
+        },
+        {
+          "info": {
+            "name": "Get dispute details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/commerce/v1/disputes/:disputeId",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "disputeId",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier assigned by the acquirer to track each inquiry or case created for a transaction dispute on an account."
+              }
+            ]
+          },
+          "docs": "The consumers of this API endpoint can get additional details about a dispute by providing the dispute case id."
+        },
+        {
+          "info": {
+            "name": "Retrieve disputes status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/commerce/v1/disputes/status-query",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The consumers of this API can request the status for list of disputes."
+        },
+        {
+          "info": {
+            "name": "Get dispute documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/commerce/v1/disputes/:disputeId/documents",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "disputeId",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier assigned by the acquirer to track each inquiry or case created for a transaction dispute on an account."
+              }
+            ]
+          },
+          "docs": "The consumers of this API endpoint can get list of issuer documents by providing the dispute case id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Disputes Actions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Challenge a dispute",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/commerce/v1/disputes/:disputeId/challenge",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "disputeId",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier assigned by the acquirer to track each inquiry or case created for a transaction dispute on an account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The consumers of this API can request the acquirer to challenge a dispute by attaching evidence documents. Once the dispute has been requested to be challenged, the acquirer will review the remedy details and will challenge the dispute back to the payment brands and then to the cardholder."
+        },
+        {
+          "info": {
+            "name": "Fulfill a retrieval request dispute",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/commerce/v1/disputes/:disputeId/fulfill",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "disputeId",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier assigned by the acquirer to track each inquiry or case created for a transaction dispute on an account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The consumers of this API can request the acquirer to fulfill a retrieval request dispute by attaching evidence documents. Once the dispute has been fulfilled, the acquirer will fulfill the retrieval request back to the payment brands."
+        },
+        {
+          "info": {
+            "name": "Accept a dispute",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/commerce/v1/disputes/:disputeId/accept",
+            "headers": [
+              {
+                "name": "request-id",
+                "value": ""
+              },
+              {
+                "name": "merchant-id",
+                "value": ""
+              },
+              {
+                "name": "platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "disputeId",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier assigned by the acquirer to track each inquiry or case created for a transaction dispute on an account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The consumers of this API can accept the dispute and take financial liability for the transaction."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

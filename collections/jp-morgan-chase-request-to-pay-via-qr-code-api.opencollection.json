@@ -1,0 +1,305 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Request to Pay via QR Code API",
+    "version": "1.4.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Link",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve a List of Payment Links",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-links",
+            "params": [
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "Specify the date time from which you want to start retrieving the Payment Links"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query",
+                "description": "Specify the date time until which you want to retrieve the Payment Links generated. Format expected- `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC"
+              },
+              {
+                "name": "expirationType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by expiration type"
+              },
+              {
+                "name": "requestMethodType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by request method type"
+              },
+              {
+                "name": "paymentLinkStatus",
+                "value": "",
+                "type": "query",
+                "description": "Search by payment link status (whether the qr is linked to a payment link or not)"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "For pagination, total number of results to return per page"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "For selecting a cursor when using pagination"
+              }
+            ]
+          },
+          "docs": "**Retrieves a list of Payment Links**\n \n *Note*: \n   - Mandatory: Specify the date range\n   - Maximum permissible date range: **one month**\n   - Maximum historical data access: Up to **one year** from the current date\n\n|Market     |Description                                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |Standard                                                "
+        },
+        {
+          "info": {
+            "name": "Generate a Payment Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-links",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Generates a new Payment Link**\n\n|Market     |Description                                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |Standard                                                           |\n|Singapore                  |Does Not Apply                                                     |    \n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a Single Payment Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-links/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique Payment Link identifier"
+              }
+            ]
+          },
+          "docs": "**Retrieves the details of a single Payment Link using the Payment Link Id** \n  |Market     |Description                                                                        |\n  |:--------------------------|:------------------------------------------------------------------|\n  |Brazil                     |Standard                                                           |\n  |Singapore                  |Does not Apply                                                     |\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Request",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a Payment Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-requests",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Creates a Payment Request based on the payments details provided:**\n- **Brazil** :  returns a Payment Link and an optional QR code for digital payment\n- **Singapore** : returns QR Code for digital payment\n- **Hong Kong** : returns QR Code for digital payment\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the Details of a Single Payment Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-requests/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique transaction identifier provided by <mark>client</mark> or identifier generated by <mark>JPM</mark>\n\n|Markets     |Description                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |<ul><li>Mandatory field</li><li>For Static QR Codes Minimum Length: 1 characters , Maximum Length:  25 characters</li><li>For Dynamic QR Codes Minimum Length: 26 characters , Maximum Length:  35 characters</li></ul>   |\n|Singapore,<br>Hong&nbsp;Kong                  |<ul><li>Mandatory field</li><li>For Static and Dynamic QR Codes Maximum Length:  35 characters</li></ul>   |"
+              },
+              {
+                "name": "revisionNumber",
+                "value": "",
+                "type": "query",
+                "description": "Payment request revision number. If unspecified, API will return Payment Request details with the latest revision"
+              }
+            ]
+          },
+          "docs": "**Retrieves a single Payment Request using the Payment Request Id**\n\n|Markets     |Description                                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil,<br>Singapore,<br>Hong&nbsp;Kong                     |Uses Payment Request Id (\"id\") for Static and Dynamic Requests            |\n"
+        },
+        {
+          "info": {
+            "name": "Create a Payment Request by Client Id or Update a Payment Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-requests/:id",
+            "headers": [
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique transaction identifier provided by <mark>client</mark> or identifier generated by <mark>JPM</mark>\n\n|Market     |Description                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |<ul><li>Mandatory field</li><li>For Static QR Codes Minimum Length: 1 characters , Maximum Length:  25 characters</li><li>For Dynamic QR Codes Minimum Length: 26 characters , Maximum Length:  35 characters</li></ul>   |"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "- Creates a Payment Request with a client provided transaction identifier OR\n- Updates the details of an existing Payment Request with a client provided\ntransaction identifier  OR\n- Updates the details of an existing payment request with a J.P. Morgan generated transaction\nidentifier\n\n|Markets     |Description                                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil          "
+        },
+        {
+          "info": {
+            "name": "Cancel a Single Payment Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-requests/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique transaction identifier provided by <mark>client</mark> or identifier generated by <mark>JPM</mark>\n\n|Markets     |Description                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |<ul><li>Mandatory field</li><li>For Static QR Codes Minimum Length: 1 characters , Maximum Length:  25 characters</li><li>For Dynamic QR Codes Minimum Length: 26 characters , Maximum Length:  35 characters</li></ul>   |\n|Singapore,<br>Hong&nbsp;Kong                  |<ul><li>Mandatory field</li><li>For Static and Dynamic QR Codes Maximum Length:  35 characters</li></ul>   |"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Cancels a Payment Request using the Payment Request Id**\n\n|Markets     |Description                                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil,<br>Singapore,<br>Hong&nbsp;Kong                     |Uses Payment Request Id (\"id\") for Static and Dynamic Requests            |\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a List of Payment Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-requests/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Retrieves a list of Payment Requests**"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Request - Bulk",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Bulk Payment Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-requests/bulk",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Creates one or more Payment Requests asynchronously based on the payment request\ndetails provided**\n\n|Market                     |Description                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |Applicable only for Dynamic Due Date QR Codes                       |\n|Singapore                  |Does not Apply                               |"
+        },
+        {
+          "info": {
+            "name": "Retrieve Bulk Payment Request Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-requests/bulk/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique Payment Requests batch identifier assigned by JPM"
+              }
+            ]
+          },
+          "docs": "**Retrieves the Bulk Payment Request details using the Bulk Payment Request Id**\n\n|Market     |Description                                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |Uses Payment Request Id for Static and Dynamic Requests            |\n|Singapore                  |Does not Apply            |\n"
+        },
+        {
+          "info": {
+            "name": "Update bulk payment request details",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.payments.jpmorgan.com/receivables/request-to-pay/v1/payment-requests/bulk/:id",
+            "headers": [
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique Payment Requests batch identifier assigned by JPM"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Updates the Bulk Payment Request details using the Bulk Payment Request Id** \n\n|Market     |Description                                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |Uses Payment Request Id for Static and Dynamic Requests            |\n|Singapore                  |Does not Apply                                                     |   \n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

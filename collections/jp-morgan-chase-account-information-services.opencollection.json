@@ -1,0 +1,262 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Account Information Services",
+    "version": "2.0.22"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Consents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate Consent Journey",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/paybybank/v2/consents",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              },
+              {
+                "name": "Request-Id",
+                "value": ""
+              },
+              {
+                "name": "Client-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Initiate consent journey to grant access to account information**\n"
+        },
+        {
+          "info": {
+            "name": "Get consent status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/paybybank/v2/consents/:consentId",
+            "headers": [
+              {
+                "name": "Request-Id",
+                "value": ""
+              },
+              {
+                "name": "Client-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "path",
+                "description": "JPMC generated consent identifier in UUID format (e.g., 0488ecb1-33c3-4b6a-b5e5-7a61680c463f)"
+              }
+            ]
+          },
+          "docs": "**Get consent status.**\n"
+        },
+        {
+          "info": {
+            "name": "Revoke consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.payments.jpmorgan.com/paybybank/v2/consents/:consentId",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              },
+              {
+                "name": "Request-Id",
+                "value": ""
+              },
+              {
+                "name": "Client-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "path",
+                "description": "JPMC generated consent identifier"
+              }
+            ]
+          },
+          "docs": "**Revoke a consent authorized for continuous access**\n"
+        },
+        {
+          "info": {
+            "name": "Renew consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/paybybank/v2/consents/:consentId/renew",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              },
+              {
+                "name": "Request-Id",
+                "value": ""
+              },
+              {
+                "name": "Client-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consentId",
+                "value": "",
+                "type": "path",
+                "description": "JPMC generated consent identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Renew consent is used to prompt the account holder for continued access to their financial data.\nFor flows with Microdeposit and Challenge, Renew Consent is used to obtain new Consent Link URL for completion of the microdeposit confirmation.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account Services",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve account information report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/paybybank/v2/accounts",
+            "headers": [
+              {
+                "name": "Consent-Id",
+                "value": ""
+              },
+              {
+                "name": "Request-Id",
+                "value": ""
+              },
+              {
+                "name": "Client-Id",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "The **Pay By Bank** - **Account Information Report API** provides an overview of permissioned consumer payment account details.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve balance information report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/paybybank/v2/balances",
+            "headers": [
+              {
+                "name": "Consent-Id",
+                "value": ""
+              },
+              {
+                "name": "Request-Id",
+                "value": ""
+              },
+              {
+                "name": "Client-Id",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "The **Pay By Bank** - **Balance Report** provides an overview of permissioned consumer payment account information and access to real-time balances.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve transaction history report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/paybybank/v2/transactions",
+            "headers": [
+              {
+                "name": "Consent-Id",
+                "value": ""
+              },
+              {
+                "name": "Request-Id",
+                "value": ""
+              },
+              {
+                "name": "Client-Id",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "The **Pay By Bank** - **Transaction History Report API** provides an overview of permissioned consumer payment account information, including real-time balances and transaction history.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve account information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/paybybank/v2/account-information",
+            "headers": [
+              {
+                "name": "Consent-Id",
+                "value": ""
+              },
+              {
+                "name": "Request-Id",
+                "value": ""
+              },
+              {
+                "name": "Client-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "view",
+                "value": "",
+                "type": "query",
+                "description": "Option to retrieve either the complete set or specific portions of the consented information.\n"
+              }
+            ]
+          },
+          "docs": "The **Pay By Bank** - **Account Information API** facilitates the verification and provision of detailed information for linked bank accounts with continuous access permissions. This API allows users to retrieve specific account information, including account details, account owner verification, and balance checks.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,329 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Reporting API",
+    "version": "1.4.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health Check",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Health check for the Data Reports service.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.reports.jpmorgan.com/api/v1/healthcheck"
+          },
+          "docs": "Healthcheck endpoint to validate that the service is running."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Report Types",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of available report types.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.reports.jpmorgan.com/api/v1/report-types"
+          },
+          "docs": "Get a list of available report types."
+        },
+        {
+          "info": {
+            "name": "Get details for a specific report type.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.reports.jpmorgan.com/api/v1/report-types/:report-type-id",
+            "params": [
+              {
+                "name": "report-type-id",
+                "value": "",
+                "type": "path",
+                "description": "Uniquely identifies the type of report being requested."
+              }
+            ]
+          },
+          "docs": "Get details for a specific report type."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Reports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of available reports.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.reports.jpmorgan.com/api/v1/reports",
+            "headers": [
+              {
+                "name": "next",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "reportStartDate",
+                "value": "",
+                "type": "query",
+                "description": "Report creation start date. Format- YYYY-MM-DD."
+              },
+              {
+                "name": "reportEndDate",
+                "value": "",
+                "type": "query",
+                "description": "Report creation end date. Format- YYYY-MM-DD."
+              },
+              {
+                "name": "reportConfigurationId",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier for report configuration."
+              }
+            ]
+          },
+          "docs": "Get a list of available reports."
+        },
+        {
+          "info": {
+            "name": "Create a new report configuration.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.reports.jpmorgan.com/api/v1/reports",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new report configuration for a merchant based upon a report type."
+        },
+        {
+          "info": {
+            "name": "Get details for a specific report.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.reports.jpmorgan.com/api/v1/reports/:report-id",
+            "params": [
+              {
+                "name": "report-id",
+                "value": "",
+                "type": "path",
+                "description": "Unique id  for the report."
+              }
+            ]
+          },
+          "docs": "Get details for a specific report."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Report Configurations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of available report configurations.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.reports.jpmorgan.com/api/v1/report-configs",
+            "headers": [
+              {
+                "name": "next",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get a list of available report configurations."
+        },
+        {
+          "info": {
+            "name": "Get details for a specific report configuration.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.reports.jpmorgan.com/api/v1/report-configs/:report-configuration-id",
+            "params": [
+              {
+                "name": "report-configuration-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of reporting setup as requested by customer."
+              }
+            ]
+          },
+          "docs": "Get details for a specific report configuration."
+        },
+        {
+          "info": {
+            "name": "Update an existing report configuration.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.reports.jpmorgan.com/api/v1/report-configs/:report-configuration-id",
+            "params": [
+              {
+                "name": "report-configuration-id",
+                "value": "",
+                "type": "path",
+                "description": "Identifies a unique occurrence of reporting setup as requested by customer."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing report configuration."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Report Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a specific report file.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.reports.jpmorgan.com/api/v1/report-files/:report-id",
+            "params": [
+              {
+                "name": "report-id",
+                "value": "",
+                "type": "path",
+                "description": "Unique id  for the report."
+              },
+              {
+                "name": "report-format",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the report file format as text or binary file. Default value is CSV."
+              },
+              {
+                "name": "reportFormat",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the report file format as text or binary file. Default value is CSV."
+              }
+            ]
+          },
+          "docs": "Retrieves a specific report file by its ID. Note In production, override the base URL with https://api.reports-files.jpmorgan.com/api/v1"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Reporting Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of available report reporting groups.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.reports.jpmorgan.com/api/v1/reporting-groups",
+            "params": [
+              {
+                "name": "groupType",
+                "value": "",
+                "type": "query",
+                "description": "The category of the reporting group. Allowed values are RGPE, RGTD, RGFTI, RGBU, RGCO, RGH"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a reporting group."
+              }
+            ]
+          },
+          "docs": "Get a list of available reporting groups."
+        },
+        {
+          "info": {
+            "name": "Create new reporting group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.reports.jpmorgan.com/api/v1/reporting-groups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new reporting group."
+        },
+        {
+          "info": {
+            "name": "Update an existing reporting group.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.reports.jpmorgan.com/api/v1/reporting-groups/:groupId",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a reporting group"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing reporting group."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

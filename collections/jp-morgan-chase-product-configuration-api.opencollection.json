@@ -1,0 +1,127 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Product Configuration API",
+    "version": "1.0.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Health check",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/commerce/configuration/v1/health"
+          },
+          "docs": "Provides health status of the application"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Merchant Onboarding",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a merchant onboarding request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/commerce/configuration/v1/merchant-boarding-requests",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to initiate a merchant onboarding request. If you have all necessary data upfront, you can submit this request simultaneously."
+        },
+        {
+          "info": {
+            "name": "Retrieve merchant onboarding request details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/commerce/configuration/v1/merchant-boarding-requests/:onboardRequestId",
+            "params": [
+              {
+                "name": "onboardRequestId",
+                "value": "",
+                "type": "path",
+                "description": "This is used for specifying individual parameters  for the merchant account under API endpoint methods."
+              }
+            ]
+          },
+          "docs": "Use this endpoint to retrieve the full set of data collected for a merchant onboarding request."
+        },
+        {
+          "info": {
+            "name": "Update a merchant onboarding request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.payments.jpmorgan.com/commerce/configuration/v1/merchant-boarding-requests/:onboardRequestId",
+            "params": [
+              {
+                "name": "onboardRequestId",
+                "value": "",
+                "type": "path",
+                "description": "This is used for specifying individual parameters under API endpoint methods."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to append additional client data to their merchant onboarding request, or submit the request to create a merchant account."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Merchant",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve merchant details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/commerce/configuration/v1/merchant-accounts/:merchantAccountId",
+            "params": [
+              {
+                "name": "merchantAccountId",
+                "value": "",
+                "type": "path",
+                "description": "This is the merchant Id for which the data will be fetched."
+              }
+            ]
+          },
+          "docs": "Use this endpoint to retrieve the current configurations and processing status for a given merchant account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

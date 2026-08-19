@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documents API",
+    "version": "1.0.50"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/documents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a document for the specified document type and parameters"
+        },
+        {
+          "info": {
+            "name": "Download a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.payments.jpmorgan.com/embedded/v1/documents/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "89eb5ab2-d688-43be-9b6d-a21dc87750b1",
+                "type": "path",
+                "description": "Unique document identifier"
+              }
+            ]
+          },
+          "docs": "Download a document with the specified document ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
