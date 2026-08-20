@@ -17,6 +17,12 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
 tags:
 - Banking
+- Financial-Services
+- Payments
+- Treasury
+- Fortune 100
+tags_raw:
+- Banking
 - Financial Services
 - Payments
 - Treasury
@@ -59,6 +65,13 @@ apis:
   baseURL: https://profiles-api.merchant.jpmorgan.com/api/v2/mmp
   humanURL: https://developer.payments.jpmorgan.com/api
   tags:
+  - Addresses
+  - Bulk Import
+  - Communications
+  - Consumer Profiles
+  - Health Check
+  - Payment Methods
+  tags_raw:
   - Addresses
   - Bulk Import
   - Communication
@@ -129,6 +142,10 @@ apis:
   humanURL: https://developer.payments.jpmorgan.com/api
   tags:
   - Health Check
+  - Notification
+  - Subscription
+  tags_raw:
+  - Health Check
   - Notifications
   - Subscriptions
   properties:
@@ -190,6 +207,10 @@ apis:
   baseURL: https://api.payments.jpmorgan.com/commerce/v1
   humanURL: https://developer.payments.jpmorgan.com/api
   tags:
+  - Disputes-Actions
+  - Disputes Data Retrieval
+  - Health Check
+  tags_raw:
   - Disputes Actions
   - Disputes Data Retrieval
   - Health Check
@@ -211,6 +232,9 @@ apis:
   baseURL: https://api.payments.jpmorgan.com/embedded/v2
   humanURL: https://developer.payments.jpmorgan.com/api
   tags:
+  - Account Restrictions
+  - Account
+  tags_raw:
   - Account Restrictions
   - Accounts
   properties:
@@ -290,6 +314,8 @@ apis:
   baseURL: https://api.payments.jpmorgan.com/embedded/v1
   humanURL: https://developer.payments.jpmorgan.com/api
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
@@ -365,6 +391,8 @@ apis:
   baseURL: https://api.payments.jpmorgan.com/embedded/v2
   humanURL: https://developer.payments.jpmorgan.com/api
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
@@ -441,6 +469,9 @@ apis:
   baseURL: https://api-ms.payments.jpmorgan.com/api/v2
   humanURL: https://developer.payments.jpmorgan.com/api
   tags:
+  - Health Check
+  - Transaction
+  tags_raw:
   - Health Check
   - Transactions
   properties:
