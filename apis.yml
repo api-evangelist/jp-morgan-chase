@@ -2,6 +2,18 @@ aid: jp-morgan-chase
 name: JPMorgan Chase
 url: https://raw.githubusercontent.com/api-evangelist/jp-morgan-chase/refs/heads/main/apis.yml
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: unknown
@@ -3472,6 +3484,9 @@ apis:
     url: >-
       https://developer.payments.jpmorgan.com/api/llm-content?path=en%2Fapi%2Fcommerce%2Foptimization-protection%2Fwallet-decryption%2Fwallet-decryption-oas.md
 common:
+- type: CapabilityMap
+  url: capabilities/jp-morgan-chase-capability-edges.yml
+  name: JPMorgan Chase Business Capability Map
 - type: DomainSecurity
   url: security/jp-morgan-chase-domain-security.yml
 - type: GitHubOrganization
