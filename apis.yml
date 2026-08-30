@@ -1090,6 +1090,8 @@ apis:
   humanURL: https://developer.payments.jpmorgan.com/api
   baseURL: https://api.payments.jpmorgan.com/onboarding/v1
   tags:
+  - Communications
+  tags_raw:
   - Communication
   properties:
   - type: OpenAPI
@@ -1376,6 +1378,8 @@ apis:
   humanURL: https://developer.payments.jpmorgan.com/api
   baseURL: https://api.payments.jpmorgan.com/onboarding/v1
   tags:
+  - Disputes-Actions
+  tags_raw:
   - Disputes Actions
   properties:
   - type: OpenAPI
@@ -3318,6 +3322,8 @@ apis:
   humanURL: https://developer.payments.jpmorgan.com/api
   baseURL: https://api.payments.jpmorgan.com/onboarding/v1
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
