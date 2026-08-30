@@ -1,0 +1,849 @@
+openapi: 3.2.0
+info:
+  title: Tokenization Cryptograms Request API
+  description: Merchant Services Tokenization APIs enable merchants to secure their cards on file by replacing the sensitive Primary Account Number (PAN) with a token. Currently supports network tokenization via Mastercard, Visa & Amex.
+  version: 1.5.0
+  contact:
+    name: Tokenization API Support
+    url: https://developer.payments.jpmorgan.com/contact
+servers:
+- url: https://api.merchant.jpmorgan.com/payments/v1/
+  description: PRODUCTION - OAUTH
+- url: https://api-test.merchant.jpmorgan.com/payments/v1/
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/payments/v1
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Cryptograms Request
+  description: Request cryptograms for a token.
+paths:
+  /cryptograms:
+    post:
+      summary: Token cryptogram request
+      operationId: v1CreateCryptogram
+      tags:
+      - Cryptograms Request
+      description: Request a cryptogram for a network token. The request can be initiated using either the tokenNumber or tokenReferenceIdentifier field.
+      parameters:
+      - name: merchantId
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 8
+          maxLength: 12
+        description: Identifier for the merchant account.
+        examples:
+          Visa cryptogram request:
+            value: '991234567890'
+          MasterCard cryptogram request:
+            value: '991234567891'
+          Amex cryptogram request:
+            value: '991234567892'
+      - name: requestId
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Merchant identifier for the request. The value must be unique.
+        examples:
+          Visa cryptogram request:
+            value: 10cc0270-7bed-11e9-a188-1763956dd7f6
+          MasterCard cryptogram request:
+            value: 11cc0270-7bed-11e9-a188-1763956dd7f6
+          Amex cryptogram request:
+            value: 12cc0270-7bed-11e9-a188-1763956dd7f6
+      requestBody:
+        description: Request a cryptogram for a token for payment processing.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tokenCryptogramRequest'
+            examples:
+              Visa cryptogram request:
+                value:
+                  paymentOrder:
+                    amounts:
+                      amount: 1234
+                      currency: USD
+                    device:
+                      deviceType: PHONE
+                      deviceIPAddress: 192.168.1.78
+                      deviceLocale: en-US
+                      deviceLatLong: 40, -73
+                      deviceMake: Samsung
+                      deviceOS: ANDROID
+                      deviceOsVersion: '12.0'
+                      digitalDeviceIdentifier: ahd896384d
+                      deviceGeoLocationCaptureTimestamp: '2021-09-08T21:01:20.945Z'
+                      deviceName: Samsung_Android
+                      walletId: '123'
+                    initiatedBy: CARDHOLDER
+                    transactionType: ECOMMERCE
+                  paymentInstrument:
+                    accountholderName: Jane Doe
+                    tokenReferenceIdentifier: 205c9a37-ae4a-4cb5-8c9a-75de746500b5
+                    tokenNumber: '4111111111111111'
+                    electronicCommerceIndicator: '02'
+                    expiry:
+                      month: 12
+                      year: 2022
+                    tokenAuthenticationValue: AgAAABBBBq1IZrIDlcLmQD4AAAA=
+                  tokenCryptogramType: TAVV
+              MasterCard cryptogram request:
+                value:
+                  paymentOrder:
+                    amounts:
+                      amount: 1234
+                      currency: USD
+                    device:
+                      deviceType: PHONE
+                      deviceIPAddress: 192.168.1.78
+                      deviceLocale: en-US
+                      deviceLatLong: 40, -73
+                      deviceMake: Samsung
+                      deviceOS: ANDROID
+                      deviceOsVersion: '12.0'
+                      digitalDeviceIdentifier: ahd896384d
+                      deviceGeoLocationCaptureTimestamp: '2021-09-08T21:01:20.945Z'
+                      deviceName: Samsung_Android
+                      walletId: '123'
+                    initiatedBy: CARDHOLDER
+                    transactionType: ECOMMERCE
+                  paymentInstrument:
+                    accountholderName: Jane Doe
+                    tokenReferenceIdentifier: 205c9a37-ae4a-4cb5-8c9a-75de746500b5
+                    tokenNumber: '5011111111111111'
+                    electronicCommerceIndicator: '02'
+                    expiry:
+                      month: 12
+                      year: 2022
+                    tokenAuthenticationValue: AgAAABBBBq1IZrIDlcLmQD4AAAA=
+                  tokenCryptogramType: UCAF
+                  randomNumber: '19283765'
+              Amex cryptogram request:
+                value:
+                  paymentOrder:
+                    amounts:
+                      amount: 1234
+                      currency: USD
+                    device:
+                      deviceType: PHONE
+                      deviceIPAddress: 192.168.1.78
+                      deviceLocale: en-US
+                      deviceLatLong: 40, -73
+                      deviceMake: Samsung
+                      deviceOS: ANDROID
+                      deviceOsVersion: '12.0'
+                      digitalDeviceIdentifier: ahd896384d
+                      deviceGeoLocationCaptureTimestamp: '2021-09-08T21:01:20.945Z'
+                      deviceName: Samsung_Android
+                      walletId: '123'
+                    initiatedBy: CARDHOLDER
+                    transactionType: ECOMMERCE
+                  paymentInstrument:
+                    accountholderName: Jane Doe
+                    tokenReferenceIdentifier: 205c9a37-ae4a-4cb5-8c9a-75de746500b5
+                    tokenNumber: '340000000001000'
+                    electronicCommerceIndicator: '07'
+                    expiry:
+                      month: 12
+                      year: 2022
+                    tokenAuthenticationValue: '9876'
+                  tokenCryptogramType: DCSC
+                  randomNumber: '19283765'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tokenCryptogramResponse'
+              examples:
+                Visa cryptogram request:
+                  value:
+                    identifier: f47eb287-f561-4493-921f-ebec52453797
+                    timestamp: '2021-09-15T19:43:59.856Z'
+                    paymentInstrument:
+                      accountholderName: Jane Doe
+                      tokenReferenceIdentifier: 205c9a37-ae4a-4cb5-8c9a-75de746500b5
+                      tokenNumber: '4111111111111111'
+                      electronicCommerceIndicator: '02'
+                      expiry:
+                        month: 12
+                        year: 2022
+                      tokenAuthenticationValue: AgAAABBBBq1IZrIDlcLmQD4AAAA=
+                    paymentOrder:
+                      amounts:
+                        amount: 1234
+                        currency: USD
+                      device:
+                        deviceType: PHONE
+                        deviceIPAddress: 192.168.1.78
+                        deviceLocale: en-US
+                        deviceLatLong: 40, -73
+                        deviceMake: Samsung
+                        deviceOS: ANDROID
+                        deviceOsVersion: '12.0'
+                        digitalDeviceIdentifier: ahd896384d
+                        deviceGeoLocationCaptureTimestamp: '2021-09-08T21:01:20.945Z'
+                        deviceName: Samsung_Android
+                        walletId: '123'
+                      initiatedBy: CARDHOLDER
+                      transactionType: ECOMMERCE
+                    requestIdentifier: 1162bba1-d14e-4e49-b870-0d30d599245f
+                    responseStatus: SUCCESS
+                    responseCode: ACCEPTED
+                    responseMessage: The request is well received.
+                MasterCard cryptogram request:
+                  value:
+                    identifier: f47eb287-f561-4493-921f-ebec52453797
+                    timestamp: '2021-09-15T19:43:59.856Z'
+                    paymentInstrument:
+                      accountholderName: Jane Doe
+                      tokenReferenceIdentifier: 205c9a37-ae4a-4cb5-8c9a-75de746500b5
+                      tokenNumber: '5011111111111111'
+                      electronicCommerceIndicator: '02'
+                      expiry:
+                        month: 12
+                        year: 2022
+                      tokenAuthenticationValue: AgAAABBBBq1IZrIDlcLmQD4AAAA=
+                    paymentOrder:
+                      amounts:
+                        amount: 1234
+                        currency: USD
+                      device:
+                        deviceType: PHONE
+                        deviceIPAddress: 192.168.1.78
+                        deviceLocale: en-US
+                        deviceLatLong: 40, -73
+                        deviceMake: Samsung
+                        deviceOS: ANDROID
+                        deviceOsVersion: '12.0'
+                        digitalDeviceIdentifier: ahd896384d
+                        deviceGeoLocationCaptureTimestamp: '2021-09-08T21:01:20.945Z'
+                        deviceName: Samsung_Android
+                        walletId: '123'
+                      initiatedBy: CARDHOLDER
+                      transactionType: ECOMMERCE
+                    requestIdentifier: 1162bba1-d14e-4e49-b870-0d30d599245f
+                    responseStatus: SUCCESS
+                    responseCode: ACCEPTED
+                    responseMessage: The request is well received.
+                Amex cryptogram request:
+                  value:
+                    identifier: f47eb287-f561-4493-921f-ebec52453797
+                    timestamp: '2021-09-15T19:43:59.856Z'
+                    paymentInstrument:
+                      accountholderName: Jane Doe
+                      tokenReferenceIdentifier: 205c9a37-ae4a-4cb5-8c9a-75de746500b5
+                      tokenNumber: '340000000001000'
+                      electronicCommerceIndicator: '07'
+                      expiry:
+                        month: 12
+                        year: 2022
+                      tokenAuthenticationValue: '9876'
+                    paymentOrder:
+                      amounts:
+                        amount: 1234
+                        currency: USD
+                      device:
+                        deviceType: PHONE
+                        deviceIPAddress: 192.168.1.78
+                        deviceLocale: en-US
+                        deviceLatLong: 40, -73
+                        deviceMake: Samsung
+                        deviceOS: ANDROID
+                        deviceOsVersion: '12.0'
+                        digitalDeviceIdentifier: ahd896384d
+                        deviceGeoLocationCaptureTimestamp: '2021-09-08T21:01:20.945Z'
+                        deviceName: Samsung_Android
+                        walletId: '123'
+                      initiatedBy: CARDHOLDER
+                      transactionType: ECOMMERCE
+                    requestIdentifier: 1162bba1-d14e-4e49-b870-0d30d599245f
+                    responseStatus: SUCCESS
+                    responseCode: ACCEPTED
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  schemas:
+    transactionAmount:
+      description: Specifies the monetary value of the transaction performed.
+      type: integer
+      format: int64
+      minimum: 1
+      maximum: 999999999999
+      example: 1234
+    validationMessage:
+      description: Object containing information about transaction validation.
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    expiry:
+      description: A number in the form of Month/Year that is displayed on a card (Debit/Credit).  Provided in format MM/YY.
+      type: object
+      required:
+      - month
+      - year
+      properties:
+        month:
+          $ref: '#/components/schemas/month'
+        year:
+          $ref: '#/components/schemas/year'
+    adfsError:
+      description: Object containing information about the active directory file system error.
+      type: object
+      required:
+      - errorSource
+      - errorCode
+      - errorDescription
+      properties:
+        errorSource:
+          description: The label of the component from where the error or warning is generated.
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: General status of all resources
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
+          type: string
+          example: the signature could not be verified
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: This is used for specifying an attribute used on a model for collection object that will contain one or more attributes
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    tokenAuthenticationValue:
+      description: Contains authentication value received from the payment networks for network token transactions.
+      type: string
+      maxLength: 40
+    tokenLifecycleMercant:
+      description: Manage the lifecycle of a token on file
+      type: object
+      required:
+      - tokenRequestorIdentifier
+      properties:
+        merchantDoingBusinessAs:
+          $ref: '#/components/schemas/merchantDoingBusinessAs'
+        tokenRequestorIdentifier:
+          $ref: '#/components/schemas/tokenRequestorIdentifier'
+    address:
+      description: Address Object
+      type: object
+      properties:
+        addressLine1:
+          description: 'A portion of a party''s address containing any of the following: house number, street name, street direction, street type, dwelling type and number, PO Box number, rural delivery route number.'
+          type: string
+          writeOnly: true
+        addressLine2:
+          description: 'A portion of a party''s address containing any of the following: house number, street name, street direction, street type, dwelling type and number, PO Box number, rural delivery route number.'
+          type: string
+          writeOnly: true
+        city:
+          description: A portion of a party's address which is the geographic area that is a municipality with legal power granted by a state/province charter.
+          type: string
+        stateProvince:
+          description: Geographic area that represents subdivision of a country like Virginia or Bavaria.
+          type: string
+        postalCode:
+          description: The portion of a party’s address that is the encoded representation of a geographic area to facilitate mail delivery services.
+          type: string
+          writeOnly: true
+        countryCode:
+          description: A code that identifies the Country or a Geographic Area based on ISO 3166 standards.
+          type: string
+          writeOnly: true
+    identifier:
+      description: It is the resource identifier for a given merchant request, provided/generated by JPMC.
+      type: string
+      format: uuid
+      maxLength: 40
+    merchantDoingBusinessAs:
+      description: Alternate name for the merchant if it exists (trading name).
+      type: string
+      example: Acme New York, Llc
+    tokenCryptogramType:
+      description: Type of cryptogram to be requested from Token service.
+      type: string
+      enum:
+      - TAVV
+      - DTVV
+      - UCAF
+      - DCSC
+    tokenReferenceIdentifier:
+      description: Identifier given to a token at the time of provisioning. Can be used as a reference to the token number.
+      type: string
+      format: uuid
+    cardExpiry:
+      description: A number in the form of Month/Year.  Provided in format MM/YY.
+      type: object
+      required:
+      - month
+      - year
+      properties:
+        month:
+          $ref: '#/components/schemas/month'
+        year:
+          $ref: '#/components/schemas/year'
+    merchant:
+      description: Contains information about the Merchant.
+      type: object
+      required:
+      - tokenRequestorIdentifier
+      properties:
+        merchantName:
+          $ref: '#/components/schemas/merchantName'
+        merchantDoingBusinessAs:
+          $ref: '#/components/schemas/merchantDoingBusinessAs'
+        merchantCategoryCode:
+          description: Four-digit number associated with a merchant and their line of business.
+          type: string
+          pattern: ^\d{4}$
+          example: '4819'
+        merchantAddress:
+          $ref: '#/components/schemas/address'
+        tokenRequestorIdentifier:
+          $ref: '#/components/schemas/tokenRequestorIdentifier'
+    paymentInstrument:
+      description: Payment Instrument
+      type: object
+      properties:
+        tokenNumber:
+          $ref: '#/components/schemas/tokenNumber'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        electronicCommerceIndicator:
+          $ref: '#/components/schemas/electronicCommerceIndicator'
+        tokenAuthenticationValue:
+          $ref: '#/components/schemas/tokenAuthenticationValue'
+        tokenReferenceIdentifier:
+          $ref: '#/components/schemas/tokenReferenceIdentifier'
+        cardLast4Digits:
+          $ref: '#/components/schemas/cardLast4Digits'
+        cardExpiry:
+          $ref: '#/components/schemas/cardExpiry'
+        cardSequenceNumber:
+          description: Sequence number for primary account number
+          type: string
+          pattern: ^[0-9]{3}$
+          example: '003'
+        accountholderName:
+          description: Name embossed on physical card.
+          type: string
+          maxLength: 128
+        cardCountry:
+          description: Country Code in ISO 3166-1 alpha-2 format for card
+          type: string
+          maxLength: 2
+        cardName:
+          description: Name for the tokenized card.
+          type: string
+          maxLength: 64
+        cardType:
+          description: Type of card product (e.g. Credit, Debit).
+          type: string
+          maxLength: 64
+        cardLongDescription:
+          description: Long description of tokenized card product.
+          type: string
+          maxLength: 64
+        cardShortDescription:
+          description: Short description of tokenized card product.
+          type: string
+          maxLength: 32
+        isCoBranded:
+          description: Indicates if card is co-branded.
+          type: boolean
+        coBrandName:
+          description: Co-brand name on tokenized card.
+          type: string
+          maxLength: 64
+        cardTypeIndicators:
+          type: array
+          minItems: 0
+          description: A structure implemented as an array of strings which produces one or more key-value pairs of Card Type Name and Card Type Indicator.
+          items:
+            type: string
+        isExpiryPrinted:
+          description: Indicates if expiration value is printed on physical card.
+          type: boolean
+        isVerificationValuePrinted:
+          description: Indicates if verification value is printed on physical card.
+          type: boolean
+        trackTwo:
+          $ref: '#/components/schemas/trackTwo'
+        paymentAccountReference:
+          $ref: '#/components/schemas/paymentAccountReference'
+    tokenRequestorIdentifier:
+      description: Identifier for the merchant given by payment networks or token provider.
+      type: string
+      pattern: ^\d{11}$
+      example: '10012345678'
+    device:
+      description: Contains additional information related to the consumer device.
+      type: object
+      properties:
+        deviceType:
+          description: Contains additional information related to the consumer device.
+          type: string
+          enum:
+          - PHONE
+          - TABLET
+          - PHONE_TABLET
+          - PC
+          - WATCH
+          - TV
+          - WEARABLE
+          - AUTOMOBILE
+          - SERVER
+          - CARD
+          - STICKER
+          - PERIPHERAL
+          - TAG
+          - JEWELRY
+          - FASHION_ACCESSORY
+          - GARMENT
+          - DOMESTIC_APPLIANCE
+          - GAMING_DEVICE
+          - OTHER
+        deviceIPAddress:
+          $ref: '#/components/schemas/ipAddress'
+        deviceLocale:
+          description: Provides information about language and locale of the device, configured for the consumer. Described in RFC5646
+          type: string
+          example: en-US
+        deviceLatLong:
+          description: Identifies the latitude and longitude coordinates. Information is expressed in the order of latitude then longitude.
+          type: string
+          pattern: ^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$
+          example: 40.758, -73.9855
+        deviceMake:
+          description: Manufacturer of a device.
+          type: string
+          example: Samsung
+        deviceOS:
+          description: Operating system of the device. Valid values for Visa Token Service are ANDROID, IOS, WINDOWS, WEB.
+          type: string
+          enum:
+          - ANDROID
+          - IOS
+          - WINDOWS
+          - BLACKBERRY
+          - TIZEN
+          - WEB
+          - ANDROID_WEAR
+          - EMBEDDED_OS
+          - PAGARE_EMBEDDED
+          - OTHER
+        deviceOsVersion:
+          description: Version of the operating system for target device.
+          type: string
+          example: 12.1.3
+        digitalDeviceIdentifier:
+          description: Identifies a unique occurrence of an electronic device.
+          type: string
+          example: 12jasdf5dr3452rf
+        deviceGeoLocationCaptureTimestamp:
+          description: Designates the hour, minute, and second in a specific day when the geographic location data captured. This is provided in ISO 8601 date-time format.
+          type: string
+          format: date-time
+        deviceName:
+          description: Name for the target device where the token is located.
+          type: string
+          maxLength: 256
+        walletId:
+          description: Unique identifier assigned to a wallet installation for user and device.
+          type: string
+    trackTwo:
+      description: Contains track 2 equivalent data for the token.
+      type: string
+      maxLength: 32
+    electronicCommerceIndicator:
+      description: Codifies the authentication results of the cardholder's credit card and tokenization interaction. Also known as ECI.
+      type: string
+      pattern: ^\d{1,2}$
+      minLength: 1
+      maxLength: 2
+      example: '05'
+    tokenCryptogramResponse:
+      description: Response to token cryptogram request.
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/identifier'
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        merchant:
+          $ref: '#/components/schemas/tokenLifecycleMercant'
+        paymentInstrument:
+          $ref: '#/components/schemas/paymentInstrument'
+        paymentOrder:
+          $ref: '#/components/schemas/paymentOrder'
+        requestIdentifier:
+          $ref: '#/components/schemas/requestIdentifier'
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+    cardLast4Digits:
+      description: Identifies the final 4 digits card number.
+      type: string
+      minLength: 4
+      maxLength: 4
+      example: '1234'
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    timestamp:
+      description: Designates the date, hour, minute and second when response was provided for a request. Using ISO 8601 date-time format.
+      type: string
+      format: date-time
+    tokenCryptogramRequest:
+      description: Request Cryptogram for a token, which can be used in token payment processing.
+      type: object
+      properties:
+        merchant:
+          $ref: '#/components/schemas/merchant'
+        paymentOrder:
+          $ref: '#/components/schemas/paymentOrder'
+        paymentInstrument:
+          $ref: '#/components/schemas/tokenCryptogramPaymentInstrument'
+        tokenCryptogramType:
+          $ref: '#/components/schemas/tokenCryptogramType'
+        randomNumber:
+          description: Merchant-provided random number used in token cryptogram generation to insert uniqueness process for MasterCard transactions.
+          type: string
+          minLength: 8
+          maxLength: 8
+          example: '19283765'
+    tokenNumber:
+      description: The token number is a SECURE surrogate value for the account number utilized in payment. A token is created at enrollment into programs or when consumer credentials are stored for card on file processing. The Token Number is a surrogate based on the Credit Card number. The token number is consistent with ISO 8583 message requirements, and is a 13 to19-digit numeric value that must pass basic validation rules of an account number, including the LUHN check(Mod 10).
+      type: string
+      maxLength: 19
+      example: '4111111111111111'
+    year:
+      description: The year of the expiration date
+      type: integer
+      minimum: 2018
+      maximum: 2999
+      example: 2020
+      writeOnly: true
+    transactionCurrencyCode:
+      description: Monetary unit that was associated with transaction using ISO 4217 format.
+      type: string
+      enum:
+      - USD
+      - EUR
+      - GBP
+      - AUD
+      - NZD
+      - SGD
+      - CAD
+      - JPY
+      - HKD
+      - KRW
+      - TWD
+      - MXN
+      - BRL
+    code:
+      description: Codifies a raised exception encountered by an internal or external system, sub-system, interface, job, module, system component with which the web service application interfaces.  In this instance it refers to the error raised when reporting job failed.
+      type: string
+    tokenCryptogramPaymentInstrument:
+      description: Manage the lifecycle of a token on file
+      type: object
+      properties:
+        accountholderName:
+          $ref: '#/components/schemas/accountholderName'
+        tokenReferenceIdentifier:
+          $ref: '#/components/schemas/tokenReferenceIdentifier'
+        tokenNumber:
+          $ref: '#/components/schemas/tokenNumber'
+        electronicCommerceIndicator:
+          $ref: '#/components/schemas/electronicCommerceIndicator'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        tokenAuthenticationValue:
+          $ref: '#/components/schemas/tokenAuthenticationValue'
+        tokenType:
+          description: Tokenization method used in transaction.
+          type: string
+          enum:
+          - NETWORK
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    message:
+      description: Provides textual description of a problem that has occurred and is preventing the system from completing a task. Messages can be a confirmation, warning or notification, and can trigger the system to apply a customized default value or override to a field, record or file, halt or postpone processing, skip or reject the entry generating the problem. Messages can be displayed on-screen in the user interface or in reporting.
+      type: string
+      readOnly: true
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    requestIdentifier:
+      description: Merchant identifier for the request. The value must be unique.
+      type: string
+      maxLength: 40
+    ipAddress:
+      description: IP address of the consumer's device used in token transactions. Supports both IPv4 and IPv6. When processing American Express - IP Address is required in IPv4 format when card source is one of the following "MOBILE_BANKING_APP", "KEY_ENTERED", "CAMERA_CAPTURED", or "MANUAL_UNKNOWN"
+      type: string
+      minLength: 0
+      maxLength: 40
+      example: 127.0.0.1
+      writeOnly: true
+    accountholderName:
+      description: Consumer name that includes the first, middle, and last name.
+      type: string
+      maxLength: 26
+      example: Jane Doe
+      writeOnly: true
+    paymentAccountReference:
+      description: Payment Account Reference (PAR) acts as a linkage mechanism for processing transactions when full PAN is unavailable. PAR is not intended to be a PAN replacement or a consumer identifier.
+      type: string
+      readOnly: true
+      minLength: 0
+      maxLength: 29
+      example: VI019876543210987654321098765
+    paymentOrder:
+      description: Information about the order related to the transaction.
+      type: object
+      properties:
+        amounts:
+          $ref: '#/components/schemas/paymentAmounts'
+        device:
+          $ref: '#/components/schemas/device'
+        initiatedBy:
+          description: The entity that started the transaction process.
+          type: string
+          enum:
+          - CARDHOLDER
+          - MERCHANT
+        transactionType:
+          description: Payment transaction type used for transaction.
+          type: string
+          enum:
+          - ECOMMERCE
+          - RECURRING
+    paymentAmounts:
+      description: Information about the amount and currency related to a transaction.
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/transactionAmount'
+        currency:
+          $ref: '#/components/schemas/transactionCurrencyCode'
+    merchantName:
+      description: Merchant legal name.
+      type: string
+      example: Acme New York, Llc
+    month:
+      description: The month of the expiration date
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 12
+      example: 5
+      writeOnly: true
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - ADMIN_MS_PAYMENTS_TOKEN
+      - CONSUMER_MS_PAYMENTS_TOKEN
+      - 108970_TOKEN_MERCH_ACCESS
+      - 108970_TOKEN_INTERNAL_PCI
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - ADMIN_MS_PAYMENTS_TOKEN
+      - CONSUMER_MS_PAYMENTS_TOKEN
+      - 108970_TOKEN_MERCH_ACCESS
+      - 108970_TOKEN_INTERNAL_PCI

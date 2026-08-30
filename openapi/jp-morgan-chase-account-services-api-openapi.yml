@@ -1,0 +1,1653 @@
+openapi: 3.2.0
+info:
+  title: Account Information Services Account Services API
+  version: 2.0.22
+  description: Enable access to account information services that allow J.P. Morgan clients to leverage Open Banking for data from customer bank accounts. Support consent management, account verification, balance retrieval, and transaction history for secure and efficient financial integration.
+  contact:
+    name: JPMorgan Chase & Co. API Support
+    url: https://apistore.jpmchase.net/support/contact
+    email: imsd.security.operations@jpmorgan.com
+servers:
+- url: https://api.payments.jpmorgan.com/paybybank/v2
+  description: PRODUCTION
+- url: https://api-cat.payments.jpmorgan.com/paybybank/v2
+  description: CLIENT TESTING
+- url: https://api-mock.payments.jpmorgan.com/paybybank/v2
+  description: MOCK
+tags:
+- name: Account Services
+  description: Account Information - Services
+paths:
+  /accounts:
+    get:
+      summary: Retrieve account information report
+      description: 'The **Pay By Bank** - **Account Information Report API** provides an overview of permissioned consumer payment account details.
+
+        '
+      tags:
+      - Account Services
+      operationId: getAccounts
+      parameters:
+      - $ref: '#/components/parameters/ConsentId'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-AccountSummary'
+        '400':
+          $ref: '#/components/responses/400-AccountVerificationBadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /balances:
+    get:
+      summary: Retrieve balance information report
+      description: 'The **Pay By Bank** - **Balance Report** provides an overview of permissioned consumer payment account information and access to real-time balances.
+
+        '
+      tags:
+      - Account Services
+      operationId: getAccountBalances
+      parameters:
+      - $ref: '#/components/parameters/ConsentId'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-BalanceDetails'
+        '400':
+          $ref: '#/components/responses/400-AccountVerificationBadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /transactions:
+    get:
+      summary: Retrieve transaction history report
+      description: 'The **Pay By Bank** - **Transaction History Report API** provides an overview of permissioned consumer payment account information, including real-time balances and transaction history.
+
+        '
+      tags:
+      - Account Services
+      operationId: getAccountTransactions
+      parameters:
+      - $ref: '#/components/parameters/ConsentId'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-TransactionDetails'
+        '400':
+          $ref: '#/components/responses/400-AccountVerificationBadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /account-information:
+    get:
+      summary: Retrieve account information
+      description: 'The **Pay By Bank** - **Account Information API** facilitates the verification and provision of detailed information for linked bank accounts with continuous access permissions. This API allows users to retrieve specific account information, including account details, account owner verification, and balance checks.
+
+        '
+      tags:
+      - Account Services
+      operationId: getAccountSummaries
+      parameters:
+      - $ref: '#/components/parameters/ConsentId'
+      - $ref: '#/components/parameters/RequestId'
+      - $ref: '#/components/parameters/ClientId'
+      - $ref: '#/components/parameters/AccountView'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK-AccountInformation'
+        '400':
+          $ref: '#/components/responses/400-AccountInformationBadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '422':
+          $ref: '#/components/responses/422-Unprocessable'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+components:
+  schemas:
+    RequestId:
+      title: RequestId
+      description: Client provided unique identifier for the current request invocation
+      type: string
+      minLength: 6
+      maxLength: 128
+      example: 5d1ff121-3a41-4cdc-9af9-de2f19cd567f
+    ErrorContext:
+      title: ConsentErrorContext
+      type: object
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+        message:
+          type: string
+          description: Humanly readable textual description of the error
+          minLength: 1
+          maxLength: 200
+        field:
+          type: string
+          description: The field which caused the error. Where the location of error occurred is BODY the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+        additionalContext:
+          type: array
+          description: List of additional error contexts providing detailed information
+          items:
+            $ref: '#/components/schemas/AdditionalContext'
+          minItems: 0
+          maxItems: 10
+      required:
+      - message
+      additionalProperties: false
+    ConsentId:
+      title: ConsentId
+      description: Unique identifier to access consent resources (UUID)
+      type: string
+      maxLength: 36
+      minLength: 32
+    ISOCurrencyCode:
+      title: ISOCurrencyCode
+      description: '**Currency of the money movement**: a 3 alpha character ISO 4217 currency code.'
+      type: string
+      minLength: 3
+      maxLength: 3
+      pattern: ^[A-Z]{3}$
+      example: EUR
+    AccountTransaction:
+      title: Transaction
+      description: Transaction details of an verified account
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the transaction
+        providerTransactionId:
+          description: Provider's Transaction Identifier
+          type: string
+        transactionInitiatedAt:
+          description: The time and date when the transaction event was first initiated. For example when a payment card was authorized at the point of sale (before it was booked) or when a money transfer was first initiated (before it was executed). Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+          type: string
+          format: date-time
+        bookedAt:
+          description: Transaction Date ( Booked). For BOOKED transaction this indicates the date and time when the transaction was posted on the financial institution’s books. For PENDING transactions indicates the expected booking date and time. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+          type: string
+          format: date-time
+        valuedAt:
+          description: The date and time when assets either become available or cease to be available to the account owner. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+          type: string
+          format: date-time
+        transactionType:
+          type: string
+          description: "Transaction Type. Possible values as below\n| Type              | Description                |\n|:------------------|:---------------------------|\n|CREDIT_CARD        | Credit card                | \n|TRANSFER           | Transfer                   |\n|WITHDRAWAL         | Withdrawal                 |\n|PAYMENT            | Payment                    |\n|DEFAULT            | Default                    |\n|UNDEFINED          | Undefined Type             |"
+        value:
+          description: Transaction Amount
+          allOf:
+          - $ref: '#/components/schemas/Value'
+        originalDescription:
+          description: Transaction Description - Original
+          type: string
+        displayDescription:
+          description: Transaction Description - Display
+          type: string
+        merchantCategory:
+          description: Merchant Category Code (MCC) as indicated by financial institution
+          type: string
+        merchantName:
+          description: Name of merchant, as indicated by financial institution
+          type: string
+        status:
+          description: Transaction booking Status
+          type: string
+          enum:
+          - PENDING
+          - BOOKED
+          - UNDEFINED
+        debtor:
+          description: Debtor details in the context of transaction
+          $ref: '#/components/schemas/TransactionCounterParty'
+        creditor:
+          description: Creditor details in the context of transaction
+          $ref: '#/components/schemas/TransactionCounterParty'
+        referenceId:
+          type: string
+          description: Transaction reference as provided by the financial institution.
+    PartyIdentity:
+      title: PartyIdentity
+      type: object
+      description: Representation of a party with its role, identity, and verification status.
+      properties:
+        name:
+          type: string
+          description: Party name.
+          maxLength: 200
+        addresses:
+          type: array
+          description: Addresses of the party.
+          items:
+            $ref: '#/components/schemas/Address'
+          minItems: 0
+          maxItems: 7
+        emails:
+          type: array
+          description: Email addresses of the user.
+          items:
+            $ref: '#/components/schemas/Email'
+          minItems: 0
+          maxItems: 5
+        phones:
+          type: array
+          description: Phone numbers of the user.
+          items:
+            $ref: '#/components/schemas/Phone'
+          minItems: 0
+          maxItems: 5
+    PartyRole:
+      type: string
+      enum:
+      - PRIMARY
+      - PRIMARY_JOINT
+      - PRIMARY_JOINT_TENANTS
+      - PRIMARY_BORROWER
+      - SECONDARY
+      - SECONDARY_JOINT
+      - SECONDARY_BORROWER
+      - SECONDARY_JOINT_TENANTS
+      - SOLE_OWNER
+      - TRUSTEE
+      - UNIFORM_TRANSFER_TO_MINOR
+      - AUTHORIZED_USER
+      - BUSINESS
+      - POWER_OF_ATTORNEY
+      - FOR_BENEFIT_OF_PRIMARY
+      - FOR_BENEFIT_OF_PRIMARY_JOINT_RESTRICTED
+      - FOR_BENEFIT_OF_SECONDARY
+      - FOR_BENEFIT_OF_SECONDARY_JOINT_RESTRICTED
+      - FOR_BENEFIT_OF_SOLE_OWNER_RESTRICTED
+      - OTHER
+      - UNKNOWN
+      description: 'The role of the party to the account.
+
+        '
+    AdditionalContext:
+      title: AdditionalContext
+      type: object
+      properties:
+        type:
+          type: string
+          description: Category of the error code (EXTERNAL)
+          minLength: 3
+          maxLength: 20
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+        message:
+          type: string
+          description: Humanly readable textual description of the error
+          minLength: 1
+          maxLength: 200
+      required:
+      - type
+      - code
+      - message
+      additionalProperties: false
+    Amount:
+      title: Amount
+      type: string
+      minLength: 3
+      maxLength: 18
+      pattern: ^(\d{1,15})\.(\d{1,2})$
+      example: '10.50'
+      description: The value representation of a monetary amount. The amount value should be more than 0.01 with maximum of two decimal places allowed.
+    SORTCODE:
+      type: object
+      title: SORTCODE
+      description: Account identifier specific to the SORT_CODE account numbering scheme.
+      required:
+      - accountIdType
+      properties:
+        accountIdType:
+          type: string
+          default: SORT_CODE
+        accountNumber:
+          type: string
+          description: The account number of the account.
+          minLength: 1
+          maxLength: 128
+        sortCode:
+          type: string
+          description: The sort code of the account.
+          minLength: 1
+          maxLength: 128
+      additionalProperties: false
+    AccountInformation:
+      title: AccountInformation
+      description: Account Information account , balances, etc....
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountDetail'
+          minItems: 1
+          maxItems: 3
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    AccountBasic:
+      title: AccountBasic
+      description: Basic representation of a financial account.
+      type: object
+      properties:
+        financialInstitution:
+          $ref: '#/components/schemas/FinancialInstitution'
+        accountIdentifiers:
+          description: Unique account identifiers assigned by the financial institution for identification and transaction processing.
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/USABA'
+          - $ref: '#/components/schemas/SORTCODE'
+          - $ref: '#/components/schemas/IBAN'
+          discriminator:
+            propertyName: accountIdType
+            mapping:
+              USABA: '#/components/schemas/USABA'
+              SORTCODE: '#/components/schemas/SORTCODE'
+              IBAN: '#/components/schemas/IBAN'
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        currencyCode:
+          $ref: '#/components/schemas/ISOCurrencyCode'
+        name:
+          type: string
+          maxLength: 250
+          description: Name of the account assigned by the account holder or by the financial institution. This field is typically what the user recognises in their online banking app.
+        segment:
+          type: string
+          description: Customer segment
+          enum:
+          - PERSONAL
+          - BUSINESS
+          - UNKNOWN
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+    AccountView:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConsentIncludes'
+      minItems: 0
+      maxItems: 3
+    IBAN:
+      type: object
+      title: IBAN
+      description: International bank account number (**IBAN**) standard numbering system.
+      required:
+      - accountIdType
+      properties:
+        accountIdType:
+          type: string
+          default: IBAN
+        bban:
+          type: string
+          description: BBAN represents a country-specific bank account number.
+          minLength: 1
+          maxLength: 128
+        bic:
+          type: string
+          description: BIC bank number. This can be inferred from the IBAN, but some banks might require it for adding a beneficiary or will display it for existing accounts owned by the user.
+          minLength: 1
+          maxLength: 128
+        iban:
+          type: string
+          description: IBAN represents an international bank account number.
+          minLength: 1
+          maxLength: 128
+      additionalProperties: false
+    Email:
+      title: Email
+      type: object
+      description: Representation of detailed email information.
+      properties:
+        isPrimary:
+          type: boolean
+          description: Indicates the email address is the first point of communication in instances where there are multiple email addresses.
+        emailAddressType:
+          type: string
+          description: The email type.
+          enum:
+          - PERSONAL
+          - BUSINESS
+          - OTHER
+          - UNKNOWN
+        emailAddress:
+          type: string
+          description: The email address.
+          format: email
+      additionalProperties: false
+    ApiErrorContext:
+      title: ErrorContext
+      description: The API error context object returned by the API.
+      type: object
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+        message:
+          type: string
+          description: Humanly readable textual description of the error
+          minLength: 1
+          maxLength: 200
+        location:
+          type: string
+          description: The location of the error occurred in the request.
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+          minLength: 1
+          maxLength: 99
+        field:
+          type: string
+          description: The field which caused the error. Where the location of error occurred is BODY the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+        additionalContext:
+          type: array
+          description: List of additional error contexts providing detailed information
+          items:
+            $ref: '#/components/schemas/ApiAdditionalContext'
+          minItems: 0
+          maximum: 10
+      required:
+      - message
+      additionalProperties: false
+    Value:
+      title: Value
+      description: Value
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        currency:
+          $ref: '#/components/schemas/ISOCurrencyCode'
+      required:
+      - amount
+      - currency
+    Error:
+      title: ConsentError
+      description: Error details for consent processing issues
+      type: object
+      properties:
+        title:
+          type: string
+          description: Brief title describing the error
+          example: Consent Processing Error
+          minLength: 1
+          maxLength: 128
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        context:
+          type: array
+          description: List of error contexts providing detailed information
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 0
+          maxItems: 10
+      required:
+      - title
+      - traceId
+    Phone:
+      title: Phone
+      type: object
+      description: Representation of a Phone Number
+      properties:
+        phoneNumber:
+          type: string
+          pattern: ^\+[0-9]{1,3}-[0-9()+\-]{1,30}$
+          description: Number as defined by the Telecom services
+        phoneNumberType:
+          type: string
+          description: 'The phone type.
+
+            '
+          enum:
+          - PHONE
+          - MOBILE
+          - BUSINESS
+          - OTHER
+    Address:
+      title: Address
+      type: object
+      description: Representation of an address object.
+      properties:
+        fullAddress:
+          type: string
+          description: Full Address.
+          minLength: 3
+          maxLength: 256
+        addressType:
+          type: string
+          description: Type of the address.
+          enum:
+          - BUSINESS
+          - CORRESPONDENCE
+          - DELIVERY_TO
+          - MAIL_TO
+          - PO_BOX
+          - RESIDENTIAL
+          - POSTAL
+          - UNKNOWN
+        addressLines:
+          type:
+          - array
+          - 'null'
+          description: Optional; if provided must contain at least one address line.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 70
+          minItems: 1
+          maxItems: 7
+        city:
+          type: string
+          description: City name.
+          minLength: 1
+          maxLength: 100
+        state:
+          type: string
+          description: State or region name.
+          minLength: 1
+          maxLength: 100
+        postalCode:
+          type: string
+          description: Postal or ZIP code.
+          minLength: 1
+          maxLength: 20
+          pattern: ^[0-9A-Za-z\- ]+$
+        countryCode:
+          $ref: '#/components/schemas/ISOCountryCode'
+    AccountId:
+      title: AccountId
+      description: Internal account identifier provided by JPMC
+      type: string
+      maxLength: 36
+      minLength: 32
+    Balance:
+      title: Balance
+      description: Balance Information
+      type: object
+      properties:
+        balanceType:
+          type: string
+          description: "Balance types\n\n  | Balance Type      | Description             |\n  |:----------------- |:------------------------|\n  | BOOKED_BALANCE    | The current balance of the account at the end of an account reporting period|\n  | AVAILABLE_BALANCE | The amount of funds the customer is able to withdraw from the account|"
+          enum:
+          - BOOKED_BALANCE
+          - AVAILABLE_BALANCE
+        value:
+          $ref: '#/components/schemas/Value'
+        lastRefreshedAt:
+          type: string
+          format: date-time
+          description: The timestamp of when the balance data was last refreshed.
+      required:
+      - balanceType
+      - value
+      additionalProperties: false
+    ApiError:
+      title: Error
+      description: The error object returned by the API.
+      type: object
+      properties:
+        title:
+          type: string
+          description: Brief title describing the error
+          example: Consent Processing Error
+          minLength: 1
+          maxLength: 128
+        httpStatus:
+          type: integer
+          format: int32
+          description: HTTP Status Code
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        requestId:
+          $ref: '#/components/schemas/RequestId'
+        context:
+          type: array
+          description: List of error contexts providing detailed information
+          items:
+            $ref: '#/components/schemas/ApiErrorContext'
+          minItems: 0
+          maxItems: 10
+      required:
+      - title
+      - httpStatus
+      - traceId
+      additionalProperties: false
+    AccountStatus:
+      type: string
+      description: Account Status
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - UNKNOWN
+    Party:
+      title: Party
+      type: object
+      description: Representation of a party with its role, identity, and verification status.
+      properties:
+        role:
+          $ref: '#/components/schemas/PartyRole'
+        identity:
+          $ref: '#/components/schemas/PartyIdentity'
+        dateOfBirth:
+          type: string
+          description: Date of birth of the party, ISO 8601 date format `YYYY-MM-DD`.
+          format: date
+        verificationStatus:
+          type: string
+          description: Verification status of the party.
+          enum:
+          - VERIFIED
+          - PARTIALLY_VERIFIED
+          - UNVERIFIED
+          - UNKNOWN
+      required:
+      - identity
+    AccountDetail:
+      title: AccountDetail
+      description: Consented accounts details
+      type: object
+      properties:
+        accountId:
+          $ref: '#/components/schemas/AccountId'
+        account:
+          $ref: '#/components/schemas/AccountBasic'
+        parties:
+          type: array
+          description: List of parties associated with the account.
+          items:
+            $ref: '#/components/schemas/Party'
+          minItems: 0
+          maxItems: 5
+        balances:
+          type: array
+          description: List of balances associated with the account.
+          items:
+            $ref: '#/components/schemas/Balance'
+          minItems: 0
+          maxItems: 2
+      required:
+      - accountId
+    ClientId:
+      title: ClientId
+      description: Unique Identifier of the client that is generated by PBB.
+      type: string
+      minLength: 1
+      maxLength: 36
+      example: '9876543210'
+    TransactionCounterParty:
+      title: TransactionCounterParty
+      description: Creditor/Debtor counter party details in the context of transaction
+      type: object
+      properties:
+        name:
+          description: Name provided by creditor/Debtor's financial institution
+          type: string
+          minLength: 1
+          maxLength: 128
+        accountNumber:
+          type: string
+          description: Internal account identifier provided by creditor/debtor's financial institution
+          minLength: 1
+          maxLength: 128
+    USABA:
+      title: USABA
+      type: object
+      description: Account Identifier in US Banking account number format
+      required:
+      - accountIdType
+      properties:
+        accountIdType:
+          type: string
+          default: USABA
+        routingNumber:
+          type: string
+          description: Represents routing number of financial institution, that account belongs to.
+          minLength: 1
+          maxLength: 128
+        accountNumber:
+          type: string
+          description: Represents account number assigned by financial institution.
+          minLength: 1
+          maxLength: 128
+        maskedAccountNumber:
+          type: string
+          description: Account number assigned by financial institution in masked format e.g.  XXXXXXXXXXXX1234
+          maxLength: 20
+        tokenizedAccountNumber:
+          type: string
+          description: Tokenized representation of the US bank account number.
+          minLength: 1
+          maxLength: 128
+      additionalProperties: false
+    AccountSummary:
+      title: AccountSummary
+      description: Sufficient account details to identify the account
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            properties:
+              accountId:
+                $ref: '#/components/schemas/AccountId'
+              account:
+                $ref: '#/components/schemas/AccountBasic'
+              parties:
+                type: array
+                description: List of parties associated with the account.
+                items:
+                  $ref: '#/components/schemas/Party'
+                minItems: 0
+                maxItems: 5
+            required:
+            - accountId
+            - account
+            - parties
+            additionalProperties: false
+          minItems: 1
+          maxItems: 3
+    TraceId:
+      title: TraceId
+      description: A unique identifier generated by server for tracing the request through the system.
+      type: string
+      minLength: 16
+      maxLength: 36
+      pattern: ^[-_.a-zA-Z0-9]{16,36}$
+      example: ed392d86-83f3-4611-ac51-3a00442c8fc5
+    AccountTransactionDetail:
+      title: TransactionDetail
+      description: Transactions List
+      type: object
+      properties:
+        accountId:
+          $ref: '#/components/schemas/AccountId'
+        account:
+          $ref: '#/components/schemas/AccountBasic'
+        balances:
+          type: array
+          description: List of balances associated with the account.
+          items:
+            $ref: '#/components/schemas/Balance'
+          minItems: 0
+          maxItems: 2
+        transactions:
+          type: array
+          description: List of transaction associated with the account.
+          items:
+            $ref: '#/components/schemas/AccountTransaction'
+          minItems: 0
+          maxItems: 100
+      required:
+      - accountId
+      - account
+      - balances
+      - transactions
+    ApiAdditionalContext:
+      title: AdditionalContext
+      type: object
+      properties:
+        type:
+          type: string
+          description: Category of the error code (EXTERNAL)
+          minLength: 3
+          maxLength: 20
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+        message:
+          type: string
+          description: Humanly readable textual description of the error
+          minLength: 1
+          maxLength: 200
+      required:
+      - type
+      - code
+      - message
+      additionalProperties: false
+    FinancialInstitution:
+      title: FinancialInstitution
+      description: Represents a financial institution with its name and logo.
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the financial institution.
+          minLength: 2
+          maxLength: 100
+        logoUrl:
+          type: string
+          description: URL of the financial institution's logo.
+          format: uri
+          pattern: ^https?:\/\/[^\s$.?#].[^\s]*$
+      required:
+      - name
+      additionalProperties: false
+    ISOCountryCode:
+      title: ISOCountryCode
+      type: string
+      description: ISO 3166-1 Alpha-2 Country Code
+      minLength: 2
+      maxLength: 2
+      pattern: ^[A-Z]{2}$
+      example: AU
+    AccountType:
+      title: AccountType
+      type: string
+      description: 'Specifies the type of account.
+
+
+        | Account Type   | Description            |
+
+        |----------------|------------------------|
+
+        | **CHECKING**   | A Checking account.    |
+
+        | **SAVINGS**    | A Savings account.     |
+
+        | **CREDIT_CARD**| A Credit Card account. |
+
+        '
+      enum:
+      - CHECKING
+      - SAVINGS
+      - CREDIT_CARD
+      - OTHER
+    BalanceDetail:
+      title: BalanceDetail
+      description: Balance Information
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            properties:
+              accountId:
+                $ref: '#/components/schemas/AccountId'
+              account:
+                $ref: '#/components/schemas/AccountBasic'
+              parties:
+                type: array
+                description: List of parties associated with the account.
+                items:
+                  $ref: '#/components/schemas/Party'
+                minItems: 0
+                maxItems: 5
+              balances:
+                type: array
+                description: List of balances associated with the account.
+                items:
+                  $ref: '#/components/schemas/Balance'
+                minItems: 0
+                maxItems: 2
+            required:
+            - accountId
+            - account
+            - balances
+          minItems: 1
+          maxItems: 3
+    ConsentIncludes:
+      title: Includes
+      type: string
+      description: "Option to retrieve either the complete set or specific portions of the consented information.\n\n |View                   |Description                                                                             |\n |:----------------------|:------------------------------------------- -------------------------------------------|\n |FULL                   |Retrieve full details of authorized accounts                                            |\n |ACCOUNT                |Retrieve basic details of authorized accounts                                           |\n |PARTIES                |Retrieve all account parties and their corresponding roles                              |\n |BALANCES               |Retrieve the balances of active accounts|\n"
+      enum:
+      - FULL
+      - ACCOUNT
+      - PARTIES
+      - BALANCES
+  examples:
+    Unauthorized:
+      value:
+        title: Authentication Failure
+        httpStatus: 401
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - code: '14000'
+          message: Client could not be authenticated
+    AccountInformationUS-Account:
+      description: Sample response payload of consented basic account detail for US
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: USABA
+              accountNumber: '45789123456789'
+              routingNumber: '6013140'
+              maskedAccountNumber: XXXXX6789
+              tokenizedAccountNumber: '98745632564'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: USD
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+    ServiceUnavailableError:
+      value:
+        title: Service Unavailable
+        httpStatus: 503
+        traceId: d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '12970'
+          message: API is currently unavailable for usage. Please try again after some time.
+    NotFound:
+      summary: Not Found
+      value:
+        title: Not Found
+        httpStatus: 404
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+    AccountDetailsUK:
+      description: Sample response payload of consented Account details for GB
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: SORT_CODE
+              sortCode: 090129
+              accountNumber: '10126789'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: GBP
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - 49 Featherstone Street
+                city: London
+                postalCode: EC1Y8SY
+                country: GB
+              emails:
+              - isPrimary: true
+                emailAddressType: OTHER
+                emailAddress: JPMCUser1234@chase.uk.com
+              phones:
+              - phoneNumber: +44-02071234567
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            verificationStatus: VERIFIED
+            dateOfBirth: '1996-08-24'
+    TransactionsDetailsEU:
+      description: Sample response payload of consented account's transaction history for EU
+      value:
+        accountId: 61d0ed13639143bc9fd47dc0a782912f
+        account:
+          accountIdentifiers:
+            accountIdType: IBAN
+            bic: DEUTDEFFXXX
+            iban: DE89370400440532013000
+            bban: '370400440532013000'
+          financialInstitution:
+            name: Chase Bank
+            logoUrl: https://www.chase.com/logo.png
+          accountType: SAVINGS
+          currencyCode: EUR
+          name: John's account
+          segment: PERSONAL
+          status: ACTIVE
+        balances:
+        - value:
+            amount: '450.00'
+            currency: EUR
+          balanceType: BOOKED_BALANCE
+          lastRefreshedAt: '2025-06-04T15:33:17Z'
+        - value:
+            amount: '700.00'
+            currency: EUR
+          balanceType: AVAILABLE_BALANCE
+          lastRefreshedAt: '2025-06-04T15:33:17Z'
+        transactions:
+        - id: f86dcb84cc164f41a166e3f56e013903
+          providerTransactionId: 500015d3-acf3-48cc-9918-9e53738d3692
+          transactionInitiatedAt: '2020-07-30T17:00:00.000Z'
+          bookedAt: '2020-07-30T18:00:00.000Z'
+          value:
+            amount: '2.00'
+            currency: EUR
+          originalDescription: Hello Fresh
+          displayDescription: Hello Fresh
+          merchantName: Luxury Apartments
+          status: BOOKED
+          transactionType: PAYMENT
+        - id: f86dcb84cc164f41a166e3f56e013903
+          providerTransactionId: 500015d3-acf3-48cc-9918-9e53738d3692
+          transactionInitiatedAt: '2020-07-30T17:00:00.000Z'
+          bookedAt: '2020-07-30T18:00:00.000Z'
+          value:
+            amount: '2.00'
+            currency: EUR
+          originalDescription: Monthly Subscription Fee
+          displayDescription: Monthly Subscription Fee
+          merchantName: Netflix
+          status: BOOKED
+          transactionType: PAYMENT
+    AccountInformationUS-Balances:
+      description: Sample response payload of consented Account details for US
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          balances:
+          - value:
+              amount: '450.00'
+              currency: USD
+            balanceType: BOOKED_BALANCE
+          - value:
+              amount: '700.00'
+              currency: USD
+            balanceType: AVAILABLE_BALANCE
+    SuspiciousContent:
+      summary: Unprocessable Entity - Suspicious Content Detected
+      value:
+        title: Suspicious Content
+        httpStatus: 422
+        traceId: 223e4567-e89b-12d3-a456-426614174002
+        requestId: 223e4567-e89b-12d3-a456-426614174003
+        context:
+        - code: '13100'
+          message: During consent process some other aspect of request was flagged as containing sensitive data
+    ConsentIdMissing:
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '10101'
+          message: Mandatory field must be present.
+          location: HEADER
+          field: Consent-Id
+    AccountDetailsEU:
+      description: Sample response payload of consented Account details for EU
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: IBAN
+              bic: DEUTDEFFXXX
+              iban: DE89370400440532013000
+              bban: '370400440532013000'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: EUR
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - Musterstraße 1
+                city: Berlin
+                country: DE
+                postalCode: '10115'
+              emails:
+              - isPrimary: true
+                emailAddressType: PERSONAL
+                emailAddress: Michael.Ands@hotmail.com
+              phones:
+              - phoneNumber: +49-7477811780
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            verificationStatus: VERIFIED
+    BalanceDetailsUK:
+      description: Sample response payload of account balances for GB
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: SORT_CODE
+              sortCode: 090129
+              accountNumber: '10126789'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: GBP
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - 49 Featherstone Street
+                city: London
+                postalCode: EC1Y8SY
+                country: GB
+              emails:
+              - isPrimary: true
+                emailAddressType: OTHER
+                emailAddress: JPMCUser1234@chase.uk.com
+              phones:
+              - phoneNumber: +44-02071234567
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            dateOfBirth: '1996-08-24'
+          balances:
+          - value:
+              amount: '5.00'
+              currency: GBP
+            balanceType: BOOKED_BALANCE
+            lastRefreshedAt: '2025-06-04T15:33:17Z'
+          - value:
+              amount: '7.00'
+              currency: GBP
+            balanceType: AVAILABLE_BALANCE
+            lastRefreshedAt: '2025-06-04T15:33:17Z'
+    ErrorRateLimit:
+      summary: Too Many Requests
+      value:
+        title: Too Many Requests
+        httpStatus: 429
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        context:
+        - message: The agreed upon rate limit for this API has been exceeded
+    AccountInformationUS-Parties:
+      description: Sample response payload of consented Account details for US
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - Street 123
+                city: Omaha
+                country: US
+                postalCode: '78497'
+              emails:
+              - isPrimary: true
+                emailAddress: JPMCUser1234@chase.us.com
+              phones:
+              - phoneNumber: +1-7477811780
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            verificationStatus: VERIFIED
+    BalanceDetailsEU:
+      description: Sample response payload of account balances for EU
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: IBAN
+              bic: DEUTDEFFXXX
+              iban: DE89370400440532013000
+              bban: '370400440532013000'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: EUR
+            name: John's account
+            segment: PERSONAL
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - Musterstraße 1
+                city: Berlin
+                country: DE
+                postalCode: '10115'
+              emails:
+              - isPrimary: true
+                emailAddressType: PERSONAL
+                emailAddress: Michael.Ands@hotmail.com
+              phones:
+              - phoneNumber: +49-7477811780
+                phoneNumberType: MOBILE
+            role: PRIMARY
+          balances:
+          - value:
+              amount: '450.00'
+              currency: EUR
+            balanceType: BOOKED_BALANCE
+            lastRefreshedAt: '2025-06-04T15:33:17Z'
+          - value:
+              amount: '700.00'
+              currency: EUR
+            balanceType: AVAILABLE_BALANCE
+            lastRefreshedAt: '2025-06-04T15:33:17Z'
+    AccountDetailsNotFoundError:
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '11408'
+          message: Account details not found
+          additionalContext:
+          - type: EXTERNAL
+            code: MA38008
+            message: Account details not found.
+    AccountInformationUS-FullView:
+      description: Sample response payload of consented full account information for US
+      value:
+        accounts:
+        - accountId: 61d0ed13639143bc9fd47dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: USABA
+              accountNumber: '45789123456789'
+              routingNumber: '6013140'
+              maskedAccountNumber: XXXXX6789
+              tokenizedAccountNumber: '98745632564'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: USD
+            name: John's account
+            segment: PERSONAL
+            status: ACTIVE
+          parties:
+          - identity:
+              name: John Doe
+              addresses:
+              - addressType: RESIDENTIAL
+                addressLines:
+                - Street 123
+                city: Omaha
+                country: US
+                postalCode: '78497'
+              emails:
+              - isPrimary: true
+                emailAddress: JPMCUser1234@chase.us.com
+              phones:
+              - phoneNumber: +1-7477811780
+                phoneNumberType: MOBILE
+            role: PRIMARY
+            verificationStatus: VERIFIED
+          balances:
+          - value:
+              amount: '450.00'
+              currency: USD
+            balanceType: BOOKED_BALANCE
+            lastRefreshedAt: '2025-03-11T14:00:00Z'
+          - value:
+              amount: '700.00'
+              currency: USD
+            balanceType: AVAILABLE_BALANCE
+            lastRefreshedAt: '2025-03-11T14:00:00Z'
+    AccountInformationUS-FullViewWithError:
+      description: Sample response payload of consented full account information for US with error that we could not fetch balance
+      value:
+        accounts:
+        - accountId: 61d0ed13-6391-43bc-9fd4-7dc0a782912f
+          account:
+            accountIdentifiers:
+              accountIdType: USABA
+              accountNumber: '45789123456789'
+              routingNumber: '6013140'
+              maskedAccountNumber: XXXXX6789
+              tokenizedAccountNumber: '98745632564'
+            financialInstitution:
+              name: Chase Bank
+              logoUrl: https://www.chase.com/logo.png
+            accountType: SAVINGS
+            currencyCode: USD
+            name: John's Savings Account
+            segment: PERSONAL
+            status: ACTIVE
+          balances:
+          - balanceType: BOOKED_BALANCE
+            value:
+              amount: '450.00'
+              currency: USD
+            lastRefreshedAt: '2025-03-11T14:00:00Z'
+          - balanceType: AVAILABLE_BALANCE
+            value:
+              amount: '700.00'
+              currency: USD
+            lastRefreshedAt: '2025-03-11T14:00:00Z'
+        error:
+          title: User Action Required
+          traceId: 4f97fe11-02bc-49d5-9e00-bf556efaa867
+          context:
+          - code: '11402'
+            message: Inadequate response to security questions from the end user.
+            field: parties
+            additionalContext:
+            - type: EXTERNAL
+              code: MA185
+              message: Missing or incorrect MFA answer. One of your security questions has expired and needs to be answered.
+    SecurityFailureError:
+      value:
+        title: Authorization Failure
+        httpStatus: 403
+        traceId: 5914f136-4544-4b1c-8004-6c2388ba76b4
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '14000'
+          message: Invalid client profile
+    TransactionsDetailsUK:
+      description: Sample response payload of consented account's transaction history for GB
+      value:
+        accountId: 61d0ed13639143bc9fd47dc0a782912f
+        account:
+          accountIdentifiers:
+            accountIdType: SORT_CODE
+            sortCode: 090129
+            accountNumber: '10126789'
+          financialInstitution:
+            name: Chase Bank
+            logoUrl: https://www.chase.com/logo.png
+          accountType: SAVINGS
+          currencyCode: GBP
+          name: John's account
+          segment: PERSONAL
+          status: ACTIVE
+        balances:
+        - value:
+            amount: '5.00'
+            currency: GBP
+          balanceType: BOOKED_BALANCE
+          lastRefreshedAt: '2025-06-04T15:33:17Z'
+        - value:
+            amount: '7.00'
+            currency: GBP
+          balanceType: AVAILABLE_BALANCE
+          lastRefreshedAt: '2025-06-04T15:33:17Z'
+        transactions:
+        - id: 61d0ed13639143bc9fd47dc0a782912f
+          providerTransactionId: 500015d3-acf3-48cc-9918-9e53738d3692
+          bookedAt: '2020-07-30T18:00:00.000Z'
+          value:
+            amount: '120.00'
+            currency: GBP
+          originalDescription: TFL Rail
+          displayDescription: Tfl Rail
+          merchantName: Amazon
+          status: BOOKED
+          transactionType: PAYMENT
+        - id: 61d0ed13639143bc9fd47dc0a782912f
+          providerTransactionId: 500015d3-acf3-48cc-9918-9e53738d3692
+          initiatedAt: '2020-07-30T17:00:00.000Z'
+          bookedAt: '2020-07-30T18:00:00.000Z'
+          value:
+            amount: '2.00'
+            currency: GBP
+          originalDescription: iTunes
+          displayDescription: iTunes
+          merchantName: Amazon
+          status: BOOKED
+          transactionType: PAYMENT
+  parameters:
+    ConsentId:
+      name: Consent-Id
+      in: header
+      description: The Consent id generated during the consent initiation journey
+      schema:
+        $ref: '#/components/schemas/ConsentId'
+      required: true
+      examples:
+        ConsentId-EU:
+          summary: Example of consent id for EU
+          value: e607ba0dc4534647b72bbff1e8ff4442
+        ConsentId-UK:
+          summary: Example of consent id for UK
+          value: ba28d866eeae4657a7e59156534159a8
+    ClientId:
+      name: Client-Id
+      in: header
+      description: Unique Identifier of the client that is generated by PBB.
+      schema:
+        $ref: '#/components/schemas/ClientId'
+      required: false
+    RequestId:
+      name: Request-Id
+      in: header
+      description: 'Client generated identifier for the current request invocation.
+
+        If provided, this identifier will be included in error responses to assist in problem diagnosis.'
+      schema:
+        $ref: '#/components/schemas/RequestId'
+      required: false
+    AccountView:
+      name: view
+      in: query
+      description: 'Option to retrieve either the complete set or specific portions of the consented information.
+
+        '
+      schema:
+        $ref: '#/components/schemas/AccountView'
+      required: true
+  responses:
+    400-AccountVerificationBadRequest:
+      description: "Bad Request. \n\n**List of Error codes and description explanations.**\n\n| Error Code      | Description                                    |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency Check Failure                      |\n| 10199           | Other                                          |\n| 11400           | FI Token is invalid                                 |\n| 11401           | Additional Information needed from the end user at financial institution |\n| 11402           | Inadequate response to security questions from the end user |\n| 11403           | Account is migrated from legacy to OAuth connection |\n| 11405           | Account is invalid and cannot be recovered          |\n| 11406           | Connection to Financial institution not supported   |\n| 11407           | Account Routing Number not found                    |\n| 11408           | Account details not found                           |\n| 11409           | Available balance has not been captured yet         |\n| 11900           | User has cancelled the consent                      |\n| 11901           | User has declined the consent                       |\n| 11902           | Provider unavailable in market. Please contact support   |\n| 11903           | Balances option is not supported for Manual Connect flow |\n| 11904           | Parties data not available for Manual Connect flow       |    \n| 11905           | Allowed time for Micro Deposit confirmation has expired  |    \n| 11906           | Micro Deposit confirmation attempts have been exhausted  |    \n| 13000           | Uncategorized error                                      |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            ConsentIdMissing:
+              $ref: '#/components/examples/ConsentIdMissing'
+    200-OK-AccountSummary:
+      description: Account Details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountSummary'
+          examples:
+            Account Details EU:
+              $ref: '#/components/examples/AccountDetailsEU'
+            Account Details UK:
+              $ref: '#/components/examples/AccountDetailsUK'
+    503-ServiceUnavailable:
+      description: 'Service Unavailable.
+
+        | Error Code    | Description       |
+
+        |---------------|-------------------|
+
+        |   12970       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12971       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12972       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12973       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12974       | API is currently unavailable for usage. Please try again after some time. |
+
+        |   12975       | API is currently unavailable for usage. Please try again after some time. |'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            ServiceUnavailableError:
+              $ref: '#/components/examples/ServiceUnavailableError'
+    422-Unprocessable:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            UnprocessableEntitySuspiciousContent:
+              $ref: '#/components/examples/SuspiciousContent'
+    403-Forbidden:
+      description: 'Forbidden
+
+        | Error Code    | Description                                |
+
+        |---------------|--------------------------------------------|
+
+        |  11410        | Authorization failure                      |
+
+        |  11411        | Connection to financial institution not supported.       |
+
+        |  14000        | Security failure                           |'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            SecurityFailureError:
+              $ref: '#/components/examples/SecurityFailureError'
+    429-TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            TooManyRequests:
+              $ref: '#/components/examples/ErrorRateLimit'
+    400-AccountInformationBadRequest:
+      description: "Bad Request. \n\n**List of Error codes and description explanations.**\n\n| Error Code      | Description                                    |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency Check Failure                      |\n| 10199           | Other                                          |\n| 11400           | FI Token is invalid                                 |\n| 11401           | Additional Information needed from the end user at financial institution |\n| 11402           | Inadequate response to security questions from the end user |\n| 11403           | Account is migrated from legacy to OAuth connection |\n| 11405           | Account is invalid and cannot be recovered          |\n| 11406           | Connection to Financial institution not supported   |\n| 11407           | Account Routing Number not found                    |\n| 11408           | Account details not found                           |\n| 11409           | Available balance has not been captured yet         |\n| 11900           | User has cancelled the consent                      |\n| 11901           | User has declined the consent                       |\n| 11902           | Provider unavailable in market. Please contact support   |\n| 11903           | Balances option is not supported for Manual Connect flow |\n| 11904           | Parties data not available for Manual Connect flow       |    \n| 11905           | Allowed time for Micro Deposit confirmation has expired  |    \n| 11906           | Micro Deposit confirmation attempts have been exhausted  |    \n| 13000           | Uncategorized error                                      |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            ConsentIdMissing:
+              $ref: '#/components/examples/ConsentIdMissing'
+            AccountDetailsNotFound:
+              $ref: '#/components/examples/AccountDetailsNotFoundError'
+    200-OK-AccountInformation:
+      description: Account Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountInformation'
+          examples:
+            Account Information US - Full View:
+              $ref: '#/components/examples/AccountInformationUS-FullView'
+            Account Information US - Full View with Error:
+              $ref: '#/components/examples/AccountInformationUS-FullViewWithError'
+            Account Information US - Account View:
+              $ref: '#/components/examples/AccountInformationUS-Account'
+            Account Information US - Balances View:
+              $ref: '#/components/examples/AccountInformationUS-Balances'
+            Account Information US - Parties View:
+              $ref: '#/components/examples/AccountInformationUS-Parties'
+    200-OK-BalanceDetails:
+      description: Balance Details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BalanceDetail'
+          examples:
+            Account Balances EU:
+              $ref: '#/components/examples/BalanceDetailsEU'
+            Account Balances UK:
+              $ref: '#/components/examples/BalanceDetailsUK'
+    404-NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            NotFoundError:
+              $ref: '#/components/examples/NotFound'
+    401-Unauthorized:
+      description: "Unauthorized\n| Error Code      | Description                                    |\n| --------------  |------------------------------------------------|\n| 11404           | Authentication failure                         |\n| 11412           | User blocked by financial institution          |\n| 11415           | Maximum Limit Exceeded                         |\n| 12400           | Authentication flow cancelled                  |\n| 12401           | Authentication flow timeout                    |\n| 12402           | Session has expired or timeout                |  \n| 14000           | Security failure                               |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            UnauthorizedError:
+              $ref: '#/components/examples/Unauthorized'
+    200-OK-TransactionDetails:
+      description: Transaction History Details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountTransactionDetail'
+          examples:
+            TransactionsListEU:
+              $ref: '#/components/examples/TransactionsDetailsEU'
+            TransactionsListUK:
+              $ref: '#/components/examples/TransactionsDetailsUK'
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2: {}
+x-jpmc-security: {}
+x-jpmc-securitySchemes:
+  MutualTLS:
+    type: x509
+    description: Mutual TLS authentication using client and server certificates.
+    x509: {}

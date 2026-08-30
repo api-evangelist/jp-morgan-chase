@@ -1,0 +1,1134 @@
+openapi: 3.2.0
+info:
+  title: Pay By Bank PIS API
+  version: 1.1.4
+  description: "## Pay By Bank v1 - PIS API\n\n---\n\n> J.P. Morgan as a registered Third Party Provider (**TPP**) of Open Banking services,\n> offers a seamless integration platform for Pay by Bank such that:\n> - clients can initiate payments (serving as a Payment Initiation Service Provider, or **PISP**) \n>"
+  contact:
+    name: JPMorgan Chase & Co. API Support
+    email: imsd.security.operations@jpmorgan.com
+    url: https://developer.payments.jpmorgan.com/contact/support
+servers:
+- url: https://apigateway.jpmorgan.com/tsapi/v1
+  description: PRODUCTION - MTLS
+- url: https://api-mock.payments.jpmorgan.com/tsapi/v1
+  description: MOCK
+tags:
+- name: PIS
+  description: Payment Initiation Services
+paths:
+  /pisp/providers:
+    post:
+      summary: Request for Providers
+      description: "- Clients can request a list of ASPSPs reachable using J.P. Morgan's PISP\nservices in each country.\n- For the purposes of this API, ASPSPs are referred to as 'Providers.' \n- The request for retrieving a particular country's list of supported providers must contain the correct country code."
+      tags:
+      - PIS
+      operationId: retrievePISProviders
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PispProvidersRequest'
+            examples:
+              ExamplePispProvidersRequest:
+                $ref: '#/components/examples/PispProvidersRequestExample'
+        required: false
+      x-examples:
+      - name: ExamplePispProvidersRequest
+        description: Example country code
+        parameters:
+          body:
+            countryCode: XF
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PispProvidersResponse'
+              examples:
+                ExamplePispProvidersResponse:
+                  $ref: '#/components/examples/PispProvidersResponseExample'
+        '400':
+          description: "Bad Request\n\n**The following table lists and describes the error codes applicable**\n\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n| PISP-001   |Customer does not exist within our system      |    \n| PISP-003   |Invalid JSON format                            |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '403':
+          description: 'Forbidden
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning             |
+
+            |------------|---------------------|
+
+            | PISP-006   |Unauthorized access  |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/UnauthorizedAccessExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning                   |
+
+            |------------|---------------------------|
+
+            | PISP-002   |Internal server error      |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes applicable**\n\n| Error Code | Meaning                                                    |\n|------------|------------------------------------------------------------|\n| PISP-004   |System exception                                            |    \n| PISP-005   |No customer exists associated with paymentId: `<paymentID>` |\n| PISP-017   |The JSON request is incorrectly formed                      |\n| PISP-017   |Customer is locked                                          |\n| PISP-017   |We do not support the received provider_mode                |\n| PISP-017   |The return_to URL exceeds 2040 characters.                  |\n| PISP-017   |Invalid payment attributes.                                 |\n| PISP-017   |Certificate not found.                                      |\n| PISP-017   |Action not supported                                        |\n| PISP-017   |The accessed provider is inactive at the moment             |\n| PISP-017   |The provider is temporary unavailable.                      |\n| PISP-017   |Payment already authorized                                  |\n| PISP-017   |Sending a provider_code that is not present in our system   |\n| PISP-017   |Failed to create the payment                                |\n| PISP-017   |The customer tried to initiate a payment with invalid credentials|\n| PISP-017   |Payment already finished.                                   |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /pisp/payment/request:
+    post:
+      summary: Request for Payment Initiation
+      description: This request initiates a payment on a PSU's behalf.
+      tags:
+      - PIS
+      operationId: createPaymentIntent
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+            examples:
+              ExampleSEPAPaymentRequest:
+                $ref: '#/components/examples/SEPAPaymentRequestExample'
+              ExampleFPSPaymentRequest:
+                $ref: '#/components/examples/FPSPaymentRequestExample'
+              ExampleBACSPaymentRequest:
+                $ref: '#/components/examples/BACSPaymentRequestExample'
+              ExampleCHAPSPaymentRequest:
+                $ref: '#/components/examples/CHAPSPaymentRequestExample'
+      x-examples:
+      - name: ExampleSEPAPaymentRequest
+        description: Example Request for an SEPA payment
+        parameters:
+          body:
+            customer_id: 00ef7b8enca1elA1tm6bmyphhgk3
+            country_code: DE
+            provider_code: berliner_sparkasse_oauth_client_de
+            payee_description: MusicCorpDE
+            template_identifier: SEPA
+            return_to: https://www.merchant.com/signup/redirectRequestLanding?action=nextAction&skipMoneyballModeRedirect=true&authURL=1695271209906.YsdmtRcveemWqg%252BQFVHNwRJO8B0%3D&flwssn=fb616054-ae67-4767-81a9-fb4d0f9976c0&nftoken=BQAbAAEBECYycrotnMdMPM%2BW6p7%2BWC%2BAoKPmq4VIBpWZVXQlGJnjdG0QZXjPij2O0eICZncDDLrE2n%2FMLxZvSBxYfto72m9nvCUjz0pZlnd%2Fcf1UnJStNNky3qwZbKMAJP2PeosCnbQ8fXIifdfaMcXZKZEKCSaOX1LpCM1Xx0kB6yfmT1FuTV5NlaphUclni%2FYt7BNVqC4tyjPAM9uUkqCPMBZzxgw%2FGeUBV2kXdmfct9EtE5PMGms%3D&redirectStrategy=open-banking
+            payment_attributes:
+              end_to_end_id: '20018300321270540'
+              creditor_name: MusicCorp
+              creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+              debtor_iban: DEXXXXXXXXXXXXXXXXXXXX
+              description: For goods
+              amount: '17.99'
+              currency_code: EUR
+              mode: Normal
+      - name: ExampleFPSPaymentRequest
+        description: Example Request for an FPS payment
+        parameters:
+          body:
+            customer_id: 00ef7b8enca1elA1tm6bmyphhgk3
+            country_code: DE
+            provider_code: berliner_sparkasse_oauth_client_de
+            payee_description: MusicCorpDE
+            template_identifier: SEPA
+            return_to: https://www.merchant.com/signup/redirectRequestLanding?action=nextAction&skipMoneyballModeRedirect=true&authURL=1695271209906.YsdmtRcveemWqg%252BQFVHNwRJO8B0%3D&flwssn=fb616054-ae67-4767-81a9-fb4d0f9976c0&nftoken=BQAbAAEBECYycrotnMdMPM%2BW6p7%2BWC%2BAoKPmq4VIBpWZVXQlGJnjdG0QZXjPij2O0eICZncDDLrE2n%2FMLxZvSBxYfto72m9nvCUjz0pZlnd%2Fcf1UnJStNNky3qwZbKMAJP2PeosCnbQ8fXIifdfaMcXZKZEKCSaOX1LpCM1Xx0kB6yfmT1FuTV5NlaphUclni%2FYt7BNVqC4tyjPAM9uUkqCPMBZzxgw%2FGeUBV2kXdmfct9EtE5PMGms%3D&redirectStrategy=open-banking
+            payment_attributes:
+              end_to_end_id: '20018300321270540'
+              creditor_name: MusicCorp
+              creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+              debtor_iban: DEXXXXXXXXXXXXXXXXXXXX
+              description: For goods
+              amount: '17.99'
+              currency_code: EUR
+              mode: Normal
+      - name: ExampleBACSPaymentRequest
+        description: Example Request for a BACS payment
+        parameters:
+          body:
+            customer_id: D310252
+            country_code: GB
+            provider_code: barclays_oauth_client_gb
+            payee_description: barclays PVT 10-25-23
+            template_identifier: BACS
+            return_to: https://sites.obtest.com/sites/cib
+            payment_attributes:
+              end_to_end_id: PISP_1025_PVT_002
+              creditor_name: John Smith
+              creditor_sort_code: XXX242
+              creditor_account_number: XXXXX035
+              description: For Goods
+              amount: '100.00'
+              currency_code: GBP
+      - name: ExampleCHAPSPaymentRequest
+        description: Example Request for a CHAPS payment
+        parameters:
+          body:
+            customer_id: D310252
+            country_code: GB
+            provider_code: barclays_oauth_client_gb
+            payee_description: barclays PVT 10-25-23
+            template_identifier: CHAPS
+            return_to: https://sites.obtest.com/sites/cib
+            payment_attributes:
+              end_to_end_id: PISP_1025_PVT_002
+              creditor_name: John Smith
+              creditor_sort_code: XXX242
+              creditor_account_number: XXXXX035
+              description: For Goods
+              amount: '100.00'
+              currency_code: GBP
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+              examples:
+                ExamplePaymentResponse:
+                  $ref: '#/components/examples/PaymentResponseExample'
+        '400':
+          description: "Bad Request\n\n**The following table lists and describes the error codes applicable**\n\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n| PISP-001   |Customer does not exist within our system      |    \n| PISP-003   |Invalid JSON format                            |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '403':
+          description: 'Forbidden
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning             |
+
+            |------------|---------------------|
+
+            | PISP-006   |Unauthorized access  |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/UnauthorizedAccessExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning                   |
+
+            |------------|---------------------------|
+
+            | PISP-002   |Internal server error      |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes applicable**\n\n| Error Code | Meaning                                                    |\n|------------|------------------------------------------------------------|\n| PISP-004   |System exception                                            |    \n| PISP-005   |No customer exists associated with paymentId: `<paymentID>` |\n| PISP-017   |The JSON request is incorrectly formed                      |\n| PISP-017   |Customer is locked                                          |\n| PISP-017   |We do not support the received provider_mode                |\n| PISP-017   |The return_to URL exceeds 2040 characters.                  |\n| PISP-017   |Invalid payment attributes.                                 |\n| PISP-017   |Certificate not found.                                      |\n| PISP-017   |Action not supported                                        |\n| PISP-017   |The accessed provider is inactive at the moment             |\n| PISP-017   |The provider is temporary unavailable.                      |\n| PISP-017   |Payment already authorized                                  |\n| PISP-017   |Sending a provider_code that is not present in our system   |\n| PISP-017   |Failed to create the payment                                |\n| PISP-017   |The customer tried to initiate a payment with invalid credentials|\n| PISP-017   |Payment already finished.                                   |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /pisp/payment/authorize:
+    post:
+      summary: Request for Payment Authorization
+      description: "This request is used to authorize a payment.    \n\n**NOTE: The request payload MUST be digitally signed and encrypted using the Signing Certificate**"
+      operationId: createPaymentAuthorization
+      tags:
+      - PIS
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentAuthorizationRequest'
+            examples:
+              ExamplePaymentAuthorizeRequest:
+                $ref: '#/components/examples/PaymentAuthorizationRequestExample'
+      x-examples:
+      - name: ExamplePaymentAuthorizeRequest
+        description: Example Request for payment Authorization
+        parameters:
+          body:
+            paymentId: '1105291498426995690'
+            authToken: a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13&end_to_end_id=00000002
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentAuthStatusResponse'
+              examples:
+                ExamplePaymentAuthorizationresponse:
+                  $ref: '#/components/examples/PaymentAuthStatusResponseExample'
+        '400':
+          description: "Bad Request\n\n**The following table lists and describes the error codes applicable**\n\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n| PISP-001   |Customer does not exist within our system      |    \n| PISP-003   |Invalid JSON format                            |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '403':
+          description: 'Forbidden
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning             |
+
+            |------------|---------------------|
+
+            | PISP-006   |Unauthorized access  |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/UnauthorizedAccessExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning                   |
+
+            |------------|---------------------------|
+
+            | PISP-002   |Internal server error      |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes applicable**\n\n| Error Code | Meaning                                                    |\n|------------|------------------------------------------------------------|\n| PISP-004   |System exception                                            |    \n| PISP-005   |No customer exists associated with paymentId: `<paymentID>` |\n| PISP-017   |The JSON request is incorrectly formed                      |\n| PISP-017   |Customer is locked                                          |\n| PISP-017   |We do not support the received provider_mode                |\n| PISP-017   |The return_to URL exceeds 2040 characters.                  |\n| PISP-017   |Invalid payment attributes.                                 |\n| PISP-017   |Certificate not found.                                      |\n| PISP-017   |Action not supported                                        |\n| PISP-017   |The accessed provider is inactive at the moment             |\n| PISP-017   |The provider is temporary unavailable.                      |\n| PISP-017   |Payment already authorized                                  |\n| PISP-017   |Sending a provider_code that is not present in our system   |\n| PISP-017   |Failed to create the payment                                |\n| PISP-017   |The customer tried to initiate a payment with invalid credentials|\n| PISP-017   |Payment already finished.                                   |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /pisp/payment/status:
+    post:
+      summary: Request for Payment Status
+      description: 'This request retrieves the current status of a previously initiated
+
+        payment.'
+      operationId: retrievePaymentStatus
+      tags:
+      - PIS
+      parameters:
+      - $ref: '#/components/parameters/ContentType'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentStatusRequest'
+            examples:
+              ExamplePaymentStatusRequest:
+                $ref: '#/components/examples/PaymentStatusRequestExample'
+      x-examples:
+      - name: ExamplePaymentStatusRequest
+        description: Example Payment Status Request
+        parameters:
+          body:
+            customer_id: '1105291496237568999'
+            payment_id: '1104531176632095201'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentAuthStatusResponse'
+              examples:
+                ExamplesPaymentStatusResponse:
+                  $ref: '#/components/examples/PaymentAuthStatusResponseExample'
+        '400':
+          description: "Bad Request\n\n**The following table lists and describes the error codes applicable**\n\n| Error Code | Meaning                                       |\n|------------|-----------------------------------------------|\n| PISP-001   |Customer does not exist within our system      |    \n| PISP-003   |Invalid JSON format                            |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/InvalidJSONFormatExample'
+        '403':
+          description: 'Forbidden
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning             |
+
+            |------------|---------------------|
+
+            | PISP-006   |Unauthorized access  |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InvalidJSONFormatExample:
+                  $ref: '#/components/examples/UnauthorizedAccessExample'
+        '500':
+          description: 'Internal server error
+
+
+            **The following table lists and describes the error codes applicable**
+
+
+            | Error Code | Meaning                   |
+
+            |------------|---------------------------|
+
+            | PISP-002   |Internal server error      |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: "Service Unavailable\n\n**The following table lists and describes the error codes applicable**\n\n| Error Code | Meaning                                                    |\n|------------|------------------------------------------------------------|\n| PISP-004   |System exception                                            |    \n| PISP-005   |No customer exists associated with paymentId: `<paymentID>` |\n| PISP-017   |The JSON request is incorrectly formed                      |\n| PISP-017   |Customer is locked                                          |\n| PISP-017   |We do not support the received provider_mode                |\n| PISP-017   |The return_to URL exceeds 2040 characters.                  |\n| PISP-017   |Invalid payment attributes.                                 |\n| PISP-017   |Certificate not found.                                      |\n| PISP-017   |Action not supported                                        |\n| PISP-017   |The accessed provider is inactive at the moment             |\n| PISP-017   |The provider is temporary unavailable.                      |\n| PISP-017   |Payment already authorized                                  |\n| PISP-017   |Sending a provider_code that is not present in our system   |\n| PISP-017   |Failed to create the payment                                |\n| PISP-017   |The customer tried to initiate a payment with invalid credentials|\n| PISP-017   |Payment already finished.                                   |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PaymentStatusRequest:
+      type: object
+      properties:
+        customer_id:
+          type: string
+          description: The unique ID determined by the J.P. Morgan client for the PSU
+        payment_id:
+          type: string
+          description: 'The unique payment identifier generated by J.P. Morgan.
+
+            This value is the same as the `payment_id` attribute in the
+
+            Payment Initiation API response body'
+    PispProvidersResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: List of PISP providers
+          items:
+            $ref: '#/components/schemas/PispProvider'
+          minItems: 1
+    Payment:
+      oneOf:
+      - $ref: '#/components/schemas/SepaPayment'
+      - $ref: '#/components/schemas/BacsChapsFpsPayment'
+      discriminator:
+        propertyName: template_identifier
+        mapping:
+          FPS: '#/components/schemas/BacsChapsFpsPayment'
+          SEPA: '#/components/schemas/SepaPayment'
+    PispProvidersRequest:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          example: DE
+          description: 'ISO 3166-1 Alpha-2 code for the desired country from which to fetch
+
+            the providers list. If no countryCode is provided, the API returns
+
+            the full list of Providers'
+    Error:
+      type: object
+      description: "The error response object \n\n**Note: This error response format is used by all AISP and PISP endpoints except Refunds endpoint which adopted a better error strcuture**"
+      properties:
+        error:
+          type: array
+          items:
+            properties:
+              errorCode:
+                type: string
+                description: Unique error code
+              errorMsg:
+                type: string
+                description: Describes the details of the error occurred
+          minItems: 0
+          maxItems: 99
+    PaymentAuthStatusResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Payment ID for the submitted payment initiation request
+        provider_code:
+          type: string
+          description: Provider code for where the payment has been initiated
+        provider_name:
+          type: string
+          description: Provider's name
+        customer_id:
+          type: string
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        created_at:
+          type: string
+          description: Created timestamp in ISO 8601 date time format
+        updated_at:
+          type: string
+          description: Updated timestamp in ISO 8601 date time format
+        payment_consent_id:
+          type: string
+          description: Consent Id of the authorized payment.
+        status:
+          type: string
+          description: 'The status of the payment.
+
+
+            | Status     | Meaning                                                                                                                              |
+
+            | -----------|--------------------------------------------------------------------------------------------------------------------------------------|
+
+            | processing | The payment initiation is in process. Further detail can be found by looking at the “stages” attribute below                         |
+
+            | accepted   | The payment initiation has been accepted by the ASPSP                                                                                |
+
+            | rejected   | The payment was rejected by the ASPSP. An error code will be provided                                                                |
+
+            | failed     | he payment initiation has been rejected due to an unknown reason, such as the ASPSP being down or returning a generic error response |'
+          enum:
+          - processing
+          - accepted
+          - rejected
+          - failed
+        fundsAvailable:
+          type: boolean
+          description: 'Refer the table for the interpretation of the values
+
+            | FundsAvailable | Meaning                                                                                                                                                                                                     |
+
+            | -----------    |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+            | True           | Money will be debited. If the bank uses a batch process for SEPA processing and the PSU no longer have sufficient funds, the money will not be debited                                                      |
+
+            | False          | In combination with `noFundsRjctPreferred=TRUE`, the bank rejects the payment. If noFundsRjctPreferred is not supported for a specific bank, the default behavior is that the payment is rejected by the bank |'
+        template_identifier:
+          type: string
+          description: Identifiers of the payment templates that are supported by this provider such as FPS, SEPA, SEPA_INSTANT, BACS, CHAPS
+        payment_attributes:
+          type: object
+          description: 'The payment attributes object. These are the same attributes used to
+
+            initiate the payment, so will therefore vary depending on the payment template'
+        custom_fields:
+          type: object
+          description: The custom fields (optional) are not used currently but would be used for any additional fields that would be relevant to payments.
+        stages:
+          type: array
+          items:
+            type: object
+            description: "The stages that the payment request has completed. \n\n- Possible values for a payment with status `processing`are below:\n\n  | Stage Name | Meaning                                                                                                                              |\n  | -----------|--------------------------------------------------------------------------------------------------------------------------------------|\n  | initialize | The payment has been created, but the initiation process has not begun\n  | start      | The payment initiation process has begun|\n  | interactive| User interaction is required, such as authentication or redirection to the ASPSP|\n  | submission | The payment has been submitted to the ASPSP|\n  | settlement | The payment has been validated by the ASPSP|\n  | completed  | The payment lifecycle has been completed|\n  | finish     | The action has been completed|\n\n- Possible value for payments with status “accepted/rejected/failed” is `finish`"
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              created_at:
+                type: string
+                description: Created date time in ISO 8601 date time format
+          minItems: 0
+    BacsChapsFpsPayment:
+      type: object
+      title: bacsChapsFpsPayment
+      description: Payment request schema for BACS, CHAPS and FPS payments
+      properties:
+        data:
+          type: object
+          required:
+          - customer_id
+          - country_code
+          - provider_code
+          - payee_description
+          - template_identifier
+          - return_to
+          - payment_attributes
+          properties:
+            customer_id:
+              type: string
+              description: The unique identifier determined by the J.P. Morgan client for the PSU
+            country_code:
+              type: string
+              description: Provider's country code in ISO 3166-1 alpha-2 format
+            provider_code:
+              type: string
+              description: Provider's unique code. This value is the same as the `code` attribute in the providers API response body
+            payee_description:
+              type: string
+              description: 'A versatile field that can be used to specify the merchant''s
+
+                internal identifier, payee name, user identifier, or any other
+
+                fields that might be relevant to the J.P. Morgan client for
+
+                internal processes. This field is not visible to the PSU'
+            template_identifier:
+              type: string
+              description: 'Unique identifier for the template being used for the
+
+                payment. This value is the same as the ''identifier'' field in
+
+                the Payment Templates API response body and the
+
+                ''payment_templates'' attribute returned by the providers API'
+            return_to:
+              type: string
+              description: 'The URL that the PSU will be redirected to after they have
+
+                completed the payment. This URL must be fully qualified
+
+                and include the full path, as some providers will validate it.
+
+                Additionally, some providers only permit HTTPS redirect URLs'
+            noFundsRjctPreferred:
+              type: boolean
+              description: "This flag is handled only for those providers which support it:\n  -  TRUE: If the PSU has no available funds (a.k.a.\n  fundsAvailable=false) the bank should reject the\n  payment\n  - FALSE Payment Initiation is accepted even when\n  \"fundsAvailable\"=false. If the account has funds at\n  the time of SEPA execution (e.g. End of Day batch\n  Payment instead of Instant payment), the payment will go through."
+            payment_attributes:
+              type: object
+              description: 'Payment attributes for the select Payment Template. This object will
+
+                vary based on payment type'
+              required:
+              - end_to_end_id
+              - creditor_name
+              - creditor_sort_code
+              - creditor_account_number
+              - description
+              - amount
+              - currency_code
+              properties:
+                end_to_end_id:
+                  type: string
+                  description: 'Numerical identifier determined by the J.P. Morgan
+
+                    client for the payment. This identifier will follow the
+
+                    payment throughout the process and can be used
+
+                    for reconciliation and reporting'
+                customer_last_logged_at:
+                  type: string
+                  description: Customer's last login date and time
+                customer_ip_address:
+                  type: string
+                  description: Customer's IP address
+                customer_device_os:
+                  type: string
+                  description: Customer's operating system
+                creditor_name:
+                  type: string
+                  description: 'Creditor''s name
+
+                    This field may be visible to the PSU, depending on the provider'
+                creditor_street_name:
+                  type: string
+                  description: Creditor's street name
+                creditor_building_number:
+                  type: string
+                  description: Creditor's building number
+                creditor_post_code:
+                  type: string
+                  description: Creditor's post code
+                creditor_town:
+                  type: string
+                  description: Creditor's town
+                creditor_account_number:
+                  type: string
+                  description: Creditor's account number
+                creditor_sort_code:
+                  type: string
+                  description: Creditor's sort code
+                description:
+                  type: string
+                  description: 'A description of the payment that will be sent to the
+
+                    provider. The description may be visible to the PSU,
+
+                    depending on the provider'
+                amount:
+                  type: string
+                  description: Amount of the payment
+                currency_code:
+                  type: string
+                  description: Currency used for the Payment
+    SepaPayment:
+      title: SEPA Payment
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+          - customer_id
+          - country_code
+          - provider_code
+          - payee_description
+          - template_identifier
+          - return_to
+          - payment_attributes
+          properties:
+            customer_id:
+              type: string
+              description: The unique identifier determined by the J.P. Morgan client for the PSU
+            country_code:
+              type: string
+              description: Provider's country code in ISO 3166-1 alpha-2 format
+            provider_code:
+              type: string
+              description: Provider's unique code. This value is the same as the `code` attribute in the providers API response body
+            payee_description:
+              type: string
+              description: 'A versatile field that can be used to specify the merchant''s
+
+                internal identifier, payee name, user identifier, or any other
+
+                fields that might be relevant to the J.P. Morgan client for
+
+                internal processes. This field is not visible to the PSU'
+            template_identifier:
+              type: string
+              description: 'Unique identifier for the template being used for the
+
+                payment. This value is the same as the ''identifier'' field in
+
+                the Payment Templates API response body and the
+
+                ''payment_templates'' attribute returned by the providers API'
+            return_to:
+              type: string
+              description: 'The URL that the PSU will be redirected to after they have
+
+                completed the payment. This URL must be fully qualified
+
+                and include the full path, as some providers will validate it.
+
+                Additionally, some providers only permit HTTPS redirect URLs'
+            locale:
+              type: string
+              description: "The language of the error message in the ISO 639-1 format. \nPossible values are: bg, cz, de, en, es-MX, es, fi, fr, he, hr, hu, it, nl, pl, pt-BR, pt, ro, ru, si, sk, sv, tr, uk, zh-HK(Traditional), zh(Simplified)  \n\n**Defaults to en if not provided**"
+            payment_attributes:
+              type: object
+              description: 'Payment attributes for the select Payment Template. This object will
+
+                vary based on payment type'
+              required:
+              - end_to_end_id
+              - creditor_name
+              - creditor_iban
+              - description
+              - amount
+              - currency_code
+              properties:
+                end_to_end_id:
+                  type: string
+                  description: 'Numerical identifier determined by the J.P. Morgan
+
+                    client for the payment. This identifier will follow the
+
+                    payment throughout the process and can be used
+
+                    for reconciliation and reporting'
+                customer_last_logged_at:
+                  type: string
+                  description: Customer's last login date and time
+                customer_ip_address:
+                  type: string
+                  description: Customer's IP address
+                customer_device_os:
+                  type: string
+                  description: Customer's operating system
+                creditor_name:
+                  type: string
+                  description: 'Creditor''s name
+
+                    This field may be visible to the PSU, depending on the provider'
+                creditor_street_name:
+                  type: string
+                  description: Creditor's street name
+                creditor_building_number:
+                  type: string
+                  description: Creditor's building number
+                creditor_post_code:
+                  type: string
+                  description: Creditor's post code
+                creditor_town:
+                  type: string
+                  description: Creditor's town
+                creditor_iban:
+                  type: string
+                  description: Creditor's IBAN
+                debtor_iban:
+                  type: string
+                  description: 'Debtor''s IBAN
+
+                    **Can be mandatory to initiate payments in some locales**'
+                description:
+                  type: string
+                  description: 'A description of the payment that will be sent to the
+
+                    provider. The description may be visible to the PSU,
+
+                    depending on the provider'
+                amount:
+                  type: string
+                  description: Amount of the payment
+                currency_code:
+                  type: string
+                  description: Currency used for the Payment
+            connect_template:
+              type: string
+              description: 'An optional field to specify the UI template.
+
+
+                **Only applicable for certain merchants**'
+    PaymentResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            payment_id:
+              type: string
+              description: Internal payment ID for the submitted payment initiation request
+            expires_at:
+              type: string
+              description: Expiration date of the redirect URL
+            redirect_url:
+              type: string
+              description: Points to a page where the PSU can provide PISP access to make the payment
+    PaymentAuthorizationRequest:
+      required:
+      - paymentId
+      - authToken
+      type: object
+      properties:
+        paymentId:
+          type: string
+          description: 'The unique payment identifier generated by J.P. Morgan.
+
+            This value is the same as the `payment_id` attribute in the
+
+            Payment Initiation API response body'
+        authToken:
+          type: string
+          description: 'One-time use token given by the provider to authorize the
+
+            payment. This token is obtained from the `redirect_url` field in
+
+            the Payment Initiation API response body and it must be
+
+            appended with “&” and the “end_to_end id” (e.g.
+
+            “code=95c…Ijo&end_to_end_id= 0002")'
+    PispProvider:
+      type: object
+      description: PISP Provider
+      properties:
+        id:
+          type: string
+          description: Provider's unique id
+        code:
+          type: string
+          description: Provider's code to be provided for payment instruction
+        name:
+          type: string
+          description: Provider's name
+        status:
+          type: string
+          description: Provider's status
+          enum:
+          - active
+          - inactive
+          - disabled
+        interactive:
+          type: boolean
+          description: 'indicates whether the provider require an interactive element during the
+
+            authentication process (e.g. SMS code entry or CAPTCHA solution)'
+        instruction:
+          type: string
+          description: 'Instructions for the PSU to complete the authentication process. For
+
+            redirect authentication, a brief overview of the process will be given'
+        home_url:
+          type: string
+          description: The URL of provider's home page
+        logo_url:
+          type: string
+          description: URL of the provider's logo
+        country_code:
+          type: string
+          description: Code of provider's country; ISO 3166-1 Alpha-2 format
+        created_at:
+          type: string
+          description: Indicates the date time of when the provider was integrated with JPMC. Represented in ISO 8601 date time format
+        updated_at:
+          type: string
+          description: Indicates the date time of when the provider was last updated by JPMC. Represented in ISO 8601 date time format
+        identification_codes:
+          type: array
+          description: 'Bank code as defined by the IBAN Structure (e.g. DEKK BBBB BBBB
+
+            CCCC CCCC CC) Where B is the Bank Identification Code'
+          items:
+            type: string
+          minItems: 0
+        payment_templates:
+          type: array
+          description: List of payment types supported by the provider
+          items:
+            type: string
+            properties:
+              FPS:
+                type: string
+              SEPA:
+                type: string
+              SEPA_INSTANT:
+                type: string
+              BACS:
+                type: string
+              CHAPS:
+                type: string
+          minItems: 0
+  examples:
+    PaymentAuthStatusResponseExample:
+      value:
+        data:
+          id: 1105291498426995700
+          provider_code: deutsche_bank_client_de
+          provider_name: Deutsche Bank
+          customer_id: 1105291496237569000
+          created_at: '2023-09-21T12:43:10Z'
+          updated_at: '2023-09-21T12:44:52Z'
+          status: accepted
+          payment_consent_id: 1105291498334721000
+          template_identifier: SEPA
+          payment_attributes:
+            mode: Normal
+            amount: 12.99
+            debtor_iban: DE75380707240330795600
+            description: NETFLIX
+            creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+            creditor_name: NETFLIX
+            currency_code: EUR
+            end_to_end_id: 20043855508803784
+            customer_ip_address: 159.53.64.214
+          custom_fields: {}
+          stages:
+          - id: 1105291498368275500
+            name: initialize
+            created_at: '2023-09-21T12:43:10Z'
+          - id: 1105291670938719200
+            name: start
+            created_at: '2023-09-21T12:43:31Z'
+          - id: 1105291671400092700
+            name: received
+            created_at: '2023-09-21T12:43:31Z'
+          - id: 1105291678303917000
+            name: interactive
+            created_at: '2023-09-21T12:43:32Z'
+            interactive_html: null
+            interactive_fields_names: []
+            interactive_redirect_url: https://meine.deutsche-bank.de/taf/db/#/authorizepaymentorder?transaction-id=cce9323d-c57e-4e77-9f1e-c394368e4751&psu-id=9503307956&authorization-id=f8190b5f-f0ee-40c7-987d-3aa453e994aa
+            interactive_fields_options: null
+          - id: 1105292279280571400
+            name: submission
+            created_at: '2023-09-21T12:44:43Z'
+          - id: 1105292284808664000
+            name: pending
+            created_at: '2023-09-21T12:44:44Z'
+          - id: 1105292288801641500
+            name: completed
+            created_at: '2023-09-21T12:44:44Z'
+          - id: 1105292290093487100
+            name: finish
+            created_at: '2023-09-21T12:44:44Z'
+    PaymentResponseExample:
+      value:
+        data:
+          payment_id: '1105048674708230671'
+          expires_at: '2023-09-21T04:56:43Z'
+          redirect_url: https://paymentservices.jpmorgan.com/payments/connect?token=a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13
+    FPSPaymentRequestExample:
+      value:
+        data:
+          customer_id: D310252
+          country_code: GB
+          provider_code: barclays_oauth_client_gb
+          payee_description: barclays PVT 10-25-23
+          template_identifier: FPS
+          return_to: https://sites.obtest.com/sites/cib
+          payment_attributes:
+            end_to_end_id: PISP_1025_PVT_002
+            creditor_name: John Smith
+            creditor_sort_code: XXX242
+            creditor_account_number: XXXXX035
+            description: For Goods
+            amount: '100.00'
+            currency_code: GBP
+    PispProvidersRequestExample:
+      value:
+        countryCode: XF
+    PaymentStatusRequestExample:
+      value:
+        customer_id: '1105291496237568999'
+        payment_id: '1104531176632095201'
+    InvalidJSONFormatExample:
+      value:
+        errorCode: PISP-003
+        errorMsg: Invalid JSON format
+    UnauthorizedAccessExample:
+      value:
+        errorCode: PISP-006
+        errorMsg: Unauthorized access
+    SEPAPaymentRequestExample:
+      value:
+        data:
+          customer_id: 00ef7b8enca1elA1tm6bmyphhgk3
+          country_code: DE
+          provider_code: berliner_sparkasse_oauth_client_de
+          payee_description: MusicCorpDE
+          template_identifier: SEPA
+          return_to: https://www.musiccorp.com/pisp_oauth_callback
+          locale: de-DE
+          payment_attributes:
+            end_to_end_id: '20018300321270540'
+            creditor_name: MusicCorp
+            creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+            debtor_iban: DEXXXXXXXXXXXXXXXXXXXX
+            description: For goods
+            amount: '17.99'
+            currency_code: EUR
+            mode: Normal
+          connect_template: jpmorgan_musiccorp_v3
+    BACSPaymentRequestExample:
+      value:
+        data:
+          customer_id: D310252
+          country_code: GB
+          provider_code: barclays_oauth_client_gb
+          payee_description: barclays PVT 10-25-23
+          template_identifier: BACS
+          return_to: https://sites.obtest.com/sites/cib
+          payment_attributes:
+            end_to_end_id: PISP_1025_PVT_002
+            creditor_name: John Smith
+            creditor_sort_code: XXX242
+            creditor_account_number: XXXXX035
+            description: For Goods
+            amount: '100.00'
+            currency_code: GBP
+    PispProvidersResponseExample:
+      value:
+        data:
+        - id: '3094'
+          code: starlingbank_oauth_client_gb
+          name: Starling
+          mode: oauth
+          status: active
+          interactive: true
+          pisp_instruction: You will be securely redirected to your financial institution to authenticate
+          logo_url: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/gb/starlingbank_oauth_client_gb.svg
+          country_code: GB
+          created_at: '2018-04-12T14:27:32Z'
+          updated_at: '2023-07-12T15:33:52Z'
+          identification_codes: []
+          payment_templates:
+          - FPS
+        - id: '3830'
+          code: revolut_client_oauth_gb
+          name: Revolut
+          mode: oauth
+          status: active
+          interactive: false
+          pisp_instruction: You will be securely redirected to your financial institution to authenticate
+          logo_url: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/gb/revolut_gb.svg
+          country_code: GB
+          created_at: '2019-04-12T14:06:05Z'
+          updated_at: '2023-08-30T07:19:06Z'
+          identification_codes: []
+          payment_templates:
+          - FPS
+          - CHAPS
+          - BACS
+          - FPS_STANDING_ORDER
+          - SEPA
+          - SEPA_INSTANT
+          - SWIFT
+    CHAPSPaymentRequestExample:
+      value:
+        data:
+          customer_id: D310252
+          country_code: GB
+          provider_code: barclays_oauth_client_gb
+          payee_description: barclays PVT 10-25-23
+          template_identifier: CHAPS
+          return_to: https://sites.obtest.com/sites/cib
+          payment_attributes:
+            end_to_end_id: PISP_1025_PVT_002
+            creditor_name: John Smith
+            creditor_sort_code: XXX242
+            creditor_account_number: XXXXX035
+            description: For Goods
+            amount: '100.00'
+            currency_code: GBP
+    PaymentAuthorizationRequestExample:
+      value:
+        paymentId: '1105291498426995690'
+        authToken: a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13&end_to_end_id=00000002
+  parameters:
+    ContentType:
+      name: Content-Type
+      description: Content Type
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - application/json
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2: {}
+x-jpmc-security: {}

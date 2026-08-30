@@ -1,0 +1,1098 @@
+openapi: 3.2.0
+info:
+  title: Global Payments Payment Returns API
+  description: Initiate, track, and manage payments and payment returns across a wide range of payment types, including ACH, wires, real-time payments, cards, and digital wallets, so you can automate your payment workflows and easily retrieve detailed status and transaction information for reconciliation and reporting.
+  version: 2.5.2
+  contact:
+    name: JPMorgan Chase & Co. API Support
+    email: imsd.security.operations@jpmorgan.com
+    url: https://developer.payments.jpmorgan.com/contact/support
+  license:
+    name: Contact JPMorgan Chase & Co. API Support for licensing terms.
+    url: https://developer.payments.jpmorgan.com/contact/support
+servers:
+- url: https://api.payments.jpmorgan.com/payment/v2
+  description: PRODUCTION - MTLS
+- url: https://api-mock.payments.jpmorgan.com/payment/v2
+  description: MOCK
+- url: https://api-sandbox.payments.jpmorgan.com/payment/v2
+  description: CLIENT TESTING - MTLS
+tags:
+- name: Payment Returns
+  description: API to initiate payment returns
+paths:
+  /payments/returns:
+    summary: Payment Returns API
+    description: Initiate payment returns
+    post:
+      summary: Payment Returns
+      description: Payment Returns
+      tags:
+      - Payment Returns
+      operationId: createPaymentReturns
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      - $ref: '#/components/parameters/RequestId'
+      requestBody:
+        $ref: '#/components/requestBodies/PaymentReturn'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-PaymentReturnDuplicate'
+        '201':
+          $ref: '#/components/responses/201-PaymentReturnCreated'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-UnAuthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '422':
+          $ref: '#/components/responses/422-UnprocessableEntityPaymentReturns'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+      callbacks:
+        paymentReturnEvent:
+          x-tags:
+          - Webhooks
+          webhooks:
+            post:
+              summary: Payment Return Webhook
+              operationId: publishReturnWebhook
+              requestBody:
+                description: Payment Return Event
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/PaymentReturnWebhook'
+                    examples:
+                      RTP - BR PIX Payment Return:
+                        $ref: '#/components/examples/RealTimeBRPIXPaymentReturnWebhook-CE'
+              responses:
+                '204':
+                  description: Success - No Content
+  /payments/returns/{returnId}:
+    summary: Retrieve payment return
+    description: Retrieve payment return details using ReturnId
+    get:
+      summary: Retrieve Payment Return
+      description: '<!-- theme: success -->
+
+        Retrieve payment return details using ReturnId'
+      tags:
+      - Payment Returns
+      operationId: getPaymentReturn
+      parameters:
+      - $ref: '#/components/parameters/ReturnId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-PaymentReturnOk'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-UnAuthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+components:
+  schemas:
+    RequestId:
+      type: string
+      minLength: 1
+      maxLength: 128
+      description: Client provided unique identifier for the current request invocation
+    PaymentReturnEventData:
+      title: Payment Return Event Data
+      description: Representation of Payment Return Event Data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PaymentReturnEvent'
+    ErrorContext:
+      title: ErrorContext
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 140
+        location:
+          type: string
+          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
+          description: The location of the error occurred in the request.
+          minLength: 1
+          maxLength: 99
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+        field:
+          type: string
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+          pattern: ^[\$0-9a-zA-Z-_.()\[\]{}'"\s@=><!?,]+$
+        additionalContext:
+          $ref: '#/components/schemas/AdditionalContext'
+      description: Error Context
+    AdditionalContext:
+      title: Additional Context
+      type: array
+      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
+      items:
+        $ref: '#/components/schemas/StandardCodeContext'
+      minItems: 1
+      maxItems: 5
+    StandardCodeContext:
+      title: Standard Code Context
+      description: Schema representing a standard code context such as ISO or Clearing codes
+      type: object
+      required:
+      - code
+      - message
+      - type
+      properties:
+        type:
+          title: CategoryType
+          type: string
+          description: 'Category of the error code such as ISO or a Clearing Code (NACHA, BACS etc)
+
+            |Category Type | Description
+
+            |--------------|-----------------
+
+            |**ISO20022**       | ISO Codes based on an ISO standard e.g. ISO20022
+
+            |**CLEARING_NACHA**  | Clearing codes
+
+            |**EXTERNAL**  | External code sets '
+          minLength: 2
+          maxLength: 16
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 140
+    IdempotencyKey:
+      title: Idempotency Key
+      description: A unique string that enables the API support idempotency by safely retrying requests without accidentally performing the same operation twice.
+      type: string
+      minLength: 1
+      maxLength: 36
+      example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+    Event:
+      title: Event notification
+      description: Event Notification Data Common Component
+      type: object
+      required:
+      - id
+      - specversion
+      - type
+      - time
+      - source
+      - data
+      properties:
+        specversion:
+          type: string
+          description: 'The version of the CloudEvents specification which the event uses
+
+            '
+          default: '1.0'
+        id:
+          type: string
+          description: Unique Event Identifier
+        time:
+          description: event occurrence timestamp. An RFC-3339 compliant date-time format.
+          type: string
+          format: date-time
+        type:
+          description: Type of event being published
+          type: string
+          example: Payment.Completed
+        source:
+          description: Identifies the context in which an event happened. Often this will include information such as the type of the event source, the organization publishing the event or the process that produced the event.
+          type: string
+          format: uri-reference
+        dataschema:
+          description: URI of the event data schema
+          type: string
+          format: uri
+        data:
+          description: 'Data is an arbitrary object, that represents an underlying data being delivered through event notification
+
+            e.g Payment outcome, User onboarding outcome, Beneficiary screening outcome'
+          type: object
+          title: EventData
+    ReturnId:
+      type: string
+      title: ReturnId
+      minLength: 1
+      maxLength: 128
+      x-faker: random.uuid
+      description: JPMC generated unique payment return identifier
+    SignedContent:
+      title: SignedContent
+      type: string
+      pattern: ^[A-Za-z0-9_-]+\.([A-Za-z0-9_-]+)\.[A-Za-z0-9_-]+$
+      description: "A JWS (JSON Web Signature) Compact Serialization string with an **attached** payload.\n\n**JWS is a [JOSE specification](https://jose.readthedocs.io/en/latest/) that defines a compact,\n  URL-safe means of representing signed content using JSON-based data structures.\n  It ensures that the sender's identity can be verified and that the content has not\n  been tampered with during transmission, providing non-repudiation of interactions\n  between parties.**\n\n**Structure**: `Base64URL(header).Base64URL(payload).Base64URL(signature)`\n\n- **Base64URL(header)** – JOSE header containing `alg` (e.g. RS256), `typ` (JOSE) and optionally `kid`\n- **Base64URL(payload)** – The Request/Response body JSON object, Base64URL-encoded\n- **Base64URL(signature)** – Digital signature computed over the ASCII bytes of header.`payload`\n\n## Attached Payloads\n\n  This API uses **attached** JWS signatures: the payload is embedded in the JWS itself \n  (the middle `payload` segment), and the resulting compact serialization string is \n  sent as the HTTP request/response body. **Detached** payloads (*where the payload \n  is transmitted separately from the JWS*) are not supported.\n\n## Signed Example\n\n<details>\n<summary>Signed Request Payload</summary>\n`eyJhbGciOiJSUzI1NiIsImtpZCI6IjEyMzQ1Njc4OTAiLCJ0eXAiOiJKT1NFIn0.\neyJyZXF1ZXN0ZWRFeGVjdXRpb25EYXRlIjoiMjAyNC0xMC0yMiIsInBheW1lbnRJZGVudGlmaWVycyI6\neyJlbmRUb0VuZElkIjoiVUtGUFNURVNUIn0sInZhbHVlIjp7ImN1cnJlbmN5IjoiR0JQIiwiYW1vdW50\nIjoiMS4wMSJ9LCJ0cmFuc2ZlclR5cGUiOiJDUkVESVQiLCJwYXltZW50VHlwZSI6IlJUUCIsImRlYnRv\nciI6eyJhY2NvdW50Ijp7ImFjY291bnROdW1iZXIiOiIxMjM0NTY3ODkwIn19LCJkZWJ0b3JBZ2VudCI6\neyJmaW5hbmNpYWxJbnN0aXR1dGlvbklkcyI6W3siaWQiOiJDSEFTR0IyTCIsImlkVHlwZSI6IkJJQyJ9\nXX0sImNyZWRpdG9yIjp7ImFjY291bnQiOnsiYWNjb3VudE51bWJlciI6Ijk4NzY1NDMyMSJ9LCJuYW1l\nIjoiR0IgVGVzdCBBY2Njb3VudCJ9LCJjcmVkaXRvckFnZW50Ijp7ImZpbmFuY2lhbEluc3RpdHV0aW9u\nSWRzIjpbeyJpZCI6IjA0MjkyMCIsImlkVHlwZSI6IkNMRUFSSU5HX1NZU1RFTV9JRCJ9XX19.\nSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`\n</details>\n\n \n<details>\n<summary>Signed Response Payload</summary>\n`eyJhbGciOiJSUzI1NiIsImtpZCI6IjEyMzQ1Njc4OTAiLCJ0eXAiOiJKT1NFIn0.\n  eyJwYXltZW50SWQiOiI5NTM2NDAxOC1iZTMyLTRjNzEtOTYxOC1mMWNlYmE3OGYyOGMiLCJwYXltZW50\n  U3RhdHVzIjoiQUNDRVBURUQiLCJwYXltZW50U3ViU3RhdHVzIjoiQUNDRVBURUQiLCJzdGF0dXNVcGRh\n  dGVkQXQiOiIyMDI2LTAzLTE3VDA5OjE3OjIzWiIsInJlcXVlc3RlZEV4ZWN1dGlvbkRhdGUiOiIyMDI0\n  LTEwLTIyIiwicGF5bWVudElkZW50aWZpZXJzIjp7ImVuZFRvRW5kSWQiOiJVS0ZQU1RFU1QifSwidHJh\n  bnNmZXJUeXBlIjoiQ1JFRElUIiwicGF5bWVudFR5cGUiOiJSVFAifQ.\n  SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`\n</details>"
+      example: REDACTED.JWT.TOKEN
+    AmountDecimal:
+      title: PaymentAmountDecimal
+      type: string
+      description: A String representation of a (potentially) whole number or decimal positive number. - Amount should be more than 0.01 with maximum of two decimal places allowed in most markets.
+      minLength: 1
+      maxLength: 40
+      pattern: ^\d+(\.\d+)?$
+    Error:
+      type: object
+      title: Error
+      description: Common Error Model
+      properties:
+        title:
+          type: string
+          title: Short humanly-readable title of the error.
+          minLength: 1
+          maxLength: 100
+        httpStatus:
+          type: integer
+          format: int32
+          default: 400
+          minimum: 400
+          maximum: 503
+          title: HTTP Status Code
+        traceId:
+          type: string
+          title: JPMC Assigned traced identifier
+          minLength: 55
+          maxLength: 128
+        requestId:
+          type: string
+          title: The 'client originated' requestId
+          minLength: 1
+          maxLength: 128
+        context:
+          type: array
+          title: Provides additional context and detail on the validation errors
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 1
+          maxItems: 100
+      required:
+      - title
+      readOnly: true
+    IsoCountryCode:
+      title: IsoCountryCode
+      type: string
+      description: ISO 3166-1 Alpha-2 Country Code
+      minLength: 2
+      maxLength: 2
+      pattern: ^[A-Z]{2}$
+      example: AU
+    IsoCurrencyCode:
+      title: IsoCurrencyCode
+      type: string
+      description: ISO 4217 Alpha-3 Currency Code
+      minLength: 3
+      maxLength: 3
+      pattern: ^[A-Z]{3}$
+      example: AUD
+    EndToEndId:
+      type: string
+      title: EndToEndId
+      minLength: 1
+      maxLength: 128
+      x-faker: random.uuid
+      description: 'Customer assigned Unique identifier to unambiguously identify the Payment transaction.
+
+        This identification is passed on, unchanged, throughout the entire end-to-end chain.'
+      example: AD202109311354152
+    PaymentReturnDuplicateResponse:
+      title: DuplicatePaymentReturnResponse
+      type: object
+      description: Duplicate Payment return
+      properties:
+        duplicateOf:
+          type: object
+          description: Reference to the original payment return resource that is a duplicate of the requested payment return resource.
+          title: DuplicatePaymentReturn
+          required:
+          - returnId
+          - paymentIdentifiers
+          properties:
+            returnId:
+              type: string
+              description: JPMC generated unique payment return identifier
+              minLength: 1
+              maxLength: 128
+            paymentIdentifiers:
+              type: object
+              title: PaymentIdentifiers
+              description: Identifiers associated with the Payment Instruction throughout its lifecycle.
+              required:
+              - endToEndId
+              properties:
+                endToEndId:
+                  type: string
+                  description: Client assigned unique end to end identifier for the return request
+                  minLength: 1
+                  maxLength: 128
+        links:
+          type: object
+          title: Links
+          description: Links to related resources.
+          required:
+          - paymentReturn
+          properties:
+            paymentReturn:
+              type: string
+              description: URI (Relative URI) of the referenced payment return resource.
+              format: uri-reference
+              example: /payment/v2/payments/returns/95364018-be32-4c71-9618-f1ceba78f28c
+              pattern: ^/[a-zA-Z0-9/_\-\.~:\?#\[\]@!\$&'\(\)\*\+,;=%]+$
+        reason:
+          type: object
+          title: Reason
+          description: Details of the duplicate reason.
+          required:
+          - code
+          - location
+          - message
+          properties:
+            code:
+              type: string
+              example: '11909'
+              minLength: 5
+              maxLength: 5
+              pattern: ^[0-9]+$
+            location:
+              type: string
+              enum:
+              - BODY
+              - HEADER
+              - QUERY
+              - PATH
+              example: BODY
+            message:
+              type: string
+              example: This is a business duplicate, refer to documentation.
+              minLength: 1
+              maxLength: 140
+      required:
+      - duplicateOf
+      - links
+    PaymentReturnWebhook:
+      title: Payment Return Webhook
+      description: Representation of a Payment Return Webhook Event
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Event'
+      - $ref: '#/components/schemas/PaymentReturnEventData'
+    PaymentReturnStatus:
+      title: PaymentReturnStatus
+      description: Payment Return Status
+      allOf:
+      - $ref: '#/components/schemas/PaymentReturnStatusBasic'
+      - $ref: '#/components/schemas/PaymentReturn'
+    PaymentReturnEvent:
+      title: PaymentReturnEvent
+      type: object
+      description: Payment Return Event Data
+      properties:
+        returns:
+          description: A collection of payment return statuses
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            $ref: '#/components/schemas/PaymentReturnStatus'
+      required:
+      - returns
+    PaymentReturnResponse:
+      title: PaymentReturnResponse
+      type: object
+      description: Representation of the Payment return response
+      properties:
+        returnId:
+          type: string
+          description: JPMC generated unique payment return identifier
+          minLength: 1
+          maxLength: 128
+        returnStatus:
+          type: string
+          enum:
+          - RECEIVED
+          - ACCEPTED
+          - PROCESSING
+          - CANCELED
+          - REJECTED
+          - COMPLETED
+          - RETURNED
+          description: The status of the return
+        returnSubStatus:
+          type: string
+          description: The return sub status provides the granular level status
+          enum:
+          - RECEIVED
+          - ACCEPTED
+          - PROCESSING_BY_JPM
+          - PENDING_CLIENT_ACTION
+          - PENDING_COMPLIANCE_REVIEW
+          - PENDING_FRAUD_REVIEW
+          - PENDING_FUNDING_REVIEW
+          - PENDING_JPM_REVIEW
+          - SCHEDULED
+          - PENDING_POSTING
+          - CANCELED
+          - REJECTED
+          - REJECTED_BY_JPM
+          - COMPLETED_BY_JPM
+          - SENT_TO_CLEARING
+          - DELIVERED_TO_RECIPIENT
+          - RETURNED
+        paymentIdentifiers:
+          type: object
+          title: PaymentIdentifiers
+          description: Identifiers associated with the Payment Instruction throughout its lifecycle.
+          required:
+          - endToEndId
+          properties:
+            endToEndId:
+              type: string
+              description: Client assigned unique end to end identifier for the return request
+              minLength: 1
+              maxLength: 128
+        paymentType:
+          type: string
+          enum:
+          - RTP
+          description: The type of payment
+      required:
+      - returnId
+      - returnStatus
+      - paymentIdentifiers
+      - paymentType
+    PaymentReturnStatusBasic:
+      title: PaymentReturnStatusBasic
+      description: Payment Return Status Basic
+      type: object
+      properties:
+        returnId:
+          type: string
+          description: JPMC generated unique payment return identifier
+          minLength: 1
+          maxLength: 128
+        returnStatus:
+          type: string
+          enum:
+          - RECEIVED
+          - ACCEPTED
+          - PROCESSING
+          - CANCELED
+          - REJECTED
+          - COMPLETED
+          - RETURNED
+          description: The status of the return
+        returnSubStatus:
+          type: string
+          description: The return sub status provides the granular level status
+          enum:
+          - RECEIVED
+          - ACCEPTED
+          - PROCESSING_BY_JPM
+          - PENDING_CLIENT_ACTION
+          - PENDING_COMPLIANCE_REVIEW
+          - PENDING_FRAUD_REVIEW
+          - PENDING_FUNDING_REVIEW
+          - PENDING_JPM_REVIEW
+          - SCHEDULED
+          - PENDING_POSTING
+          - CANCELED
+          - REJECTED
+          - REJECTED_BY_JPM
+          - COMPLETED_BY_JPM
+          - SENT_TO_CLEARING
+          - DELIVERED_TO_RECIPIENT
+          - RETURNED
+        exceptions:
+          type: array
+          description: 'List of exceptions that occurred during the return process. This
+
+            field is only returned when the return status is REJECTED or
+
+            CANCELED.'
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+      required:
+      - returnId
+      - returnStatus
+    PaymentReturn:
+      type: object
+      title: PaymentReturn
+      description: Representation of the payment return instruction
+      required:
+      - paymentType
+      - originalPaymentIdentifiers
+      - country
+      properties:
+        paymentType:
+          type: string
+          enum:
+          - RTP
+          description: The type of payment
+        originalPaymentIdentifiers:
+          type: object
+          title: OriginalPaymentIdentifiers
+          description: 'Original payment identifiers to locate and facilitate the requested request type
+
+
+            ***NOTE: Clients MUST satisfy at least one of the below conditions to locate the original payment***
+
+
+            | Condition    | Details                                                                                   |
+
+            | ------------ | ---------------------------------------------------------------------------------------- |
+
+            | Condition #1 | At least one of the original payment identifiers such as `bankReferenceNumber` or `clearingSystemReference` or `paymentId` |
+
+            | Condition #2 | `originalValue`, `valueDate` and originalPaymentIdentifiers.`endToEndId`                 |
+
+            '
+          properties:
+            bankReferenceNumber:
+              type: string
+              description: 'JPMC generated unique reference number
+
+
+                ***NOTE: Clients receive this bankReferenceNumber today via Payment Receipts API that delivers credit confirmation notifications***
+
+                '
+              minLength: 1
+              maxLength: 12
+            account:
+              type: object
+              title: Account
+              description: Account details
+              required:
+              - accountNumber
+              - financialInstitutionId
+              properties:
+                accountNumber:
+                  type: string
+                  description: Account number
+                  minLength: 2
+                  maxLength: 14
+                financialInstitutionId:
+                  type: object
+                  title: FinancialInstitutionId
+                  description: Financial institution
+                  required:
+                  - id
+                  - idType
+                  properties:
+                    id:
+                      type: string
+                      minLength: 1
+                      maxLength: 11
+                      description: Financial Institution Identifier
+                    idType:
+                      type: string
+                      minLength: 1
+                      maxLength: 35
+                      description: Type of identifier
+            clearingSystemReference:
+              type: string
+              description: 'A unique reference assigned by the clearing system such as Central Banks which does the payment settlements.
+
+                ***NOTE: Clients receive this clearingSystemReference today via Payment Receipts API that delivers credit confirmation notifications***
+
+                '
+              minLength: 1
+              maxLength: 50
+            paymentId:
+              type: string
+              minLength: 1
+              maxLength: 128
+              description: Unique payment initiation identification number
+            endToEndId:
+              $ref: '#/components/schemas/EndToEndId'
+            originalValue:
+              type: object
+              title: OriginalValue
+              description: Original payment amount and currency
+              required:
+              - currency
+              - amount
+              properties:
+                currency:
+                  $ref: '#/components/schemas/IsoCurrencyCode'
+                amount:
+                  $ref: '#/components/schemas/AmountDecimal'
+            valueDate:
+              type: string
+              format: date
+              description: Date at which the funds become available to the creditor in ISO 8601 `yyyy-mm-dd` format
+          minProperties: 1
+        paymentIdentifiers:
+          type: object
+          title: PaymentIdentifiers
+          description: Identifiers associated with the Payment Instruction throughout its lifecycle.
+          required:
+          - endToEndId
+          properties:
+            endToEndId:
+              type: string
+              description: Client assigned unique end to end identifier for the return request
+              minLength: 1
+              maxLength: 128
+        country:
+          $ref: '#/components/schemas/IsoCountryCode'
+        chargeBearer:
+          type: string
+          description: Party bearing the transaction fees
+          enum:
+          - CREDITOR
+          - DEBTOR
+          - SHARED
+        returnType:
+          type: string
+          description: Specifies whether the full amount or partial amount to be returned
+          enum:
+          - FULL
+          - PARTIAL
+        value:
+          description: Return value
+          title: ReturnValue
+          type: object
+          required:
+          - amount
+          properties:
+            amount:
+              $ref: '#/components/schemas/AmountDecimal'
+            currency:
+              $ref: '#/components/schemas/IsoCurrencyCode'
+        reason:
+          type: object
+          title: ReturnReason
+          description: Captures the reason for the return either in coded or proprietary format.
+          properties:
+            code:
+              type: string
+              description: Reason code as applicable per market
+              minLength: 4
+              maxLength: 4
+            proprietary:
+              type: string
+              description: Proprietary value
+              minLength: 1
+              maxLength: 35
+          minProperties: 1
+          maxProperties: 1
+        additionalInformation:
+          type: array
+          description: To capture any additional information about the return
+          items:
+            type: string
+            minLength: 1
+            maxLength: 105
+          minItems: 1
+          maxItems: 5
+  examples:
+    ErrorSystemUnavailableWithRetryAfterHeader:
+      summary: Service Unavailable With Retry After Header
+      value:
+        title: Service Unavailable
+        httpStatus: 503
+        traceId: 00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '12995'
+          message: Service is temporarily unavailable. Please try again after sometime.
+    RealTimeBRPIXPaymentReturn:
+      summary: RTP - Payment Return - Brazil PIX
+      value:
+        paymentType: RTP
+        originalPaymentIdentifiers:
+          bankReferenceNumber: ABC12346000
+        paymentIdentifiers:
+          endToEndId: RT202109311350000
+        chargeBearer: DEBTOR
+        country: BR
+        returnType: PARTIAL
+        value:
+          amount: '50.00'
+        additionalInformation:
+        - OrderNumber:OD-1234000
+    IdempotencyFailure:
+      summary: Unprocessable Entity - Idempotency Failure
+      value:
+        title: Idempotency Failure
+        httpStatus: 422
+        traceId: 00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01
+        requestId: e59b912a-9c00-11ed-a8fc-0242ac120002
+        context:
+        - code: '10106'
+          message: Idempotency Key must not be reused across different payloads of this operation
+          location: HEADER
+          field: Idempotency-Key
+    ErrorNotFound:
+      summary: Not Found
+      value:
+        title: Not Found
+        httpStatus: 404
+        traceId: 00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+    RealTimeBRPIXPaymentReturnCreatedResponse:
+      summary: RTP - Brazil PIX - Payment Return Created Response
+      value:
+        returnId: bre4c092-b90d-4b33-bd19-1a3843370bpt
+        returnStatus: ACCEPTED
+        returnSubStatus: ACCEPTED
+        paymentIdentifiers:
+          endToEndId: RT202109311350000
+        paymentType: RTP
+    ErrorUnauthorized:
+      summary: Authorization Failure
+      value:
+        title: Authorization Failure
+        httpStatus: 403
+        traceId: 00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '14000'
+          message: Client forbidden from accessing the requested resource
+    RealTimeBRPIXPaymentReturnStatusRetrieval:
+      summary: RTP - Brazil PIX - Payment Return Status Retrieval Example
+      value:
+        returnId: bre4c092-b90d-4b33-bd19-1a3843370bpt
+        returnStatus: ACCEPTED
+        returnSubStatus: ACCEPTED
+        paymentType: RTP
+        originalPaymentIdentifiers:
+          bankReferenceNumber: ABC12346000
+        paymentIdentifiers:
+          endToEndId: RT202109311350000
+        chargeBearer: DEBTOR
+        country: BR
+        returnType: PARTIAL
+        value:
+          amount: '50.00'
+        additionalInformation:
+        - OrderNumber:OD-1234000
+    ErrorUnauthenticated:
+      summary: Authentication Failure
+      value:
+        title: Authentication Failure
+        httpStatus: 401
+        traceId: 00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '14000'
+          message: Client could not be authenticated
+    DuplicatePaymentReturnResponse:
+      summary: Duplicate Payment Return Response
+      value:
+        duplicateOf:
+          returnId: 253f67f3-b640-44cb-aabd-2cc348b52678
+          paymentIdentifiers:
+            endToEndId: AD202109311354152
+        links:
+          paymentReturn: /payment/v2/payments/returns/95364018-be32-4c71-9618-f1ceba78f28c
+        reason:
+          code: '11909'
+          location: BODY
+          message: This is a business duplicate, refer to documentation.
+    RealTimeBRPIXPaymentReturnWebhook-CE:
+      summary: RTP - Brazil PIX - Payment Return Webhook
+      value:
+        specversion: '1.0'
+        id: 385d920a-e732-46e8-9f7b-3d033482e851
+        time: '2024-10-30T14:15:24Z'
+        type: Payment.Completed
+        source: /payment/v2/payments/returns/bre4c092-b90d-4b33-bd19-1a3843370bpt
+        dataschema: urn:com.jpmorgan.payments/payment-return-event
+        data:
+          returns:
+          - returnId: bre4c092-b90d-4b33-bd19-1a3843370bpt
+            returnStatus: COMPLETED
+            paymentType: RTP
+            originalPaymentIdentifiers:
+              bankReferenceNumber: ABC12346000
+            paymentIdentifiers:
+              endToEndId: RT202109311350000
+            chargeBearer: DEBTOR
+            country: BR
+            returnType: PARTIAL
+            value:
+              amount: '50.00'
+            additionalInformation:
+            - OrderNumber:OD-1234000
+    ErrorAccountAuthorization:
+      summary: Account Authorization Failure
+      value:
+        title: Account Authorization Failure
+        httpStatus: 403
+        traceId: 00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '14000'
+          message: Client not authorized accessing the requested account
+    ErrorBusinessValidation:
+      summary: Business Validation Failure
+      value:
+        title: Business Validation Failure
+        httpStatus: 400
+        traceId: 00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '11002'
+          message: Creditor account is closed
+          location: BODY
+          field: $.creditor.account
+          additionalContext:
+          - code: AC03
+            type: ISO20022
+            message: Creditor account is closed
+          - code: CLR119
+            type: CLEARING_NACHA
+            message: Error on Creditor Account Number
+    ErrorSystemUnavailable:
+      summary: Service Unavailable
+      value:
+        title: Service Unavailable
+        httpStatus: 503
+        traceId: 00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '12999'
+          message: API is currently unavailable for usage. Please try again after some time
+    ErrorInvalidData:
+      summary: Invalid Data Error
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 00-d45503a0a3fb4915bb5749e58cf01f1a-47ac5b7550a4064e-01
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '10001'
+          message: Mandatory field is missing
+          location: BODY
+          field: $.creditor.account
+          additionalContext:
+          - code: AC03
+            type: ISO20022
+            message: Creditor account number is missing or invalid
+  requestBodies:
+    PaymentReturn:
+      description: Representation of a Payment Return Request
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentReturn'
+          examples:
+            RTP - BR PIX Payment Return:
+              $ref: '#/components/examples/RealTimeBRPIXPaymentReturn'
+        application/jose:
+          schema:
+            $ref: '#/components/schemas/SignedContent'
+  responses:
+    503-ServiceUnavailable:
+      description: 'Service Unavailable
+
+
+        | Error Code    | Description                                |
+
+        |---------------|----------------------------------------------------------------------------------------------|
+
+        |  12995        | Service is temporarily unavailable. Please try again after sometime.( Accompanied by Retry-After Header)                      |
+
+        |  12999        | Service is temporarily unavailable. Please try again after sometime.                                                           |'
+      headers:
+        Retry-After:
+          description: The number of seconds to wait before retrying the request.
+          schema:
+            type: integer
+            minimum: 1
+            example: 600
+            default: 600
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            SystemUnavailable:
+              $ref: '#/components/examples/ErrorSystemUnavailable'
+            SystemUnavailableWithRetryAfterHeader:
+              $ref: '#/components/examples/ErrorSystemUnavailableWithRetryAfterHeader'
+    403-Forbidden:
+      description: "Forbidden \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     "
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            Forbidden:
+              $ref: '#/components/examples/ErrorUnauthorized'
+            AccountAuthorizationFailure:
+              $ref: '#/components/examples/ErrorAccountAuthorization'
+    422-UnprocessableEntityPaymentReturns:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            IdempotencyFailure:
+              $ref: '#/components/examples/IdempotencyFailure'
+    401-UnAuthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            UnAuthenticated:
+              $ref: '#/components/examples/ErrorUnauthenticated'
+    404-NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            InvalidData:
+              $ref: '#/components/examples/ErrorNotFound'
+    200-PaymentReturnDuplicate:
+      description: Ok
+      headers:
+        Duplicate-Request:
+          $ref: '#/components/headers/DuplicateRequest'
+        Location:
+          $ref: '#/components/headers/Location'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentReturnDuplicateResponse'
+          examples:
+            DuplicatePaymentReturnResponse:
+              $ref: '#/components/examples/DuplicatePaymentReturnResponse'
+        application/jose:
+          schema:
+            $ref: '#/components/schemas/SignedContent'
+    200-PaymentReturnOk:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentReturnStatus'
+          examples:
+            BRPixPaymentReturnStatusRetrievalResponse:
+              $ref: '#/components/examples/RealTimeBRPIXPaymentReturnStatusRetrieval'
+        application/jose:
+          schema:
+            $ref: '#/components/schemas/SignedContent'
+    400-BadRequest:
+      description: "Bad Request \n\n**List of Error codes and Usage explanations.**\n\n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency failure                            |\n| 10107           | Concurrent request failure                     |\n| 10199           | Other                                          |\n| 11000 - 11499   | Account/Permission Problems                    |\n| 11500 - 11999   | General Business Errors                        |\n| 12000 - 12499   | Timeouts                                       |\n| 12500 - 12999   | Service Offline                                |\n| 13000           | Other Errors                                   |\n| 14000           | Security Failure                               |\n| 15000           | System Error                                   |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            InvalidData:
+              $ref: '#/components/examples/ErrorInvalidData'
+            BusinessValidationError:
+              $ref: '#/components/examples/ErrorBusinessValidation'
+    201-PaymentReturnCreated:
+      description: Created
+      headers:
+        Location:
+          $ref: '#/components/headers/Location'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentReturnResponse'
+          examples:
+            BRPixPaymentReturnCreatedResponse:
+              $ref: '#/components/examples/RealTimeBRPIXPaymentReturnCreatedResponse'
+        application/jose:
+          schema:
+            $ref: '#/components/schemas/SignedContent'
+  parameters:
+    ReturnId:
+      name: returnId
+      in: path
+      description: JPMC generated unique payment return identifier
+      required: true
+      schema:
+        $ref: '#/components/schemas/ReturnId'
+    RequestId:
+      name: Request-Id
+      in: header
+      description: 'Client generated identifier for the current request invocation.
+
+        If provided, this identifier will be included in error responses to assist in problem diagnosis.'
+      required: false
+      schema:
+        $ref: '#/components/schemas/RequestId'
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: 'Client generated unique idempotency key used in recognizing consecutive retries of the same request
+
+
+        **Usage of V4 UUIDs is recommended.**'
+      schema:
+        $ref: '#/components/schemas/IdempotencyKey'
+      required: false
+  headers:
+    Location:
+      description: URI (Relative URI) of the referenced resource.
+      schema:
+        title: Location
+        type: string
+        format: uri-reference
+        pattern: ^/[a-zA-Z0-9/_\-\.~:\?#\[\]@!\$&'\(\)\*\+,;=%]+$
+      required: true
+      examples:
+        PaymentLocation:
+          value: /payment/v2/payments/95364018-be32-4c71-9618-f1ceba78f28c
+        ReturnLocation:
+          value: /payment/v2/payments/returns/95364018-be32-4c71-9618-f1ceba78f28c
+    DuplicateRequest:
+      description: Indicates that the request is a duplicate of a previous request
+      schema:
+        title: Duplicate-Request
+        type: boolean
+      required: true
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-security:
+- MutualTLS: []
+x-jpmc-securityDefinitions:
+  MutualTLS:
+    type: mutualTLS
+    description: Mutual TLS authentication using client and server certificates.

@@ -1,0 +1,1839 @@
+openapi: 3.2.0
+info:
+  title: Dispute Management Disputes Data Retrieval API
+  description: End to end disputes management interface.
+  version: 1.1.3
+  contact:
+    name: Disputes API Support
+    url: https://developer.jpmorgan.com/support
+    email: developer_help@jpmorgan.com
+servers:
+- url: https://api.payments.jpmorgan.com/commerce/v1
+  description: PRODUCTION - OAUTH
+- url: https://api-sandbox.payments.jpmorgan.com/commerce/v1
+  description: CLIENT TESTING - OAUTH
+security:
+- bearerAuth: []
+tags:
+- name: Disputes Data Retrieval
+  description: Operations for fetching dispute-related data, such as list of disputes, details, status, and issuer documents
+paths:
+  /disputes:
+    post:
+      summary: Retrieve a list of disputes
+      operationId: fetchDisputes
+      tags:
+      - Disputes Data Retrieval
+      description: This API endpoint allows consumers to retrieve a list of disputes, including chargebacks, retrieval requests, and pre-arbitration cases. Users can filter disputes by providing one or more Transaction Division IDs, Processing Entity IDs, or Company IDs. The response is paginated, with a maximum of 5,000 records per page. Disputes are sorted by due date in ascending order when available; otherwise, they are sorted by the initiated date in ascending order. If no date range is specified, the API returns disputes created within the last 90 days.
+      parameters:
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Unique request identifier provided by the requestor.
+        examples:
+          Success:
+            value: 123e4567-e89b-12d3-a456-426614174000
+      - $ref: '#/components/parameters/platformIdHeader'
+      requestBody:
+        description: Disputes Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/disputesRequest'
+            examples:
+              Success:
+                value:
+                  entityIds:
+                    companyIds:
+                    - '12345678'
+                    merchantIds:
+                    - '9876543210'
+                  disputeTypes:
+                  - FIRST_CHARGEBACK
+                  disputeStatuses:
+                  - NEW
+                  - NEEDS_RESPONSE
+                  paymentMethodList:
+                  - VI
+                  - MC
+                  initiatedStartDate: '2025-01-01'
+                  initiatedEndDate: '2025-01-02'
+                  disputeReceivedStartDate: '2025-01-01'
+                  disputeReceivedEndDate: '2025-01-02'
+                  responseDueStartDate: '2025-01-01'
+                  responseDueEndDate: '2025-01-02'
+                  pagination:
+                    cursor: cGFnZVRva2VuMTIzNDU=
+                    pageSize: 2000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/disputesResponse'
+              examples:
+                Success:
+                  value:
+                    requestId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+                    disputes:
+                    - disputeType: FIRST_CHARGEBACK
+                      disputeId: 254311672
+                      acquirerReferenceNumber: '24692166211000002406020'
+                      disputeInitiatedDate: '2025-01-01'
+                      disputeReceivedDate: '2025-01-01'
+                      responseDueDate: '2025-01-18'
+                      disputeValue:
+                        amount: 100
+                        currencyCode: USD
+                      disputeReason:
+                        reasonCode: '13.1'
+                        reason: SERVICES NOT RENDERED/MDSE NOT RECVD
+                      disputeCategoryCode: AUTHORIZATION
+                      disputeStatus: NEEDS_RESPONSE
+                      statusUpdateTimestamp: '2025-01-01T12:00:00Z'
+                      outcome: PENDING
+                      paymentMethod:
+                        paymentMethodCode: VI
+                        paymentMethodName: Visa
+                        maskedAccountNumber: 123456XXXXXX4000
+                      issuerDocumentCode: 1
+                      issuerDocumentExpected: true
+                      issuerDocumentReceived: true
+                      authorizationData:
+                        authorizationTimestamp: '2024-12-25T07:00:00Z'
+                        authorizationReferenceNumber: ''
+                      transactionData:
+                        merchantOrderNumber: 123456ORD
+                        transactionTimestamp: '2024-12-25T22:00:00Z'
+                        transactionAmount: 100
+                        transactionCurrency: USD
+                        transactionId: '1707071808295'
+                        submitterPlatformId: '2179821798'
+                      merchantData:
+                        companyId: '569874562'
+                        merchantId: '498613834'
+                        companyName: SAMPLE COMPANY
+                        merchantName: SAMPLE DIVISION
+                    pagination:
+                      cursor: cGFnZVRva2VuMTIzNDU=
+                    traceId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /disputes/{disputeId}:
+    get:
+      summary: Get dispute details
+      operationId: getDisputeDetails
+      tags:
+      - Disputes Data Retrieval
+      description: The consumers of this API endpoint can get additional details about a dispute by providing the dispute case id.
+      parameters:
+      - name: disputeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 10000
+          maximum: 9223372036854776000
+        description: A unique identifier assigned by the acquirer to track each inquiry or case created for a transaction dispute on an account.
+        examples:
+          Success:
+            value: 9876543210
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Unique request identifier provided by the requestor.
+        examples:
+          Success:
+            value: f47ac10b-58cc-4372-a567-0e02b2c3d479
+      - $ref: '#/components/parameters/platformIdHeader'
+      - name: merchant-id
+        in: header
+        required: true
+        schema:
+          type: string
+          pattern: ^\d+$
+          minLength: 1
+          maxLength: 12
+        description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '9876543'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/disputeDetailsResponse'
+              examples:
+                Success:
+                  value:
+                    requestId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+                    disputeDetails:
+                      disputeType: FIRST_CHARGEBACK
+                      disputeId: 9876543210
+                      acquirerReferenceNumber: '25103246259000000000126'
+                      bankIdentificationNumber: '12345678'
+                      disputeValue:
+                        amount: 100
+                        currencyCode: USD
+                      saleRefundCode: S
+                      isCurrencyConversion: false
+                      disputeCategoryCode: CONSUMER_DISPUTE
+                      disputeReason:
+                        reasonCode: '13.1'
+                        reason: SERVICES NOT RENDERED/MDSE NOT RECVD
+                      disputeReasonDetailed: '• Merchandise Not Received: The cardholder was charged for merchandise that was not delivered/received, has attempted to resolve the issue with the merchant. • Services Not Rendered: The cardholder was charged for a service that was not rendered and has attempted to resolve the issue with the merchant. • Expanded to include disputes related to no-show transactions, where merchant cannot or is unable to render services (applies only to hotel merchants and U.S. Domestic peak-time and specialized vehicle car rental merchants who are permitted to process no-show transactions).'
+                      potentialRemedies: 'Provide a letter of explanation detailing the transaction and any attempts to remedy the dispute in addition to providing evidence of the following: Provide a letter of explanation detailing the transaction and any attempts to remedy the dispute in addition to providing evidence of the following: • Credit was issued prior to first chargeback, including posting date and credit receipt. • Documentation to prove that the cardholder or an authorized person received the merchandise or services at the agreed location or by the agreed date. • Examples: Signed proof of delivery to shipping address, signed pick up slips or job completion certification. • For an Airline Transaction, evidence showing that the name is included in the manifest for the departed flight and it matches the name provided on the purchased itinerary. • Retail: Provide itemized sales slip. • Card Not Present: Provide proof of AVS response, an itemized bill with bill-to and ship-to addresses and proof of delivery. • Compelling Evidence: Visa will accept compelling evidence for representment. This includes, but is not limited to: Evidence such as photographs or emails to prove the person received the merchandise or service. For download of digital goods, the IP address, email address, description of goods, date and time goods were downloaded and/or proof the merchant’s website was accessed for services after the transaction date. • Passenger transport — evidence the ticket was received at cardholder’s billing address, boarding pass was scanned at the gate, details of frequent flyer miles claimed, additional incidental transactions purchased (such as baggage fees, seat upgrades, alcohol, etc.). • Previous undisputed transaction — provide evidence that the information provided is the same as that from a previous undisputed transaction. • Evidence that the transaction was completed by a member of the Cardholder’s household.'
+                      issuerMemo: This message is from issuer
+                      messageToMerchant: This is a sample message to merchant.
+                      disputeInitiatedDate: '2025-01-01'
+                      disputeReceivedDate: '2025-01-01'
+                      responseDueDate: '2025-01-18'
+                      disputeStatus: NEEDS_RESPONSE
+                      statusUpdateTimestamp: '2025-01-01T12:00:00Z'
+                      outcome: PENDING
+                      paymentMethod:
+                        paymentMethodCode: VI
+                        paymentMethodName: Visa
+                        maskedAccountNumber: 123456XXXXXX4000
+                      issuerDocumentCode: 1
+                      issuerDocumentExpected: true
+                      issuerDocumentReceived: true
+                      transactionDataDetailed:
+                        transactionData:
+                          merchantOrderNumber: 123456ORD
+                          transactionTimestamp: '2024-12-25T22:00:00Z'
+                          transactionAmount: 100
+                          transactionCurrency: USD
+                          transactionId: '1707071708295'
+                          submitterPlatformId: '2179821798'
+                        transactionTypeCode: R
+                      authorizationDataDetailed:
+                        authorizationTimestamp: '2024-12-25T07:00:00Z'
+                        authorizationIdentifier: a10078
+                        authorizationReferenceNumber: ''
+                        authorizationResponseCode: 100
+                        authorizationAmount: 100
+                        authorizationCurrency: USD
+                        cavvResponseCode: '7'
+                        secureIndicator: false
+                        terminalNumber: TERM1234
+                        posEntryMode: '02'
+                      merchantDataDetailed:
+                        merchantData:
+                          companyId: '569874562'
+                          merchantId: '498613834'
+                          companyName: SAMPLE COMPANY
+                          merchantName: SAMPLE DIVISION
+                        merchantCategoryCode: '2331'
+                        merchantCountryCode: USA
+                        merchantRegionCode: US
+                      merchantAccountId: 9874563210
+                      relatedItems:
+                      - disputeId: 9876543211
+                        disputeType: RETRIEVAL_REQUEST
+                        disputeValue:
+                          amount: 100
+                          currencyCode: USD
+                        disputeReason:
+                          reasonCode: '13.1'
+                          reason: SERVICES NOT RENDERED/MDSE NOT RECVD
+                        disputeInitiatedDate: '2024-11-01'
+                      isReversed: false
+                      caseTimeline:
+                      - eventName: New
+                        eventDate: '2024-12-25'
+                        eventDetailText: Dispute Received.
+                    traceId: f57ac10b-58cc-4372-a567-0e02b2c3d480
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /disputes/status-query:
+    post:
+      summary: Retrieve disputes status
+      operationId: fetchDisputeStatuses
+      tags:
+      - Disputes Data Retrieval
+      description: The consumers of this API can request the status for list of disputes.
+      parameters:
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Unique request identifier provided by the requestor.
+        examples:
+          Success:
+            value: f47ac10b-58cc-4372-a567-0e02b2c3d479
+      - $ref: '#/components/parameters/platformIdHeader'
+      requestBody:
+        description: Dispute Status Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/disputesStatusRequest'
+            examples:
+              Success:
+                value:
+                  statusInquiryParameters:
+                    companyIds:
+                    - '987654'
+                    merchantIds:
+                    - '345686'
+                    disputeIds:
+                    - 9876543210
+                    startDateTime: '2025-01-01T12:00:00Z'
+                    endDateTime: '2025-01-02T12:00:00Z'
+                  pagination:
+                    cursor: cGFnZVRva2VuMTIzNDU=
+                    pageSize: 2000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/disputesStatusResponse'
+              examples:
+                Success:
+                  value:
+                    requestId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+                    disputesStatusList:
+                    - disputeId: 9876543210
+                      disputeStatus: UNDER_ISSUER_REVIEW
+                      statusUpdateTimestamp: '2025-01-01T12:00:00Z'
+                      outcome: PENDING
+                      financialAdjustmentIndicator: false
+                      isReversed: false
+                      relatedFinancialItems:
+                      - relatedFinancialItemsData:
+                          transactionTypeCode: C
+                          relatedItemsData: Related Items Data
+                    traceId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+                    pagination:
+                      cursor: cGFnZVRva2VuMTIzNDU=
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /disputes/{disputeId}/documents:
+    get:
+      summary: Get dispute documents
+      operationId: getDisputeDocuments
+      tags:
+      - Disputes Data Retrieval
+      description: The consumers of this API endpoint can get list of issuer documents by providing the dispute case id.
+      parameters:
+      - name: disputeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 10000
+          maximum: 9223372036854776000
+        description: A unique identifier assigned by the acquirer to track each inquiry or case created for a transaction dispute on an account.
+        examples:
+          Success:
+            value: 9876543210
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Unique request identifier provided by the requestor.
+        examples:
+          Success:
+            value: f47ac10b-58cc-4372-a567-0e02b2c3d479
+      - $ref: '#/components/parameters/platformIdHeader'
+      - name: merchant-id
+        in: header
+        required: true
+        schema:
+          type: string
+          pattern: ^\d+$
+          minLength: 1
+          maxLength: 12
+        description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '9876543'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/disputeDocumentsResponse'
+              examples:
+                Success:
+                  value:
+                    requestId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+                    disputeId: 9876543210
+                    issuerDocuments:
+                    - documentName: document1.pdf
+                      documentContent: base64_encoded_content
+                      documentDate: '2025-01-01'
+                    traceId: 9f8c4b2e-3d6a-4f1b-9a2e-5b7c8d9e0f1a
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  schemas:
+    transactionAmount:
+      description: Specifies the monetary value of the transaction performed.
+      type: number
+      format: double
+    merchantId:
+      description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+      type: string
+      pattern: ^\d+$
+      minLength: 1
+      maxLength: 12
+    merchantIds:
+      description: A list of unique processing entities or transaction division identifiers.
+      type: object
+      properties:
+        merchantIds:
+          type: array
+          minItems: 0
+          maxItems: 500
+          description: A list of unique processing entities or transaction division identifiers.
+          items:
+            $ref: '#/components/schemas/merchantId'
+    responseDueDate:
+      description: Due date before which the merchant can challenge the dispute in YYYY-MM-DD format.
+      type: string
+    disputeStatuses:
+      type: array
+      minItems: 0
+      maxItems: 30
+      description: A list of dispute status filters to apply when querying disputes. Use the value 'ALL' to return disputes matching other filters, regardless of their status.
+      default:
+      - NEW
+      - NEEDS_RESPONSE
+      items:
+        $ref: '#/components/schemas/disputesStatusFilter'
+    merchantData:
+      description: Contains basic data of a merchant.
+      type: object
+      properties:
+        companyId:
+          $ref: '#/components/schemas/companyId'
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        companyName:
+          $ref: '#/components/schemas/companyName'
+        merchantName:
+          $ref: '#/components/schemas/merchantName'
+    transactionDataDetailed:
+      description: Contains detailed information about sale or refund transaction.
+      type: object
+      properties:
+        transactionData:
+          $ref: '#/components/schemas/transactionData'
+        transactionTypeCode:
+          description: 'Codifies a grouping of payment transactions with similar processing characteristics such as retails transactions, mail order transactions, etc. Sample Values: R - Retail Transaction 1 - Single Transaction - Mail Order/ Telephone Order 2 - Recurring Transaction 3 - Installment Transaction 4 - Deferred Transaction 5 - SET (Secure Electronic Transmission) Transaction 6 - Non Authenticated SET Transaction 7 - Non SET Channel Encrypted Transaction 8 - Non Secure Transaction I - IVR(PINless Debit Only)'
+          type: string
+          maxLength: 1
+    disputeCategoryCode:
+      description: The category of the dispute based on the reason code.
+      type: string
+      maxLength: 25
+      enum:
+      - AUTHORIZATION
+      - CONSUMER_DISPUTE
+      - FRAUD
+      - PROCESSING_ERROR
+    disputeDetails:
+      description: Includes details of a specific dispute.
+      type: object
+      properties:
+        disputeType:
+          $ref: '#/components/schemas/disputeType'
+        disputeId:
+          $ref: '#/components/schemas/disputeId'
+        acquirerReferenceNumber:
+          $ref: '#/components/schemas/acquirerReferenceNumber'
+        bankIdentificationNumber:
+          description: Identifies the issuing organization for a payment product following ISO/IEC standard 7812. The first character identifies the major industry for the issuer of the payment card, identifiers 4, 5, and, 6 apply to banking. For the banking and finance industry, the identifier will be 6 to 8 characters.  For legacy issuer identifiers whose length is 6, the issuer identifier may be the first 6 digits of the payment card.  This may also be known as the Bank Identification Number (BIN).
+          type: string
+          maxLength: 8
+        disputeValue:
+          $ref: '#/components/schemas/disputeValue'
+        saleRefundCode:
+          description: Indicates if this dispute is a sale or a refund.
+          type: string
+          enum:
+          - S
+          - R
+        isCurrencyConversion:
+          description: Indicates the Boolean value of the merchant provided currency conversion at the time of the transaction.
+          type: boolean
+        disputeCategoryCode:
+          $ref: '#/components/schemas/disputeCategoryCode'
+        disputeReason:
+          $ref: '#/components/schemas/disputeReason'
+        disputeReasonDetailed:
+          description: Textual detailed description of the chargeback reason for the disputed case. Chargeback is the monetary value of the transaction amount that is reclaimed from the merchant. Chargeback happens for variety of reasons and some common reasons are customer dispute, fraud, processing error and authorization issues.
+          type: string
+          maxLength: 4000
+        potentialRemedies:
+          description: Provides textual information about the recommended actions and supporting documentation required to address and resolve a dispute. This includes providing a detailed letter of explanation about the transaction, evidence of any corrective actions taken, and relevant documentation to substantiate the validity of the transaction. Examples of supporting evidence may include transaction receipts, proof of delivery, authorization logs, and any correspondence with the cardholder. The attribute serves as a guide for merchants to compile necessary information to effectively challenge a dispute and demonstrate compliance with transaction terms and conditions.
+          type: string
+          maxLength: 4000
+        issuerMemo:
+          description: Provides textual information about a message entered manually by Issuer while raising the dispute. This is a free form field.
+          type: string
+          maxLength: 999
+        messageToMerchant:
+          description: Provides textual information of the instruction from the dispute analyst to assist the merchant to resolve the dispute. This is a free form field.
+          type: string
+          maxLength: 512
+        disputeInitiatedDate:
+          $ref: '#/components/schemas/disputeInitiatedDate'
+        disputeReceivedDate:
+          description: Designates the date when dispute case record was created in the Acquirer System. This is the start date of the range.
+          type: string
+          format: date
+        responseDueDate:
+          $ref: '#/components/schemas/responseDueDate'
+        disputeStatus:
+          $ref: '#/components/schemas/disputeStatus'
+        statusUpdateTimestamp:
+          $ref: '#/components/schemas/statusUpdateTimestamp'
+        outcome:
+          $ref: '#/components/schemas/outcome'
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethod'
+        issuerDocumentCode:
+          $ref: '#/components/schemas/issuerDocumentCode'
+        issuerDocumentExpected:
+          $ref: '#/components/schemas/issuerDocumentExpected'
+        issuerDocumentReceived:
+          $ref: '#/components/schemas/issuerDocumentReceived'
+        transactionDataDetailed:
+          $ref: '#/components/schemas/transactionDataDetailed'
+        authorizationDataDetailed:
+          $ref: '#/components/schemas/authorizationDataDetailed'
+        fraudNotificationServiceDate:
+          description: Designates the century, year, month and day by when the issuer loses the right to chargeback a transaction for a ‘fraud-related’ or ‘cardholder does not recognize’ fraud reason code for transactions authorized after the date of the second fraud chargeback on that account.
+          type: string
+          format: date
+        merchantDataDetailed:
+          $ref: '#/components/schemas/merchantDataDetailed'
+        merchantAccountId:
+          description: Identifies a merchant acquiring account that processes transactions on the Firm's Tandem payment processing system.
+          type: integer
+          format: int64
+        relatedItems:
+          $ref: '#/components/schemas/relatedItems'
+        isReversed:
+          description: Indicates whether the dispute is reversed.
+          type: boolean
+        caseTimeline:
+          type: array
+          minItems: 0
+          maxItems: 100
+          description: Provides a chronological timeline of all events that occurred in a specific dispute case.
+          items:
+            $ref: '#/components/schemas/caseTimelineEvent'
+    location:
+      description: Location of the field for which the error occurred in the request
+      type: string
+      minLength: 0
+      maxLength: 1000
+      enum:
+      - BODY
+      - PATH
+      - QUERY
+      - HEADER
+    issuerDocumentReceived:
+      description: 'Codifies a document is received by the payment network from the issuer for a disputed transaction. If this is set to true, an issuer document is received from the payment brand. You can check the issuer document availability using our "documents" API endpoint.  Sample Values: true - Received Issuer Documents, false - No issuer Documents Received.'
+      type: boolean
+      example: false
+    caseTimelineEvent:
+      description: Depicts a specific event within the chronological timeline of all events in a particular dispute case.
+      type: object
+      properties:
+        eventName:
+          description: The label given to a classification of a known, possible, documented and tracked happening on a dispute case.  Such events are typically assembled together to create a lifecycle of a dispute.  Event examples could include New, Assigned, Auto - Assigned, Accepted, Auto Accepted, Challenged - Merchant, Challenged - JPMC, JPMC denied this dispute, Need Additional Information, Under Issuer Review, Closed, Expired, Needs Response, Issuer Document Uploaded.
+          type: string
+        eventDate:
+          description: Designates the hour, minute, and second in a specific day when an event occurred on a dispute.
+          type: string
+        eventDetailText:
+          description: Provides textual information about the specifics of the action taken.
+          type: string
+    disputeCurrencyCode:
+      description: The currency code for the dispute amount, always in the merchant's settlement currency.
+      type: string
+      enum:
+      - USD
+      - EUR
+      - GBP
+      - AUD
+      - NZD
+      - SGD
+      - CAD
+      - JPY
+      - HKD
+      - KRW
+      - TWD
+      - MXN
+      - BRL
+      - DKK
+      - NOK
+      - ZAR
+      - SEK
+      - CHF
+      - CZK
+      - PLN
+      - TRY
+      - AFN
+      - ALL
+      - DZD
+      - AOA
+      - ARS
+      - AMD
+      - AWG
+      - AZN
+      - BSD
+      - BDT
+      - BBD
+      - BYN
+      - BZD
+      - BMD
+      - BOB
+      - BAM
+      - BWP
+      - BND
+      - BGN
+      - BIF
+      - BTN
+      - XOF
+      - XAF
+      - XPF
+      - KHR
+      - CVE
+      - KYD
+      - CLP
+      - CNY
+      - COP
+      - KMF
+      - CDF
+      - CRC
+      - HRK
+      - DJF
+      - DOP
+      - XCD
+      - EGP
+      - ETB
+      - FKP
+      - FJD
+      - GMD
+      - GEL
+      - GHS
+      - GIP
+      - GTQ
+      - GYD
+      - HTG
+      - HNL
+      - HUF
+      - ISK
+      - INR
+      - IDR
+      - ILS
+      - JMD
+      - KZT
+      - KES
+      - LAK
+      - LBP
+      - LSL
+      - LRD
+      - MOP
+      - MKD
+      - MGA
+      - MWK
+      - MYR
+      - MVR
+      - MRU
+      - MUR
+      - MDL
+      - MNT
+      - MAD
+      - MZN
+      - MMK
+      - NAD
+      - NPR
+      - ANG
+      - PGK
+      - NIO
+      - NGN
+      - PKR
+      - PAB
+      - PYG
+      - PEN
+      - PHP
+      - QAR
+      - RON
+      - RWF
+      - SHP
+      - WST
+      - STN
+      - SAR
+      - RSD
+      - SCR
+      - SLL
+      - SBD
+      - SOS
+      - LKR
+      - SRD
+      - SZL
+      - TJS
+      - TZS
+      - THB
+      - TOP
+      - TTD
+      - UGX
+      - UAH
+      - AED
+      - UYU
+      - UZS
+      - VUV
+      - VND
+      - YER
+      - ZMW
+    disputeStatus:
+      description: The label for the current stage of a case in the dispute resolution process
+      type: string
+      maxLength: 50
+      enum:
+      - NEW
+      - NEEDS_RESPONSE
+      - EXPIRED
+      - CHALLENGED_JPMC
+      - UNDER_ISSUER_REVIEW
+      - CHALLENGED_MERCHANT
+      - ACCEPTED
+      - CHALLENGE_DENIED
+      - CLOSED
+      - NEED_ADDITIONAL_INFORMATION
+    disputeType:
+      description: Codifies the category of an inquiry or disagreement related to a payment transaction on a consumer payment account.
+      type: string
+      enum:
+      - FIRST_CHARGEBACK
+      - RETRIEVAL_REQUEST
+    disputesRequest:
+      description: Specifies attributes used to query and retrieve a list of dispute cases
+      type: object
+      required:
+      - entityIds
+      properties:
+        entityIds:
+          $ref: '#/components/schemas/entityIds'
+        disputeTypes:
+          $ref: '#/components/schemas/disputeTypes'
+        disputeStatuses:
+          $ref: '#/components/schemas/disputeStatuses'
+        paymentMethodList:
+          $ref: '#/components/schemas/paymentMethodList'
+        initiatedStartDate:
+          description: Indicates the date on which the dispute case record was created in the Issuer System. This serves as the start date of the range. If this date, along with disputeReceivedStartDate and disputeReceivedEndDate, is not provided, it defaults to 90 days prior to the current date.
+          type: string
+          format: date
+        initiatedEndDate:
+          description: Indicates the date on which the dispute case record was created in the Issuer System. This serves as the end date of the range. If this date, along with disputeReceivedStartDate and disputeReceivedEndDate, is not provided, it defaults to the current date.
+          type: string
+          format: date
+        disputeReceivedStartDate:
+          description: Indicates the date on which the dispute case record was created in the Acquirer System. This serves as the start date of the range. If this date is provided, the initiatedDate range will not default to any other value.
+          type: string
+          format: date
+        disputeReceivedEndDate:
+          description: Indicates the date on which the dispute case record was created in the Acquirer System. This serves as the end date of the range. If this date is provided, the initiatedDate range will not default to any other value.
+          type: string
+          format: date
+        responseDueStartDate:
+          description: Indicates the start date of the range for filtering disputes by their response due date in YYYY-MM-DD format.
+          type: string
+          format: date
+        responseDueEndDate:
+          description: Indicates the end date of the range for filtering disputes by their response due date in YYYY-MM-DD format.
+          type: string
+          format: date
+        pagination:
+          description: The next cursor is a marker or identifier provided by the API in the response of a paginated request. It indicates the starting point for the next set of data. When you make a request to the API and receive a response with a next page token, you can use that token in a subsequent request to retrieve the next page of results.
+          type: object
+          properties:
+            cursor:
+              description: The next cursor is a marker or identifier provided by the API in the response of a paginated request. It indicates the starting point for the next set of data. When you make a request to the API and receive a response with a next page token, you can use that token in a subsequent request to retrieve the next page of results.
+              type: string
+            pageSize:
+              description: Denotes the maximum number of records the API can return as the output for a requested page in a paginated response.
+              type: integer
+              default: 1000
+              maximum: 5000
+    authorizationReferenceNumber:
+      description: Identifies a reference number generated at debit card transaction time.
+      type: string
+      maxLength: 8
+    outcome:
+      description: 'The label given to the financial outcome of a chargeback dispute where money was taken back from the merchant for a sale and indicates if the case has been Won (money returned to merchant) or Lost (money returned to consumer) by the merchant. List of outcomes for Chargeacks are PENDING: Final decision/result pending, LOST:  Merchant lost dispute, WON: Merchant won dispute and PARTIALLY_WON: Merchant won partial disputed amount, List of outcomes for Retrieval requests are PENDING: Final decision/result pending, FULFILLED: Request Retrieval request complete and NOT_FULFILLED: Request Retrieval request expired.'
+      type: string
+      maxLength: 50
+      enum:
+      - WON
+      - LOST
+      - PENDING
+      - PARTIALLY_WON
+      - FULFILLED
+      - NOT_FULFILLED
+    message:
+      description: Provides textual description of a problem that has occurred and is preventing the system from completing a task. Messages can be a confirmation, warning or notification, and can trigger the system to apply a customized default value or override to a field, record or file, halt or postpone processing, skip or reject the entry generating the problem. Messages can be displayed on-screen in the user interface or in reporting.
+      type: string
+    disputesStatusResponse:
+      description: Dispute Response
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        disputesStatusList:
+          type: array
+          minItems: 0
+          maxItems: 5000
+          description: List of disputes
+          items:
+            $ref: '#/components/schemas/disputesStatusData'
+        traceId:
+          $ref: '#/components/schemas/traceId'
+        pagination:
+          $ref: '#/components/schemas/pagination'
+    disputeDocumentsResponse:
+      description: Dispute document response
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        disputeId:
+          $ref: '#/components/schemas/disputeId'
+        issuerDocuments:
+          type: array
+          minItems: 0
+          maxItems: 10
+          description: List of documents
+          items:
+            $ref: '#/components/schemas/documentData'
+        traceId:
+          $ref: '#/components/schemas/traceId'
+    disputeInitiatedDate:
+      description: Designates the date the dispute case record was substantiated or established.
+      type: string
+      format: date
+    merchantName:
+      description: The label given to a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+      type: string
+      maxLength: 80
+    pagination:
+      description: This is used for specifying pagination related information.
+      type: object
+      properties:
+        cursor:
+          description: The next cursor is a marker or identifier provided by the API in the response of a paginated request. It indicates the starting point for the next set of data. When you make a request to the API and receive a response with a next page token, you can use that token in a subsequent request to retrieve the next page of results.
+          type: string
+          maxLength: 4000
+    issuerDocumentCode:
+      description: "Codifies a document is required by the payment network from the issuer for a disputed transaction. If this is set to 1, expect an issuer document arrival in next few days depending on payment brand. You can check the issuer document availability using our \"documents\" API endpoint.  Sample Values: 0-\tNo Chargeback Documentation Provided by issuer. 1-\tSupporting document will be provided by issuer. 2-\tNo Documents required by issuer. 3-\tDocuments are required by issuer. 4-\tNon Receipt of required documents by issuer.'"
+      type: integer
+      format: int32
+      deprecated: true
+    transactionCurrency:
+      description: Codifies the monetary unit that was associated with the financial transaction (such as sale, refund)
+      type: string
+      minLength: 3
+      maxLength: 3
+      enum:
+      - USD
+      - EUR
+      - GBP
+      - AUD
+      - NZD
+      - SGD
+      - CAD
+      - JPY
+      - HKD
+      - KRW
+      - TWD
+      - MXN
+      - BRL
+      - DKK
+      - NOK
+      - ZAR
+      - SEK
+      - CHF
+      - CZK
+      - PLN
+      - TRY
+      - AFN
+      - ALL
+      - DZD
+      - AOA
+      - ARS
+      - AMD
+      - AWG
+      - AZN
+      - BSD
+      - BDT
+      - BBD
+      - BYN
+      - BZD
+      - BMD
+      - BOB
+      - BAM
+      - BWP
+      - BND
+      - BGN
+      - BIF
+      - BTN
+      - XOF
+      - XAF
+      - XPF
+      - KHR
+      - CVE
+      - KYD
+      - CLP
+      - CNY
+      - COP
+      - KMF
+      - CDF
+      - CRC
+      - HRK
+      - DJF
+      - DOP
+      - XCD
+      - EGP
+      - ETB
+      - FKP
+      - FJD
+      - GMD
+      - GEL
+      - GHS
+      - GIP
+      - GTQ
+      - GYD
+      - HTG
+      - HNL
+      - HUF
+      - ISK
+      - INR
+      - IDR
+      - ILS
+      - JMD
+      - KZT
+      - KES
+      - LAK
+      - LBP
+      - LSL
+      - LRD
+      - MOP
+      - MKD
+      - MGA
+      - MWK
+      - MYR
+      - MVR
+      - MRU
+      - MUR
+      - MDL
+      - MNT
+      - MAD
+      - MZN
+      - MMK
+      - NAD
+      - NPR
+      - ANG
+      - PGK
+      - NIO
+      - NGN
+      - PKR
+      - PAB
+      - PYG
+      - PEN
+      - PHP
+      - QAR
+      - RON
+      - RWF
+      - SHP
+      - WST
+      - STN
+      - SAR
+      - RSD
+      - SCR
+      - SLL
+      - SBD
+      - SOS
+      - LKR
+      - SRD
+      - SZL
+      - TJS
+      - TZS
+      - THB
+      - TOP
+      - TTD
+      - UGX
+      - UAH
+      - AED
+      - UYU
+      - UZS
+      - VUV
+      - VND
+      - YER
+      - ZMW
+    disputeId:
+      description: A unique identifier assigned by the acquirer to track each inquiry or case created for a transaction dispute on an account.
+      type: integer
+      format: int64
+      minimum: 10000
+      maximum: 9223372036854776000
+    disputeIds:
+      description: List of unique case identifiers.
+      type: object
+      properties:
+        disputeIds:
+          type: array
+          minItems: 0
+          maxItems: 1000
+          description: A list of unique identifiers assigned by the acquirer to track each inquiry or case created for a transaction dispute on an account.
+          items:
+            $ref: '#/components/schemas/disputeId'
+    disputeTypes:
+      type: array
+      minItems: 0
+      maxItems: 15
+      description: A list of labels representing the categories or cycles of disputes. By default it returns all types of disputes.
+      items:
+        $ref: '#/components/schemas/disputeType'
+    documentData:
+      description: Document data attached to a case.
+      type: object
+      properties:
+        documentName:
+          description: The label given to a data file containing zero or more records that is processed or transmitted.
+          type: string
+        documentContent:
+          description: Provides document content in base64-encoded format. It should be decoded to retrieve the original data.
+          type: string
+        documentDate:
+          description: Designates the year (YYYY), month and day printed on the document.
+          type: string
+    paymentMethod:
+      description: Contains payment method code and description.
+      type: object
+      properties:
+        paymentMethodCode:
+          $ref: '#/components/schemas/paymentMethodCode'
+        paymentMethodName:
+          $ref: '#/components/schemas/paymentMethodName'
+        maskedAccountNumber:
+          $ref: '#/components/schemas/maskedAccountNumber'
+    statusUpdateEndDate:
+      description: Dispute case status update date. This is to set end date-time of the range, in format YYYY-MM-DDTHH:MM:SSZ.
+      type: object
+      properties:
+        endDateTime:
+          description: 'Dispute case status update date: This field specifies the end date-time of the range in the format YYYY-MM-DDTHH:MM:SSZ. By default, the end time is set to the current date-time. The default value does not apply when disputeIds are included in the request.'
+          type: string
+          format: date-time
+    issuerDocumentExpected:
+      description: 'Codifies a document is required by the payment network from the issuer for a disputed transaction. If this is set to true, expect an issuer document arrival in next few days depending on payment brand. You can check the issuer document availability using our "documents" API endpoint.  Sample Values: true - Chargeback Documentation will be provided by issuer. false - No Chargeback Documentation will be provided by issuer.'
+      type: boolean
+      example: true
+    disputesStatusData:
+      description: Dispute current status related information.
+      type: object
+      properties:
+        disputeId:
+          $ref: '#/components/schemas/disputeId'
+        disputeStatus:
+          $ref: '#/components/schemas/disputeStatus'
+        statusUpdateTimestamp:
+          $ref: '#/components/schemas/statusUpdateTimestamp'
+        outcome:
+          $ref: '#/components/schemas/outcome'
+        financialAdjustmentIndicator:
+          description: 'Indicates that a recent activity or a status change has financial impact on merchant. Examples: a new dispute, issuer has reversed the chargeback, lost dispute, excess funds has been credited or debited, etc. This is reserved for future use.'
+          type: boolean
+        isReversed:
+          description: Indicates whether the transaction is a reversal transaction.
+          type: boolean
+        relatedFinancialItems:
+          type: array
+          minItems: 0
+          maxItems: 25
+          description: Financial items related to disputes.
+          items:
+            $ref: '#/components/schemas/relatedFinancialItemsData'
+    requestId:
+      description: Unique request identifier provided by the requestor.
+      type: string
+      format: uuid
+    relatedItemsData:
+      description: Contains information about other related disputes items.
+      type: object
+      properties:
+        disputeId:
+          $ref: '#/components/schemas/disputeId'
+        disputeType:
+          $ref: '#/components/schemas/disputeType'
+        disputeValue:
+          $ref: '#/components/schemas/disputeValue'
+        disputeReason:
+          $ref: '#/components/schemas/disputeReason'
+        disputeInitiatedDate:
+          $ref: '#/components/schemas/disputeInitiatedDate'
+    disputesResponse:
+      description: Disputes response object.
+      type: object
+      required:
+      - requestId
+      - disputes
+      - pagination
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        disputes:
+          type: array
+          minItems: 0
+          maxItems: 5000
+          description: List of disputes
+          items:
+            $ref: '#/components/schemas/disputeData'
+        pagination:
+          $ref: '#/components/schemas/pagination'
+        traceId:
+          $ref: '#/components/schemas/traceId'
+    authorizationData:
+      description: Contains detailed information about transaction authorization.
+      type: object
+      properties:
+        authorizationTimestamp:
+          $ref: '#/components/schemas/authorizationTimestamp'
+        authorizationReferenceNumber:
+          $ref: '#/components/schemas/authorizationReferenceNumber'
+    disputeReason:
+      description: Contains reason code and description of a dispute.
+      type: object
+      properties:
+        reasonCode:
+          $ref: '#/components/schemas/disputeReasonCode'
+        reason:
+          $ref: '#/components/schemas/disputeReasonDescription'
+    httpStatus:
+      description: The response code that is returned to the client based on how a backend service handled the request
+      type: integer
+      format: int32
+      minimum: 100
+      maximum: 999
+    authorizationTimestamp:
+      description: Designates the year, month and day along with timestamp when an authorization for a transaction was received by transaction processing system. This may be different from the date and time when authorization was requested by the customer at the point of sale.
+      type: string
+      format: date-time
+    disputeAmount:
+      description: Specifies the monetary value of the total amount of a charge the customer is disputing on their account with the merchant.
+      type: number
+      format: double
+    code:
+      description: Codifies a raised exception encountered by an internal or external system, sub-system, interface, job, module, system component with which the web service application interfaces.  In this instance it refers to the error raised when reporting job failed.
+      type: string
+    companyId:
+      description: Identifies a unique entity which represents a relationship at the highest of the three levels of the account hierarchy of the backend proprietary merchant acquiring processing platform. Complex organizations may be represented by grouping multiple company identifiers. The full hierarchy consists of company identifier, business unit identifier, and transaction division identifier. Reserved for future use. Currently not active.
+      type: string
+      pattern: ^\d+$
+      minLength: 1
+      maxLength: 12
+    disputeReasonCode:
+      description: Codifies the reason for the disputed case.
+      type: string
+      minLength: 1
+      maxLength: 6
+    title:
+      description: Short human readable title of the error
+      type: string
+      minLength: 0
+      maxLength: 1000
+    merchantOrderNumber:
+      description: A unique identifier assigned by the merchant or on behalf of the merchant for the intention to purchase goods and/or services. The merchant order provides the merchant a reference to the prices, quantity and description of goods and/or services to be delivered for all transactions included in the sale.
+      type: string
+      pattern: '[A-Za-z0-9 .-]*'
+      minLength: 1
+      maxLength: 40
+    submitterPlatformId:
+      type: string
+      description: Identifies the platform used to facilitate the request of the transaction that is being disputed.
+      example: '2179821798'
+      maxLength: 20
+    companyName:
+      description: The label given to a unique entity which represents a relationship at the highest of the three levels of the account hierarchy of the back-end proprietary merchant acquiring processing platform. Complex organizations may be represented by grouping multiple company identifiers. The full hierarchy consists of company identifier, business unit identifier, and transaction division identifier. Reserved for future use. Currently not active.
+      type: string
+      maxLength: 80
+    disputesStatusFilter:
+      description: Represents the possible status values used to filter disputes in a query. Includes all valid dispute statuses, as well as the special value 'ALL' to indicate that disputes of any status should be included in the results.
+      type: string
+      maxLength: 50
+      enum:
+      - ALL
+      - NEW
+      - NEEDS_RESPONSE
+      - EXPIRED
+      - CHALLENGED_JPMC
+      - UNDER_ISSUER_REVIEW
+      - CHALLENGED_MERCHANT
+      - ACCEPTED
+      - CHALLENGE_DENIED
+      - CLOSED
+      - NEED_ADDITIONAL_INFORMATION
+    statusInquiryParameters:
+      description: Status enquiry parameters
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/companyIds'
+      - $ref: '#/components/schemas/merchantIds'
+      - $ref: '#/components/schemas/disputeIds'
+      - $ref: '#/components/schemas/statusUpdateStartDate'
+      - $ref: '#/components/schemas/statusUpdateEndDate'
+    messages:
+      description: A list of errors and warnings
+      type: object
+      properties:
+        httpStatus:
+          $ref: '#/components/schemas/httpStatus'
+        title:
+          $ref: '#/components/schemas/title'
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        traceId:
+          $ref: '#/components/schemas/traceId'
+        context:
+          type: array
+          minItems: 0
+          maxItems: 100
+          description: Error Object Array for Failed requests
+          items:
+            $ref: '#/components/schemas/contextMessage'
+    transactionTypeCode:
+      description: Codifies whether a transaction type will be grouped as a debit, credit or non monetary. C value indicates Credit and D indicates Debit.
+      type: string
+      maxLength: 1
+      enum:
+      - C
+      - D
+    disputeData:
+      description: Dispute information
+      type: object
+      required:
+      - disputeType
+      - disputeId
+      - disputeInitiatedDate
+      - disputeValue
+      - disputeCategoryCode
+      - disputeStatus
+      - statusUpdateTimestamp
+      - paymentMethod
+      - authorizationData
+      - transactionData
+      - merchantData
+      properties:
+        disputeType:
+          $ref: '#/components/schemas/disputeType'
+        disputeId:
+          $ref: '#/components/schemas/disputeId'
+        acquirerReferenceNumber:
+          $ref: '#/components/schemas/acquirerReferenceNumber'
+        disputeInitiatedDate:
+          $ref: '#/components/schemas/disputeInitiatedDate'
+        disputeReceivedDate:
+          description: Designates the date when the dispute case record was created in the Acquirer System.
+          type: string
+          format: date
+        responseDueDate:
+          $ref: '#/components/schemas/responseDueDate'
+        disputeValue:
+          $ref: '#/components/schemas/disputeValue'
+        disputeReason:
+          $ref: '#/components/schemas/disputeReason'
+        disputeCategoryCode:
+          $ref: '#/components/schemas/disputeCategoryCode'
+        disputeStatus:
+          $ref: '#/components/schemas/disputeStatus'
+        statusUpdateTimestamp:
+          $ref: '#/components/schemas/statusUpdateTimestamp'
+        outcome:
+          $ref: '#/components/schemas/outcome'
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethod'
+        issuerDocumentCode:
+          $ref: '#/components/schemas/issuerDocumentCode'
+        issuerDocumentExpected:
+          $ref: '#/components/schemas/issuerDocumentExpected'
+        issuerDocumentReceived:
+          $ref: '#/components/schemas/issuerDocumentReceived'
+        authorizationData:
+          $ref: '#/components/schemas/authorizationData'
+        transactionData:
+          $ref: '#/components/schemas/transactionData'
+        merchantData:
+          $ref: '#/components/schemas/merchantData'
+    relatedItems:
+      type: array
+      minItems: 0
+      maxItems: 100
+      description: Includes details about items related to disputes.
+      items:
+        $ref: '#/components/schemas/relatedItemsData'
+    disputeValue:
+      description: Contains dispute amount and currency.
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/disputeAmount'
+        currencyCode:
+          $ref: '#/components/schemas/disputeCurrencyCode'
+    paymentMethodList:
+      type: array
+      minItems: 0
+      maxItems: 30
+      description: A list of payment method codes to filter disputes by card brand or payment type.
+      items:
+        $ref: '#/components/schemas/paymentMethodCode'
+    merchantDataDetailed:
+      description: Contains detailed information about merchant.
+      type: object
+      properties:
+        merchantData:
+          $ref: '#/components/schemas/merchantData'
+        merchantCategoryCode:
+          description: Codifies a merchant's primary goods or services sold, this is a four-digit number associated with a business by a credit/debit card merchant acquirer or merchant transaction processor (e.g., 5411 = "GROCERY STORES, SUPERMARKETS", 5812 = "EATING PLACES, RESTAURANTS", 4121 = "TAXICABS AND LIMOUSINES").
+          type: string
+          maxLength: 4
+        merchantCountryCode:
+          description: Codifies the three digit value used to define country per ISO 3166 standard (e.g. 840=United States, 124=Canada).
+          type: string
+          maxLength: 3
+        merchantRegionCode:
+          description: 'Codifies a geographic area represented by one or more Countries, States or Provinces. Country, State or Province identifies a geographic area that represents a Firm recognized geopolitical unit. Examples: E - East, M - Midwest, X - Out of Country (U.S.)'
+          type: string
+          maxLength: 10
+    authorizationCurrency:
+      description: Codifies the monetary unit that was associated with the financial transaction (such as sale, refund)
+      type: string
+      minLength: 3
+      maxLength: 3
+      enum:
+      - USD
+      - EUR
+      - GBP
+      - AUD
+      - NZD
+      - SGD
+      - CAD
+      - JPY
+      - HKD
+      - KRW
+      - TWD
+      - MXN
+      - BRL
+      - DKK
+      - NOK
+      - ZAR
+      - SEK
+      - CHF
+      - CZK
+      - PLN
+      - TRY
+      - AFN
+      - ALL
+      - DZD
+      - AOA
+      - ARS
+      - AMD
+      - AWG
+      - AZN
+      - BSD
+      - BDT
+      - BBD
+      - BYN
+      - BZD
+      - BMD
+      - BOB
+      - BAM
+      - BWP
+      - BND
+      - BGN
+      - BIF
+      - BTN
+      - XOF
+      - XAF
+      - XPF
+      - KHR
+      - CVE
+      - KYD
+      - CLP
+      - CNY
+      - COP
+      - KMF
+      - CDF
+      - CRC
+      - HRK
+      - DJF
+      - DOP
+      - XCD
+      - EGP
+      - ETB
+      - FKP
+      - FJD
+      - GMD
+      - GEL
+      - GHS
+      - GIP
+      - GTQ
+      - GYD
+      - HTG
+      - HNL
+      - HUF
+      - ISK
+      - INR
+      - IDR
+      - ILS
+      - JMD
+      - KZT
+      - KES
+      - LAK
+      - LBP
+      - LSL
+      - LRD
+      - MOP
+      - MKD
+      - MGA
+      - MWK
+      - MYR
+      - MVR
+      - MRU
+      - MUR
+      - MDL
+      - MNT
+      - MAD
+      - MZN
+      - MMK
+      - NAD
+      - NPR
+      - ANG
+      - PGK
+      - NIO
+      - NGN
+      - PKR
+      - PAB
+      - PYG
+      - PEN
+      - PHP
+      - QAR
+      - RON
+      - RWF
+      - SHP
+      - WST
+      - STN
+      - SAR
+      - RSD
+      - SCR
+      - SLL
+      - SBD
+      - SOS
+      - LKR
+      - SRD
+      - SZL
+      - TJS
+      - TZS
+      - THB
+      - TOP
+      - TTD
+      - UGX
+      - UAH
+      - AED
+      - UYU
+      - UZS
+      - VUV
+      - VND
+      - YER
+      - ZMW
+    companyIds:
+      description: A list of unique company identifiers. Reserved for future use. Currently not active.
+      type: object
+      properties:
+        companyIds:
+          type: array
+          minItems: 0
+          maxItems: 25
+          description: A list of unique company identifiers.
+          items:
+            $ref: '#/components/schemas/companyId'
+    field:
+      description: The field for which the error has occured.
+      type: string
+    contextMessage:
+      description: Object containing information in the file
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        field:
+          $ref: '#/components/schemas/field'
+        location:
+          $ref: '#/components/schemas/location'
+    entityIds:
+      description: Entity identifiers for a Merchant Organization, determined by the hierarchical structure within the system.
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/companyIds'
+      - $ref: '#/components/schemas/merchantIds'
+    acquirerReferenceNumber:
+      description: Identifies a unique number assigned by the payment brand to a credit card transaction for use when it goes from the Firm acting as the acquiring bank through the payment processing network during settlement to the cardholders bank (the issuer). This number can be used by issuing banks to trace a transaction with an acquirer. This reference number is an industry standard and has a specific format defined by the payment brand.
+      type: string
+      maxLength: 30
+      example: '1234567890123456'
+    traceId:
+      description: A number assigned by a transaction originator to assist in identifying a transaction uniquely. The systems trace audit number remains unchanged for all messages within a transaction.
+      type: string
+      readOnly: true
+      format: uuid
+    paymentMethodCode:
+      description: 'Codifies the method used to pay for the exchange of money, goods or services between a merchant and their customer. Examples: VI for Visa, MC for MasterCard etc. Also known as method of payment or MOP.'
+      type: string
+      minLength: 2
+      maxLength: 2
+      example: VI
+      enum:
+      - AE
+      - AF
+      - AK
+      - AM
+      - AP
+      - AT
+      - AX
+      - CB
+      - CR
+      - CU
+      - CX
+      - CZ
+      - DC
+      - DD
+      - DE
+      - DI
+      - DP
+      - EB
+      - EC
+      - ED
+      - EP
+      - EW
+      - ID
+      - IL
+      - IM
+      - IP
+      - JC
+      - JN
+      - KL
+      - MC
+      - MD
+      - MR
+      - MT
+      - NP
+      - NY
+      - PM
+      - PP
+      - PS
+      - SP
+      - SR
+      - SZ
+      - UD
+      - UP
+      - UR
+      - VG
+      - VI
+      - VR
+      - VY
+      - WX
+      - ZP
+    statusUpdateStartDate:
+      description: Dispute case status update date. This is to set start date-time of the range, in format YYYY-MM-DDTHH:MM:SSZ.
+      type: object
+      properties:
+        startDateTime:
+          description: 'Dispute case status update date: This field specifies the start date-time of the range in the format YYYY-MM-DDTHH:MM:SSZ. By default, the time is set to the beginning of the 72-hour period preceding the current date-time. The default value does not apply when disputeIds are included in the request.'
+          type: string
+          format: date-time
+    relatedFinancialItemsData:
+      description: Dispute related financial items.
+      type: object
+      properties:
+        transactionTypeCode:
+          $ref: '#/components/schemas/transactionTypeCode'
+        relatedItemsData:
+          $ref: '#/components/schemas/relatedItemsData'
+    statusUpdateTimestamp:
+      description: Represents the date and time when the status of a dispute case was last updated in UTC timezone. The format is YYYY-MM-DDTHH:MM:SSZ.
+      type: string
+      format: date-time
+    transactionData:
+      description: Contains basic data of an original sale or refund transaction.
+      type: object
+      properties:
+        merchantOrderNumber:
+          $ref: '#/components/schemas/merchantOrderNumber'
+        transactionTimestamp:
+          $ref: '#/components/schemas/transactionTimestamp'
+        transactionAmount:
+          $ref: '#/components/schemas/transactionAmount'
+        transactionCurrency:
+          $ref: '#/components/schemas/transactionCurrency'
+        transactionId:
+          $ref: '#/components/schemas/transactionId'
+        submitterPlatformId:
+          $ref: '#/components/schemas/submitterPlatformId'
+    disputesStatusRequest:
+      description: Retrieve dispute status request.
+      type: object
+      required:
+      - statusInquiryParameters
+      properties:
+        statusInquiryParameters:
+          $ref: '#/components/schemas/statusInquiryParameters'
+        pagination:
+          description: The next cursor is a marker or identifier provided by the API in the response of a paginated request. It indicates the starting point for the next set of data. When you make a request to the API and receive a response with a next page token, you can use that token in a subsequent request to retrieve the next page of results.
+          type: object
+          properties:
+            cursor:
+              description: The next cursor is a marker or identifier provided by the API in the response of a paginated request. It indicates the starting point for the next set of data. When you make a request to the API and receive a response with a next page token, you can use that token in a subsequent request to retrieve the next page of results.
+              type: string
+            pageSize:
+              description: Denotes the maximum number of records the API can return as the output for a requested page in a paginated response.
+              type: integer
+              default: 1000
+              maximum: 5000
+    transactionId:
+      type: string
+      description: The transaction identifier of the original transaction.
+      example: '1707071808295'
+      maxLength: 36
+    authorizationDataDetailed:
+      description: Contains detailed information about transaction authorization.
+      type: object
+      properties:
+        authorizationTimestamp:
+          $ref: '#/components/schemas/authorizationTimestamp'
+        authorizationIdentifier:
+          description: Identifies a unique occurrence of an authorization that is associated with a purchase of goods and/or services. More than one authorization can exist for a purchase, as an example in fuel and hotel services a merchant can send multiple authorization requests when the exact amount is unknown until completion of the sale.
+          type: string
+          maxLength: 13
+        authorizationReferenceNumber:
+          $ref: '#/components/schemas/authorizationReferenceNumber'
+        authorizationResponseCode:
+          description: Codifies the Firm's representation of the authorization response code being sent back to the merchant during credit card authorization.
+          type: integer
+          format: int32
+        authorizationAmount:
+          description: Specifies the monetary value of the sum requested to validate and ensure there are enough funds required to make a purchase. The amount is usually identical to the cost of the goods or services charged for a single transaction. It can be a smaller amount in cases where a transaction is split into multiple payments. It can also be a small amount or estimated amount to ensure the payment method is valid and has sufficient funds available when the final transaction amount is not known at authorization. In the case of a reversal, this represents the sum originally requested.
+          type: number
+          format: double
+        authorizationCurrency:
+          $ref: '#/components/schemas/authorizationCurrency'
+        cavvResponseCode:
+          description: Codifies the payment brand's outcome result to the process that validates the vendor Cardholder Authentication Verification Value (CAVV).
+          type: string
+          maxLength: 1
+        secureIndicator:
+          description: Indicates whether the transaction is 3DS (Three Domain Secure). TRUE value indicates the transaction is three domain secure.
+          type: boolean
+        terminalNumber:
+          description: Identifies the terminal at which the transaction was initiated for the merchant. This is a programmable number assigned by the merchant.
+          type: string
+          maxLength: 8
+        posEntryMode:
+          description: Codifies the original Point of Sale entry method used on a payment transaction as well as the maximum level capability of the Point of Sale device.
+          type: string
+          maxLength: 2
+    paymentMethodName:
+      description: 'English label for the method used to pay for the exchange of money, goods or services between a merchant and their customer. Examples: Visa, MasterCard, PayPal, Bill Me Later etc. Also known with the Firm as method of payment or MOP.'
+      type: string
+      maxLength: 100
+      example: Visa
+    maskedAccountNumber:
+      description: The Card Number is a number recognized by various payment systems to route debit card, ATM and credit Card transactions to an issuer and to identify the underlying account to which each transaction should be applied. Transactions may be initiated from physical or non-physical devices (e.g. debit card, ATM, credit card, Single Use Account (SUA), Near Field Communication (NFC), etc.). This is typically concealed by storing only the first 6 and/or last 4 digits of the payment account number or some variation.
+      type: string
+      maxLength: 23
+    disputeReasonDescription:
+      description: Textual reason description of the disputed case.
+      type: string
+      maxLength: 256
+    transactionTimestamp:
+      description: Designates the date and time in UTC timezone, on which the original sale or refund transaction was performed. The format is YYYY-MM-DDTHH:MM:SSZ.
+      type: string
+      format: date-time
+    disputeDetailsResponse:
+      description: Dispute details response
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        disputeDetails:
+          $ref: '#/components/schemas/disputeDetails'
+        traceId:
+          $ref: '#/components/schemas/traceId'
+  parameters:
+    platformIdHeader:
+      name: platform-id
+      in: header
+      required: false
+      description: Platform identifier provided by the requestor. Identifies the platform used to onboard the merchant and enforce the authentication.
+      schema:
+        type: string
+        maxLength: 20
+        pattern: ^\d+$
+      examples:
+        Success:
+          value: '2179821798'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - 108919_DISPUTES_MERCH_ACCESS: allows all api access for disputes management
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - 108919_DISPUTES_MERCH_ACCESS: allows all api access for disputes management

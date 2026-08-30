@@ -1,0 +1,303 @@
+openapi: 3.2.0
+info:
+  title: Pay By Bank PIS Refunds API
+  version: 1.1.4
+  description: "## Pay By Bank v1 - PIS API\n\n---\n\n> J.P. Morgan as a registered Third Party Provider (**TPP**) of Open Banking services,\n> offers a seamless integration platform for Pay by Bank such that:\n> - clients can initiate payments (serving as a Payment Initiation Service Provider, or **PISP**) \n>"
+  contact:
+    name: JPMorgan Chase & Co. API Support
+    email: imsd.security.operations@jpmorgan.com
+    url: https://developer.payments.jpmorgan.com/contact/support
+servers:
+- url: https://apigateway.jpmorgan.com/tsapi/v1
+  description: PRODUCTION - MTLS
+- url: https://api-mock.payments.jpmorgan.com/tsapi/v1
+  description: MOCK
+tags:
+- name: Refunds
+  description: Refund initiation services.
+paths:
+  /pisp/payments/refunds:
+    post:
+      summary: Request for Payment refunds
+      description: This request initiates a refund on the payments made before
+      operationId: createRefunds
+      tags:
+      - Refunds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundsRequest'
+        required: true
+      x-examples:
+      - name: PSD2 Payment Refunds
+        description: Refund request payload
+        parameters:
+          body:
+            paymentIdentifiers:
+              endToEndId: '123123123'
+              paymentId: '1401642'
+            amount:
+              amount: 100
+              currency: GBP
+            reason: REQUESTED_BY_CUSTOMER
+            mode: INSTANT
+      responses:
+        '202':
+          description: Refund has been accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundsResponse'
+        '400':
+          description: "Bad Request.\n\n**List of Error codes and Rule definitions. errorDescription is\ndynamically generated hence not shown here.\nRefer the table below**\n|  Error Code | Meaning                                              |\n|-------------|------------------------------------------------------|\n|  10001       | Mandatory field is missing or invalid               |\n|  10002       | Minimum length validation failure                   |\n|  10003       | Maximum length validation failure                   |\n|  10006       | Amount validation failure ~ value less than minimum | \n|  10007       | Amount validation failure ~ value is not a number   | \n|  10008       | Validation failure ~ unexpected value provided      | \n|  10009       | Invalid Id provided                                 | \n|  12000       | System Error                                        | \n|  13000       | Uncategorized Error                                 | \n\n**Standard API Gateway Error codes and descriptions** \n\n|  Error Code  | Meaning                      |\n|--------------|------------------------------|\n|  GCA-030     | API Processing Error         |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsInit'
+        '403':
+          description: 'Forbidden.
+
+
+            |  Error Code  | Meaning                                    |
+
+            |--------------|--------------------------------------------|
+
+            |  GCA-001     | Client is not eligible for the API Service |
+
+            |  GCA-003     | Client is not eligible for the API Service |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '503':
+          description: 'Service Unavailable.
+
+
+            |  Error Code  | Meaning           |
+
+            |--------------|-------------------|
+
+            |  GCA-099    | System Unavailable |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /pisp/payments/refunds/{refundId}:
+    get:
+      summary: Retrieve refund status
+      description: This request retrieves the refund status and details based on the given refund Id
+      tags:
+      - Refunds
+      operationId: getRefunds
+      parameters:
+      - $ref: '#/components/parameters/RefundId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundsResponse'
+        '400':
+          description: "Bad Request.\n\n**List of Error codes and Rule definitions. errorDescription is\ndynamically generated hence not shown here**\n|  Error Code | Meaning                                              |\n|-------------|------------------------------------------------------|\n|  10001       | Mandatory field is missing or invalid               |\n|  10002       | Minimum length validation failure                   |\n|  10003       | Maximum length validation failure                   |\n|  10006       | Amount validation failure ~ value less than minimum | \n|  10007       | Amount validation failure ~ value is not a number   | \n|  10008       | Validation failure ~ unexpected value provided      | \n|  10009       | Invalid Id provided                                 | \n|  12000       | System Error                                        | \n|  13000       | Uncategorized Error                                 | \n\n**Standard API Gateway Error codes and descriptions** \n\n|  Error Code  | Meaning                      |\n|--------------|------------------------------|\n|  GCA-030     | API Processing Error         |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsInit'
+        '403':
+          description: 'Forbidden.
+
+
+            |  Error Code  | Meaning                                    |
+
+            |--------------|--------------------------------------------|
+
+            |  GCA-001     | Client is not eligible for the API Service |
+
+            |  GCA-003     | Client is not eligible for the API Service |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '503':
+          description: 'Service Unavailable.
+
+
+            |  Error Code  | Meaning           |
+
+            |--------------|-------------------|
+
+            |  GCA-099    | System Unavailable |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  parameters:
+    RefundId:
+      in: path
+      name: refundId
+      description: A unique refund identifier in UUID (version 4) format.
+      schema:
+        type: string
+        minLength: 0
+        maxLength: 36
+      required: true
+      example: 45f452df-f84a-4fc1-acee-d024f5fede98
+  schemas:
+    StatusUpdatedAt:
+      type: string
+      format: dateTime
+      description: The last updated date and time of the refund status
+      example: '2022-05-31T14:00:57.751Z'
+    RefundsRequest:
+      type: object
+      required:
+      - paymentIdentifiers
+      - amount
+      - reason
+      - mode
+      properties:
+        paymentIdentifiers:
+          $ref: '#/components/schemas/PaymentIdentifiers'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        reason:
+          $ref: '#/components/schemas/Reason'
+        mode:
+          $ref: '#/components/schemas/Mode'
+    RefundsResponse:
+      type: object
+      description: The refunds response object from the API provided the request was accepted successfully.
+      properties:
+        refund:
+          type: object
+          properties:
+            refundId:
+              type: string
+              description: A unique refund identifier in UUID ( version 4) format
+              example: 45f452df-f84a-4fc1-acee-d024f5fede98
+            status:
+              description: 'Describes the status of the refund.
+
+
+                |Status|    |Description|
+
+                PENDING   - The refund is pending for processing
+
+                COMPLETED - The refund is processed successfully
+
+                REJECTED  - The refund was rejected due to the request not qualified
+
+                FAILED    - The refund was failed such as credit can''t be done to the bank account'
+              type: string
+              enum:
+              - PENDING
+              - COMPLETED
+              - REJECTED
+              - FAILED
+            paymentIdentifiers:
+              $ref: '#/components/schemas/PaymentIdentifiers'
+            amount:
+              $ref: '#/components/schemas/Amount'
+            reason:
+              $ref: '#/components/schemas/Reason'
+            mode:
+              $ref: '#/components/schemas/Mode'
+            statusUpdatedAt:
+              $ref: '#/components/schemas/StatusUpdatedAt'
+    ErrorDetailsInit:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          example: '1009'
+        errorDescription:
+          type: string
+          example: RefundId provided in the URI is invalid
+        ruleDefinition:
+          type: string
+          example: Invalid Id provided
+    ErrorsInit:
+      type: object
+      description: Contains error response
+      properties:
+        errors:
+          description: Contains error payload
+          type: object
+          properties:
+            errorDetails:
+              type: array
+              items:
+                $ref: '#/components/schemas/ErrorDetailsInit'
+              minItems: 0
+    Amount:
+      description: Contains amount details
+      type: object
+      properties:
+        amount:
+          description: Amount should be more than 0.01 and maximum of two decimal places allowed
+          type: number
+          format: decimal
+          example: 10
+        currency:
+          description: 3 character ISO 4217 currency code.
+          type: string
+          enum:
+          - GBP
+          - EUR
+      required:
+      - amount
+      - currency
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            errorDetails:
+              type: array
+              items:
+                $ref: '#/components/schemas/ErrorDetailsType'
+              minItems: 0
+    Reason:
+      description: Reason for the refund request
+      type: string
+      enum:
+      - DUPLICATE
+      - WITHDRAWAL
+      - REFUND
+      - PARTIAL_REFUND
+    ErrorDetailsType:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          example: GCA-001
+        errorDescription:
+          type: string
+          example: Client is not eligible for the API Service.
+    Mode:
+      description: Captures the speed of refund settlement
+      type: string
+      enum:
+      - INSTANT
+      - NORMAL
+    PaymentIdentifiers:
+      type: object
+      description: the payment identifier provided in the original payment request
+      properties:
+        endToEndId:
+          description: The EndtoEndId provided in the original payment initiation request
+          type: string
+          example: '123123123'
+        paymentId:
+          description: The PaymentId received in the original payment initiation response
+          type: string
+          example: '1401642'
+      minProperties: 1
+      additionalProperties: false
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2: {}
+x-jpmc-security: {}

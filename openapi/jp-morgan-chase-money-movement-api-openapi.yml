@@ -1,0 +1,569 @@
+openapi: 3.2.0
+info:
+  title: J.P. Morgan Business Direct Connect Money Movement API
+  version: 6.5.1
+  description: Connect to retrieve account details, transactions, payment network information, and statements for eligible USD-denominated US checking, savings, and money market accounts using the Financial Data Exchange (FDX) standard with secure, paginated access and lightweight or detailed responses.
+  contact:
+    name: J.P. Morgan Corporate FDX Support
+    email: jpmorgan.business.direct.connect.support@jpmorgan.com
+servers:
+- url: https://api.payments.jpmorgan.com/fdx/v6
+  description: PRODUCTION - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/fdx/v6
+  description: MOCK
+tags:
+- name: Money Movement
+paths:
+  /accounts/{accountId}/payment-networks:
+    get:
+      operationId: getAccountPaymentNetworks
+      tags:
+      - Money Movement
+      description: Get payment networks supported by the account
+      summary: Get payment networks supported by the account
+      parameters:
+      - $ref: '#/components/parameters/FapiInteractionIdHeader'
+      - $ref: '#/components/parameters/FdxApiActorTypeHeader'
+      - $ref: '#/components/parameters/FdxApiClientPublicKeyHeader'
+      - $ref: '#/components/parameters/FdxApiDataProviderIdHeader'
+      - $ref: '#/components/parameters/FdxApiDataRecipientIdHeader'
+      - $ref: '#/components/parameters/AccountIdPath'
+      - $ref: '#/components/parameters/OffsetQuery'
+      - $ref: '#/components/parameters/LimitQuery'
+      responses:
+        '200':
+          description: Information required to execute a payment transaction against this account
+          headers:
+            x-fapi-interaction-id:
+              $ref: '#/components/parameters/FapiInteractionIdHeader'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountPaymentNetworks'
+        '400':
+          description: 'Bad Request
+
+
+            **List of Error codes and Usage explanations.**
+
+            | Error Code      |           Usage                                                                                                                           |
+
+            | --------------  |-------------------------------------------------------------------------------------------------------------------------------------------|
+
+            | 401             | Invalid Input, 11001:Input in Request for Client ID {0}. {1}                                                                              |'
+          headers:
+            x-fapi-interaction-id:
+              $ref: '#/components/parameters/FapiInteractionIdHeader'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          description: 'Not Found
+
+
+            **List of Error codes and Usage explanations.**
+
+            | Error Code      |           Usage                                                                       |
+
+            | --------------  |-------------------------------------------------------------------------------------- |
+
+            | 701             | Account not found, 12001:Account not found for Client ID {0} , Account ID {1}         |
+
+            | 701             | ABA Number not found, 12002:ABA Number not found for Account ID {0}                   |'
+          headers:
+            x-fapi-interaction-id:
+              $ref: '#/components/parameters/FapiInteractionIdHeader'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Account not found:
+                  value:
+                    code: '701'
+                    message: Account not found
+                    debugMessage: 12001:Account not found for Client ID YODLEE, Account ID b61303ed9a0756e63f1a8
+                ABA Number not found:
+                  value:
+                    code: '701'
+                    message: ABA Number not found
+                    debugMessage: 12002:ABA Number not found for Account ID b61303ed9a0756e63f1a8
+        '500':
+          $ref: '#/components/responses/500'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+components:
+  schemas:
+    PageMetadata:
+      title: Page Metadata
+      description: Offset IDs for paginated result sets
+      type: object
+      properties:
+        nextOffset:
+          type: string
+          example: '2'
+          description: Opaque identifier. Does not need to be numeric or have any specific pattern. Implementation specific Offset based pagination is not supported for /transactions.
+        prevOffset:
+          type: string
+          example: '1'
+          description: Opaque identifier. Does not need to be numeric or have any specific pattern. Implementation specific Offset based pagination is not supported for /transactions.
+        totalElements:
+          type: integer
+          example: 3
+          description: Total number of elements , can be used to validate against total number of elements returned in paginated response(s)
+    ErrorContext:
+      x-tags:
+      - common-error-model
+      - common-components
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+        location:
+          type: string
+          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
+          description: The location of the error occurred in the request.
+          minLength: 1
+          maxLength: 99
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+        field:
+          type: string
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+          pattern: ^[\$0-9a-zA-Z-_.()\[\]{}'"\s@=><!?,]+$
+        additionalContext:
+          $ref: '#/components/schemas/AdditionalContext'
+      description: Error Context
+    Identifier:
+      title: Identifier
+      description: Value for a unique identifier
+      type: string
+      maxLength: 256
+      example: 5ff6a4b6fd9f4607c0a7ca0f037c62018693f940836d69b31d664f2257f4c623
+    AdditionalContext:
+      type: array
+      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
+      items:
+        $ref: '#/components/schemas/StandardCodeContext'
+      minItems: 1
+      maxItems: 5
+    StandardCodeContext:
+      type: object
+      required:
+      - code
+      - message
+      - type
+      properties:
+        type:
+          title: CategoryType
+          type: string
+          description: "Category of the error code such as Business  21000 Invalid Access Token \n|Category Type | Description\n|--------------|-----------------\n|Business 21000 | Invalid Request, Client ID {ClientIdName} not valid\n|Server 22002 | Error connecting to Account Product Service for Client Id {ClientIdName}, account Id {accountHashId} for retrieving account details"
+          minLength: 2
+          maxLength: 16
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+    HateoasLink:
+      title: HATEOAS Link
+      description: REST application constraint (Hypermedia As The Engine Of Application State)
+      required:
+      - href
+      type: object
+      properties:
+        href:
+          type: string
+          format: uri-reference
+          description: URL to invoke the action on the resource
+          example: https://api.fi.com/fdx/v4/accounts/12345
+        action:
+          description: HTTP Method to use for the request
+          $ref: '#/components/schemas/HttpAction'
+        rel:
+          description: Relation of this link to its containing entity, as defined by and with many example relation values at [IETF RFC5988](https://datatracker.ietf.org/doc/html/rfc5988)
+          type: string
+        types:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/ContentTypes'
+    ActorType:
+      title: FDX API Actor Type
+      description: 'This parameter is optional. The API only supports BATCH operations. default: BATCH'
+      type: string
+      default: BATCH
+      enum:
+      - BATCH
+      - USER
+    PaymentNetworkType:
+      title: Payment Network Type
+      description: "Suggested values for Payment Network Type.\n\n  | Value | Description |\n  |-----|-----|\n  | CA_ACSS | Automated Clearing House Settlement System |\n  | CA_LVTS | Large-Value Transfer System |\n  | US_ACH | Automated Clearing House |\n  | US_CHIPS | Clearinghouse Interbank Payments System |\n  | US_FEDNOW | Federal Reserve Instant Payment System |\n  | US_FEDWIRE | Fedwire Funds Service |\n  | US_RTP | US Real Time Payments System |"
+      type: string
+      enum:
+      - CA_ACSS
+      - CA_LVTS
+      - US_ACH
+      - US_CHIPS
+      - US_FEDNOW
+      - US_FEDWIRE
+      - US_RTP
+    Error:
+      title: Error
+      description: An error entity which can be used at the API level for error responses or at the account level to indicate a problem specific to a particular account
+      type: object
+      properties:
+        code:
+          type: string
+          description: Long term persistent identifier which can be used to trace error condition back to log information
+          example: '601'
+        message:
+          type: string
+          description: End user displayable information which might help the customer diagnose an error
+          example: Customer not found
+        debugMessage:
+          type: string
+          description: Message used to debug the root cause of the error. Contents should not be used in consumer's business logic. Can change at any time and should only be used for consumer to communicate with the data provider about an issue. Provider can include an error GUID in message for their use.
+          example: 11005:Invalid Customer - Customer Not Found for Client ID A_JPMC_CB_777_SIT_114355
+    PaymentError:
+      type: object
+      x-tags:
+      - common-error-model
+      - common-components
+      title: Error
+      description: Common Error Model
+      properties:
+        title:
+          type: string
+          title: Short humanly-readable title of the error.
+          minLength: 1
+          maxLength: 100
+        httpStatus:
+          type: integer
+          default: 400
+          title: HTTP Status Code
+        traceId:
+          type: string
+          title: JPMC Assigned traced identifier
+        requestId:
+          type: string
+          title: The 'client originated' requestId
+        context:
+          type: array
+          title: Provides additional context and detail on the validation errors
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 1
+          maxItems: 100
+      required:
+      - title
+      readOnly: true
+    PageMetadataLinks:
+      title: Page Metadata Links
+      description: Resource URLs for retrieving next or previous datasets
+      type: object
+      properties:
+        next:
+          $ref: '#/components/schemas/HateoasLink'
+          description: Resource URL for retrieving next dataset
+        prev:
+          $ref: '#/components/schemas/HateoasLink'
+          description: Resource URL for retrieving previous dataset. It is not supported for /transactions, which only supports forward traversal.
+    HttpAction:
+      title: HTTP Action Type
+      description: HTTP Methods to use for requests
+      type: string
+      enum:
+      - DELETE
+      - GET
+      - PATCH
+      - POST
+      - PUT
+    PaymentNetworkIdentifierType:
+      title: Payment Network Identifier Type
+      description: Suggested values for Payment Initiation Identifier Type
+      type: string
+      enum:
+      - ACCOUNT_NUMBER
+      - TOKENIZED_ACCOUNT_NUMBER
+    AccountPaymentNetworks:
+      title: Account Payment Networks
+      description: An array of payment networks supported by the account. If array contains `ACCOUNT_NUMBER` identifiers which are not masked this is sensitive data which should only be exchanged if encrypted. For detailed information on implementing encryption see the FDX CSDF API Security Model document's "Part 2 FDX Message Encryption" in the Security folder of the latest FDX Release download
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+          description: Offset IDs for navigating result sets. Pagination for `/accounts/{accountId}/payment-network` is deprecated in v6.5
+          deprecated: true
+        links:
+          $ref: '#/components/schemas/PageMetadataLinks'
+          description: Resource URLs for navigating result sets. Pagination for `/accounts/{accountId}/payment-network` is deprecated in v6.5
+          deprecated: true
+        paymentNetworks:
+          type: array
+          minItems: 0
+          description: Array of payment networks
+          items:
+            $ref: '#/components/schemas/AccountPaymentNetwork'
+    ContentTypes:
+      title: Content Types
+      description: Types of document formats. (Suggested values)
+      type: string
+      enum:
+      - application/json
+      - application/pdf
+      - application/zip
+      - image/gif
+      - image/jpeg
+      - image/png
+      - image/tiff
+    AccountPaymentNetwork:
+      title: Payment Network Supported by Account
+      description: This provides details required to execute a transaction against the account within the payment network
+      type: object
+      properties:
+        bankId:
+          type: string
+          description: Bank identifier used by the payment network. Typically the 9-digit routing transit number (RTN) associated with the account number at a US institution, or the 3-digit Institution (FID) and 5-digit Transit numbers for Canadian institutions, including leading zeroes
+        identifier:
+          type: string
+          description: The number used to identify the account within the payment network. If identifierType is ACCOUNT_NUMBER, this is the account number; if identifierType is TOKENIZED_ACCOUNT_NUMBER, this is a tokenized account number
+        identifierType:
+          $ref: '#/components/schemas/PaymentNetworkIdentifierType'
+          description: Type of identifier, ACCOUNT_NUMBER or TOKENIZED_ACCOUNT_NUMBER
+        type:
+          $ref: '#/components/schemas/PaymentNetworkType'
+          description: Type of Canadian or U.S. payment network, CA_ACSS, CA_LVTS, US_ACH, US_CHIPS, US_FEDWIRE, US_RTP
+  parameters:
+    FapiInteractionIdHeader:
+      name: x-fapi-interaction-id
+      in: header
+      description: Unique identifier for this interaction as an IETF RFC 4122 UUID. Used across all FDX API requests and responses. This parameter is required.
+      schema:
+        type: string
+      required: true
+      examples:
+        Scenario-1:
+          summary: Sample FAPI Interaction Id
+          value: c770aef3-6784-41f7-8e0e-ff5f97bddb3a
+    FdxApiDataProviderIdHeader:
+      name: FDX-API-Data-Provider-Id
+      in: header
+      description: ID for the financial institution responding to the request
+      schema:
+        $ref: '#/components/schemas/Identifier'
+        description: If the FDX API service is provided by a service bureau which uses the same end point for multiple institutions, the FDX API client MUST provide a header that identifies the desired financial institution. This corresponds to a data_provider_id in the registry. This header MAY be omitted if identifying a data provider is not required by the API host
+      required: false
+    OffsetQuery:
+      name: offset
+      in: query
+      description: 'Page number that can be used to fetch a specific page for paginated results. This parameter is optional. If specified, it returns the requested page. default: 0, returns the first page. OffsetQuery is not supported for /transactions. Use links to retrieve the next page.'
+      schema:
+        type: string
+        default: '0'
+    FdxApiActorTypeHeader:
+      name: Fdx-Api-Actor-Type
+      in: header
+      description: This parameter is optional. The API only supports BATCH operations.
+      schema:
+        $ref: '#/components/schemas/ActorType'
+      examples:
+        Scenario-1:
+          summary: Sample Actor Type
+          value: BATCH
+    FdxApiClientPublicKeyHeader:
+      name: FDX-API-Client-Public-Key
+      in: header
+      description: Public key for data provider to encrypt sensitive response data
+      schema:
+        type: string
+        description: A public key value (created using RSA or Elliptic Curve) to use to encrypt the value that's returned in accountNumber or other sensitive response properties
+      required: false
+    LimitQuery:
+      name: limit
+      in: query
+      description: 'Number of elements consumer wishes to receive per page. This parameter is optional. If limit is less than minimum, then the minimum specified below applies as the limit. If limit is greater than maximum, then the maximum specified below applies as the limit. minimum: 100 or return all records default: 100 maximum: 100 for /transactions, and 500 for /accounts. Transactions are always set to a fixed max page size of 100.'
+      schema:
+        type: integer
+        default: 100
+    AccountIdPath:
+      name: accountId
+      in: path
+      description: AccountId as returned in the call to /accounts. This parameter is required.
+      required: true
+      schema:
+        type: string
+      examples:
+        Scenario-1:
+          summary: Sample Account Identifier
+          value: c5e38f3375cb5f9225ab4dbf05ddcb9ed3faf2d29ebe0d4de47cbd7eb5e9594f
+    FdxApiDataRecipientIdHeader:
+      name: FDX-API-Data-Recipient-Id
+      in: header
+      description: ID for the data recipient making the request
+      schema:
+        $ref: '#/components/schemas/Identifier'
+        description: "If the FDX API service is being called by a Data Access Platform which supports multiple data recipients, the FDX API client must provide a header that identifies the calling data recipient. This header may be omitted if identifying a Data Recipient is not required by the Data Provider. Data Provider will specify what the header value must correspond to\n  * `client_id` if client is registered in the Data Provider's registry, and/or\n  * `FDX-Registry-Id` if client is registered with FDX (not with DP), and/or\n  * `App Name` if Data Provider uses neither client_id nor FDX_Registry-Id"
+      required: false
+  responses:
+    '403':
+      description: "Method Not Allowed\n\n**List of Error codes and Usage explanations.**\n  | Error Code      |           Usage                                                                     |\n  | --------------  |-------------------------------------------------------------------------------------|\n  | 14001           | Forbidden, 14001: Method Not Allowed                                                |\n  | 602             | Customer not authorized, 11006:Customer Not Authorized for Client ID {0}            |"
+      headers:
+        x-fapi-interaction-id:
+          $ref: '#/components/parameters/FapiInteractionIdHeader'
+      content:
+        application/json:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/Error'
+            - $ref: '#/components/schemas/PaymentError'
+          examples:
+            Forbidden:
+              value:
+                title: Forbidden
+                httpStatus: 403
+                traceId: 123e4567-e89b-12d3-a456-426614174000
+                requestId: client-req-001
+                context:
+                - code: '14001'
+                  message: Method Not Allowed
+            Customer not authorized:
+              value:
+                code: '602'
+                message: Customer not authorized
+                debugMessage: Provider custom developer-level error details for troubleshooting
+    '500':
+      description: 'Internal Server Error
+
+
+        **List of Error codes and Usage explanations.**
+
+        | Error Code      |           Usage                                                                             |
+
+        | --------------  |---------------------------------------------------------------------------------------------|
+
+        | 503             | Bad Response,GET / 503 operation response content type ''text/html'' does not exist           |'
+      headers:
+        x-fapi-interaction-id:
+          $ref: '#/components/parameters/FapiInteractionIdHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentError'
+          examples:
+            BadResponse:
+              value:
+                title: Bad Response
+                httpStatus: 500
+                traceId: 123e4567-e89b-12d3-a456-426614174000
+                context:
+                - message: GET / 503 operation response content type 'text/html' does not exist
+    '501':
+      description: 'Error when FdxVersion in URI is not one of those implemented at backend
+
+
+        **List of Error codes and Usage explanations.**
+
+        | Error Code      |           Usage                                                                                  |
+
+        | --------------  |---------------------------------------------------------------------------                       |
+
+        | 503             | System unavailable, GET / 503 operation response content type ''text/html'' does not exist         |'
+      headers:
+        x-fapi-interaction-id:
+          $ref: '#/components/parameters/FapiInteractionIdHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentError'
+          examples:
+            SystemUnavailable:
+              value:
+                title: System Unavailable
+                httpStatus: 503
+                traceId: 123e4567-e89b-12d3-a456-426614174000
+                context:
+                - message: GET / 503 operation response content type 'text/html' does not exist
+    '401':
+      description: "Unauthorized\n\n**List of Error codes and Usage explanations.**\n  | Error Code      |           Usage                                                           |\n  | --------------  |---------------------------------------------------------------------------|\n  | 603             | Authentication failed, 11007:Authentication failed for  Client ID {0}.{1} |"
+      headers:
+        x-fapi-interaction-id:
+          $ref: '#/components/parameters/FapiInteractionIdHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            Authentication failed:
+              value:
+                code: '401'
+                message: Authentication failed
+                debugMessage: Provider custom developer-level error details for troubleshooting
+    '503':
+      description: 'Service Unavailable
+
+
+        **List of Error codes and Usage explanations.**
+
+        | Error Code      |           Usage                                                                             |
+
+        | --------------  |---------------------------------------------------------------------------------------------|
+
+        | 500             | Internal server error,11002:Internal Server Error for Client ID                             |
+
+        | 503             | System unavailable, GET / 503 operation response content type ''text/html'' does not exist    |'
+      headers:
+        x-fapi-interaction-id:
+          $ref: '#/components/parameters/FapiInteractionIdHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentError'
+          examples:
+            SystemUnavailable:
+              value:
+                title: System Unavailable
+                httpStatus: 503
+                traceId: 123e4567-e89b-12d3-a456-426614174000
+                context:
+                - message: GET / 503 operation response content type 'text/html' does not exist
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Reader: Read role claim
+x-jpmc-security:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Reader: Read role claim
+      - Editor: Write role claim

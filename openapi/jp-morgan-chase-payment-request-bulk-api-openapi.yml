@@ -1,0 +1,1747 @@
+openapi: 3.2.0
+info:
+  title: Request to Pay via QR Code Payment Request - Bulk API
+  version: 1.4.4
+  description: 'Streamline your digital payment experience to create, update, and manage payment requests and payment links, letting your customers pay instantly via shareable QR codes or payment URLs. You can easily track payment status, retrieve payment details, and handle bulk requests, all while integrating with your customers’ financial institutions for secure, real-time transactions.
+
+    '
+  contact:
+    name: JPMorgan Chase & Co. API Support
+    email: imsd.security.operations@jpmorgan.com
+    url: https://apistore.jpmchase.net/support/contact
+  license:
+    name: Contact JPMorgan Chase & Co. API Support for licensing terms.
+    url: https://apistore.jpmchase.net/support/contact
+servers:
+- url: https://api.payments.jpmorgan.com/receivables/request-to-pay/v1
+  description: PRODUCTION - MTLS
+- url: https://api-cat.payments.jpmorgan.com/receivables/request-to-pay/v1
+  description: CLIENT TESTING - MTLS
+- url: https://api-mock.payments.jpmorgan.com/receivables/request-to-pay/v1
+  description: MOCK
+tags:
+- name: Payment Request - Bulk
+  description: Manage Payment Requests in Bulk
+paths:
+  /payment-requests/bulk:
+    post:
+      summary: Create Bulk Payment Requests
+      operationId: createPaymentRequests
+      description: '**Creates one or more Payment Requests asynchronously based on the payment request
+
+        details provided**
+
+
+        |Market                     |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |Applicable only for Dynamic Due Date QR Codes                       |
+
+        |Singapore                  |Does not Apply                               |'
+      tags:
+      - Payment Request - Bulk
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        $ref: '#/components/requestBodies/PaymentRequestBulkCreate'
+      responses:
+        '202':
+          $ref: '#/components/responses/202-BulkResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /payment-requests/bulk/{id}:
+    get:
+      summary: Retrieve Bulk Payment Request Details
+      description: '**Retrieves the Bulk Payment Request details using the Bulk Payment Request Id**
+
+
+        |Market     |Description                                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |Uses Payment Request Id for Static and Dynamic Requests            |
+
+        |Singapore                  |Does not Apply            |
+
+        '
+      tags:
+      - Payment Request - Bulk
+      operationId: retrievePaymentRequestBulk
+      parameters:
+      - $ref: '#/components/parameters/BulkId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-BulkPaymentRequestDetails'
+        '400':
+          $ref: '#/components/responses/400-BadRequest-GET-Entity'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+    put:
+      summary: Update bulk payment request details
+      description: "**Updates the Bulk Payment Request details using the Bulk Payment Request Id** \n\n|Market     |Description                                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |Uses Payment Request Id for Static and Dynamic Requests            |\n|Singapore                  |Does not Apply                                                     |   \n"
+      tags:
+      - Payment Request - Bulk
+      operationId: updatePaymentRequestBulk
+      parameters:
+      - $ref: '#/components/parameters/BulkId'
+      - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        $ref: '#/components/requestBodies/PaymentRequestBulkUpdate'
+      responses:
+        '202':
+          $ref: '#/components/responses/202-BulkResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest-GET-Entity'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '405':
+          $ref: '#/components/responses/405-MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+components:
+  schemas:
+    ExpirationType:
+      title: ExpirationType
+      description: 'Payment request expiration type
+
+        |Markets                     |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |IMMEDIATE, DUE-DATE apply for Dynamic QR Codes                |
+
+        |Singapore                  |Provide SCHEDULED if expiry date/time is provided in expiresAt. Mandatory for Dynamic QR. Optional for Static QR.                             |
+
+        |Hong&nbsp;Kong                  |Provide SCHEDULED if expiry date/time is provided in expiresAt. Mandatory for Dynamic QR. Not supported for Static QR. |'
+      type: string
+      enum:
+      - IMMEDIATE
+      - DUE_DATE
+      - SCHEDULED
+    RequestMethodType:
+      title: RequestMethodType
+      description: "Payment Request method type \n\n| Value  | Description                                    |\n|:-----  |:-----------------------------------------------|\n|NONE    |QR code not required                            |\n|QR_CODE |Generate QR Code and associate to payment request|"
+      type: string
+      enum:
+      - NONE
+      - QR_CODE
+    ErrorContext:
+      title: ErrorContext
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: JPM Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]+
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+        location:
+          type: string
+          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
+          description: The location of the error occurred in the request
+          minLength: 1
+          maxLength: 99
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+        field:
+          type: string
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+          pattern: ^\$?[0-9a-zA-Z-_.()\[\]{}]+$
+      description: Error Context
+    UnstructuredInformation:
+      type: object
+      title: UnstructuredInformation
+      description: Unstructured information about request
+      properties:
+        valueType:
+          type: string
+          description: Information type
+          maxLength: 50
+        text:
+          type: string
+          description: Information text
+          maxLength: 200
+    ISOCurrencyCode:
+      title: ISOCurrencyCode
+      type: string
+      description: 'ISO 4217 Alpha-3 Currency Code
+
+
+        |Markets     |Currency ISO Code     |Description                                                       |
+
+        |:----------|:--------------------|:------------------------------------------------------------------|
+
+        |Brazil     |BRL                     |ISO Currency Code for the Market, Mandatory |
+
+        |Singapore  |SGD                     |ISO Currency Code for the Market, Mandatory |
+
+        |Hong&nbsp;Kong   |HKD, CNY                     |ISO Currency Code for the Market, Mandatory |'
+      minLength: 3
+      maxLength: 3
+      pattern: ^[A-Z]{3}$
+      example: AUD
+    BulkStatus:
+      title: BulkStatus
+      description: Bulk Request Status
+      type: object
+      properties:
+        refreshedAt:
+          type: string
+          format: date-time
+          description: Bulk request status refreshed time stamp. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+        details:
+          description: Details of Payment Request generation status
+          type: array
+          minItems: 1
+          maxItems: 25
+          items:
+            $ref: '#/components/schemas/QRCodeGenerationStatus'
+    IdempotencyKey:
+      title: Idempotency Key
+      description: A unique string that enables API support idempotency by safely retrying requests without accidentally performing the same operation twice
+      type: string
+      minLength: 36
+      maxLength: 36
+      pattern: ^[-_.a-zA-Z0-9]{36}$
+      example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+    BulkPaymentRequest:
+      title: BulkPaymentRequest
+      description: Bulk Payment Request details
+      allOf:
+      - $ref: '#/components/schemas/BulkPaymentRequestBasic'
+      - $ref: '#/components/schemas/BulkStatus'
+    Amount:
+      title: Amount
+      type: string
+      minLength: 3
+      maxLength: 18
+      pattern: ^(\d{1,15})\.(\d{2})$
+      example: '10.50'
+      description: The value representation of a monetary amount. The amount value should be more than 0.01 with maximum of two decimal places allowed.
+    BulkPaymentRequestBasic:
+      title: BulkPaymentRequestBasic
+      description: Bulk Payment Request basic details
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/PaymentRequestBulkId'
+        description:
+          type: string
+          description: Client provided description for Bulk Payment Requests
+          minLength: 1
+          maxLength: 250
+        createdAt:
+          type: string
+          format: date-time
+          description: Bulk request created time stamp. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+        updatedAt:
+          type: string
+          format: date-time
+          description: Bulk request updated time stamp. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+    PaymentRequestBulkId:
+      title: id
+      type: string
+      description: Unique Bulk Payment Requests identifier generated by JPM
+      minLength: 32
+      maxLength: 36
+      example: 253f67f3-b640-44cb-aabd-2cc348b52678
+    ValueType:
+      title: ValueType
+      description: 'Value type either as fixed amount or percentage of original amount
+
+        |Markets                     |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |Applicable only for Dynamic QR Codes with due date expiration      |
+
+        |Singapore,<br>Hong&nbsp;Kong                  |Does not apply           |'
+      type: string
+      enum:
+      - NOT_APPLICABLE
+      - FIXED_AMOUNT
+      - PERCENTAGE
+    Email:
+      title: Email
+      type: object
+      description: Representation of an email
+      properties:
+        address:
+          type: string
+          description: 'The email address
+
+
+            |Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil                     |<ul><li>`Debtor` : Applicable for Dynamic QR Codes with due date expiration</li></ul>|
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+        type:
+          description: 'The email type
+
+
+            |Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil                     |<ul><li>`Debtor` : Applicable only for Dynamic QR Codes with due date expiration</li></ul>|
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          type: string
+          default: PRIMARY
+          enum:
+          - PRIMARY
+          - SECONDARY
+          - OTHER
+          - UNKNOWN
+    UnstructuredAddress:
+      type: array
+      description: "Unstructured Address\n\n  |Markets                     |Description                                                            |\n  |:--------------------------|:----------------------------------------------------------------------|\n  |Brazil                     |<ul><li>`Debtor`: Applicable for Dynamic QR Codes with due date expiration</li><li>`Creditor`: Applicable only for Dynamic QR Codes</li></ul>|\n  |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |\n"
+      minItems: 1
+      maxItems: 7
+      items:
+        type: string
+        minLength: 1
+        maxLength: 70
+    Discount:
+      title: Discount
+      description: "Parameters to calculate discount based on actual payments \n\n|Markets                     |Description                                                            |\n|:--------------------------|:----------------------------------------------------------------------|\n|Brazil                     |Applicable for Dynamic QR Codes with due date expiration |\n|Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                         |\n"
+      type: object
+      properties:
+        days:
+          description: Days to consider for discount calculation
+          type: string
+          enum:
+          - CALENDAR_DAYS
+          - BUSINESS_DAYS
+        cutOffDetails:
+          description: For discount type is FIXED_TO_DATE or PERCENTAGE_TO_DATE, up to 3 cut-off days and amounts/percentages for each cut-off date can be provided
+          type: array
+          items:
+            $ref: '#/components/schemas/CutOffItem'
+          minItems: 0
+          maxItems: 3
+        percentage:
+          description: "Discount expressed as percentage. Applicable for discount type \"ADVANCE_PAYMENT\" or \"PAYMENT_TO_DUE_PERCENTAGE\"\n  ** Note: Discount can be specified either as percentage or amount\n"
+          $ref: '#/components/schemas/Percentage'
+        amount:
+          description: 'Discount expressed as fixed amount. Applicable for discount type "ADVANCE_PAYMENT" or "PAYMENT_TO_DUE_PERCENTAGE"
+
+            ** Note: Discount can be specified either as percentage or amount
+
+            '
+          $ref: '#/components/schemas/Amount'
+    Duration:
+      description: 'Specify how long (in seconds) the request is valid. ISO 8601 compliant duration.
+
+        E.g., a validity of 5 minutes will be represented as 300. If duration unspecified,
+
+        a default duration of 86400 seconds (i.e 24 hours) will be considered
+
+
+        |Markets                     |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |Applicable and mandatory only for Dynamic - IMMEDIATE QR Codes     |
+
+        |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply.    |'
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 999999
+    Interest:
+      title: Interest
+      description: "Parameters to calculate interest for the payments overdue \n\n|Markets                     |Description                                                            |\n|:--------------------------|:----------------------------------------------------------------------|\n|Brazil                     |Applicable Dynamic QR Codes with due date expiration |\n|Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |"
+      type: object
+      properties:
+        days:
+          description: Days to consider for interest calculation
+          type: string
+          enum:
+          - CALENDAR_DAYS
+          - BUSINESS_DAYS
+        amount:
+          description: Fixed interest amount. Applicable for interest type is 'AMOUNT'
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          description: Interest percentage. Applicable for interest type expressed as percentage
+          $ref: '#/components/schemas/Percentage'
+    InterestType:
+      description: 'Interest type
+
+
+        |Markets                     |Description                                                            |
+
+        |:--------------------------|:----------------------------------------------------------------------|
+
+        |Brazil                     |Applicable only for Dynamic - Due Date QR Codes|
+
+        |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+
+        |Value               |Description                                                                             |
+
+        |:-------------------|:---------------------------------------------------------------------------------------|
+
+        |NOT_APPLICABLE      |Interest not applicable                                                                 |
+
+        |AMOUNT              |Fixed Amount of interest                                                                |
+
+        |PERCENTAGE_PER_DAY  |Rate of Interest / day                                                                  |
+
+        |PERCENTAGE_PER_MONTH|Rate of Interest / month                                                                |
+
+        |PERCENTAGE_PER_YEAR |Rate of Interest / year                                                                 |'
+      type: string
+      enum:
+      - NOT_APPLICABLE
+      - AMOUNT
+      - PERCENTAGE_PER_DAY
+      - PERCENTAGE_PER_MONTH
+      - PERCENTAGE_PER_YEAR
+    ETag:
+      description: Entity tag that uniquely represents the requested resource represented as string of ASCII characters placed between double quotes e.g., "675af34563dc-tr34". With the help of the ETag and the If-Match headers, mid-air edit collisions can be handled efficiently when updating the resource.
+      type: string
+      minLength: 0
+      maxLength: 128
+    Penalty:
+      title: Penalty
+      description: 'Penalty details expressed as a fixed value or percentage of payment amount
+
+
+        |Markets                     |Description                                                            |
+
+        |:--------------------------|:----------------------------------------------------------------------|
+
+        |Brazil                     |Applicable for Dynamic QR Codes with due date expiration |
+
+        |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |'
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          $ref: '#/components/schemas/Percentage'
+    Error:
+      type: object
+      title: Error
+      description: Common error model
+      properties:
+        title:
+          type: string
+          title: Short humanly-readable title of the error
+          minLength: 1
+          maxLength: 100
+        httpStatus:
+          type: integer
+          default: 400
+          title: ' HTTP Status Code'
+        traceId:
+          type: string
+          title: JPM Assigned traced identifier
+        requestId:
+          type: string
+          title: The 'client originated' requestId
+        context:
+          type: array
+          title: Provides additional context and detail on the validation errors
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 0
+          maxItems: 100
+      required:
+      - title
+      readOnly: true
+    QRCodeGenerationStatus:
+      title: QRCodeGenerationStatus
+      description: Representation of QR Code generation status
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/PaymentRequestId'
+        status:
+          type: string
+          description: Status for QR code generation
+          enum:
+          - PENDING
+          - SUCCESS
+          - FAILED
+        exceptions:
+          description: Exceptions, if any
+          type: array
+          minItems: 0
+          maxItems: 25
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+    Debtor:
+      type: object
+      title: Debtor
+      description: 'The person or an entity that pays for the goods or services purchased '
+      properties:
+        name:
+          type: string
+          description: 'Debtor name
+
+
+            |Markets                     |Description                                                           |
+
+            |:--------------------------|:---------------------------------------------------------------------|
+
+            |Brazil                     |Up to 200 chars. Applicable only for Dynamic QR Codes. Mandatory for due date QR code|
+
+            |Singapore,<br>Hong&nbsp;Kong       |Does not Apply                                                        |
+
+            '
+          maxLength: 500
+        address:
+          description: 'Debtor address
+
+
+            |Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil                     |Applicable Dynamic QR Codes. |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          allOf:
+          - $ref: '#/components/schemas/Address'
+        email:
+          description: 'Debtor email address
+
+
+            |Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil                     |Applicable for Dynamic QR Codes with due date expiration |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          $ref: '#/components/schemas/Email'
+        taxInformation:
+          $ref: '#/components/schemas/DebtorTaxInformation'
+    SchemeName:
+      title: Scheme Name
+      description: Specifies the type of Proxy account. Mandatory if alternateAccountIdentifier is present
+      type: object
+      properties:
+        proprietary:
+          description: "Proprietary types applicable per market and instrument:\n\n- **Brazil**:\n  - **CPF** - Tax ID of Individual\n  - **CNPJ** - Tax ID of Corporate\n  - **EVP** - Random Key\n  - **EMAL** - Email id \n  - **MOBN** - Mobile number\n- **Singapore**: \n  - **UEN** - Unique Entity Number\n- **Hong Kong**:\n  - **SVID** - FPS Identifier\n  - **MOBN** - Mobile ntrumber\n  - **EMAL** - Email id"
+          type: string
+          enum:
+          - CPF
+          - CNPJ
+          - EVP
+          - EMAL
+          - MOBN
+          - MSIDN
+          - UEN
+          - VPA
+          - NRIC
+          - SVID
+    DiscountType:
+      description: 'Discount type
+
+        |Markets                     |Description                                                            |
+
+        |:--------------------------|:----------------------------------------------------------------------|
+
+        |Brazil                     |Applicable only for Dynamic - Due Date QR Codes |
+
+        |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+
+        |Value                |Description                                                                            |
+
+        |:--------------------------|:--------------------------------------------------------------------------------|
+
+        |NOT_APPLICABLE             |Discount not applicable                                                          |
+
+        |FIXED_TO_DATE              |Fixed Amount until the cut off  date                                             |
+
+        |PERCENTAGE_TO_DATE         |Percentage up to the cut off date                                                |
+
+        |FIXED_ADVANCE_PAYMENT      |Payment in Advance ( based on days - Calender /  Business Days)                  |
+
+        |PERCENTAGE_ADVANCE_PAYMENT |Percentage of advance payment ( based on  days - Calender / Business Days)       |'
+      type: string
+      enum:
+      - NOT_APPLICABLE
+      - FIXED_TO_DATE
+      - PERCENTAGE_TO_DATE
+      - FIXED_ADVANCE_PAYMENT
+      - PERCENTAGE_ADVANCE_PAYMENT
+    Address:
+      title: Address
+      type: object
+      description: Representation of an address
+      minProperties: 1
+      properties:
+        type:
+          type: string
+          description: 'Address type
+
+            |Value  |Description        |
+
+            |:------|:------------------|
+
+            |ADDR   |Legal Address     |
+
+            |BIZZ   |Business Address  |
+
+            |DLVY   |Delivery Address  |
+
+            |HOME   |Home Address      |
+
+            |MLTO   |Mailing Address   |
+
+            |PBOX   |PO Box Address    |
+
+
+            |Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil                     |<ul><li>`Debtor`: Optional</li><li>`Creditor`: Applicable only for Dynamic QR Codes</li></ul>|
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          enum:
+          - ADDR
+          - BIZZ
+          - DLVY
+          - HOME
+          - MLTO
+          - PBOX
+          default: ADDR
+        addressLines:
+          $ref: '#/components/schemas/UnstructuredAddress'
+        city:
+          description: '|Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil                     |<ul><li>`Debtor` : Applicable for Dynamic QR Codes with due date expiration</li><li>`Creditor`: Applicable for Static and Dynamic QR Codes. Maximum of 15 characters allowed.</li></ul>|
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          type: string
+          minLength: 1
+          maxLength: 200
+        state:
+          description: '|Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil                     |<ul><li>`Debtor` : Applicable for Dynamic QR Codes with due date expiration</li><li>`Creditor`: Applicable only Dynamic QR Codes</li></ul>|
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          type: string
+          minLength: 1
+          maxLength: 100
+        postalCode:
+          description: '|Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil                     |<ul><li>`Debtor` : Applicable for Dynamic QR Codes with due date expiration</li><li>`Creditor`: Applicable only Dynamic QR Codes</li></ul>|
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          type: string
+          minLength: 1
+          maxLength: 20
+        country:
+          description: 'ISO Country Code.
+
+
+            "**Note** : Country cannot be changed after request created"
+
+            |Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil                     |<ul><li>`Debtor` : Optional</li><li>`Creditor`: Applicable for Static and Dynamic QR Codes</li></ul>|
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          allOf:
+          - $ref: '#/components/schemas/ISOCountryCode'
+    AlternateAccountIdentifier:
+      title: AlternateAccountIdentifier
+      type: string
+      description: 'Alternate account identifier based on the scheme
+
+
+        |Markets                     |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |<ul><li>Maximum supported length is 77 characters.</li><li>CPF - Up to 11 chars. Only numbers allowed</li><li>CNPJ - Up to 14 chars. Only numbers allowed</li><li>EVP - Up to 32 chars. Supported regex pattern: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12} </li><li>MOBN - Up to 15 chars. </li></ul>                               |
+
+        |Singapore                  |UEN - Up to 21 chars.                                              |
+
+        |Hong&nbsp;Kong                   |Maximum Supported length is 34 characters.                                              |
+
+        '
+      minLength: 0
+      maxLength: 128
+    Reference:
+      title: Reference
+      type: string
+      description: 'Text to be presented to the payer so that payer can enter related
+
+        information in free format, to be sent to the recipient.
+
+
+        |Markets                     |Description                                                                        |
+
+        |:--------------------------|:----------------------------------------------------------------------------------|
+
+        |Brazil                     |Maximum length of 140 characters allowed                                           |
+
+        |Singapore,<br>Hong&nbsp;Kong                  |Does Not Apply                                           |'
+      minLength: 0
+      maxLength: 200
+    Percentage:
+      description: The value representation of a percentage. The percentage value should be between 0.01 and 99.99 with maximum of two decimal places allowed
+      type: string
+      minLength: 3
+      maxLength: 5
+      pattern: ^(\d{1,2})\.(\d{2})$
+      example: '10.50'
+    PaymentRequest:
+      title: PaymentRequest
+      description: Payment Request details
+      type: object
+      required:
+      - creditor
+      properties:
+        debtor:
+          $ref: '#/components/schemas/Debtor'
+        creditor:
+          $ref: '#/components/schemas/Creditor'
+        expirationType:
+          $ref: '#/components/schemas/ExpirationType'
+        paymentDueDate:
+          type: string
+          format: date
+          description: 'Payment Due Date. Format - `YYYY-MM-DD`
+
+            |Markets                     |Description                                                        |
+
+            |:--------------------------|:------------------------------------------------------------------|
+
+            |Brazil                     |Applicable and mandatory only for Dynamic - Due Date QR Codes |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |'
+        duration:
+          $ref: '#/components/schemas/Duration'
+        expiresAt:
+          $ref: '#/components/schemas/ExpiresAt'
+        gracePeriod:
+          type: integer
+          format: int32
+          description: 'Number of consecutive calender days after payment due date, by which
+
+            payment can be still be made. Beyond this date, QR code will be expired
+
+            and it impacts any applicable discounts and might results in penalty
+
+
+            |Markets                     |Description                                                        |
+
+            |:--------------------------|:------------------------------------------------------------------|
+
+            |Brazil                     |Applicable for Dynamic QR Code with due date expiration            |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |'
+        currency:
+          description: Payment Request currency code. All the amounts for this request considered in this currency.
+          $ref: '#/components/schemas/ISOCurrencyCode'
+        paymentAmount:
+          $ref: '#/components/schemas/Amount'
+        isAmountAdjustable:
+          type: boolean
+          description: 'If this value is true, it allows debtor to pay a different amount than the
+
+            original payment amount specified by the creditor
+
+
+            |Markets                     |Description                                                        |
+
+            |:--------------------------|:------------------------------------------------------------------|
+
+            |Brazil                     |Applicable for Dynamic QR code with Immediate expiration;           |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Applicable for Dynamic or Static QR code when Payment amount is provided           |
+
+
+            |Markets                     |Default Value                                                        |
+
+            |:--------------------------|:------------------------------------------------------------------|
+
+            |Brazil                     |false           |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |true           |'
+        interestType:
+          $ref: '#/components/schemas/InterestType'
+        interestParameters:
+          $ref: '#/components/schemas/Interest'
+        discountType:
+          $ref: '#/components/schemas/DiscountType'
+        discountParameters:
+          $ref: '#/components/schemas/Discount'
+        penaltyType:
+          $ref: '#/components/schemas/ValueType'
+        penaltyParameters:
+          $ref: '#/components/schemas/Penalty'
+        reductionType:
+          $ref: '#/components/schemas/ValueType'
+        reductionParameters:
+          $ref: '#/components/schemas/Reduction'
+        reference:
+          $ref: '#/components/schemas/Reference'
+        additionalInformation:
+          type: array
+          description: 'Additional information provided by the client for the Payment Request
+
+            expressed as array of key/value pairs
+
+
+            |Markets                     |Description                                                        |
+
+            |:--------------------------|:------------------------------------------------------------------|
+
+            |Brazil                     |Applicable only for Dynamic QR Codes                               |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |'
+          minItems: 0
+          maxItems: 50
+          items:
+            $ref: '#/components/schemas/UnstructuredInformation'
+          example:
+          - valueType: Obs
+            text: This bill can be paid after the due date
+    CutOffItem:
+      title: CutOffItem
+      description: Cutoff limit to calculate discount, expressed as a date and applicable discount in percentage or fixed amount
+      type: object
+      properties:
+        cutOffDate:
+          type: string
+          format: date
+          description: Cutoff date
+        percentage:
+          description: "Discount expressed as percentage\n  ** Note: Discount can be specified either as percentage or amount\n"
+          $ref: '#/components/schemas/Percentage'
+        amount:
+          description: 'Discount expressed as fixed amount
+
+            ** Note: Discount can be specified either as percentage or amount
+
+            '
+          $ref: '#/components/schemas/Amount'
+    Creditor:
+      type: object
+      title: Creditor
+      description: Creditor details
+      properties:
+        account:
+          $ref: '#/components/schemas/AlternateAccountDetails'
+        name:
+          type: string
+          description: 'Name of creditor
+
+
+            |Markets                     |Description                                                           |
+
+            |:--------------------------|:---------------------------------------------------------------------|
+
+            |Brazil                     |Maximum of 25 characters allowed                                      |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          maxLength: 500
+        shortName:
+          type: string
+          description: 'Company short name
+
+
+            |Markets                     |Description                                                           |
+
+            |:--------------------------|:---------------------------------------------------------------------|
+
+            |Brazil                     |Applicable only for Dynamic - Due Date QR Codes                       |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+          maxLength: 500
+        address:
+          description: 'Creditor''s address
+
+            '
+          allOf:
+          - $ref: '#/components/schemas/Address'
+        taxInformation:
+          $ref: '#/components/schemas/CreditorTaxInformation'
+    DebtorTaxInformation:
+      type: object
+      title: DebtorTaxInformation
+      description: 'Debtor tax details
+
+
+        |Markets                     |Description                                                            |
+
+        |:--------------------------|:----------------------------------------------------------------------|
+
+        |Brazil                     |Applicable only for Dynamic QR codes. Mandatory for Dynamic - Due Date QR Codes|
+
+        |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+        '
+      properties:
+        taxpayerCategory:
+          type: string
+          description: Tax payer category
+          enum:
+          - INDIVIDUAL
+          - CORPORATE
+        taxId:
+          type: string
+          description: 'Tax Identifier
+
+
+            Maximum lengths allowed per market :-
+
+            |Markets                     |Description                                                        |
+
+            |:--------------------------|:------------------------------------------------------------------|
+
+            |Brazil                     |Individual - CPF: 11  , CORPORATE - CNPJ: 14                       |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |
+
+            '
+    QRCodeRequest:
+      title: QRCodeRequest
+      description: Representation of QR Code request
+      type: object
+      properties:
+        qrCodeType:
+          type: string
+          description: 'QR Code type
+
+
+            |Markets                     |Description                                                            |
+
+            |:--------------------------|:----------------------------------------------------------------------|
+
+            |Brazil,<br>Singapore,<br>Hong&nbsp;Kong                     |Static and Dynamic types Apply                                         |
+
+            '
+          enum:
+          - STATIC
+          - DYNAMIC
+        paymentLinkId:
+          description: "Unique payment link identifier generated by JPM\n|Markets                     |Description                                                        |\n|:--------------------------|:------------------------------------------------------------------|\n|Brazil                     |Applicable only for Dynamic QR Codes \t\t\t\t\t\t\t  |\n|Singapore,<br>Hong&nbsp;Kong                     |Does Not Apply \t\t\t\t\t\t\t  |"
+          type: string
+          minLength: 0
+          maxLength: 128
+        contentType:
+          type: string
+          description: 'QR Code content type
+
+
+            |Value|Description|
+
+            |:----|:----------|
+
+            |IMAGE| Generates QR code image along with QR code text (default)|
+
+            |TEXT_ONLY| Generate QR code text only|
+
+
+            |Markets|Allowed Content Type Values|
+
+            |:----|:----------|
+
+            |Brazil| IMAGE,TEXT_ONLY|
+
+            |Singapore,<br>Hong&nbsp;Kong| IMAGE|'
+          enum:
+          - IMAGE
+          - TEXT_ONLY
+          default: IMAGE
+        correctionLevel:
+          type: string
+          default: MEDIUM
+          description: 'Standard error correction level that depicts robustness of QR codes in the
+
+            physical environment to sustain damage and continue to function when a
+
+            part of the QR code image is obscured, defaced or removed
+
+
+            |Level       | Description                       |
+
+            |:-----------|:----------------------------------|
+
+            |LOW         | up to 7%  data bytes restoration  |
+
+            |MEDIUM      | up to 15%  data bytes restoration |
+
+            |QUARTILE    | up to 25%  data bytes restoration |
+
+            |HIGH        | up to 30%  data bytes restoration |'
+          enum:
+          - LOW
+          - MEDIUM
+          - QUARTILE
+          - HIGH
+        imageWidth:
+          type: integer
+          format: int32
+          description: QR code image size in pixels
+          default: 400
+    PaymentRequestBulk:
+      title: PaymentRequestBulk
+      description: Bulk Payment Request
+      type: object
+      properties:
+        description:
+          type: string
+          description: Client provided description for Bulk Payment Requests
+          minLength: 1
+          maxLength: 250
+        requests:
+          type: array
+          minItems: 1
+          maxItems: 25
+          items:
+            $ref: '#/components/schemas/PaymentRequestBulkItem'
+    PaymentRequestId:
+      title: PaymentRequestId
+      type: string
+      description: 'Unique transaction identifier provided by <mark>client</mark> or identifier generated by <mark>JPM</mark>
+
+
+        |Market     |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |<ul><li>Mandatory field</li><li>For Static QR Codes Minimum Length: 1 characters , Maximum Length:  25 characters</li><li>For Dynamic QR Codes Minimum Length: 26 characters , Maximum Length:  35 characters</li></ul>   |
+
+        |Singapore                  |<ul><li>Mandatory field</li><li>For Static and Dynamic QR Codes Maximum Length:  35 characters</li></ul>   |
+
+        |HongKong                   |<ul><li>Mandatory field</li><li>For Static and Dynamic QR Codes Maximum Length:  35 characters</li></ul>   |'
+      minLength: 1
+      maxLength: 36
+    PaymentRequestBulkUpdateItem:
+      title: PaymentRequestBulkUpdateItem
+      description: Payment Request Bulk Update Item
+      type: object
+      required:
+      - request
+      - requestMethodType
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/PaymentRequestId'
+        request:
+          $ref: '#/components/schemas/PaymentRequest'
+        requestMethodType:
+          $ref: '#/components/schemas/RequestMethodType'
+        requestMethod:
+          $ref: '#/components/schemas/QRCodeRequest'
+    PaymentRequestBulkItem:
+      title: PaymentRequestBulkItem
+      description: Payment Request
+      type: object
+      required:
+      - request
+      - requestMethodType
+      - country
+      properties:
+        id:
+          $ref: '#/components/schemas/PaymentRequestId'
+        country:
+          description: Payment requested for country / market
+          $ref: '#/components/schemas/ISOCountryCode'
+        request:
+          $ref: '#/components/schemas/PaymentRequest'
+        requestMethodType:
+          $ref: '#/components/schemas/RequestMethodType'
+        requestMethod:
+          $ref: '#/components/schemas/QRCodeRequest'
+    PaymentRequestBulkUpdate:
+      title: PaymentRequestBulkUpdate
+      description: 'Bulk Update Payment Requests
+
+
+        |Market     |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Singapore                     |Does Not Apply  |'
+      type: object
+      properties:
+        description:
+          type: string
+          description: Client provided description for Bulk Payment Requests
+          minLength: 1
+          maxLength: 250
+        requests:
+          type: array
+          minItems: 1
+          maxItems: 25
+          items:
+            $ref: '#/components/schemas/PaymentRequestBulkUpdateItem'
+    CreditorTaxInformation:
+      type: object
+      title: CreditorTaxInformation
+      description: 'Creditor tax details
+
+
+        |Markets                    |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |Applicable only for Dynamic QR Codes                               |
+
+        |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                               |
+
+        '
+      properties:
+        taxpayerCategory:
+          type: string
+          description: Tax payer category
+          enum:
+          - INDIVIDUAL
+          - CORPORATE
+        taxId:
+          type: string
+          description: 'Tax Identifier
+
+
+            Maximum lengths allowed per market
+
+            |Markets |Description                                                        |
+
+            |:--------------------------|:------------------------------------------------------------------|
+
+            |Brazil                     |Individual - CPF: 11  , CORPORATE - CNPJ: 14                       |
+
+            |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                     |
+
+            '
+    ISOCountryCode:
+      title: ISOCountryCode
+      type: string
+      description: 'ISO 3166-1 Alpha-2 country code
+
+
+        |Markets     |Country ISO Code     |Description                                                        |
+
+        |:----------|:--------------------|:------------------------------------------------------------------|
+
+        |Brazil     |BR                   |ISO Country Code for the Market |
+
+        |Singapore  |SG                   |ISO Country Code for the Market |
+
+        |Hong&nbsp;Kong   |HK                   |ISO Country Code for the Market |'
+      minLength: 2
+      maxLength: 2
+      pattern: ^[A-Z]{2}$
+      example: AU
+    Reduction:
+      title: Reduction
+      description: 'Reduction details expressed either as a fixed value or percentage of payment
+
+        amount
+
+
+        |Markets                     |Description                                                            |
+
+        |:--------------------------|:----------------------------------------------------------------------|
+
+        |Brazil                     |Applicable for Dynamic QR Codes with due date expiration |
+
+        |Singapore,<br>Hong&nbsp;Kong                  |Does not Apply                                                        |'
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          $ref: '#/components/schemas/Percentage'
+    ExpiresAt:
+      title: ExpiresAt
+      description: 'Specify a datetime stamp in valid RFC 3339 section 5.6, ISO 8601 compliant format for expiration.
+
+        E.g., `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+
+
+        |Markets                     |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |Applicable for Payment Response object, calculated from Duration |
+
+        |Singapore                  |Mandatory for Dynamic QR. Optional for Static QR. |
+
+        |Hong&nbsp;Kong                  |Mandatory for Dynamic QR. Not supported for Static QR. |'
+      type: string
+      format: date-time
+    AlternateAccountDetails:
+      type: object
+      title: Alternate Account
+      description: Alternate account details
+      properties:
+        schemeName:
+          $ref: '#/components/schemas/SchemeName'
+        alternateAccountIdentifier:
+          $ref: '#/components/schemas/AlternateAccountIdentifier'
+  examples:
+    Unauthorized:
+      value:
+        title: Unauthorized
+        httpStatus: 401
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - message: Unauthorized
+    UpdateBulkPaymentRequestsBR:
+      summary: Bulk update of QR code generation sample request for Brazil Market
+      value:
+        requests:
+        - id: 533594cb44f646b7beee3c1ed461e84b
+          request:
+            debtor:
+              name: JOÃO DA SILVA RIBEIRO
+              address:
+                type: ADDR
+                addressLines:
+                - AV PAULISTA 200
+                city: SÃO PAULO
+                state: SP
+                postalCode: 01311900
+                country: BR
+              email:
+                address: joao.silva@gmail.com
+                type: PRIMARY
+              taxInformation:
+                taxpayerCategory: INDIVIDUAL
+                taxId: '81877226220'
+            creditor:
+              account:
+                schemeName:
+                  proprietary: EVP
+                alternateAccountIdentifier: 123e4567-e12b-12d1-a456-426655440000
+            expirationType: DUE_DATE
+            paymentAmount: '150.00'
+            currency: BRL
+            paymentDueDate: '2024-11-21'
+            reference: Invoice for energy bill - 123456
+            additionalInformation:
+            - valueType: Obs
+              text: QR with Due Date - Test
+            interestType: PERCENTAGE_PER_DAY
+            interestParameters:
+              days: CALENDAR_DAYS
+              percentage: '5.00'
+            discountType: PERCENTAGE_TO_DATE
+            discountParameters:
+              cutOffDetails:
+              - percentage: '2.00'
+                cutOffDate: '2024-10-02'
+            penaltyType: FIXED_AMOUNT
+            penaltyParameters:
+              amount: '16.50'
+            reductionType: FIXED_AMOUNT
+            reductionParameters:
+              amount: '20.00'
+            gracePeriod: 5
+          requestMethodType: QR_CODE
+          requestMethod:
+            qrCodeType: DYNAMIC
+            contentType: IMAGE
+            correctionLevel: MEDIUM
+            imageWidth: 400
+    BulkPaymentRequestDetailsBR:
+      summary: Fetch status of Bulk QR code generation request for Brazil Market
+      value:
+        id: 253f67f3-b640-44cb-aabd-2cc348b52678
+        description: A Sample Bulk Request
+        createdAt: '2024-10-27T23:15:22Z'
+        updatedAt: '2024-10-27T23:45:22Z'
+        refreshedAt: '2024-10-27T23:55:22Z'
+        details:
+        - id: 533594cb44f646b7beee3c1ed461e84b
+          status: FAILED
+          exceptions:
+          - code: '10103'
+            message: Invalid format. Value must match this regular expression ^(\d{1,15})\.(\d{2})$
+            location: BODY
+            field: $.request.paymentAmount
+        - id: 344505f9b0814ba3bbe2f50eb693e6c0
+          status: PENDING
+        - id: a544f3133b804820b295c0854c0d8cba
+          status: SUCCESS
+    ServiceUnavailableError:
+      value:
+        title: System Error
+        httpStatus: 503
+        traceId: d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4
+        requestId: UK202109202311354152
+        context:
+        - code: '12000'
+          message: Service Unavailable
+    NotFound:
+      summary: Not Found
+      value:
+        title: Not Found
+        httpStatus: 404
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+    MethodNotAllowedError:
+      summary: Method not allowed
+      value:
+        title: Method not allowed
+        httpStatus: 405
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+    ErrorRateLimit:
+      summary: Too Many Requests
+      value:
+        title: Too Many Requests
+        httpStatus: 429
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        context:
+        - message: The agreed upon rate limit for this API has been exceeded
+    BadIdentifier:
+      value:
+        title: Bad format
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - code: '10103'
+          message: Invalid resource identifier format.
+          field: id
+          location: PATH
+    CreateBulkPaymentResponseSG:
+      summary: Response for Bulk QR code request- Singapore Market
+      value:
+        id: f1e2d3c4-b5a6-7890-1234-56789abcdef0
+        description: A Sample Bulk Request
+        createdAt: '2024-10-27T23:15:22Z'
+        updatedAt: '2024-10-27T23:15:22Z'
+    CreateBulkPaymentResponseBR:
+      summary: Response for Bulk QR code request- Brazil Market
+      value:
+        id: 253f67f3-b640-44cb-aabd-2cc348b52678
+        description: A Sample Bulk Request
+        createdAt: '2024-10-27T23:15:22Z'
+        updatedAt: '2024-10-27T23:15:22Z'
+    BulkPaymentRequestDetailsSG:
+      summary: Fetch status of Bulk QR code generation request for Singapore Market
+      value:
+        id: 123e4567-e89b-12d3-a456-426614174000
+        description: A Sample Bulk Request
+        createdAt: '2024-10-27T23:15:22Z'
+        updatedAt: '2024-10-27T23:45:22Z'
+        refreshedAt: '2024-10-27T23:55:22Z'
+        details:
+        - id: 9f8e7d6c5b4a3b2c1d0e9f8a7b6c5d4e
+          status: FAILED
+          exceptions:
+          - code: '10103'
+            message: Invalid format. Value must match this regular expression ^(\d{1,15})\.(\d{2})$
+            location: BODY
+            field: $.request.paymentAmount
+        - id: d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9
+          status: PENDING
+        - id: 1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d
+          status: SUCCESS
+    SecurityFailureError:
+      value:
+        title: Security Failure
+        httpStatus: 403
+        traceId: 5914f136-4544-4b1c-8004-6c2388ba76b4
+        requestId: UK202109202311354152
+        context:
+        - code: '14000'
+          message: Invalid client profile
+    CreateBulkPaymentRequestsBR:
+      summary: Bulk QR code generation sample request for Brazil Market
+      value:
+        description: A Sample Bulk Request
+        requests:
+        - country: BR
+          request:
+            debtor:
+              name: JOÃO DA SILVA RIBEIRO
+              address:
+                type: ADDR
+                addressLines:
+                - AV PAULISTA 200
+                city: SÃO PAULO
+                state: SP
+                postalCode: 01311900
+                country: BR
+              email:
+                address: joao.silva@gmail.com
+                type: PRIMARY
+              taxInformation:
+                taxpayerCategory: INDIVIDUAL
+                taxId: '81877226220'
+            creditor:
+              account:
+                schemeName:
+                  proprietary: EVP
+                alternateAccountIdentifier: 123e4567-e12b-12d1-a456-426655440000
+            expirationType: DUE_DATE
+            paymentAmount: '150.00'
+            currency: BRL
+            paymentDueDate: '2024-11-21'
+            reference: Invoice for energy bill - 123456
+            additionalInformation:
+            - valueType: Obs
+              text: QR with Due Date - Test
+            interestType: PERCENTAGE_PER_DAY
+            interestParameters:
+              days: CALENDAR_DAYS
+              percentage: '5.00'
+            discountType: PERCENTAGE_TO_DATE
+            discountParameters:
+              cutOffDetails:
+              - percentage: '2.00'
+                cutOffDate: '2024-10-02'
+            penaltyType: FIXED_AMOUNT
+            penaltyParameters:
+              amount: '16.50'
+            reductionType: FIXED_AMOUNT
+            reductionParameters:
+              amount: '20.00'
+            gracePeriod: 5
+          requestMethodType: QR_CODE
+          requestMethod:
+            qrCodeType: DYNAMIC
+            contentType: IMAGE
+            correctionLevel: MEDIUM
+            imageWidth: 400
+        - country: BR
+          request:
+            debtor:
+              name: JOÃO DA SILVA RIBEIRO
+              address:
+                type: ADDR
+                addressLines:
+                - AV PAULISTA 200
+                city: SÃO PAULO
+                state: SP
+                postalCode: 01311900
+                country: BR
+              email:
+                address: joao.silva@gmail.com
+                type: PRIMARY
+              taxInformation:
+                taxpayerCategory: INDIVIDUAL
+                taxId: '81877226220'
+            creditor:
+              account:
+                schemeName:
+                  proprietary: EVP
+                alternateAccountIdentifier: 123e4567-e12b-12d1-a456-426655440000
+            expirationType: DUE_DATE
+            paymentAmount: '180.00'
+            currency: BRL
+            paymentDueDate: '2024-12-21'
+            reference: Invoice for energy bill - 123456
+            additionalInformation:
+            - valueType: Obs
+              text: QR with Due Date - Test
+            interestType: PERCENTAGE_PER_DAY
+            interestParameters:
+              days: CALENDAR_DAYS
+              percentage: '5.00'
+            discountType: PERCENTAGE_TO_DATE
+            discountParameters:
+              cutOffDetails:
+              - percentage: '2.00'
+                cutOffDate: '2024-11-02'
+            penaltyType: FIXED_AMOUNT
+            penaltyParameters:
+              amount: '16.50'
+            reductionType: FIXED_AMOUNT
+            reductionParameters:
+              amount: '20.00'
+            gracePeriod: 5
+          requestMethodType: QR_CODE
+          requestMethod:
+            qrCodeType: DYNAMIC
+            contentType: IMAGE
+            correctionLevel: MEDIUM
+            imageWidth: 400
+    InvalidDataError:
+      summary: Mandatory field missing
+      value:
+        title: Mandatory field missing
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - code: '10001'
+          message: Property amount must be provided.
+          field: $.requestedPaymentAmount.amount
+          location: BODY
+  responses:
+    503-ServiceUnavailable:
+      description: "Service Unavailable\n\n*List of error codes and descriptions* \n| Error Code    | Description       |\n|---------------|-------------------|\n|   12000       | System error      |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            ServiceUnavailableError:
+              $ref: '#/components/examples/ServiceUnavailableError'
+    202-BulkResponse:
+      description: Bulk Processing of Payment Requests Accepted
+      headers:
+        ETag:
+          schema:
+            $ref: '#/components/schemas/ETag'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkPaymentRequestBasic'
+          examples:
+            BulkPaymentRequestsBR:
+              $ref: '#/components/examples/CreateBulkPaymentResponseBR'
+            BulkPaymentRequestsSG:
+              $ref: '#/components/examples/CreateBulkPaymentResponseSG'
+    403-Forbidden:
+      description: 'Forbidden
+
+        | Error Code    | Description                                |
+
+        |---------------|--------------------------------------------|
+
+        |  14000        | Security failure                           |     '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            SecurityFailureError:
+              $ref: '#/components/examples/SecurityFailureError'
+    200-BulkPaymentRequestDetails:
+      description: Bulk Payment Request Details
+      headers:
+        ETag:
+          schema:
+            $ref: '#/components/schemas/ETag'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkPaymentRequest'
+          examples:
+            BulkPaymentRequestsBR:
+              $ref: '#/components/examples/BulkPaymentRequestDetailsBR'
+            BulkPaymentRequestsSG:
+              $ref: '#/components/examples/BulkPaymentRequestDetailsSG'
+    400-BadRequest-GET-Entity:
+      description: "Bad Request. \n\n**List of error codes and descriptions**\n\n| Error Code      |          Description                               |\n| --------------  |------------------------------------------------|\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10199           | Other                                          |\n| 13000           | Uncategorized error                            |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            BadIdentifier:
+              $ref: '#/components/examples/BadIdentifier'
+    404-NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            InvalidData:
+              $ref: '#/components/examples/NotFound'
+    401-Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            UnauthorizedError:
+              $ref: '#/components/examples/Unauthorized'
+    405-MethodNotAllowed:
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            MethodNotAllowedError:
+              $ref: '#/components/examples/MethodNotAllowedError'
+    400-BadRequest:
+      description: 'Bad Request
+
+
+        **List of error codes and descriptions**
+
+
+        | Error Code      |           Description                               |
+
+        | --------------  |------------------------------------------------|
+
+        | 10001           | Mandatory field missing                        |
+
+        | 10002           | Minimum length violation                       |
+
+        | 10003           | Maximum length violation                       |
+
+        | 10100           | Minimum value violation                        |
+
+        | 10101           | Maximum value violation                        |
+
+        | 10102           | Range violation                                |
+
+        | 10103           | Bad format                                     |
+
+        | 10104           | Bad value                                      |
+
+        | 10105           | Unexpected field                               |
+
+        | 10199           | Other                                          |
+
+        | 13000           | Uncategorized error                            |'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            InvalidDataError:
+              $ref: '#/components/examples/InvalidDataError'
+    429-TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            TooManyRequests:
+              $ref: '#/components/examples/ErrorRateLimit'
+  parameters:
+    IfMatch:
+      name: If-Match
+      description: JPM created ETag - An opaque version identifier for the resource
+      in: header
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 100
+      required: false
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: 'Client generated unique idempotency key used in recognizing consecutive retries of the same request
+
+
+        **V4 UUIDs are recommended**'
+      schema:
+        $ref: '#/components/schemas/IdempotencyKey'
+      required: false
+    BulkId:
+      name: id
+      in: path
+      description: Unique Payment Requests batch identifier assigned by JPM
+      schema:
+        $ref: '#/components/schemas/PaymentRequestBulkId'
+      required: true
+      examples:
+        BulkPaymentRequestsBR:
+          summary: Bulk Payment Request Identifier - Brazil Market
+          value: 253f67f3-b640-44cb-aabd-2cc348b52678
+  requestBodies:
+    PaymentRequestBulkCreate:
+      description: Payment Request Bulk Request Payload
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentRequestBulk'
+          examples:
+            BulkPaymentRequestsBR:
+              $ref: '#/components/examples/CreateBulkPaymentRequestsBR'
+      required: true
+    PaymentRequestBulkUpdate:
+      description: Payment Requests - Bulk Update Request Payload
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentRequestBulkUpdate'
+          examples:
+            BulkPaymentRequestsBR:
+              $ref: '#/components/examples/UpdateBulkPaymentRequestsBR'
+      required: true
+x-jpmc-securityDefinitions:
+  MutualTLS:
+    type: x509
+    description: Mutual TLS authentication using client and server certificates.
+x-jpmc-security:
+- MutualTLS

@@ -1,0 +1,535 @@
+openapi: 3.2.0
+info:
+  title: Digital Onboarding Questions API
+  version: 1.0.18
+  description: Streamline your client onboarding process to create, update, and manage clients, parties, documents, and due diligence requirements in a fully digital workflow so you can automate Know Your Customer (KYC), document collection, and compliance tasks directly from your own platform.
+  contact:
+    name: JPMC Technical Services Support
+servers:
+- url: https://api.payments.jpmorgan.com/onboarding/v1
+  description: PRODUCTION-MTLS
+- url: https://api-sandbox.payments.jpmorgan.com/onboarding/v1
+  description: CLIENT TESTING-MTLS
+- url: https://api-mock.payments.jpmorgan.com/onboarding/v1
+  description: MOCK
+security:
+- Certs: []
+  Token: []
+- Certs: []
+- BearerAuth: []
+tags:
+- name: Questions
+  description: View details about answering questions by id.
+  x-displayName: Questions
+paths:
+  /questions:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/TokenInHeader'
+      - $ref: '#/components/parameters/QuestionIdListInQuery'
+      tags:
+      - Questions
+      summary: List questions
+      description: 'Lists customer due diligence questions.
+
+        '
+      operationId: smbdo-listQuestions
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionListResponse'
+              examples:
+                QuestionListResponse:
+                  $ref: '#/components/examples/QuestionListResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        '503':
+          $ref: '#/components/responses/503'
+  /questions/{id}:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/TokenInHeader'
+      - name: id
+        in: path
+        description: Unique Question identifier.
+        required: true
+        schema:
+          type: string
+          maxLength: 10
+        example: '300001'
+      tags:
+      - Questions
+      summary: Get question
+      description: 'Get a customer due diligence question.
+
+        '
+      operationId: smbdo-getQuestion
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+              examples:
+                QuestionResponse:
+                  $ref: '#/components/examples/QuestionResponse'
+                DependentQuestionResponse:
+                  $ref: '#/components/examples/DependentQuestionResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        '503':
+          $ref: '#/components/responses/503'
+components:
+  schemas:
+    QuestionId:
+      description: The ID uniquely identifying a question.
+      type: string
+      maxLength: 10
+      example: '30024'
+    ContentItem:
+      description: Content displayed to a user for a given locale.
+      type: object
+      properties:
+        description:
+          type: string
+        label:
+          description: Exact text to be displayed to a user.
+          type: string
+        locale:
+          $ref: '#/components/schemas/LocaleId'
+      required:
+      - label
+      - locale
+    QuestionListResponse:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/PageMetaData'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionResponse'
+          minItems: 0
+          maxItems: 100
+    ResponseSchema:
+      description: A subset of JSON Schema used to validate the response values.
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - array
+        minItems:
+          type: integer
+        maxItems:
+          type: integer
+        items:
+          $ref: '#/components/schemas/ResponseSchemaItem'
+      example:
+        type: array
+        items:
+          type: boolean
+        minItems: 1
+        maxItems: 1
+    ApiErrorContext:
+      description: Context of the API error.
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          example: '11000'
+        location:
+          type: string
+          enum:
+          - BODY
+          - QUERY
+          - PATH
+          - HEADER
+          example: BODY
+          description: Part of the request which is responsible for the reason
+        field:
+          type: string
+          description: The location of the property or parameter in error
+        message:
+          type: string
+          example: The server can not find the requested resource.
+          description: Message describing the reason.
+    QuestionIdList:
+      description: A list of question IDs.
+      type: array
+      items:
+        $ref: '#/components/schemas/QuestionId'
+      minItems: 0
+      maxItems: 200
+    schemas-ApiError:
+      description: An API error.
+      type: object
+      required:
+      - title
+      - httpStatus
+      properties:
+        title:
+          type: string
+          description: Short humanly-readable title of the error
+          example: BAD_REQUEST
+        httpStatus:
+          type: integer
+          description: HTTP status code
+          example: 422
+        traceId:
+          type: string
+          description: Internal assigned traced identifier
+        requestId:
+          type: string
+          description: Client provided request identifier
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorContext'
+          description: Provides additional context and detail on the errors
+          minItems: 0
+          maxItems: 100
+    QuestionDescription:
+      description: A description of the question.
+      example: Individuals must additionally provide info regarding cash flow.
+      type: string
+    AnyValuesMatch:
+      description: Describes the answer value that would require dependent questions.
+      type: string
+      maxLength: 255
+      example: 'true'
+    PageMetaData:
+      description: Page metadata.
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          example: 0
+          description: 'Page number.
+
+            '
+          minimum: 0
+          maximum: 2147483647
+        limit:
+          type: integer
+          format: int32
+          example: 25
+          description: 'Number of records per page.
+
+            '
+          minimum: 1
+          maximum: 25
+        total:
+          type: integer
+          format: int64
+          example: 340
+          description: 'Total number of items.
+
+            '
+          minimum: 0
+          maximum: 9999999999
+    QuestionResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentItem'
+          minItems: 1
+          maxItems: 50
+        defaultLocale:
+          $ref: '#/components/schemas/LocaleId'
+        description:
+          $ref: '#/components/schemas/QuestionDescription'
+        id:
+          $ref: '#/components/schemas/QuestionId'
+        parentQuestionId:
+          $ref: '#/components/schemas/QuestionId'
+        responseSchema:
+          $ref: '#/components/schemas/ResponseSchema'
+        subQuestions:
+          type: array
+          items:
+            type: object
+            properties:
+              anyValuesMatch:
+                $ref: '#/components/schemas/AnyValuesMatch'
+              questionIds:
+                $ref: '#/components/schemas/QuestionIdList'
+          minItems: 0
+    ResponseSchemaItem:
+      description: A limited subset of JSON Schema used to validate the response value items.
+      type: object
+      properties:
+        type:
+          description: 'The data type for the response values. The `enum` type is deprecated, refer to the `enum` field instead.
+
+            '
+          type: string
+          enum:
+          - boolean
+          - string
+          - number
+          - integer
+          - enum
+        minimum:
+          type: number
+        maximum:
+          type: number
+        exclusiveMinimum:
+          type: boolean
+        exclusiveMaximum:
+          type: boolean
+        minLength:
+          type: integer
+        maxLength:
+          type: integer
+        format:
+          description: Only applicable to string, number, and integer.
+          type: string
+          enum:
+          - float
+          - double
+          - int32
+          - int64
+          - date
+        pattern:
+          description: Only applicable to string.
+          type: string
+        enum:
+          description: A list of options if the answer is restricted to a fixed set of values.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 100
+      required:
+      - type
+    LocaleId:
+      description: The identifier for a language and location.
+      type: string
+      example: en-US
+  responses:
+    '403':
+      description: Forbidden - Unauthorized Access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Forbidden
+            httpStatus: 403
+            context:
+            - message: Platform is not authorized to access client.
+    '500':
+      description: Internal Server Error - Generic Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Internal Server Error
+            httpStatus: 500
+            context:
+            - message: Something went wrong. Please try again later.
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Invalid Data
+            httpStatus: 400
+            context:
+            - code: '10104'
+              message: Client with ID [3000005555] does not exist.
+              location: BODY
+              field: clientId
+    '401':
+      description: Unauthenticated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Unauthorized
+            httpStatus: 401
+            context:
+            - message: Provided token does not follow required JWT format. It may also be missing mandatory parts
+    '503':
+      description: Service Unavailable - API Processing Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Service Unavailable
+            httpStatus: 503
+            context:
+            - message: Service unavailable.
+    '404':
+      description: No data found for the criteria specified
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Not Found
+            httpStatus: 404
+            context:
+            - message: Party with ID [2000000555] not found.
+  examples:
+    QuestionResponse:
+      summary: Question response
+      description: The response data for a question
+      value:
+        content:
+        - label: Will you perform cash transactions?
+          description: Individuals must additionally provide info regarding cash flow.
+          locale: en-US
+        defaultLocale: en-US
+        description: Individuals must additionally provide info regarding cash flow.
+        id: '300001'
+        responseSchema:
+          type: array
+          items:
+            type: boolean
+          minItems: 1
+          maxItems: 1
+        subQuestions:
+        - anyValuesMatch: 'true'
+          questionIds:
+          - '300002'
+    QuestionListResponse:
+      summary: List of questions
+      description: A list of due diligence questions
+      value:
+        questions:
+        - content:
+          - label: Will you perform cash transactions?
+            description: Individuals must additionally provide info regarding cash flow.
+            locale: en-US
+          defaultLocale: en-US
+          description: Individuals must additionally provide info regarding cash flow.
+          id: '300001'
+          responseSchema:
+            type: array
+            items:
+              type: boolean
+            minItems: 1
+            maxItems: 1
+          subQuestions:
+          - anyValuesMatch: 'true'
+            questionIds:
+            - '300002'
+        - content:
+          - label: If yes, will they exceed US$xx in aggregate on a monthly basis?
+            description: Individuals must additionally provide info regarding cash flow.
+            locale: en-US
+          defaultLocale: en-US
+          description: Individuals must additionally provide info regarding cash flow.
+          id: '300002'
+          parentQuestionId: '300001'
+          responseSchema:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 1
+          subQuestions: []
+        - content:
+          - label: 'Purpose of the account(s):'
+            description: The purpose of the account(s) must be provided.
+            locale: en-US
+          defaultLocale: en-US
+          description: The purpose of the account(s) must be provided.
+          id: '300003'
+          responseSchema:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 1
+          subQuestions: []
+        metadata:
+          page: 0
+          limit: 25
+          total: 3
+    DependentQuestionResponse:
+      summary: Dependent question
+      description: The response data for a dependent question
+      value:
+        content:
+        - label: If yes, will they exceed US$xx in aggregate on a monthly basis?
+          description: Individuals must additionally provide info regarding cash flow.
+          locale: en-US
+        defaultLocale: en-US
+        description: Individuals must additionally provide info regarding cash flow.
+        id: '300002'
+        parentQuestionId: '300001'
+        responseSchema:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 1
+        subQuestions: []
+  parameters:
+    TokenInHeader:
+      name: token
+      in: header
+      description: JWT Client token
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 8192
+    QuestionIdListInQuery:
+      name: questionIds
+      in: query
+      description: Comma-separated list of Question IDs.
+      example: 30001,30002,30003
+      required: false
+      schema:
+        type: string
+        pattern: ^[0-9]{1,19}(,[0-9]{1,19})*$
+        maxLength: 4096
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - 111789_SMBDO_PAYFAC_ACCESS: API access role claim
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - 111789_SMBDO_CLIENT_ACCESS: API access role claim

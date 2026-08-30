@@ -1,0 +1,759 @@
+openapi: 3.2.0
+info:
+  title: J.P. Morgan Business Direct Connect Personal Information API
+  version: 6.5.1
+  description: Connect to retrieve account details, transactions, payment network information, and statements for eligible USD-denominated US checking, savings, and money market accounts using the Financial Data Exchange (FDX) standard with secure, paginated access and lightweight or detailed responses.
+  contact:
+    name: J.P. Morgan Corporate FDX Support
+    email: jpmorgan.business.direct.connect.support@jpmorgan.com
+servers:
+- url: https://api.payments.jpmorgan.com/fdx/v6
+  description: PRODUCTION - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/fdx/v6
+  description: MOCK
+tags:
+- name: Personal Information
+paths:
+  /accounts/{accountId}/contact:
+    get:
+      tags:
+      - Personal Information
+      summary: Get an account's contact information
+      operationId: getAccountContact
+      description: Get contact information on the account
+      parameters:
+      - $ref: '#/components/parameters/FapiInteractionIdHeader'
+      - $ref: '#/components/parameters/FdxApiActorTypeHeader'
+      - $ref: '#/components/parameters/FdxApiClientPublicKeyHeader'
+      - $ref: '#/components/parameters/FdxApiDataProviderIdHeader'
+      - $ref: '#/components/parameters/FdxApiDataRecipientIdHeader'
+      - $ref: '#/components/parameters/AccountIdPath'
+      responses:
+        '200':
+          description: Details used to verify an account
+          headers:
+            x-fapi-interaction-id:
+              $ref: '#/components/parameters/FapiInteractionIdHeader'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountContact'
+        '400':
+          description: 'Bad Request
+
+
+            **List of Error codes and Usage explanations.**
+
+            | Error Code      |           Usage                                                                                                                           |
+
+            | --------------  |-------------------------------------------------------------------------------------------------------------------------------------------|
+
+            | 401             | Invalid Input, 15001:Input in Request for Client ID {0}. {1}                                                                              |'
+          headers:
+            x-fapi-interaction-id:
+              $ref: '#/components/parameters/FapiInteractionIdHeader'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Customer not authorized
+
+
+            **List of Error codes and Usage explanations.**
+
+            | Error Code      |           Usage                                                                                                  |
+
+            | --------------  |------------------------------------------------------------------------------------------------------------------|
+
+            | 602             | Customer not authorized, 15003:Authenticated customer does not have the authorization to perform this action     |'
+          headers:
+            x-fapi-interaction-id:
+              $ref: '#/components/parameters/FapiInteractionIdHeader'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Account not found:
+                  value:
+                    code: '602'
+                    message: Customer not authorized
+                    debugMessage: Account {accountId} is not consented
+        '404':
+          description: 'Not Found
+
+
+            **List of Error codes and Usage explanations.**
+
+            | Error Code      |           Usage                                                           |
+
+            | --------------  |---------------------------------------------------------------------------|
+
+            | 701             | Account not found, 15002:Account not found for Client ID {0}. {1}         |'
+          headers:
+            x-fapi-interaction-id:
+              $ref: '#/components/parameters/FapiInteractionIdHeader'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Account not found:
+                  value:
+                    code: '701'
+                    message: Account not found
+                    debugMessage: Account {accountId} is not available
+        '500':
+          $ref: '#/components/responses/500'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+components:
+  schemas:
+    AccountContact:
+      title: Account Contact entity
+      description: Contact information for the account
+      type: object
+      properties:
+        holders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customer'
+          minItems: 0
+          description: Owners of the account
+    ErrorContext:
+      x-tags:
+      - common-error-model
+      - common-components
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+        location:
+          type: string
+          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
+          description: The location of the error occurred in the request.
+          minLength: 1
+          maxLength: 99
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+        field:
+          type: string
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+          pattern: ^[\$0-9a-zA-Z-_.()\[\]{}'"\s@=><!?,]+$
+        additionalContext:
+          $ref: '#/components/schemas/AdditionalContext'
+      description: Error Context
+    Identifier:
+      title: Identifier
+      description: Value for a unique identifier
+      type: string
+      maxLength: 256
+      example: 5ff6a4b6fd9f4607c0a7ca0f037c62018693f940836d69b31d664f2257f4c623
+    AdditionalContext:
+      type: array
+      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
+      items:
+        $ref: '#/components/schemas/StandardCodeContext'
+      minItems: 1
+      maxItems: 5
+    StandardCodeContext:
+      type: object
+      required:
+      - code
+      - message
+      - type
+      properties:
+        type:
+          title: CategoryType
+          type: string
+          description: "Category of the error code such as Business  21000 Invalid Access Token \n|Category Type | Description\n|--------------|-----------------\n|Business 21000 | Invalid Request, Client ID {ClientIdName} not valid\n|Server 22002 | Error connecting to Account Product Service for Client Id {ClientIdName}, account Id {accountHashId} for retrieving account details"
+          minLength: 2
+          maxLength: 16
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+    BusinessOrConsumer:
+      title: Business or Consumer Type
+      description: Indicator if parent entity is a consumer or business
+      type: string
+      x-fdx-csdf-account-categories:
+      - ANY
+      enum:
+      - BUSINESS
+      - CONSUMER
+    Customer:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            type: string
+            description: Array of the contact email addresses
+            example: ''
+          minItems: 0
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+          minItems: 0
+        telephones:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelephoneNumber'
+          minItems: 0
+        type:
+          $ref: '#/components/schemas/BusinessOrConsumer'
+          description: Type of entity. One of BUSINESS or CONSUMER
+        businessCustomer:
+          $ref: '#/components/schemas/BusinessCustomer'
+    ActorType:
+      title: FDX API Actor Type
+      description: 'This parameter is optional. The API only supports BATCH operations. default: BATCH'
+      type: string
+      default: BATCH
+      enum:
+      - BATCH
+      - USER
+    Error:
+      title: Error
+      description: An error entity which can be used at the API level for error responses or at the account level to indicate a problem specific to a particular account
+      type: object
+      properties:
+        code:
+          type: string
+          description: Long term persistent identifier which can be used to trace error condition back to log information
+          example: '601'
+        message:
+          type: string
+          description: End user displayable information which might help the customer diagnose an error
+          example: Customer not found
+        debugMessage:
+          type: string
+          description: Message used to debug the root cause of the error. Contents should not be used in consumer's business logic. Can change at any time and should only be used for consumer to communicate with the data provider about an issue. Provider can include an error GUID in message for their use.
+          example: 11005:Invalid Customer - Customer Not Found for Client ID A_JPMC_CB_777_SIT_114355
+    Address:
+      title: Address
+      description: U.S. domestic address or a foreign address with country other than 'US'
+      type: object
+      properties:
+        line1:
+          type: string
+          maxLength: 64
+          description: Address line 1
+          example: 206 WIRT ST
+        line2:
+          type: string
+          maxLength: 64
+          description: Address line 2
+          example: 111 MAIN ST APT 4B
+        line3:
+          type: string
+          maxLength: 64
+          description: Address line 3
+        city:
+          type: string
+          maxLength: 64
+          description: City
+          example: WEIRTON
+        region:
+          type: string
+          maxLength: 64
+          description: State, Province, Territory, Canton or Prefecture. From [Universal Postal Union](https://www.upu.int/en/Postal-Solutions/Programmes-Services/Addressing-Solutions#addressing-s42-standard) as of 2-26-2020, [S42 International Address Standards](https://www.upu.int/UPU/media/upu/documents/PostCode/S42_International-Addressing-Standards.pdf). For U.S. addresses can be 2-character code from '#/components/schemas/StateCode'
+          example: WV
+        postalCode:
+          type: string
+          maxLength: 16
+          description: Postal code
+          example: '260620000'
+        type:
+          type: string
+          description: Address type
+          example: LEGAL
+        country:
+          allOf:
+          - $ref: '#/components/schemas/Iso3166CountryCode'
+          - type: string
+            description: Country code
+            example: US
+    PaymentError:
+      type: object
+      x-tags:
+      - common-error-model
+      - common-components
+      title: Error
+      description: Common Error Model
+      properties:
+        title:
+          type: string
+          title: Short humanly-readable title of the error.
+          minLength: 1
+          maxLength: 100
+        httpStatus:
+          type: integer
+          default: 400
+          title: HTTP Status Code
+        traceId:
+          type: string
+          title: JPMC Assigned traced identifier
+        requestId:
+          type: string
+          title: The 'client originated' requestId
+        context:
+          type: array
+          title: Provides additional context and detail on the validation errors
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 1
+          maxItems: 100
+      required:
+      - title
+      readOnly: true
+    Iso3166CountryCode:
+      title: ISO 3166 Country Code
+      description: ISO 3166-1 alpha-2 codes as of April 5, 2023, from officially assigned Country Codes on [ISO Online Browsing Platform](https://www.iso.org/obp/ui/). Change log is at [ISO 3166 Maintenance Agency](https://www.iso.org/fr/committee/48750.html?t=3V3rukDb61p05Wd6ojyTRvE0S3Yg_fZgUjrLjHWcd9-mDmTKHOGjbX3nEJ3SqHar&view=documents#section-isodocuments-top)
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - UM
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+    TelephoneNumber:
+      title: Telephone Number
+      description: Standard for international phone numbers
+      type: object
+      properties:
+        number:
+          type: string
+          maxLength: 15
+          pattern: \d+
+          description: Telephone subscriber number defined by ITU-T recommendation E.164
+          example: '1234567890'
+    BusinessCustomer:
+      title: Business Customer entity
+      description: Customers that are commercial in nature are affiliated with a business entity
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of business customer
+          example: AKOMEAH TEXTILES
+  parameters:
+    FapiInteractionIdHeader:
+      name: x-fapi-interaction-id
+      in: header
+      description: Unique identifier for this interaction as an IETF RFC 4122 UUID. Used across all FDX API requests and responses. This parameter is required.
+      schema:
+        type: string
+      required: true
+      examples:
+        Scenario-1:
+          summary: Sample FAPI Interaction Id
+          value: c770aef3-6784-41f7-8e0e-ff5f97bddb3a
+    FdxApiDataProviderIdHeader:
+      name: FDX-API-Data-Provider-Id
+      in: header
+      description: ID for the financial institution responding to the request
+      schema:
+        $ref: '#/components/schemas/Identifier'
+        description: If the FDX API service is provided by a service bureau which uses the same end point for multiple institutions, the FDX API client MUST provide a header that identifies the desired financial institution. This corresponds to a data_provider_id in the registry. This header MAY be omitted if identifying a data provider is not required by the API host
+      required: false
+    FdxApiActorTypeHeader:
+      name: Fdx-Api-Actor-Type
+      in: header
+      description: This parameter is optional. The API only supports BATCH operations.
+      schema:
+        $ref: '#/components/schemas/ActorType'
+      examples:
+        Scenario-1:
+          summary: Sample Actor Type
+          value: BATCH
+    FdxApiClientPublicKeyHeader:
+      name: FDX-API-Client-Public-Key
+      in: header
+      description: Public key for data provider to encrypt sensitive response data
+      schema:
+        type: string
+        description: A public key value (created using RSA or Elliptic Curve) to use to encrypt the value that's returned in accountNumber or other sensitive response properties
+      required: false
+    AccountIdPath:
+      name: accountId
+      in: path
+      description: AccountId as returned in the call to /accounts. This parameter is required.
+      required: true
+      schema:
+        type: string
+      examples:
+        Scenario-1:
+          summary: Sample Account Identifier
+          value: c5e38f3375cb5f9225ab4dbf05ddcb9ed3faf2d29ebe0d4de47cbd7eb5e9594f
+    FdxApiDataRecipientIdHeader:
+      name: FDX-API-Data-Recipient-Id
+      in: header
+      description: ID for the data recipient making the request
+      schema:
+        $ref: '#/components/schemas/Identifier'
+        description: "If the FDX API service is being called by a Data Access Platform which supports multiple data recipients, the FDX API client must provide a header that identifies the calling data recipient. This header may be omitted if identifying a Data Recipient is not required by the Data Provider. Data Provider will specify what the header value must correspond to\n  * `client_id` if client is registered in the Data Provider's registry, and/or\n  * `FDX-Registry-Id` if client is registered with FDX (not with DP), and/or\n  * `App Name` if Data Provider uses neither client_id nor FDX_Registry-Id"
+      required: false
+  responses:
+    '500':
+      description: 'Internal Server Error
+
+
+        **List of Error codes and Usage explanations.**
+
+        | Error Code      |           Usage                                                                             |
+
+        | --------------  |---------------------------------------------------------------------------------------------|
+
+        | 503             | Bad Response,GET / 503 operation response content type ''text/html'' does not exist           |'
+      headers:
+        x-fapi-interaction-id:
+          $ref: '#/components/parameters/FapiInteractionIdHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentError'
+          examples:
+            BadResponse:
+              value:
+                title: Bad Response
+                httpStatus: 500
+                traceId: 123e4567-e89b-12d3-a456-426614174000
+                context:
+                - message: GET / 503 operation response content type 'text/html' does not exist
+    '501':
+      description: 'Error when FdxVersion in URI is not one of those implemented at backend
+
+
+        **List of Error codes and Usage explanations.**
+
+        | Error Code      |           Usage                                                                                  |
+
+        | --------------  |---------------------------------------------------------------------------                       |
+
+        | 503             | System unavailable, GET / 503 operation response content type ''text/html'' does not exist         |'
+      headers:
+        x-fapi-interaction-id:
+          $ref: '#/components/parameters/FapiInteractionIdHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentError'
+          examples:
+            SystemUnavailable:
+              value:
+                title: System Unavailable
+                httpStatus: 503
+                traceId: 123e4567-e89b-12d3-a456-426614174000
+                context:
+                - message: GET / 503 operation response content type 'text/html' does not exist
+    '503':
+      description: 'Service Unavailable
+
+
+        **List of Error codes and Usage explanations.**
+
+        | Error Code      |           Usage                                                                             |
+
+        | --------------  |---------------------------------------------------------------------------------------------|
+
+        | 500             | Internal server error,11002:Internal Server Error for Client ID                             |
+
+        | 503             | System unavailable, GET / 503 operation response content type ''text/html'' does not exist    |'
+      headers:
+        x-fapi-interaction-id:
+          $ref: '#/components/parameters/FapiInteractionIdHeader'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentError'
+          examples:
+            SystemUnavailable:
+              value:
+                title: System Unavailable
+                httpStatus: 503
+                traceId: 123e4567-e89b-12d3-a456-426614174000
+                context:
+                - message: GET / 503 operation response content type 'text/html' does not exist
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Reader: Read role claim
+x-jpmc-security:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Reader: Read role claim
+      - Editor: Write role claim

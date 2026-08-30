@@ -1,0 +1,979 @@
+openapi: 3.2.0
+info:
+  title: Account Updater Account Updates API
+  description: The Account Updater API provides recurring and stored payment merchants with their customers latest card account credentials.
+  version: 1.4.0
+  contact:
+    name: Merchant Services Account Updater API Support
+    url: https://developer.payments.jpmorgan.com/contact/support
+servers:
+- url: https://api-ms.payments.jpmorgan.com/api/v1
+  description: PRODUCTION - OAUTH
+- url: https://api-ms-test.payments.jpmorgan.com/api/v1
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/api/v1
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Account Updates
+  description: Request updates to an account.
+paths:
+  /account-updates:
+    post:
+      summary: Query Account Updater service.
+      tags:
+      - Account Updates
+      description: Request an update to an account. Check for updated account information.
+      parameters:
+      - name: merchant-id
+        in: header
+        required: true
+        schema:
+          type: string
+          example: '990000000002'
+          minLength: 6
+          maxLength: 12
+        description: Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.
+        examples:
+          VI - New Account:
+            value: '990941725627'
+          VI - New Expiry:
+            value: '990000000001'
+          VI -New Account New Expiry:
+            value: '990000000002'
+          VI - Closed Account:
+            value: '990000000003'
+          VI - Contact Cardholder:
+            value: '990000000004'
+          VI - Match No Update:
+            value: '990000000005'
+          VI - No Match Non Participating BIN:
+            value: '990000000006'
+          VI - No Match Participating BIN:
+            value: '990000000007'
+          VI - Brandflip to MC:
+            value: '990000000008'
+          VI - PAN OPT OUT:
+            value: '990000000009'
+          VI - Stop Advice on merchant:
+            value: '990000000010'
+          MC - No Match Non Participating BIN:
+            value: '990000000011'
+          MC - Match No Update:
+            value: '990000000012'
+          MC - New Account New Expiry:
+            value: '990000000013'
+          MC - Contact Cardholder:
+            value: '990000000014'
+          MC - New Expiry:
+            value: '990000000015'
+          MC - No Match Participating BIN:
+            value: '990000000016'
+          MC - Brandflip to VI:
+            value: '990000000027'
+          DI - Match No Update:
+            value: '990000000017'
+          DI - New Account:
+            value: '990000000018'
+          DI - New Expiry (Network Response E):
+            value: '990000000019'
+          DI -New Account New Expiry (Network Response A):
+            value: '990000000020'
+          DI - Closed Account:
+            value: '990000000021'
+          DI - Contact Cardholder:
+            value: '990000000022'
+          DI -New Account New Expiry (Network Response O):
+            value: '990000000023'
+          DI - New Expiry (Network Response O):
+            value: '990000000024'
+          Merchant is not entitled for Standalone AU:
+            value: '990000000025'
+          Card not supported for account updater:
+            value: '990000000026'
+          VI UNREGISTER - New Account New Expiry:
+            value: '990000000028'
+          VI REGISTER - New Account New Expiry:
+            value: '990000000030'
+          MC UNREGISTER - New Account New Expiry:
+            value: '990000000031'
+          MC REGISTER - New Account New Expiry:
+            value: '990000000032'
+          DI UNREGISTER - Match No Update:
+            value: '990000000033'
+          DI REGISTER - Match No Update:
+            value: '990000000034'
+          VI - New Account New Expiry (using Safetech Token):
+            value: '990000000035'
+          VI - New Account (using alphanumeric Safetech Token):
+            value: '990000000036'
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 5c678f07-7eec-4b46-9e52-38feb6a23b2a
+        description: Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.
+        examples:
+          VI - New Account:
+            value: 12cc0270-7bed-11e9-a188-1763956dd7f7
+          VI - New Expiry:
+            value: 6a0b2c2a-9c77-4f1f-a6cb-64e0f3e802a1
+          VI -New Account New Expiry:
+            value: 5a7d2b3c-7b2d-4d0d-9a2f-3d7f268f3f77
+          VI - Closed Account:
+            value: 0b4b1c52-4a2d-4a5b-9e86-12da5ce4d5a1
+          VI - Contact Cardholder:
+            value: 1f6c6f9b-8f9a-4f66-8b6b-8b7d6d8d8e6a
+          VI - Match No Update:
+            value: 2c4c3cc2-2519-4ac4-8b26-23912f7b6507
+          VI - No Match Non Participating BIN:
+            value: 3c2a4e8b-6d7a-4d45-9a13-6f3b2b8e4f12
+          VI - No Match Participating BIN:
+            value: 4d0f1b3e-cc7a-4b1b-9e5a-82c3d8e7a3b4
+          VI - Brandflip to MC:
+            value: 7e8a2f1d-1e42-4b1d-8d7c-9c1b2a3d4e5f
+          VI - PAN OPT OUT:
+            value: 9d0b720a-67a0-4c60-9f35-5e4d02f65d6f
+          VI - Stop Advice on merchant:
+            value: 0d7a8b9c-1e2f-4a3b-8c9d-0e1f2a3b4c5d
+          MC - No Match Non Participating BIN:
+            value: 24a3e9f3-6232-4f38-9e55-b1b3ed0a17cb
+          MC - Match No Update:
+            value: a27f4fb9-d0b4-40f3-b1b2-91bfb9e38a44
+          MC - New Account New Expiry:
+            value: 718b39d3-3c01-4e44-8f49-fb5e6c6e7d69
+          MC - Contact Cardholder:
+            value: 6c02b8c7-4d5d-4e6c-9b21-8ff6c1c4ccef
+          MC - New Expiry:
+            value: 5df7d9cd-8a39-4cc8-9f52-3d0b7c355a3f
+          MC - No Match Participating BIN:
+            value: b9c6fd41-8a5e-4b7a-8e1a-0d5aa2b2f839
+          MC - Brandflip to VI:
+            value: 6f8b8a5c-3a9b-4b0c-9c61-3f2e2f631b8d
+          DI - Match No Update:
+            value: 6a62db33-6dd2-4b3b-9a5f-9adf6e0c2e0a
+          DI - New Account:
+            value: 2d0c3a78-7c5a-4b7a-b9c5-3cf8b1a27ce6
+          DI - New Expiry (Network Response E):
+            value: 0f6c0a89-8e80-4c2c-b4a2-5b1b2d7b8f4a
+          DI -New Account New Expiry (Network Response A):
+            value: c0f1f1c2-9b6a-4db8-a8aa-f2d6d4b6ee20
+          DI - Closed Account:
+            value: 9a83e274-0b24-4a7a-8f28-50f0b1b0c3a5
+          DI - Contact Cardholder:
+            value: 1b3a8d9a-0c2b-4a9e-9c31-2dd5d7b11c25
+          DI -New Account New Expiry (Network Response O):
+            value: 7f2a6c50-0b6a-41c9-9f9a-0d0c8e5e0d17
+          DI - New Expiry (Network Response O):
+            value: 84ac3dd3-1b0b-4a0c-8d6a-7bb4dcf2d6b4
+          Merchant is not entitled for Standalone AU:
+            value: b3f6e7d0-2b55-4f45-9b6d-8c61079b1f67
+          Card not supported for account updater:
+            value: 0d9c0d8b-7d4c-4bb0-a5f8-ff0d8bcd6c7a
+          VI UNREGISTER - New Account New Expiry:
+            value: a6c2c4d7-4f71-4bdf-8c62-06da7269ad5a
+          VI REGISTER - New Account New Expiry:
+            value: e4f5b7b7-e5d7-46b2-8b8a-fcab0c1a2fe7
+          MC UNREGISTER - New Account New Expiry:
+            value: 4b4c4b1f-2a1d-4d2d-9c79-6a0a5e5ee5f4
+          MC REGISTER - New Account New Expiry:
+            value: 52c68c32-6aa1-441b-b52a-6f3f31ea3b6d
+          DI UNREGISTER - Match No Update:
+            value: d0b2d4c5-0dfc-46cf-8d0a-14b97fbfe70c
+          DI REGISTER - Match No Update:
+            value: 15ee6a2a-098f-4516-8a74-bf4f0ab3a55b
+          VI - New Account New Expiry (using Safetech Token):
+            value: 4a588054-717e-4917-9d17-3cafec28215a
+          VI - New Account (using alphanumeric Safetech Token):
+            value: 4a588054-717e-4918-9d17-3cafec28215a
+      requestBody:
+        description: Request an update to an account.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/accountUpdateRequest'
+            examples:
+              VI - New Account:
+                value:
+                  accountInformation:
+                    cardNumber: '4111111111111111'
+                    expiry:
+                      month: 8
+                      year: 2026
+              VI - New Expiry:
+                value:
+                  accountInformation:
+                    accountNumberType: PAN
+                    cardNumber: '4111111111111112'
+                    expiry:
+                      month: 12
+                      year: 2027
+              VI -New Account New Expiry:
+                value:
+                  accountInformation:
+                    accountNumberType: PAN
+                    cardNumber: '4111111111111113'
+                    expiry:
+                      month: 12
+                      year: 2027
+              VI - Closed Account:
+                value:
+                  accountInformation:
+                    accountNumberType: PAN
+                    cardNumber: '4111111111111114'
+                    expiry:
+                      month: 12
+                      year: 2027
+              VI - Contact Cardholder:
+                value:
+                  accountInformation:
+                    accountNumberType: PAN
+                    cardNumber: '4111111111111115'
+                    expiry:
+                      month: 12
+                      year: 2027
+              VI - Match No Update:
+                value:
+                  accountInformation:
+                    accountNumberType: PAN
+                    cardNumber: '4111111111111116'
+                    expiry:
+                      month: 12
+                      year: 2027
+              VI - No Match Non Participating BIN:
+                value:
+                  accountInformation:
+                    accountNumberType: PAN
+                    cardNumber: '4111111111111117'
+                    expiry:
+                      month: 12
+                      year: 2027
+              VI - No Match Participating BIN:
+                value:
+                  accountInformation:
+                    accountNumberType: PAN
+                    cardNumber: '4111111111111118'
+                    expiry:
+                      month: 12
+                      year: 2027
+              VI - Brandflip to MC:
+                value:
+                  accountInformation:
+                    accountNumberType: PAN
+                    cardNumber: '4111111111111119'
+                    expiry:
+                      month: 12
+                      year: 2024
+              VI - PAN OPT OUT:
+                value:
+                  accountInformation:
+                    cardNumber: '4111111111111110'
+                    expiry:
+                      month: 8
+                      year: 2026
+              VI - Stop Advice on merchant:
+                value:
+                  accountInformation:
+                    cardNumber: '4111111111111190'
+                    expiry:
+                      month: 8
+                      year: 2026
+              MC - No Match Non Participating BIN:
+                value:
+                  accountInformation:
+                    cardNumber: '5111111111111111'
+                    expiry:
+                      month: 8
+                      year: 2026
+              MC - Match No Update:
+                value:
+                  accountInformation:
+                    cardNumber: '5111111111111112'
+                    expiry:
+                      month: 8
+                      year: 2026
+              MC - New Account New Expiry:
+                value:
+                  accountInformation:
+                    cardNumber: '5111111111111113'
+                    expiry:
+                      month: 8
+                      year: 2026
+              MC - Contact Cardholder:
+                value:
+                  accountInformation:
+                    cardNumber: '5111111111111114'
+                    expiry:
+                      month: 8
+                      year: 2026
+              MC - New Expiry:
+                value:
+                  accountInformation:
+                    cardNumber: '5111111111111115'
+                    expiry:
+                      month: 8
+                      year: 2026
+              MC - No Match Participating BIN:
+                value:
+                  accountInformation:
+                    cardNumber: '5111111111111117'
+                    expiry:
+                      month: 8
+                      year: 2026
+              MC - Brandflip to VI:
+                value:
+                  accountInformation:
+                    cardNumber: '5111111111111119'
+                    expiry:
+                      month: 8
+                      year: 2026
+              DI - Match No Update:
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111110'
+                    expiry:
+                      month: 8
+                      year: 2026
+              DI - New Account:
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111111'
+                    expiry:
+                      month: 8
+                      year: 2026
+              DI - New Expiry (Network Response E):
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111112'
+                    expiry:
+                      month: 8
+                      year: 2026
+              DI -New Account New Expiry (Network Response A):
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111113'
+                    expiry:
+                      month: 8
+                      year: 2026
+              DI - Closed Account:
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111114'
+                    expiry:
+                      month: 8
+                      year: 2026
+              DI - Contact Cardholder:
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111115'
+                    expiry:
+                      month: 8
+                      year: 2026
+              DI -New Account New Expiry (Network Response O):
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111116'
+                    expiry:
+                      month: 8
+                      year: 2026
+              DI - New Expiry (Network Response O):
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111117'
+                    expiry:
+                      month: 8
+                      year: 2026
+              Merchant is not entitled for Standalone AU:
+                value:
+                  accountInformation:
+                    cardNumber: '4211111111111111'
+                    expiry:
+                      month: 8
+                      year: 2026
+              Card not supported for account updater:
+                value:
+                  accountInformation:
+                    cardNumber: '371449635398431'
+                    expiry:
+                      month: 8
+                      year: 2026
+              VI UNREGISTER - New Account New Expiry:
+                value:
+                  accountInformation:
+                    cardNumber: '4111111111111113'
+                    expiry:
+                      month: 9
+                      year: 2032
+                  cardAccountAction: UNREGISTER
+              VI REGISTER - New Account New Expiry:
+                value:
+                  accountInformation:
+                    cardNumber: '4111111111111113'
+                    expiry:
+                      month: 9
+                      year: 2032
+                  cardAccountAction: REGISTER
+              MC UNREGISTER - New Account New Expiry:
+                value:
+                  accountInformation:
+                    cardNumber: '5111111111111113'
+                    expiry:
+                      month: 8
+                      year: 2026
+                  cardAccountAction: UNREGISTER
+              MC REGISTER - New Account New Expiry:
+                value:
+                  accountInformation:
+                    cardNumber: '5111111111111113'
+                    expiry:
+                      month: 8
+                      year: 2026
+                  cardAccountAction: REGISTER
+              DI UNREGISTER - Match No Update:
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111110'
+                    expiry:
+                      month: 8
+                      year: 2026
+                  cardAccountAction: UNREGISTER
+              DI REGISTER - Match No Update:
+                value:
+                  accountInformation:
+                    cardNumber: '6011111111111110'
+                    expiry:
+                      month: 8
+                      year: 2026
+                  cardAccountAction: REGISTER
+              VI - New Account New Expiry (using Safetech Token):
+                value:
+                  accountInformation:
+                    cardNumber: '4112347990004113'
+                    expiry:
+                      month: 9
+                      year: 2032
+                    accountNumberType: SAFETECH_TOKEN
+              VI - New Account (using alphanumeric Safetech Token):
+                value:
+                  accountInformation:
+                    cardNumber: 411111STEASF1111
+                    expiry:
+                      month: 7
+                      year: 2026
+                    accountNumberType: SAFETECH_TOKEN
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountUpdateResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /account-updates/{account-identifier}:
+    get:
+      summary: Get information about an account update.
+      tags:
+      - Account Updates
+      description: Get information about an account update.
+      parameters:
+      - name: merchant-id
+        in: header
+        required: true
+        schema:
+          type: string
+          example: '991234567890'
+          minLength: 6
+          maxLength: 12
+        description: Unique identifier of the merchant account. Must be 6-12 characters in length and contain only numeric values.
+        examples:
+          Account update referencing initial request - DI:
+            value: '990000000020'
+          Account update referencing initial request - VI:
+            value: '990000000002'
+          Account update referencing initial request - MC:
+            value: '990000000013'
+          Account update referencing initial request - DI REGISTER:
+            value: '990000000034'
+          Account update referencing initial request - VI REGISTER:
+            value: '990000000030'
+          Account update referencing initial request - MC REGISTER:
+            value: '990000000032'
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 5c678f07-7eec-4b46-9e52-38feb6a23b2a
+        description: Unique identifier of the merchant request. Must be a valid UUID for each request. Ensures each merchant request is traceable and distinct.
+        examples:
+          Account update referencing initial request - DI:
+            value: c0f1f1c2-9b6a-4db8-a8bb-f2d6d4b6ee20
+          Account update referencing initial request - VI:
+            value: 5a7d2b3c-7b2d-4d0d-9c2c-3d7f268f3f77
+          Account update referencing initial request - MC:
+            value: 718b39d3-3c01-4e44-8d4d-fb5e6c6e7d69
+          Account update referencing initial request - DI REGISTER:
+            value: 15ee6a2a-098f-4516-8acc-bf4f0ab3a55b
+          Account update referencing initial request - VI REGISTER:
+            value: e4f5b7b7-e5d7-46b2-8bbb-fcab0c1a2fe7
+          Account update referencing initial request - MC REGISTER:
+            value: 52c68c32-6aa1-441b-b5aa-6f3f31ea3b6d
+      - name: account-identifier
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 310566a1-d6f8-46d1-8f14-4e01803ad009
+        description: UUID referencing a prior account update request. Used to retrieve update status or results for a specific account.
+        examples:
+          Account update referencing initial request - DI:
+            value: c0f1f1c2-9b6a-4db8-a8aa-f2d6d4b6ee20
+          Account update referencing initial request - VI:
+            value: 5a7d2b3c-7b2d-4d0d-9a2f-3d7f268f3f77
+          Account update referencing initial request - MC:
+            value: 718b39d3-3c01-4e44-8f49-fb5e6c6e7d69
+          Account update referencing initial request - DI REGISTER:
+            value: 15ee6a2a-098f-4516-8a74-bf4f0ab3a55b
+          Account update referencing initial request - VI REGISTER:
+            value: a6c2c4d7-4f71-4bdf-8c62-06da7269ad5a
+          Account update referencing initial request - MC REGISTER:
+            value: 52c68c32-6aa1-441b-b52a-6f3f31ea3b6d
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountGetUpdateResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  schemas:
+    accountInformation:
+      description: Object that contains card account details, including card number, expiration date, and account number type.
+      type: object
+      properties:
+        cardNumber:
+          description: Card or SafeTech token account number (13-19 digits). Used for identifying the payment instrument.
+          type: string
+          example: '4012888888881881'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
+    merchantRecordIdentifier:
+      description: Merchant-supplied record identifier preferably in UUID format. Used to correlate API requests with internal records.
+      type: string
+      example: 45becd4d-b0d9-4904-9958-49aba52f1280
+    validationMessage:
+      description: Object containing information about transaction validation.
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          description: The name of the entity that experienced an error, such as a component or service involved in the request.
+          type: string
+          example: Request Validator
+    accountUpdaterResult:
+      description: Object that contains the result of the account update process, including old and new account information,payment network response, and outcome messages.
+      type: object
+      properties:
+        oldAccountInformation:
+          $ref: '#/components/schemas/oldAccountInformation'
+        newAccountInformation:
+          $ref: '#/components/schemas/newAccountInformation'
+        networkResponse:
+          $ref: '#/components/schemas/networkResponse'
+        reasonMessage:
+          description: The account update response message that is independent of payment network. Allowed values are defined by the Account Updater service.
+          type: string
+          example: NEW_ACCOUNT_AND_EXPIRY
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        expectedRecordUpdateTimestamp:
+          description: Expected timestamp (ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)) for when the record will be updated. Useful for scheduling and tracking updates.
+          type: string
+          format: date-time
+          example: '2024-10-30T14:30:00.000Z'
+    expiry:
+      description: Object that contains the card expiration date, including month and year.
+      type: object
+      required:
+      - month
+      - year
+      properties:
+        month:
+          $ref: '#/components/schemas/month'
+        year:
+          $ref: '#/components/schemas/year'
+    requestId:
+      description: Unique identifier of the API request designated by the merchant. Must be a valid UUID.
+      type: string
+      example: 98c21399-a3f6-41ce-881a-9c5aeb586932
+    requestStatus:
+      description: Registration state of the card for the submitted request (REGISTERED, UNREGISTERED, etc.). Reflects current enrollment status.
+      type: string
+      example: REGISTERED
+      enum:
+      - REGISTERED
+      - UNREGISTERED
+      - REGISTRATION_FAILED
+      - REGISTRATION_PENDING
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Array that contains information about errors encountered during transaction validation. Each object includes error code, message, and entity details.
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    responseId:
+      description: Unique response identifier (UUID). Used to track and reference API responses.
+      type: string
+      example: fe663508-8040-4880-bfc6-1212932837bc
+    resultsMessage:
+      description: Object that contains the result details of the account update process, including old and new account information, network response codes, and outcome messages.
+      type: object
+      properties:
+        oldAccountInformation:
+          $ref: '#/components/schemas/oldAccountInformation'
+        newAccountInformation:
+          $ref: '#/components/schemas/newAccountInformation'
+        networkResponse:
+          description: The response code returned by the payment network for the account update.
+          type: string
+          deprecated: true
+        reason:
+          description: The textual description of the account update outcome as provided by the response code.
+          type: string
+          deprecated: true
+        reasonMessage:
+          description: Outcome message describing the result of the account updater process. Refer to Account Updater service documentation for allowed values.
+          type: string
+          example: NEW_ACCOUNT_AND_EXPIRY
+        responseMessage:
+          description: Detailed explanation of the account update response. Provides context for the outcome of the request.
+          type: string
+        expectedRecordUpdateTimestamp:
+          description: Expected timestamp (ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)) for when the record will be updated. Useful for scheduling and tracking updates.
+          type: string
+          format: date-time
+          example: '2024-10-30T14:30:00.000Z'
+        networkResponseCode:
+          description: The response code returned by the payment network for the account update.
+          type: string
+    newAccountInformation:
+      description: Object that contains updated card account information when available, including card number, expiration date, account number type, and payment method change status.
+      type: object
+      properties:
+        cardNumber:
+          description: Updated card or SafeTech token account number (13-19 digits). Represents the new payment instrument after update.
+          type: string
+          example: '4012888888881881'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        cardTypeName:
+          $ref: '#/components/schemas/cardTypeName'
+        paymentMethodChanged:
+          description: Boolean flag indicating if the payment method for the consumer account has changed (true = changed, false = unchanged).
+          type: boolean
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
+    networkResponse:
+      description: Object that contains account update response information from the payment network, including response codes and messages.
+      type: object
+      properties:
+        networkReasonMessage:
+          description: The account update description returned from payment networks.
+          type: string
+          deprecated: true
+        networkResponseCode:
+          description: The response code returned by the payment network for the account update. Allowed values are defined by the payment network.
+          type: string
+    responseCode:
+      description: The response code representing the outcome of the request. Allowed values are defined by the application.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    cardTypeName:
+      description: Payment method label used to identify the card brand or payment network, for example, Visa, Mastercard, Discover.
+      type: string
+    accountUpdateRequest:
+      description: Request updated information for an account. Information is delivered via the notification interface.
+      type: object
+      properties:
+        accountInformation:
+          $ref: '#/components/schemas/accountInformation'
+        cardAccountAction:
+          $ref: '#/components/schemas/cardAccountAction'
+        subMerchantId:
+          $ref: '#/components/schemas/subMerchantId'
+        merchantRecordIdentifier:
+          $ref: '#/components/schemas/merchantRecordIdentifier'
+        bypassBrandCheckIndicator:
+          description: Boolean flag indicating whether the check for updates on additional card brands is bypassed. When set to "true", no verification is performed on these additional brands to determine their readiness for updates.
+          type: boolean
+    code:
+      description: The error code returned when an exception is encountered by the system or a connected component. Allowed values are defined by the application.
+      type: string
+      example: '1001'
+    year:
+      description: Card expiration year (four-digit integer, for example, 2026). Indicates when the card expires.
+      type: integer
+      format: int32
+      minimum: 2018
+      maximum: 2999
+      example: 2020
+    responseStatus:
+      description: The result status of the request. Allowed values are "SUCCESS" and "ERROR".
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    message:
+      description: The detailed message describing the error encountered.
+      type: string
+      example: A required field is empty.
+    responseMessage:
+      description: Detailed explanation of the account update response. Provides context for the outcome of the request.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    cardAccountAction:
+      description: Action to register or unregister the account number for automated updates (requires notification service enrollment).
+      type: string
+      example: REGISTER
+      enum:
+      - REGISTER
+      - UNREGISTER
+    accountUpdateResponse:
+      description: Information on update request. Pending indicates that request is being processed. Delivered indicates that a response has been sent to the callback URL provided in the request.
+      type: object
+      required:
+      - requestCreateTimestamp
+      - responseId
+      - requestId
+      - response
+      properties:
+        requestCreateTimestamp:
+          description: The date and time when the request is created, in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).
+          type: string
+          format: date-time
+          example: '2024-10-30T14:30:00.000Z'
+        responseId:
+          $ref: '#/components/schemas/responseId'
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        requestStatus:
+          $ref: '#/components/schemas/requestStatus'
+        response:
+          description: Status of the request (SUCCESS or ERROR). Indicates whether the operation was completed successfully.
+          type: string
+          enum:
+          - SUCCESS
+          - ERROR
+          example: SUCCESS
+        accountUpdaterResult:
+          $ref: '#/components/schemas/accountUpdaterResult'
+        merchantRecordIdentifier:
+          $ref: '#/components/schemas/merchantRecordIdentifier'
+        cardAccountAction:
+          $ref: '#/components/schemas/cardAccountAction'
+        subMerchantId:
+          $ref: '#/components/schemas/subMerchantId'
+        bypassBrandCheckIndicator:
+          description: Boolean flag indicating whether the check for updates on additional card brands is bypassed. When set to "true", no verification is performed on these additional brands to determine their readiness for updates.
+          type: boolean
+    accountNumberType:
+      description: Type of payment method for the account number, for example, PAN, SAFETECH_TOKEN. Determines processing method.
+      type: string
+      enum:
+      - PAN
+      - SAFETECH_TOKEN
+    accountGetUpdateResponse:
+      description: Information about an account.
+      type: object
+      required:
+      - recordUpdateTimestamp
+      - responseId
+      - requestId
+      - response
+      properties:
+        recordUpdateTimestamp:
+          description: The date and time when the record was updated, in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ). Useful for tracking update history.
+          type: string
+          format: date-time
+          example: '2024-10-30T14:30:00.000Z'
+        responseId:
+          $ref: '#/components/schemas/responseId'
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        requestStatus:
+          $ref: '#/components/schemas/requestStatus'
+        callbackDeliveredTimestamp:
+          description: The date and time when the Account Updater service delivered the callback notification to the designated endpoint, confirming completion of the callback process. Value is in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).
+          type: string
+          format: date-time
+          example: '2024-10-30T14:30:00.000Z'
+        merchantRecordIdentifier:
+          $ref: '#/components/schemas/merchantRecordIdentifier'
+        response:
+          description: Status of the request (SUCCESS or ERROR). Indicates whether the operation was completed successfully.
+          type: string
+          enum:
+          - SUCCESS
+          - ERROR
+          example: SUCCESS
+        resultsMessage:
+          $ref: '#/components/schemas/resultsMessage'
+        subMerchantId:
+          $ref: '#/components/schemas/subMerchantId'
+        bypassBrandCheckIndicator:
+          description: Boolean flag indicating whether the check for updates on additional card brands is bypassed. When set to "true", no verification is performed on these additional brands to determine their readiness for updates.
+          type: boolean
+        cardAccountAction:
+          $ref: '#/components/schemas/cardAccountAction'
+    subMerchantId:
+      description: Sub-merchant entity identifier (up to 12 numeric digits). Used for transaction processing and reporting at the lowest account hierarchy.
+      type: string
+      maxLength: 12
+      example: '991234567890'
+    oldAccountInformation:
+      description: Object that contains the card account information submitted in the request, including card number, expiration date, and account number type.
+      type: object
+      properties:
+        cardNumber:
+          description: Card or SafeTech token account number (13-19 digits). Represents the original payment instrument submitted in the request.
+          type: string
+          example: '4012888888881881'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        cardTypeName:
+          $ref: '#/components/schemas/cardTypeName'
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
+    month:
+      description: Card expiration month (integer 1-12). Indicates when the card expires.
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 12
+      example: 5
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles: []
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles: []

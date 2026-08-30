@@ -1,0 +1,208 @@
+openapi: 3.2.0
+info:
+  title: Reporting Report Files API
+  description: Data Reports API enables easy access to build consumable data sets. It is designed for merchants or system integrators looking for transaction-level payment data.
+  version: 1.4.0
+  contact:
+    name: Reporting API Support
+    url: https://developer.payments.jpmorgan.com/contact-support
+    email: ms.pit.team@jpmorgan.com
+servers:
+- url: https://api.reports.jpmorgan.com/api/v1
+  description: PRODUCTION - OAUTH
+- url: https://api.reports-files.jpmorgan.com/api/v1
+  description: PRODUCTION - OAUTH REPORTS FILES
+- url: https://api.reports.test.jpmorgan.com/api/v1
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/api/v1
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Report Files
+  description: Endpoints for report files.
+paths:
+  /report-files/{report-id}:
+    get:
+      summary: Get a specific report file.
+      operationId: v1GetReportFileByReportId
+      tags:
+      - Report Files
+      description: Retrieves a specific report file by its ID. Note In production, override the base URL with https://api.reports-files.jpmorgan.com/api/v1
+      parameters:
+      - name: report-id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 40
+        description: Unique id  for the report.
+        examples:
+          Success:
+            value: fca8115f-1912-4743-9d27-c61de99b604a
+          Authentication Failure:
+            value: 5555-6666-7777
+      - name: report-format
+        in: query
+        deprecated: true
+        schema:
+          type: string
+          enum:
+          - CSV
+          - PDF
+          - GZ
+        description: Indicates the report file format as text or binary file. Default value is CSV.
+        examples:
+          Success:
+            value: CSV
+      - name: reportFormat
+        in: query
+        schema:
+          type: string
+          enum:
+          - CSV
+          - PDF
+          - GZ
+          - XLSX
+        description: Indicates the report file format as text or binary file. Default value is CSV.
+        examples:
+          Success:
+            value: CSV
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/fileContent'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  schemas:
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
+      type: string
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    adfsError:
+      description: Object containing information in the file
+      type: object
+      required:
+      - errorSource
+      - errorCode
+      - errorDescription
+      properties:
+        errorSource:
+          description: The label of the component from where the error or warning is generating
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: General status of all resources
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
+          type: string
+          example: the signature could not be verified
+    code:
+      description: Short informative code about the error.
+      type: string
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in transaction validation
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    fileContent:
+      description: Provide texual information about the values stored in a file
+      type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Merchant
+      - Navigator_View_Only
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Merchant
+      - Navigator_View_Only

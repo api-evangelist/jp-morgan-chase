@@ -1,0 +1,315 @@
+openapi: 3.2.0
+info:
+  title: Reporting Report Types API
+  description: Data Reports API enables easy access to build consumable data sets. It is designed for merchants or system integrators looking for transaction-level payment data.
+  version: 1.4.0
+  contact:
+    name: Reporting API Support
+    url: https://developer.payments.jpmorgan.com/contact-support
+    email: ms.pit.team@jpmorgan.com
+servers:
+- url: https://api.reports.jpmorgan.com/api/v1
+  description: PRODUCTION - OAUTH
+- url: https://api.reports-files.jpmorgan.com/api/v1
+  description: PRODUCTION - OAUTH REPORTS FILES
+- url: https://api.reports.test.jpmorgan.com/api/v1
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/api/v1
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Report Types
+  description: Endpoints for report types.
+paths:
+  /report-types:
+    get:
+      summary: Get a list of available report types.
+      operationId: v1ListReportTypes
+      tags:
+      - Report Types
+      description: Get a list of available report types.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportTypes'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+              examples:
+                Authentication Failure:
+                  value:
+                    errorSource: APG-EDGE
+                    errorCode: EDG00012
+                    errorDescription: the signature could not be verified
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /report-types/{report-type-id}:
+    get:
+      summary: Get details for a specific report type.
+      operationId: v1ListReportTypesByReportTypeId
+      tags:
+      - Report Types
+      description: Get details for a specific report type.
+      parameters:
+      - name: report-type-id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 40
+        description: Uniquely identifies the type of report being requested.
+        examples:
+          Success:
+            value: '1003'
+          Authentication Failure:
+            value: '9003'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportTypeFields'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  schemas:
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
+      type: string
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    reportTypes:
+      description: An array containing Report Types.
+      type: object
+      required:
+      - reportTypes
+      properties:
+        reportTypes:
+          type: array
+          minItems: 0
+          description: Array of report type
+          items:
+            $ref: '#/components/schemas/reportType'
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    reportAttributeName:
+      description: The name of the attribute in the report.
+      type: string
+    reportType:
+      description: Report Type
+      type: object
+      required:
+      - reportTypeId
+      - reportTypeName
+      - reportDescription
+      - reportGranularityTypeCode
+      properties:
+        reportTypeId:
+          $ref: '#/components/schemas/reportTypeId'
+        reportTypeName:
+          description: The name of the report type.
+          type: string
+        reportDescription:
+          description: The textual description of the report type.
+          type: string
+        reportGranularityTypeCode:
+          description: The level at which report detail is presented. For example, Fee level, transaction level and so on.
+          type: string
+        gatewayRegionCode:
+          description: Indicates the geographical region for which the report type is applicable.  The region code is defined using ISO-3166 code. For e.g. USA, CAN, AU and so on
+          type: string
+          deprecated: true
+        gatewayRegion:
+          description: Indicates the geographical region for which the report type is applicable.  The region code is defined using ISO-3166 code. For e.g. USA, CAN, AU and so on
+          type: string
+        paymentMethodCodes:
+          type: array
+          minItems: 0
+          description: Indicates the list of Payment Network Code through which card's (Debit or credit) account transactions in the report are processed. For e.g. VI, MC, AX and so on.
+          deprecated: true
+          items:
+            type: string
+        paymentMethodGroup:
+          description: Codifies the category of payment method used for reporting purpose such as local payment method, global payment method.
+          type: string
+    adfsError:
+      description: Object containing information in the file
+      type: object
+      required:
+      - errorSource
+      - errorCode
+      - errorDescription
+      properties:
+        errorSource:
+          description: The label of the component from where the error or warning is generating
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: General status of all resources
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
+          type: string
+          example: the signature could not be verified
+    code:
+      description: Short informative code about the error.
+      type: string
+    reportTypeId:
+      description: Uniquely identifies the type of report being requested.
+      type: string
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in transaction validation
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    defaultReportField:
+      description: Report Configuration Request
+      type: object
+      required:
+      - reportAttributeName
+      - businessDefinitionText
+      - defaultIncludeIndicator
+      properties:
+        reportAttributeName:
+          $ref: '#/components/schemas/reportAttributeName'
+        businessDefinitionText:
+          description: Indicates clear and concise description of the data elements used in the reports
+          type: string
+        defaultIncludeIndicator:
+          description: Indicates the BOOLEAN value to signifiy if the attribute is included in the report. TRUE indicates that the attribute is included by default.
+          type: boolean
+        attributeCategories:
+          description: Defines the category of the attribute. Samples values are Card Present, Tax, MRPS, IBAN, 3DS.
+          type: string
+    reportTypeFields:
+      description: An array containing Report Type Fields.
+      type: object
+      required:
+      - reportTypeFields
+      properties:
+        reportTypeFields:
+          type: array
+          minItems: 0
+          description: Report Type Field Array
+          items:
+            $ref: '#/components/schemas/defaultReportField'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Merchant
+      - Navigator_View_Only
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Merchant
+      - Navigator_View_Only

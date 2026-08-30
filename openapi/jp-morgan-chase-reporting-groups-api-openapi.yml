@@ -1,0 +1,491 @@
+openapi: 3.2.0
+info:
+  title: Reporting Groups API
+  description: Data Reports API enables easy access to build consumable data sets. It is designed for merchants or system integrators looking for transaction-level payment data.
+  version: 1.4.0
+  contact:
+    name: Reporting API Support
+    url: https://developer.payments.jpmorgan.com/contact-support
+    email: ms.pit.team@jpmorgan.com
+servers:
+- url: https://api.reports.jpmorgan.com/api/v1
+  description: PRODUCTION - OAUTH
+- url: https://api.reports-files.jpmorgan.com/api/v1
+  description: PRODUCTION - OAUTH REPORTS FILES
+- url: https://api.reports.test.jpmorgan.com/api/v1
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/api/v1
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Reporting Groups
+  description: Reporting Group Information
+paths:
+  /reporting-groups:
+    post:
+      summary: Create new reporting group
+      operationId: v1ReportingGroupPost
+      tags:
+      - Reporting Groups
+      description: Create a new reporting group.
+      requestBody:
+        description: Reporting group information
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reportingGroup'
+            examples:
+              Create a reporting group of entities:
+                value:
+                  reportingGroupName: Example RG 1
+                  reportingGroupDescription: Description for Example RG 1
+                  childEntityInfo:
+                  - entityType: BU
+                    entityIds:
+                    - '1285401'
+                    - '123456'
+              Create a reporting group of reporting groups:
+                value:
+                  reportingGroupName: Example RG 2
+                  reportingGroupDescription: Description for Example RG 2
+                  childEntityInfo:
+                  - entityType: RGBU
+                    entityIds:
+                    - '2405141152387311'
+                    - '2405141153250961'
+              Create a reporting group of entities and reporting groups:
+                value:
+                  reportingGroupName: Example RG 3
+                  reportingGroupDescription: Description for Example RG 3
+                  childEntityInfo:
+                  - entityType: RGBU
+                    entityIds:
+                    - '2407092248548502'
+                  - entityType: BU
+                    entityIds:
+                    - '1285401'
+              Create a Heterogeneous reporting group multi level:
+                value:
+                  reportingGroupName: Example RGH 4
+                  reportingGroupDescription: Description for Example RGH 4
+                  childEntityInfo:
+                  - entityType: RGCO
+                    entityIds:
+                    - '2507252256449185'
+                  - entityType: RGH
+                    entityIds:
+                    - '2509151900464748'
+                  - entityType: TD
+                    entityIds:
+                    - '188935'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportingGroupResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    get:
+      summary: Get a list of available report reporting groups.
+      operationId: v1ReportingGroupGet
+      tags:
+      - Reporting Groups
+      description: Get a list of available reporting groups.
+      parameters:
+      - name: groupType
+        in: query
+        schema:
+          type: string
+        description: The category of the reporting group. Allowed values are RGPE, RGTD, RGFTI, RGBU, RGCO, RGH
+        examples:
+          Get reporting groups by groupType:
+            value: RGCO
+          Get reporting groups by groupType & groupId:
+            value: RGCO
+      - name: groupId
+        in: query
+        schema:
+          type: string
+        description: Unique identifier of a reporting group.
+        examples:
+          Get reporting group by groupId:
+            value: '2405281843563422'
+          Get reporting groups by groupType & groupId:
+            value: '2405232310294687'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportingGroupResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+              examples:
+                Authentication Failure:
+                  value:
+                    errorSource: APG-EDGE
+                    errorCode: EDG00012
+                    errorDescription: the signature could not be verified
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /reporting-groups/{groupId}:
+    patch:
+      summary: Update an existing reporting group.
+      operationId: v1ReportingGroupPut
+      tags:
+      - Reporting Groups
+      description: Update an existing reporting group.
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of a reporting group
+        examples:
+          Modify reporting group hierarchy, name, description:
+            value: '2409042109467790'
+          Deactivate reporting group, update name and description:
+            value: '2409042109467790'
+          Reactivate reporting group, update name and description:
+            value: '2409042109467790'
+          Modify heterogeneous reporting group name, description:
+            value: '2509052216214359'
+      requestBody:
+        description: Update an existing reporting group.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateReportingGroup'
+            examples:
+              Modify reporting group hierarchy, name, description:
+                value:
+                  reportingGroupType: RGPE
+                  reportingGroupName: Test RG 8
+                  reportingGroupDescription: New Description for Test RG 8
+                  childEntityInfo:
+                  - entityType: RGPE
+                    entityIds:
+                    - '2409042106034913'
+              Deactivate reporting group, update name and description:
+                value:
+                  reportingGroupType: RGPE
+                  reportingGroupName: New name for RG
+                  reportingGroupDescription: New description for RG
+                  reportingGroupStatus: inactive
+              Reactivate reporting group, update name and description:
+                value:
+                  reportingGroupType: RGPE
+                  reportingGroupName: Test RG 7
+                  reportingGroupDescription: New description for RG..
+                  reportingGroupStatus: active
+              Modify heterogeneous reporting group name, description:
+                value:
+                  reportingGroupType: RGH
+                  reportingGroupName: RGH Example
+                  reportingGroupDescription: Update Heterogeneous Reporting Group
+                  childEntityInfo:
+                  - entityType: CO
+                    entityIds:
+                    - '233235'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportingGroupResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  schemas:
+    lastPage:
+      description: Indicates the BOOLEAN value to signify whether or not the response is the final page of results.
+      type: boolean
+      example: true
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
+      type: string
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    next:
+      description: Indicates the reference for the next page for paginated response. Use the value of next to fetch the next batch of report configs. If the lastPage = TRUE; then the next attribute value is not populated.
+      type: string
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    reportingGroup:
+      description: Reporting Group Information
+      type: object
+      required:
+      - reportingGroupName
+      - reportingGroupDescription
+      - childEntityInfo
+      properties:
+        reportingGroupId:
+          description: Unique identifier of a reporting group.
+          type: string
+          readOnly: true
+        reportingGroupName:
+          description: The name of the reporting group.
+          type: string
+        reportingGroupType:
+          description: The category of the reporting group. Allowed values are RGPE, RGTD, RGFTI, RGBU, RGCO, RGH.
+          type: string
+          readOnly: true
+        reportingGroupDescription:
+          description: The textual description of the reporting group.
+          type: string
+        childEntityInfo:
+          type: array
+          minItems: 0
+          description: List of child entities.
+          items:
+            $ref: '#/components/schemas/childEntity'
+        reportingGroupStatus:
+          description: The current status of the reporting group. Allowed values are active, inactive
+          type: string
+          readOnly: true
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    adfsError:
+      description: Object containing information in the file
+      type: object
+      required:
+      - errorSource
+      - errorCode
+      - errorDescription
+      properties:
+        errorSource:
+          description: The label of the component from where the error or warning is generating
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: General status of all resources
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
+          type: string
+          example: the signature could not be verified
+    code:
+      description: Short informative code about the error.
+      type: string
+    updateReportingGroup:
+      description: Report group update information
+      type: object
+      required:
+      - reportingGroupType
+      properties:
+        reportingGroupType:
+          description: The category of the reporting group. Allowed values are RGPE, RGTD, RGFTI, RGBU, RGCO, RGH.
+          type: string
+        reportingGroupName:
+          description: The name of the reporting group.
+          type: string
+        reportingGroupDescription:
+          description: The textual description of the reporting group.
+          type: string
+        reportingGroupStatus:
+          description: The current status of the reporting group. Allowed values are active, inactive.
+          type: string
+        childEntityInfo:
+          type: array
+          minItems: 0
+          description: List of child entities.
+          items:
+            $ref: '#/components/schemas/childEntity'
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in transaction validation
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    childEntity:
+      description: Child Entity Information
+      type: object
+      properties:
+        entityType:
+          description: The level of the merchant relationship as it relates to the acquiring account. Allowed values are PE, TD, FTI, BU, CO, RGPE, RGTD, RGFTI, RGBU, RGCO, RGH.
+          type: string
+        entityIds:
+          type: array
+          minItems: 0
+          description: List of child entities for the reporting group.
+          items:
+            type: string
+    reportingGroupResponse:
+      description: Reporting Group Response
+      type: object
+      required:
+      - next
+      - reportingGroupList
+      - lastPage
+      properties:
+        next:
+          $ref: '#/components/schemas/next'
+        reportingGroupList:
+          type: array
+          minItems: 0
+          description: List of reporting group available
+          items:
+            $ref: '#/components/schemas/reportingGroup'
+        lastPage:
+          $ref: '#/components/schemas/lastPage'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Merchant
+      - Navigator_View_Only
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - Merchant
+      - Navigator_View_Only

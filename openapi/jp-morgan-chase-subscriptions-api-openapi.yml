@@ -1,0 +1,2233 @@
+openapi: 3.2.0
+info:
+  title: Notifications Subscriptions API
+  description: Notification API enables merchants to subscribe to and receive notifications in real-time.
+  version: 1.13.1
+  contact:
+    name: Notifications API Support
+    url: https://developer.payments.jpmorgan.com/contact/support
+servers:
+- url: https://mns-aws.jpmchase.com/v1
+  description: PRODUCTION - OAUTH
+- url: https://mns-aws-cat.jpmchase.com/v1
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/v1
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Subscriptions
+  description: Manage notification subscriptions
+paths:
+  /subscriptions:
+    get:
+      summary: Get all subscriptions by entity Id
+      operationId: v1ListSubscriptions
+      tags:
+      - Subscriptions
+      description: Retrieves all subscriptions using the entity Id
+      parameters:
+      - name: merchant-id
+        in: header
+        deprecated: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the merchant account.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+      - name: entity-id
+        in: header
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the entity.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+      - name: entity-type
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - MERCHANT
+          - PLATFORM
+          - CLIENT
+          - ACCOUNT
+          - EMBEDDED_PLATFORM
+          - CONSUMER
+        description: Type of entity  identifier.
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: A unique identifier provided by the requestor for each request.
+        examples:
+          Success:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea5dc
+          Authentication failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea7ab
+          Authorization failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea8dc
+      - name: notification-type
+        in: header
+        schema:
+          type: string
+        description: The first level categories of events the firm uses to communicate with the merchant.
+      - name: parent-entity-id
+        in: header
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifies the Parent Entity in the merchant hierarchy applicable to this request (e.g. platform ID in ISV use cases).
+        examples:
+          Success:
+            value: 0123456797
+          Authentication failure:
+            value: 0123456798
+          Authorization failure:
+            value: 0123456799
+      - name: parent-entity-type
+        in: header
+        schema:
+          type: string
+          enum:
+          - PLATFORM
+          - EMBEDDED_PLATFORM
+        description: Code for the Parent Entity Type in the merchant hierarchy applicable to this request (e.g. platform in ISV use cases).
+      - name: email-address
+        in: header
+        schema:
+          type: string
+        description: A mail system that allows a party to send and receive messages electronically. An email address is composed of a local part and a domain part. The local part is unique to the individual while the domain or host name must meet specific standards required by the host that administers the email service.
+      - name: subscription-category
+        in: header
+        schema:
+          type: string
+        description: Delineates a set of rules for the management of a subscription.
+      - name: subscription-channel
+        in: header
+        schema:
+          type: string
+        description: Codifies the method in which the Firm communicates with the Party.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionResponseList'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    post:
+      summary: Subscribe to a notification
+      operationId: v1CreateSubscription
+      tags:
+      - Subscriptions
+      description: Create subscriptions to notification event types
+      parameters:
+      - name: merchant-id
+        in: header
+        deprecated: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the merchant account.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+      - name: entity-id
+        in: header
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the entity.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: A unique identifier provided by the requestor for each request.
+        examples:
+          Success:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea5dc
+          Authentication failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea7ab
+          Authorization failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea8dc
+      - name: entity-type
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - MERCHANT
+          - PLATFORM
+          - CLIENT
+          - ACCOUNT
+          - EMBEDDED_PLATFORM
+          - CONSUMER
+        description: Type of entity  identifier.
+      - name: parent-entity-id
+        in: header
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifies the Parent Entity in the merchant hierarchy applicable to this request (e.g. platform ID in ISV use cases).
+        examples:
+          Success:
+            value: 0123456797
+          Authentication failure:
+            value: 0123456798
+          Authorization failure:
+            value: 0123456799
+      - name: parent-entity-type
+        in: header
+        schema:
+          type: string
+          enum:
+          - PLATFORM
+          - EMBEDDED_PLATFORM
+        description: Code for the Parent Entity Type in the merchant hierarchy applicable to this request (e.g. platform in ISV use cases).
+      requestBody:
+        description: Create a new subscription
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscription'
+            examples:
+              Success:
+                value:
+                  recipientDetails:
+                    firstName: John
+                    lastName: Doe
+                    emailAddress: john.doe@myemail.com
+                    telephoneNumber: 800-980-9890
+                    telephoneCountryCode: '+1'
+                    preferredLanguage: en-US
+                  notifications:
+                    paymentUpdateNotification:
+                    - All
+                  callbackURL: https://merchant.notification.com
+                  subscriptionChannel: WEBHOOK
+                  subscriptionChannels:
+                  - WEBHOOK
+              Success Payout:
+                value:
+                  recipientDetails:
+                    firstName: John
+                    lastName: Doe
+                    emailAddress: john.doe@myemail.com
+                    telephoneNumber: 800-980-9890
+                    telephoneCountryCode: '+1'
+                  notifications:
+                    payoutNotification:
+                    - All
+                  subscriptionChannel: EMAIL
+                  subscriptionChannels:
+                  - EMAIL
+              Success Client Secret Post:
+                value:
+                  notifications:
+                    paymentUpdateNotification:
+                    - All
+                  securityPreferences:
+                    webhookAuthorizationType: token
+                    tokenEndpointAuthorizationType: client_secret_post
+                    mTLSEnabled: false
+                    authorizationDetails:
+                      clientCredentials:
+                        clientId: 3e28334a-1b7d-490a-a35d-12345e80e87
+                        clientSecret: n1onto1n1on
+                        contentType: application/json
+                        clientCredentialRequestBody:
+                          grant_type: client_credentials
+                          scope: CASHIER.GET_ACCESS
+                      tokenEndpoint: AUTH_ENDPOINT
+                  callbackURL: https://merchant.notification.com
+                  subscriptionChannel: WEBHOOK
+                  subscriptionChannels:
+                  - WEBHOOK
+              Success Private Key Jwt:
+                value:
+                  notifications:
+                    paymentUpdateNotification:
+                    - All
+                  securityPreferences:
+                    webhookAuthorizationType: token
+                    tokenEndpointAuthorizationType: private_key_jwt
+                    mTLSEnabled: false
+                    authorizationDetails:
+                      tokenEndpoint: AUTH_ENDPOINT
+                      jwtDetails:
+                        jwtHeaderFields:
+                          typ: JWT
+                          alg: RS256
+                          kid: kid
+                        jwtRequestBody:
+                          sub: dsd5yhuyuiyok5vQMZdZT3o
+                          iss: //mns-aws.jpmchase.com
+                          aud: jpmchase.com
+                        jwtRequestParameters:
+                          grant_type: urn:ietf:params:oauth:grant-type:jwt-bearer
+                          assertion: CLIENT_ASSERTION_JWT
+                    signingAlgorithm: RSA
+                  callbackURL: https://merchant.notification.com
+                  subscriptionChannel: WEBHOOK
+                  subscriptionChannels:
+                  - WEBHOOK
+              Authentication failure:
+                value:
+                  notifications:
+                    disputeNotification:
+                    - All
+                  subscriptionChannel: EMAIL
+                  subscriptionChannels:
+                  - EMAIL
+              Authorization failure:
+                value:
+                  notifications:
+                    disputeNotification:
+                    - All
+                  callbackURL: https://merchant.notification.com
+                  subscriptionChannel: WEBHOOK
+                  subscriptionChannels:
+                  - WEBHOOK
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /subscriptions/{subscription-id}:
+    get:
+      summary: Get a subscription by subscription Id
+      operationId: v1GetSubscriptionBySubscriptionId
+      tags:
+      - Subscriptions
+      description: Retrieves a specific subscription using the subscription Id
+      parameters:
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: A unique identifier provided by the requestor for each request.
+        examples:
+          Success:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea5dc
+          Authentication failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea7ab
+          Authorization failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea8dc
+          Subscription not found:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea6ab
+          Subscription Identifier Invalid:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea3ab
+      - name: merchant-id
+        in: header
+        deprecated: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the merchant account.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+          Subscription not found:
+            value: '9876543213'
+          Subscription Identifier Invalid:
+            value: '9876543214'
+      - name: subscription-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: A unique identifier provided by the requestor for each request.
+        examples:
+          Success:
+            value: 7611d1bf-326d-4795-a828-ac21f9bea5dc
+          Authentication failure:
+            value: 7611d1bf-326d-4795-a828-ac21f9bea6dc
+          Authorization failure:
+            value: 7611d1bf-326d-4795-a828-ac21f9bea7dc
+          Subscription not found:
+            value: f56f4c9c-f5d5-44db-8fc7-bd8155406d76
+          Subscription Identifier Invalid:
+            value: f561d1bf-326d-4795-a828-ac21f9bea555
+      - name: entity-id
+        in: header
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the entity.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+      - name: entity-type
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - MERCHANT
+          - PLATFORM
+          - CLIENT
+          - ACCOUNT
+          - EMBEDDED_PLATFORM
+          - CONSUMER
+        description: Type of entity  identifier.
+      - name: parent-entity-id
+        in: header
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifies the Parent Entity in the merchant hierarchy applicable to this request (e.g. platform ID in ISV use cases).
+        examples:
+          Success:
+            value: 0123456797
+          Authentication failure:
+            value: 0123456798
+          Authorization failure:
+            value: 0123456799
+      - name: parent-entity-type
+        in: header
+        schema:
+          type: string
+          enum:
+          - PLATFORM
+          - EMBEDDED_PLATFORM
+        description: Code for the Parent Entity Type in the merchant hierarchy applicable to this request (e.g. platform in ISV use cases).
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    put:
+      summary: Update a specific subscription
+      operationId: v1UpdateSubscriptionBySubscriptionId
+      tags:
+      - Subscriptions
+      description: Update a specific subscription. Keep in mind that excluded fields will be interpreted as `null`. To avoid inadvertently removing data, be sure to send the existing fields as-is in addition to the fields being updated.
+      parameters:
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: A unique identifier provided by the requestor for each request.
+        examples:
+          Success:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea5dc
+          Authentication failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea7ab
+          Authorization failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea8dc
+          Subscription not found:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea6ab
+          Subscription Identifier Invalid:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea3ab
+      - name: merchant-id
+        in: header
+        deprecated: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the merchant account.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+          Subscription not found:
+            value: '9876543213'
+          Subscription Identifier Invalid:
+            value: '9876543214'
+      - name: subscription-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: A unique identifier provided by the requestor for each request.
+        examples:
+          Success:
+            value: 7611d1bf-326d-4795-a828-ac21f9bea5dc
+          Authentication failure:
+            value: 7611d1bf-326d-4795-a828-ac21f9bea7dc
+          Authorization failure:
+            value: 7611d1bf-326d-4795-a828-ac21f9bea9dc
+          Subscription not found:
+            value: f56f4c9c-f5d5-44db-8fc7-bd8155406d76
+          Subscription Identifier Invalid:
+            value: f561d1bf-326d-4795-a828-ac21f9bea555
+      - name: entity-id
+        in: header
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the entity.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+      - name: entity-type
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - MERCHANT
+          - PLATFORM
+          - CLIENT
+          - ACCOUNT
+          - EMBEDDED_PLATFORM
+          - CONSUMER
+        description: Type of entity  identifier.
+      - name: parent-entity-id
+        in: header
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifies the Parent Entity in the merchant hierarchy applicable to this request (e.g. platform ID in ISV use cases).
+        examples:
+          Success:
+            value: 0123456797
+          Authentication failure:
+            value: 0123456798
+          Authorization failure:
+            value: 0123456799
+      - name: parent-entity-type
+        in: header
+        schema:
+          type: string
+          enum:
+          - PLATFORM
+          - EMBEDDED_PLATFORM
+        description: Code for the Parent Entity Type in the merchant hierarchy applicable to this request (e.g. platform in ISV use cases).
+      requestBody:
+        description: Update an existing notification subscription
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscription'
+            examples:
+              Success:
+                value:
+                  recipientDetails:
+                    firstName: John
+                    lastName: Doe
+                    emailAddress: john.doe@myemail.com
+                    telephoneNumber: 800-980-9890
+                    telephoneCountryCode: '+1'
+                    preferredLanguage: en-US
+                  notifications:
+                    paymentUpdateNotification:
+                    - All
+                  callbackURL: https://merchant.notification.com
+                  subscriptionChannel: WEBHOOK
+                  subscriptionChannels:
+                  - WEBHOOK
+              Authentication failure:
+                value:
+                  notifications:
+                    disputeNotification:
+                    - All
+                  callbackURL: https://merchant.notification.com
+                  subscriptionChannel: EMAIL
+                  subscriptionChannels:
+                  - EMAIL
+              Authorization failure:
+                value:
+                  notifications:
+                    disputeNotification:
+                    - All
+                  callbackURL: https://merchant.notification.com
+                  subscriptionChannel: WEBHOOK
+                  subscriptionChannels:
+                  - WEBHOOK
+              Subscription not found:
+                value:
+                  notifications:
+                    disputeNotification:
+                    - All
+                  callbackURL: https://merchant.notification.com
+                  subscriptionChannel: EMAIL
+                  subscriptionChannels:
+                  - EMAIL
+              Subscription Identifier Invalid:
+                value:
+                  notifications:
+                    disputeNotification:
+                    - All
+                  callbackURL: https://merchant.notification.com
+                  subscriptionChannel: WEBHOOK
+                  subscriptionChannels:
+                  - WEBHOOK
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    delete:
+      summary: Delete a specific subscription
+      operationId: v1DeleteSubscriptionBySubscriptionId
+      tags:
+      - Subscriptions
+      description: Delete a specific subscription
+      parameters:
+      - name: merchant-id
+        in: header
+        deprecated: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the merchant account.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+          Subscription not found:
+            value: '9876543213'
+          Subscription Identifier Invalid:
+            value: '9876543214'
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: A unique identifier provided by the requestor for each request.
+        examples:
+          Success:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea5dc
+          Authentication failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea7ab
+          Authorization failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea8dc
+          Subscription not found:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea6ab
+          Subscription Identifier Invalid:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea3ab
+      - name: subscription-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: A unique identifier provided by the requestor for each request.
+        examples:
+          Success:
+            value: 44444444-4017-11e9-b649-8de064221544
+          Authentication failure:
+            value: 55544444-4017-11e9-b649-8de064221544
+          Authorization failure:
+            value: 66644444-4017-11e9-b649-8de064221544
+          Subscription not found:
+            value: f56f4c9c-f5d5-44db-8fc7-bd8155406d76
+          Subscription Identifier Invalid:
+            value: f561d1bf-326d-4795-a828-ac21f9bea555
+      - name: entity-id
+        in: header
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the entity.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+          Subscription not found:
+            value: '9876543213'
+          Subscription Identifier Invalid:
+            value: '9876543214'
+      - name: entity-type
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - MERCHANT
+          - PLATFORM
+          - CLIENT
+          - ACCOUNT
+          - EMBEDDED_PLATFORM
+          - CONSUMER
+        description: Type of entity  identifier.
+      - name: parent-entity-id
+        in: header
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifies the Parent Entity in the merchant hierarchy applicable to this request (e.g. platform ID in ISV use cases).
+        examples:
+          Success:
+            value: 0123456797
+          Authentication failure:
+            value: 0123456798
+          Authorization failure:
+            value: 0123456799
+      - name: parent-entity-type
+        in: header
+        schema:
+          type: string
+          enum:
+          - PLATFORM
+          - EMBEDDED_PLATFORM
+        description: Code for the Parent Entity Type in the merchant hierarchy applicable to this request (e.g. platform in ISV use cases).
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /publicKeys:
+    get:
+      summary: (***DEPRECATED***) Get a public key by entity Id
+      operationId: v1PublicKeyGet
+      tags:
+      - Subscriptions
+      description: (***DEPRECATED***)  Retrieve a public key using the Entity Id.
+      deprecated: true
+      parameters:
+      - name: request-id
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: A unique identifier provided by the requestor for each request.
+        examples:
+          Success:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea5dc
+      - name: merchant-id
+        in: header
+        deprecated: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the merchant account.
+        examples:
+          Success:
+            value: '9876543210'
+      - name: entity-id
+        in: header
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the entity.
+        examples:
+          Success:
+            value: '9876543210'
+      - name: entity-type
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - MERCHANT
+          - PLATFORM
+          - CLIENT
+          - ACCOUNT
+          - EMBEDDED_PLATFORM
+          - CONSUMER
+        description: Type of entity  identifier.
+      - name: signingAlgorithm
+        in: query
+        schema:
+          type: string
+          enum:
+          - EC
+          - RSA
+        description: Enumerates the Digital Signing Algorithm preferred by the Client, used to sign payloads and for identity verification.  For RSA key length will be 3072 and for EC key length will be 256.
+      - name: parent-entity-id
+        in: header
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifies the Parent Entity in the merchant hierarchy applicable to this request (e.g. platform ID in ISV use cases).
+        examples:
+          Success:
+            value: 0123456797
+          Authentication failure:
+            value: 0123456798
+          Authorization failure:
+            value: 0123456799
+      - name: parent-entity-type
+        in: header
+        schema:
+          type: string
+          enum:
+          - PLATFORM
+          - EMBEDDED_PLATFORM
+        description: Code for the Parent Entity Type in the merchant hierarchy applicable to this request (e.g. platform in ISV use cases).
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publicKey'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /subscriptions/verifications/{id}:
+    get:
+      summary: Get pending subscription verification by request id
+      tags:
+      - Subscriptions
+      description: Get a subscription by request ID before it has a UUID assigned when its status becomes ACTIVE.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The request id provided on the initial POST /subscriptions call which this GET call shall fetch.
+        examples:
+          Success:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea5dc
+          Authentication failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea7ab
+          Authorization failure:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea8dc
+          Request Identifier not found:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea6ab
+          Request Identifier Invalid:
+            value: 7611d1bf-325c-4795-a828-ac21f9bea3ab
+      - name: entity-id
+        in: header
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifier for the entity.
+        examples:
+          Success:
+            value: '9876543210'
+          Authentication failure:
+            value: '9876543211'
+          Authorization failure:
+            value: '9876543212'
+          Request Identifier not found:
+            value: '9876543213'
+          Request Identifier Invalid:
+            value: '9876543214'
+      - name: entity-type
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - MERCHANT
+          - PLATFORM
+          - CLIENT
+          - ACCOUNT
+          - EMBEDDED_PLATFORM
+          - CONSUMER
+        description: Type of entity  identifier.
+      - name: parent-entity-id
+        in: header
+        schema:
+          type: string
+          pattern: ^[0-9]{8,12}$
+        description: Identifies the Parent Entity in the merchant hierarchy applicable to this request (e.g. platform ID in ISV use cases).
+        examples:
+          Success:
+            value: 0123456797
+          Authentication failure:
+            value: 0123456798
+          Authorization failure:
+            value: 0123456799
+          Request Identifier not found:
+            value: 0123456790
+          Request Identifier Invalid:
+            value: 0123456791
+      - name: parent-entity-type
+        in: header
+        schema:
+          type: string
+          enum:
+          - PLATFORM
+          - EMBEDDED_PLATFORM
+        description: Code for the Parent Entity Type in the merchant hierarchy applicable to this request (e.g. platform in ISV use cases).
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  schemas:
+    subscriptionStatus:
+      description: 'Codifies the state of the message category that merchant has registered for. Sample values are: Active, Inactive, pending authorization.'
+      type: string
+      enum:
+      - PENDING_VERIFICATION
+      - ACTIVATED
+      - FAILED_VERIFICATION
+    subscriptionChannels:
+      type: array
+      minItems: 0
+      deprecated: true
+      description: (***DEPRECATED***) List of medium through which event notifications will be delivered to recipient. Use `subscriptionChannel` (singular) instead.
+      items:
+        type: string
+        enum:
+        - WEBHOOK
+        - EMAIL
+        - IN-APP-COMMERCE-CENTER
+    recommendationNotificationType:
+      description: Codifies the subscription type to merchant for recommendations from firm.
+      type: string
+      enum:
+      - PaymentRetry
+      - All
+    enrollmentNotificationType:
+      description: Codifies the subscription type to Enrollment notifications. Possible values are EnrollmentSuccess, EnrollmentPaymentMethodAdded, enrollmentNoPaymentMethodAdded, All
+      type: string
+      enum:
+      - EnrollmentSuccess
+      - EnrollmentPaymentMethodAdded
+      - EnrollmentNoPaymentMethodAdded
+      - All
+    authenticationNotificationType:
+      description: 'Codifies the categories of messages the firm uses to communicate with the merchant. Sample values are: chargeback, alerts, funding. In this context, this is for the notifications for the pay by bank feature. The possible values are  "AuthenticationComplete"'
+      type: string
+      enum:
+      - AuthenticationComplete
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          description: Short informative code about the error.
+          type: string
+        message:
+          description: Long informative message about the error.
+          type: string
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    clientCredentials:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      properties:
+        clientSecret:
+          description: A confidential string known only to the application and the authorization server.
+          type: string
+        clientId:
+          description: A public identifier for the application using Auth for authenticating the client.
+          type: string
+        contentType:
+          description: If your IDA server expects a value other than `application/x-www-form-urlencoded`, provide it here
+          type: string
+        clientCredentialRequestBody:
+          description: Define parameters like grant type, scope, etc, to include in the request body
+          type: object
+          additionalProperties:
+            type: string
+    subscriptionResponse:
+      description: Response Object for Merchant Notification Subscription
+      type: object
+      properties:
+        notifications:
+          $ref: '#/components/schemas/notifications'
+        subscriptionId:
+          $ref: '#/components/schemas/subscriptionId'
+        subscriptionCreateTimestamp:
+          $ref: '#/components/schemas/subscriptionCreateTimestamp'
+        subscriptionUpdatedTimestamp:
+          $ref: '#/components/schemas/subscriptionUpdatedTimestamp'
+        subscriptionChannels:
+          $ref: '#/components/schemas/subscriptionChannels'
+        callbackURL:
+          $ref: '#/components/schemas/callbackURL'
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        publicKey:
+          $ref: '#/components/schemas/publicKey'
+        subscriptionStatus:
+          $ref: '#/components/schemas/subscriptionStatus'
+        subscriptionCategory:
+          $ref: '#/components/schemas/subscriptionCategory'
+        subscriptionChannel:
+          $ref: '#/components/schemas/subscriptionChannel'
+    processingThresholdNotificationType:
+      description: Defines the threshold notification sub types.  Possible values are "ProcessingThresholdStatus", "ALL"]
+      type: string
+      enum:
+      - ProcessingThresholdStatus
+      - All
+    adfsError:
+      description: Object containing information about the active directory file system error.
+      type: object
+      required:
+      - errorSource
+      - errorCode
+      - errorDescription
+      properties:
+        errorSource:
+          description: The label of the component from where the error or warning was generated.
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: General status of all resources.
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
+          type: string
+          example: the signature could not be verified
+    entityOnboardingEventNotificationType:
+      description: Codifies the onboarding status of merchant and entities by our firm
+      type: string
+      enum:
+      - EntityNetworkRegistrationException
+      - All
+    accountInformationServiceNotificationType:
+      description: Codifies the subscription type to Account Information Service notifications. Possible values are ConsentLinkInitiated, ConsentLinkOpened, ConsentLinkSuccessful, ConsentLinkCancelled, ConsentLinkExpired, ConsentLinkAbandoned, ConsentLinkPending, ConsentLinkFailed, ConsentSuccessful, ConsentFailed, ConsentRevoked, ConsentPending, ConsentReadyToValidate, ConsentFixSuccessful, ConsentFixFailed, All
+      type: string
+      enum:
+      - ConsentLinkInitiated
+      - ConsentLinkOpened
+      - ConsentLinkSuccessful
+      - ConsentLinkCancelled
+      - ConsentLinkExpired
+      - ConsentLinkAbandoned
+      - ConsentLinkPending
+      - ConsentLinkFailed
+      - ConsentSuccessful
+      - ConsentFailed
+      - ConsentRevoked
+      - ConsentFixSuccessful
+      - ConsentFixFailed
+      - ConsentPending
+      - ConsentReadyToValidate
+      - All
+    recurringProgramNotificationType:
+      description: 'Codifies the categories of messages the firm uses to communicate with the merchant. Sample vaues are: chargeback, alerts, funding.'
+      type: string
+      enum:
+      - PlanUpdated
+      - ProgramUpdated
+      - PaymentApplied
+      - PaymentNotApplied
+      - ConsumerCommunicationUpdated
+      - All
+    payoutNotificationType:
+      description: Codifies the subscription type to Payout notifications. Possible values include PayoutFailure, PayoutUnderReview, PayoutCreated, PayoutDenied, PayoutCompleted, PayoutRejected, PayoutFailureResolved, PayoutUnderReviewReleased, PayoutRejectedResolved, All
+      type: string
+      enum:
+      - PayoutFailure
+      - PayoutUnderReview
+      - PayoutCreated
+      - PayoutDenied
+      - PayoutCompleted
+      - PayoutRejected
+      - PayoutFailureResolved
+      - PayoutUnderReviewReleased
+      - PayoutRejectedResolved
+      - FinancialAdjustmentInitiated
+      - All
+    productOnboardingNotificationType:
+      description: Codifies the subscription type to product onboarding notifications
+      type: string
+      enum:
+      - OnboardingStatus
+    publicKey:
+      description: (***DEPRECATED***) Public Key information
+      type: object
+      readOnly: true
+      deprecated: true
+      properties:
+        publicKeyIdentifier:
+          description: Unique Identifier of the cipher key for exchanging data via an associated string or byte image. This is a public key generated by the producer of the data and shared with the consumer.
+          type: string
+        publicKeyText:
+          description: Provides textual information about a cipher key for exchanging data via an associated string or byte image. This is a public key generated by the producer of the data and shared with the consumer.
+          type: string
+        publicKeyExpirationDate:
+          description: Designates the year, month and day when a cipher key for exchanging data via an associated string or byte image is terminated.
+          type: string
+    tokenLifecycleNotificationType:
+      description: Codifies the subscription type to Token lifecycle notifications
+      type: string
+      enum:
+      - All
+      - CardDetailsUpdate
+      - TokenStateChange
+      - TokenProvisionUpdate
+      - BulkTokenUpdate
+    merchantStatusNotificationType:
+      description: Codifies the subscription type to product onboarding notifications
+      type: string
+      enum:
+      - MerchantOnboardingInProgress
+      - MerchantOnboardingDeclined
+      - MerchantOnboardingCompleted
+      - MerchantSuspendedAutoblock
+      - MerchantSuspendedWithFundHold
+      - MerchantSuspendedWithoutFundHold
+      - MerchantAccountClosed
+      - MerchantOnboardingDeclinedWithCreditPull
+      - MopActivationCompleted
+      - MopActivationDeclined
+      - MerchantPerfPlatUpgrade
+      - All
+    orderUpdateNotificationType:
+      description: (***DEPRECATED***) Subscribe to notifications for order update
+      type: string
+      enum:
+      - OrderApproved
+      - OrderDeclined
+      - OrderErrored
+      - All
+      deprecated: true
+    entityOnboardingNotificationType:
+      description: Codifies the onboarding status of merchant and entities by our firm
+      type: string
+      enum:
+      - EntityScreening
+      - EntityOnboarding
+      - EntityOnboardingV2
+      - EntityOnboardingNew
+      - EntityOnboardingReviewInProgress
+      - EntityOnboardingInformationRequested
+      - EntityOnboardingApproved
+      - EntityOnboardingDeclined
+      - All
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          description: Short explanation of the response code.
+          type: string
+          readOnly: true
+          minLength: 2
+          maxLength: 50
+          example: ACCEPTED
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in validation.
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    documentNotificationType:
+      description: Codifies the categories of messages between merchant and Firm for the document update.
+      type: string
+      enum:
+      - DocumentGenerated
+      - DocumentFailed
+    refundUpdateNotificationType:
+      description: Codifies the refund notification subscription type to merchant for recommendations from firm.
+      type: string
+      enum:
+      - RefundApproved
+      - RefundDeclined
+      - RefundErrored
+      - RefundClosed
+      - All
+    canadianKycNotificationType:
+      description: Notifications for Canadian KYC mandates.
+      type: string
+      enum:
+      - UpliftInitiated
+      - UpliftReminder
+      - TerminalDeactivation
+      - PaymentHold
+    recipientDetails:
+      description: Individual details information
+      type: object
+      properties:
+        firstName:
+          description: That part of an individual's full name considered a personal name or given name and generally positioned before the last name or family name.
+          type: string
+        lastName:
+          description: 'That part of an individual’s name generally placed at the end of the given name. The last name is also known as the surname or family name. (Note: name conventions may be different based on practices in different countries. Some countries use two or more last names; in other countries, the family name is placed before a person’s given name; in some countries, it is common for people to have only one name or a mononym.)'
+          type: string
+        emailAddress:
+          description: A mail system that allows a party to send and receive messages electronically. An email address is composed of a local part and a domain part. The local part is unique to the individual while the domain or host name must meet specific standards required by the host that administers the email service.
+          type: string
+        telephoneNumber:
+          description: 'A locator whose value identifies the formatted numeric address for routing voice or data communications via telephony, to reach a party. NOTE: Telephone number formats may vary; this field can include domestic and international telephone numbers.'
+          type: string
+        telephoneCountryCode:
+          description: The telephone dialing prefix for a member country in the International Telecommunication Union (ITU) that is defined by the ITU-T E.164 standard. The code is a combination of one, two or three digits identifying a specific country, countries in an integrated numbering plan, or a specific geographic area.
+          type: string
+        preferredLanguage:
+          description: 'Codifies the language of spoken and written communication consisting of the use of words, grammar and pronunciations that are different from other varieties of the standard language. Allowed values :'
+          type: string
+          enum:
+          - en-US
+          - en-CA
+          - fr-CA
+    transactionUpdateNotificationType:
+      description: Codifies the categories of messages between merchant and Firm for the transaction Update.
+      type: string
+      enum:
+      - TransactionChangeRequested
+      - TransactionCompleted
+      - TransactionFailed
+      - All
+    eCommerceServiceUpdateNotificationType:
+      description: Codifies the subscription type to eCommerce Service Update notifications. Possible values are WixOnboardingComplete, All
+      type: string
+      enum:
+      - WixOnboardingComplete
+      - All
+    notifications:
+      description: Array of Notification Types.
+      type: object
+      properties:
+        disputeNotification:
+          type: array
+          minItems: 0
+          description: '**Limited availability: Please connect with your relationship manager for availability.** Array of Dispute notification Types. The possible values include ''All'', ''DisputeClosed'', ''DisputeReceived'', ''DisputeMerchantResponseRequested''.'
+          items:
+            $ref: '#/components/schemas/disputeNotificationType'
+        tokenLifecycleNotification:
+          type: array
+          minItems: 0
+          description: Array of Token lifecycle Notification types.Possible values are "All", "CardDetailsUpdate", "TokenStateChange", "TokenProvisionUpdate", "BulkTokenUpdate".
+          items:
+            $ref: '#/components/schemas/tokenLifecycleNotificationType'
+        paymentUpdateNotification:
+          type: array
+          minItems: 0
+          description: Array of Payment Update notification Types. The possible values are "PaymentApproved","PaymentDeclined","PaymentErrored", "PaymentVoid", "PaymentClosed", "All"
+          items:
+            $ref: '#/components/schemas/paymentUpdateNotificationType'
+        orderUpdateNotification:
+          type: array
+          minItems: 0
+          description: (***DEPRECATED***) Array of Order Update notification Types.
+          deprecated: true
+          items:
+            $ref: '#/components/schemas/orderUpdateNotificationType'
+        recurringProgramNotification:
+          type: array
+          minItems: 0
+          description: Array of Recurring program notification Types.  Possible values are  "PlanUpdated", "ProgramUpdated", "PaymentApplied", "PaymentNotApplied","ConsumerCommunicationUpdated", "All"
+          items:
+            $ref: '#/components/schemas/recurringProgramNotificationType'
+        balanceMonitoringNotification:
+          type: array
+          minItems: 0
+          description: Array of Balance monitoring notification Types. Possible values are "DirectDebitInitiated", "DirectDebitRetry", "DirectDebitReturn", "All"
+          items:
+            $ref: '#/components/schemas/balanceMonitoringNotificationType'
+        commerceCenterUserAccess:
+          type: array
+          minItems: 0
+          description: Array of Commerce Center user access notification Types. Possible values are "firstTimeRegistration", "All"
+          items:
+            $ref: '#/components/schemas/commerceCenterUserAccessNotificationType'
+        accountUpdateNotification:
+          type: array
+          minItems: 0
+          description: Array of Account update notification Types.  Possible values are "AccountLinkSuccess","AccountLinkException","AccountUpdaterStatus","MicroDepositInitiated","MicroDepositSent","MicroDepositVerificationFailed","MicroDepositVerified", "MicroDepositReadyToValidate", "RecipientUpdated", "All"
+          items:
+            $ref: '#/components/schemas/accountUpdateNotificationType'
+        consumerAccountUpdate:
+          type: array
+          minItems: 0
+          description: Array of Account update notification Types.  Possible values are "InfoUpdateSuccess","CardUpdateSuccess","AccountClosedByConsumerSuccess","AccountClosedSuccess","ProfileFreeze","ProfileUnFreeze", "InfoUpdateFailure", "All"
+          items:
+            $ref: '#/components/schemas/consumerAccountUpdateType'
+        authenticationUpdateNotification:
+          type: array
+          minItems: 0
+          description: Array of Authentication notification Types.  Possible values is "AuthenticationComplete","All"
+          items:
+            $ref: '#/components/schemas/authenticationNotificationType'
+        consumerProfileNotification:
+          type: array
+          minItems: 0
+          description: Array of consumer profile update notification types.  Possible values are "Created","PaymentMethodCreated", "PaymentMethodDeleted", "BulkConsumerProfileUpdate", "All"
+          items:
+            $ref: '#/components/schemas/consumerProfileNotificationType'
+        reportStatusNotification:
+          type: array
+          minItems: 0
+          description: Array of report update notification subscription. Possible values are "DailyCompleted", "MonthlyCompleted", "WeeklyCompleted", "AdhocRunCompleted", "DailyErrored", "MonthlyErrored", "WeeklyErrored", "AdhocRunErrored", "IcPlusStatementCompleted", All"
+          items:
+            $ref: '#/components/schemas/reportStatusNotificationType'
+        entityOnboardingNotification:
+          type: array
+          minItems: 0
+          description: Array of entity onboarding update notification. Possible values include "EntityOnboarding", "EntityOnboardingV2", "EntityScreening", "All"
+          items:
+            $ref: '#/components/schemas/entityOnboardingNotificationType'
+        entityOnboardingEventNotification:
+          type: array
+          minItems: 0
+          description: Array of entity onboarding update notification. Possible values include "EntityNetworkRegistrationException", "All"
+          items:
+            $ref: '#/components/schemas/entityOnboardingEventNotificationType'
+        productOnboardingNotification:
+          type: array
+          minItems: 0
+          description: (***DEPRECATED***) Array of product onboarding notification subscriptions
+          deprecated: true
+          items:
+            $ref: '#/components/schemas/productOnboardingNotificationType'
+        merchantStatusNotification:
+          type: array
+          minItems: 0
+          description: Array of merchant status notification subscriptions. Possible values are "MerchantOnboardingInProgress", "MerchantOnboardingCompleted", "MerchantOnboardingDeclined", "MerchantSuspendedAutoblock", "MerchantSuspendedWithFundHold", "MerchantSuspendedWithoutFundHold", "MerchantAccountClosed","MerchantAccountPendingForClosure", "MerchantReactivationCompleted", "MerchantReactivationInProgress", "MerchantReactivationDeclined",  "MerchantOnboardingDeclinedWithCreditPull", "MopActivationCompleted", "MopActivationDeclined" ,"MerchantPerfPlatUpgrade", "All"
+          items:
+            $ref: '#/components/schemas/merchantStatusNotificationType'
+        payoutNotification:
+          type: array
+          minItems: 0
+          description: Array of payout notification subscriptions. Possible values are "PayoutFailure", "PayoutUnderReview", "PayoutCreated", "PayoutDenied", "PayoutCompleted", "PayoutFailureResolved", "PayoutUnderReviewReleased", "PayoutRejectedResolved", "PayoutRejected", "FinancialAdjustmentInitiated", "All"
+          items:
+            $ref: '#/components/schemas/payoutNotificationType'
+        systemNotification:
+          type: array
+          minItems: 0
+          description: Array of system notification subscriptions. Possible values are "MessageAlert", "All"
+          items:
+            $ref: '#/components/schemas/systemNotificationType'
+        recommendationNotification:
+          type: array
+          minItems: 0
+          description: Array of recommendation notifications available for subscription. Possible values are "PaymentRetry", "All"
+          items:
+            $ref: '#/components/schemas/recommendationNotificationType'
+        refundUpdateNotification:
+          type: array
+          minItems: 0
+          description: Array of refund transaction notifications available for subscription. Possible values are "RefundApproved", "RefundDeclined", "RefundErrored", "RefundClosed", "All"
+          items:
+            $ref: '#/components/schemas/refundUpdateNotificationType'
+        qrCodeStatusNotification:
+          type: array
+          minItems: 0
+          description: Array of qr status notifications available for subscription. Possible values are QRCodeCreated, QRCodeExpired, QRCodePaid, QRCodeSettlementProcessing, QRCodeCancelled, All
+          items:
+            $ref: '#/components/schemas/qrCodeStatusNotificationType'
+        transactionUpdateNotification:
+          type: array
+          minItems: 0
+          description: Array of transaction update notification types.  Possible values are "TransactionCompleted", "TransactionRejected", "TransactionChangeRequested", "All"
+          items:
+            $ref: '#/components/schemas/transactionUpdateNotificationType'
+        documentNotification:
+          type: array
+          minItems: 0
+          description: Array of document notification types.  Possible values are "DocumentGenerated", "DocumentFailed"
+          items:
+            $ref: '#/components/schemas/documentNotificationType'
+        allocationOrderNotification:
+          type: array
+          minItems: 0
+          description: Array of allocation order notification types.  Possible values are "AllocationOrderUpdateNotification",  "All"
+          items:
+            $ref: '#/components/schemas/allocationOrderNotificationType'
+        directDebitAccountNotification:
+          type: array
+          minItems: 0
+          description: Array of direct debit notification subscriptions. Possible values are "DirectDebitAccountUpdateSuccess", "DirectDebitAccountUpdateFailure", "DirectDebitAccountUpdatePending",  "All"
+          items:
+            $ref: '#/components/schemas/directDebitAccountNotificationTypeCode'
+        allocationOrderInstructionNotificationSubscription:
+          type: array
+          minItems: 0
+          description: Array of allocation order instruction notification subscriptions. Possible values are - "AllocationOrderInstructionUpdate" and "AllocationOrderInstructionRequest"
+          items:
+            $ref: '#/components/schemas/allocationOrderInstructionNotificationTypeCode'
+        allocationOrderSettlementNotificationSubscription:
+          type: array
+          minItems: 0
+          description: Array of allocation order settlement notification subscriptions. Possible values are - "PspSettlementTransferUpdate", "DistributionTransferUpdate", "PlatformSettlementTransferUpdate"
+          items:
+            $ref: '#/components/schemas/allocationOrderSettlementNotificationTypeCode'
+        processingThresholdNotificationSubscription:
+          type: array
+          minItems: 0
+          description: Array of processing threshold notification types
+          items:
+            $ref: '#/components/schemas/processingThresholdNotificationType'
+        achStatusNotification:
+          type: array
+          minItems: 0
+          description: Array of ach status notification subscriptions. Possible values are - "AchReturnReceived"
+          items:
+            $ref: '#/components/schemas/achStatusNotificationType'
+        taxNotification:
+          type: array
+          minItems: 0
+          description: Array of Tax notifications available for subscription. Possible values are BackupWithholdingPrevented, BackupWithholdingPreventedTwo, BackupWithholdingPending, BackupWithholdingPendingTwo, BackupWithholdingStopped, BackupWithholdingStoppedTwo, BackupWithholdingStarted, BackupWithholdingStartedTwo, All
+          items:
+            $ref: '#/components/schemas/taxNotificationType'
+        accountInformationServiceNotification:
+          type: array
+          minItems: 0
+          description: Array of AIS notification subscriptions. Possible values are - ConsentLinkInitiated, ConsentLinkOpened, ConsentLinkSuccessful, ConsentLinkCancelled, ConsentLinkExpired, ConsentLinkAbandoned, ConsentLinkPending, ConsentLinkFailed, ConsentSuccessful, ConsentFailed, ConsentRevoked, ConsentFixSuccessful, ConsentFixFailed, ConsentPending, ConsentReadyToValidate, All
+          items:
+            $ref: '#/components/schemas/accountInformationServiceNotificationType'
+        enrollmentUpdate:
+          type: array
+          minItems: 0
+          description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+          items:
+            $ref: '#/components/schemas/enrollmentNotificationType'
+        securityAlert:
+          type: array
+          minItems: 0
+          description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+          items:
+            $ref: '#/components/schemas/securityAlertNotificationType'
+        passcodeUpdate:
+          type: array
+          minItems: 0
+          description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+          items:
+            $ref: '#/components/schemas/passcodeUpdateNotificationType'
+        eCommerceServiceUpdate:
+          type: array
+          minItems: 0
+          description: Array of eCommerce Service Update notification types. Possible values are "WixOnboardingComplete", "All"
+          items:
+            $ref: '#/components/schemas/eCommerceServiceUpdateNotificationType'
+        canadianKyc:
+          type: array
+          minItems: 0
+          description: Notifications for Canadian KYC mandates.
+          items:
+            $ref: '#/components/schemas/canadianKycNotificationType'
+        orbitalOperations:
+          type: array
+          minItems: 0
+          description: Get notifications about migrated Orbital merchant activity
+          items:
+            $ref: '#/components/schemas/orbitalOperationsNotificationType'
+    subscriptionGetResponse:
+      description: subscriptionGetResponse
+      type: object
+      properties:
+        notifications:
+          $ref: '#/components/schemas/notifications'
+        subscriptionId:
+          $ref: '#/components/schemas/subscriptionId'
+        subscriptionCreateTimestamp:
+          $ref: '#/components/schemas/subscriptionCreateTimestamp'
+        subscriptionUpdatedTimestamp:
+          $ref: '#/components/schemas/subscriptionUpdatedTimestamp'
+        callbackURL:
+          $ref: '#/components/schemas/callbackURL'
+        publicKey:
+          $ref: '#/components/schemas/publicKey'
+        subscriptionChannels:
+          $ref: '#/components/schemas/subscriptionChannels'
+        recipientDetails:
+          $ref: '#/components/schemas/recipientDetails'
+        subscriptionCategory:
+          $ref: '#/components/schemas/subscriptionCategory'
+        subscriptionChannel:
+          $ref: '#/components/schemas/subscriptionChannel'
+    subscriptionCreateTimestamp:
+      description: Designates the hour, minute and second in a specific day when the notification subscription was created.
+      type: string
+    subscriptionResponseList:
+      description: Response Object for Notification Get Subscription Response
+      type: object
+      properties:
+        pageInfo:
+          $ref: '#/components/schemas/pageInfo'
+        subscriptionGetResponses:
+          type: array
+          minItems: 0
+          description: List of Subscription Responses
+          items:
+            $ref: '#/components/schemas/subscriptionGetResponse'
+    achStatusNotificationType:
+      description: Codifies the subscription type to Ach status notifications. Possible values include AchReturnReceived, All.
+      type: string
+      enum:
+      - AchReturnReceived
+      - All
+    securityPreferences:
+      description: Parent Object which holds information on security preferences for sending Webhook Notifications.
+      type: object
+      writeOnly: true
+      properties:
+        oAuthNotificationEnabled:
+          description: (***DEPRECATED***) Indicate merchant is setup to receive notification messages supported by Open Authorization standard such as webhook notifications.
+          type: boolean
+          deprecated: true
+        sslAuthNotificationEnabled:
+          description: (***DEPRECATED***) Indicate merchant is setup to receive notification messages supported by Secure Socket Layer certificates authentication standard.
+          type: boolean
+          deprecated: true
+        webhookAuthorizationType:
+          description: Indicates auth needed to set up to receive notification messages supported by Open Authorization standard such as webhook notifications. Values include none, basic, and token.
+          type: string
+        tokenEndpointAuthorizationType:
+          description: Valid values include client_secret_post, private_key_jwt, none.
+          type: string
+        mTLSEnabled:
+          description: Signifies if mTLS is enabled on the given webhook endpoint
+          type: boolean
+        authorizationDetails:
+          $ref: '#/components/schemas/authorizationDetails'
+        headerFields:
+          description: Hashmap object with key value pairs that need to pass into request header while connecting to merchant server. Merchant put some validations based on those headers and their values at their side.
+          type: object
+          additionalProperties:
+            type: string
+        oAuthDetails:
+          $ref: '#/components/schemas/oAuthDetails'
+        signingAlgorithm:
+          description: Enumerates the Digital Signing Algorithm preferred by the Client, used to sign payloads and for identity verification.  For RSA key length will be 3072 and for EC key length will be 256.
+          type: string
+    allocationOrderInstructionNotificationTypeCode:
+      description: Defines the  allocation order instruction notification sub types.  Possible values are "AllocationOrderInstructionUpdate", "AllocationOrderInstructionRequest" "All"
+      type: string
+      enum:
+      - AllocationOrderInstructionUpdate
+      - AllocationOrderInstructionRequest
+      - All
+    commerceCenterUserAccessNotificationType:
+      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding Commerce Center user access registration.
+      type: string
+      enum:
+      - firstTimeRegistration
+      - All
+    subscriptionsResponse:
+      description: Response Object for Merchant Notification Subscription
+      type: object
+      properties:
+        notifications:
+          $ref: '#/components/schemas/notifications'
+        subscriptionId:
+          $ref: '#/components/schemas/subscriptionId'
+        subscriptionCreateTimestamp:
+          $ref: '#/components/schemas/subscriptionCreateTimestamp'
+        subscriptionUpdatedTimestamp:
+          $ref: '#/components/schemas/subscriptionUpdatedTimestamp'
+        subscriptionChannels:
+          $ref: '#/components/schemas/subscriptionChannels'
+        callbackURL:
+          $ref: '#/components/schemas/callbackURL'
+        secretKey:
+          $ref: '#/components/schemas/secretKey'
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        publicKey:
+          $ref: '#/components/schemas/publicKey'
+        recipientDetails:
+          $ref: '#/components/schemas/recipientDetails'
+        subscriptionChannel:
+          $ref: '#/components/schemas/subscriptionChannel'
+        subscriptionCategory:
+          $ref: '#/components/schemas/subscriptionCategory'
+    pageInfo:
+      description: Page Information
+      type: object
+      properties:
+        pageNumber:
+          description: Identifies a page within a document
+          type: string
+        recordPerPage:
+          description: Enumerates the quantity of records in a data object that is returned based on a query.
+          type: integer
+        totalRecord:
+          description: Enumerates the quantity of total records returned based on a query.
+          type: integer
+    securityAlertNotificationType:
+      description: Codifies the subscription type to Login Locked notifications. Possible values are LoginLocked, PasswordReset, LoginFailed, All
+      type: string
+      enum:
+      - LoginLocked
+      - PasswordReset
+      - LoginFailed
+      - All
+    subscriptionUpdatedTimestamp:
+      description: Designates the hour, minute and second in a specific day when the notification subscription has been modified.
+      type: string
+    subscribingForEntity:
+      description: Determines whether the subscription is for an entity within CPM (PAYER), or the subscription is for a prospective entity (BUYER).
+      type: string
+      enum:
+      - PAYER
+      - BUYER
+      writeOnly: true
+    responseCode:
+      description: Codifies the Firm's representation of the response code being sent back to the merchant.
+      type: string
+      readOnly: true
+    callbackURL:
+      description: URL/Endpoint to receive Webhook notifications by merchant.
+      type: string
+    passcodeUpdateNotificationType:
+      description: Codifies the subscription type to Passcode Update notifications. Possible values are PasscodeUpdateSuccess, PasscodeEnabledByUser, PasscodeEnabledBySystem, All
+      type: string
+      enum:
+      - PasscodeUpdateSuccess
+      - PasscodeEnabledByUser
+      - PasscodeEnabledBySystem
+      - All
+    oAuthDetails:
+      description: (***DEPRECATED***) Information on potential oAuth details to apply when sending Webhook Notification to Merchant.
+      type: object
+      deprecated: true
+      properties:
+        oAuthClientSecret:
+          description: The confidential string known only to the application and the authorization server.
+          type: string
+        oAuthClientId:
+          description: Public identifier for the application using the open authentication for authenticating client.
+          type: string
+        tokenURL:
+          description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for the identity provider to fetch the token.
+          type: string
+    subscription:
+      description: Request Object for Merchant Notification Subscription
+      type: object
+      required:
+      - notifications
+      - subscriptionChannel
+      properties:
+        subscriptionId:
+          $ref: '#/components/schemas/subscriptionId'
+        recipientDetails:
+          $ref: '#/components/schemas/recipientDetails'
+        notifications:
+          $ref: '#/components/schemas/notifications'
+        securityPreferences:
+          $ref: '#/components/schemas/securityPreferences'
+        subscriptionStatus:
+          description: Codifies the status of an agreement to receive alerts and messages by the merchant for events of interest chosen by the merchant. This status is set by the Firm's notification system.
+          type: string
+          readOnly: true
+          enum:
+          - ACTIVE
+          - INACTIVE
+        subscriptionChannels:
+          $ref: '#/components/schemas/subscriptionChannels'
+        callbackURL:
+          $ref: '#/components/schemas/callbackURL'
+        publicKey:
+          $ref: '#/components/schemas/publicKey'
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        createdAt:
+          description: Designates the hour, minute and second in a specific day when the record was created.
+          type: string
+          readOnly: true
+          format: date-time
+        updatedAt:
+          description: Designates the hour, minute, and second in a specifc day when the record was last modified.
+          type: string
+          readOnly: true
+          format: date-time
+        subscribingForEntity:
+          $ref: '#/components/schemas/subscribingForEntity'
+        subscriptionChannel:
+          $ref: '#/components/schemas/subscriptionChannel'
+        subscriptionCategory:
+          description: Delineates a set of rules for the management of a subscription.
+          type: string
+          enum:
+          - DEFAULT
+          - MANDATORY
+          writeOnly: true
+    subscriptionCategory:
+      description: Delineates a set of rules for the management of a subscription.
+      type: string
+      enum:
+      - DEFAULT
+      - MANDATORY
+      writeOnly: true
+    consumerProfileNotificationType:
+      description: Codifies the subscription type to consumer profile notifications
+      type: string
+      enum:
+      - Created
+      - PaymentMethodCreated
+      - PaymentMethodDeleted
+      - BulkConsumerProfileUpdate
+      - All
+    responseStatus:
+      description: Codifies the general categorization by the Firm of the response code being sent back to the merchant.
+      type: string
+      readOnly: true
+    subscriptionId:
+      description: Identifies unique occurrence of notification subscription message by the merchant for new subscription or modification of an existing subscription.
+      type: string
+      readOnly: true
+    reportStatusNotificationType:
+      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding merchant reports run by firm.
+      type: string
+      enum:
+      - DailyCompleted
+      - MonthlyCompleted
+      - WeeklyCompleted
+      - AdhocRunCompleted
+      - DailyErrored
+      - MonthlyErrored
+      - WeeklyErrored
+      - AdhocRunErrored
+      - IcPlusStatementCompleted
+      - All
+    paymentUpdateNotificationType:
+      description: Subscribe to notifications for payment update
+      type: string
+      enum:
+      - PaymentApproved
+      - PaymentDeclined
+      - PaymentErrored
+      - PaymentVoid
+      - PaymentClosed
+      - All
+    responseMessage:
+      description: Long explanation of the response code.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    authorizationDetails:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      properties:
+        clientSecret:
+          description: (***DEPRECATED***) A confidential string known only to the application and the authorization server.
+          type: string
+          deprecated: true
+        clientId:
+          description: (***DEPRECATED***) A public identifier for the application using Auth for authenticating the client.
+          type: string
+          deprecated: true
+        tokenEndpoint:
+          description: A reference to a web resource on the internet that specifies the location and mechanism for the identity provider to fetch.
+          type: string
+        clientCredentials:
+          $ref: '#/components/schemas/clientCredentials'
+        jwtDetails:
+          $ref: '#/components/schemas/jwtDetails'
+    disputeNotificationType:
+      description: Subscribe to notifications for dispute
+      type: string
+      enum:
+      - All
+      - Closed
+      - Received
+      - Response
+      - DisputeClosed
+      - DisputeReceived
+      - DisputeMerchantResponseRequested
+      deprecated: true
+    allocationOrderNotificationType:
+      description: Defines the  allocation order notification sub types.  Possible values are "AllocationOrderUpdateNotification", "All"
+      type: string
+      enum:
+      - AllocationOrderUpdateNotification
+      - All
+    subscriptionChannel:
+      description: Codifies the method in which the Firm communicates with the Party.
+      type: string
+      enum:
+      - WEBHOOK
+      - EMAIL
+      - IN-APP-COMMERCE-CENTER
+      - SMS
+    jwtDetails:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      properties:
+        clientSecret:
+          description: A confidential string that will be used to sign the JWT Token in case of tokenEndpointAuthorizationType client_secret_jwt.
+          type: string
+        jwtHeaderFields:
+          description: Hashmap object with key value pairs that will be used as header part of JWT token
+          type: object
+          additionalProperties:
+            type: string
+        jwtRequestBody:
+          description: Hashmap object with key value pairs that will be used as body part of JWT token
+          type: object
+          additionalProperties:
+            type: string
+        jwtRequestParameters:
+          description: Define the JWT request parameters and values you expect to receive as part of authenticating in to your servers for webhook delivery.
+          type: object
+          additionalProperties:
+            type: string
+    qrCodeStatusNotificationType:
+      description: Codifies the subscription type to QR Status notifications. Possible values are QRCodeCreated, QRCodeExpired, QRCodePaid, QRCodeSettlementProcessing, QRCodeCancelled, All
+      type: string
+      enum:
+      - QRCodeCreated
+      - QRCodeExpired
+      - QRCodePaid
+      - QRCodeSettlementProcessing
+      - QRCodeCancelled
+      - All
+    secretKey:
+      description: (***DEPRECATED***) This is the endpoint's confidential text used for generating signatures.  This is only returned at creation.
+      type: string
+    consumerAccountUpdateType:
+      description: Codifies the categories of messages the firm uses to communicate with the biometric merchant regarding consumer account update.
+      type: string
+      enum:
+      - InfoUpdateSuccess
+      - CardUpdateSuccess
+      - AccountClosedByConsumerSuccess
+      - AccountClosedSuccess
+      - ProfileFreeze
+      - ProfileUnFreeze
+      - InfoUpdateFailure
+      - All
+    accountUpdateNotificationType:
+      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding consumer account update.
+      type: string
+      enum:
+      - AccountCreated
+      - AccountClosed
+      - AccountOverdrawn
+      - RecipientAccountValidation
+      - AccountLinkSuccess
+      - AccountLinkException
+      - AccountUpdaterStatus
+      - MicroDepositInitiated
+      - MicroDepositSent
+      - MicroDepositVerificationFailed
+      - MicroDepositVerified
+      - MicroDepositReadyToValidate
+      - RecipientUpdated
+      - All
+    taxNotificationType:
+      description: Codifies the subscription type to Tax notifications. Possible values are BackupWithholdingPending, BackupWithholdingPendingTwo, BackupWithholdingPrevented, BackupWithholdingPreventedTwo, BackupWithholdingStarted, BackupWithholdingStartedTwo, BackupWithholdingStopped, BackupWithholdingStoppedTwo, All
+      type: string
+      enum:
+      - BackupWithholdingPending
+      - BackupWithholdingPendingTwo
+      - BackupWithholdingPrevented
+      - BackupWithholdingPreventedTwo
+      - BackupWithholdingStarted
+      - BackupWithholdingStartedTwo
+      - BackupWithholdingStopped
+      - BackupWithholdingStoppedTwo
+      - All
+    orbitalOperationsNotificationType:
+      description: Get notifications about migrated Orbital merchant activity.
+      type: string
+      enum:
+      - BulkFileStatus
+    balanceMonitoringNotificationType:
+      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding consumer account balance monitoring.
+      type: string
+      enum:
+      - DirectDebitInitiated
+      - DirectDebitRetry
+      - DirectDebitReturn
+      - All
+    directDebitAccountNotificationTypeCode:
+      description: Information regarding Direct Debit Account updates. Sample values are "DirectDebitAccountUpdateSuccess", "DirectDebitAccountUpdateFailure", "DirectDebitAccountUpdatePending".
+      type: string
+      enum:
+      - DirectDebitAccountUpdateSuccess
+      - DirectDebitAccountUpdateFailure
+      - DirectDebitAccountUpdatePending
+      - All
+    allocationOrderSettlementNotificationTypeCode:
+      description: Defines the  allocation order settlement notification sub types.  Possible values are "PspSettlementTransferUpdate", "DistributionTransferUpdate", "PlatformSettlementTransferUpdate", "All"
+      type: string
+      enum:
+      - PspSettlementTransferUpdate
+      - DistributionTransferUpdate
+      - PlatformSettlementTransferUpdate
+      - All
+    systemNotificationType:
+      description: Codifies the subscription type to system notifications
+      type: string
+      enum:
+      - MessageAlert
+      - All
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - 103257_SUBSCRIBE_MERCH_ACCESS
+      - 103257_NOTIFY_MERCH_ACCESS
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - 103257_SUBSCRIBE_MERCH_ACCESS
+      - 103257_NOTIFY_MERCH_ACCESS

@@ -1,0 +1,1476 @@
+openapi: 3.2.0
+info:
+  title: Consumer Profile Management Addresses API
+  description: The consumer profile management API provides merchant functionality to create, store, update, and maintain customer or consumer profiles.
+  version: 2.4.2
+  contact:
+    name: Consumer Profile Management API Support
+    url: https://developer.payments.jpmorgan.com/contact
+servers:
+- url: https://profiles-api.merchant.jpmorgan.com/api/v2/mmp
+  description: PRODUCTION - OAUTH
+- url: https://cat-profiles-api.merchant.jpmorgan.com/api/v2/mmp
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/api/v2/mmp
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Addresses
+  description: Addresses API
+paths:
+  /consumer-profiles/{consumer-profile-id}/addresses:
+    post:
+      summary: Add a new address to an existing consumer profile
+      operationId: v1PostConsumerProfilesAddresses
+      tags:
+      - Addresses
+      description: Add a new address to an existing consumer profile.
+      parameters:
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Create Consumer Address:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+        examples:
+          Create Consumer Address:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source system, that will provide a linkage between independent events. This will allow events from multiple applications to be linked together to represent a single string of events or a customer contact experience. This field should be considered generic (aka ability to use for document event tracking) to allow correlation of events not specific to customer contacts. This is unique per customer experience and should be passed between applications.
+        examples:
+          Create Consumer Address:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API) .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Create Consumer Address:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Add a new Address to an existing Consumer Profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createAddress'
+            examples:
+              Create Consumer Address:
+                value:
+                  firstName: John
+                  lastName: Doe
+                  consumerAssignedAddressName: Work2
+                  primaryAddressIndicator: true
+                  addressType: SHIPPING
+                  line1: 200 Elton Farm
+                  line2: Apt 123
+                  city: Glen Mills
+                  state: PA
+                  postalCode: '19342'
+                  countryCode: USA
+                  addressStatus: ACTIVE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+  /consumer-profiles/{consumer-profile-id}/addresses/{address-id}:
+    patch:
+      summary: Update an address on an existing consumer profile
+      operationId: v1PatchConsumerProfilesAddressesId
+      tags:
+      - Addresses
+      description: Update an address on a consumer profile using the address ID.
+      parameters:
+      - name: address-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies an interaction between a customer and a representative with the Firm within a given application tool.
+        examples:
+          Update Consumer Address:
+            value: 4a599d25-00b9-4a19-af8d-fdae45e034c9
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Update Consumer Address:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+        examples:
+          Update Consumer Address:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source system, that will provide a linkage between independent events. This will allow events from multiple applications to be linked together to represent a single string of events or a customer contact experience. This field should be considered generic (aka ability to use for document event tracking) to allow correlation of events not specific to customer contacts. This is unique per customer experience and should be passed between applications.
+        examples:
+          Update Consumer Address:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API) .
+        examples:
+          Update Consumer Address:
+            value: test
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      requestBody:
+        description: Update an Address on an existing Consumer Profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateAddress'
+            examples:
+              Update Consumer Address:
+                value:
+                  firstName: John
+                  lastName: Doe
+                  consumerAssignedAddressName: Work2
+                  primaryAddressIndicator: true
+                  line1: 201 Elton Farm
+                  line2: Apt 123
+                  city: Glen Mills
+                  state: PA
+                  postalCode: '19342'
+                  countryCode: USA
+                  addressStatus: ACTIVE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+    delete:
+      summary: Delete an address
+      operationId: v1DeleteConsumerProfilesAddressesId
+      tags:
+      - Addresses
+      description: Delete an address on a consumer profile using the address ID.
+      parameters:
+      - name: address-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies an interaction between a customer and a representative with the Firm within a given application tool.
+        examples:
+          Success:
+            value: e17a1ecd-b177-4c3d-a99b-c72e132b260f
+      - name: consumer-profile-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique occurrence of a merchant's customer profile
+        examples:
+          Success:
+            value: PACJGQ
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source system, that will provide a linkage between independent events. This will allow events from multiple applications to be linked together to represent a single string of events or a customer contact experience. This field should be considered generic (aka ability to use for document event tracking) to allow correlation of events not specific to customer contacts. This is unique per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API) .
+      - name: userIdentifier
+        in: header
+        schema:
+          type: string
+        description: The identifier (id) of the user who created the object or inserted the row. This could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+        examples:
+          Success:
+            value: test
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consumerProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  schemas:
+    middleName:
+      description: 'That part of an individual''s name generally positioned between the first and family names, as a second given name or a maternal surname. (NOTE: in some instances, an individual may have multiple middle names)'
+      type: string
+      pattern: '[\p{L}\p{P}0-9'' ]*$'
+      maxLength: 70
+      example: James
+    verificationResult:
+      description: card verification  Result
+      type: object
+      readOnly: true
+      properties:
+        transactionDate:
+          description: Designates the hour, minute, seconds and date (if timestamp) or year, month, and date (if date) when the transaction (monetary or non-monetary) occurred.
+          type: string
+        transactionId:
+          description: Identifies a unique occurrence of a transaction.
+          type: string
+        messages:
+          $ref: '#/components/schemas/messages'
+    accountNumber:
+      description: The card or token number.
+      type: string
+      pattern: '[0-9]*'
+      minLength: 16
+      maxLength: 16
+      example: '4234555678909099'
+      writeOnly: true
+    validationMessage:
+      description: Object containing information about transaction validation.
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          description: The name given to the module or program where the error was generated.
+          type: string
+    phone:
+      description: Phone Information
+      type: object
+      required:
+      - phoneNumber
+      - countryCode
+      properties:
+        phoneNumber:
+          description: 'A locator whose value identifies the formatted numeric address for routing voice or data communications via telephony, to reach a party. NOTE: Telephone number formats may vary; this field can include domestic and international telephone numbers.'
+          type: string
+        countryCode:
+          description: The telephone dialing prefix for a member country in the International Telecommunication Union (ITU) that is defined by the ITU-T E.164 standard. The code is a combination of one, two or three digits identifying a specific country, countries in an integrated numbering plan, or a specific geographic area.
+          type: string
+        phoneNumberType:
+          description: Codifies the type of formatted numeric address for routing voice or data communications via telephony to reach a party.
+          type: string
+        communicationIdentifier:
+          description: Internal Identifier generated by firm for each phone information for a consumer stored in the system.
+          type: string
+          readOnly: true
+    adfsError:
+      description: Object containing information about the active directory file system error.
+      type: object
+      required:
+      - errorSource
+      - errorCode
+      - errorDescription
+      properties:
+        errorSource:
+          description: The label of the component from where the error or warning originated.
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: Codifies a raised exception encountered by an internal or external system, sub-system, interface, job, module, or system component with which the web service application interfaces.  In this instance it refers to the error raised when reporting job failed.
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: The textual information of the code of the raised exception encountered by an internal or external system, sub-system, interface, job, module, or system component with which the web service application interfaces.
+          type: string
+          example: the signature could not be verified
+    billerDebitCardReferenceNumber:
+      description: The Firm identifier assigned to a debit card number at the instantiation of the debit card number that persists over time as the debit card number changes through the lost/stolen/fraud process. It links replacement debit card numbers with the originally assigned card number.
+      type: string
+    countryCode:
+      description: 'A code that identifies the Country, a Geographic Area, that is recognized as an independent political unit in world affairs. Note: This data element is a child of the Country Code CDE and valid values are based on ISO standards.'
+      type: string
+      pattern: ^[a-zA-Z]{2,3}$
+      minLength: 3
+      maxLength: 3
+      example: USA
+    bacs:
+      description: Object for BACS (Bankers' Automated Clearing System) is an electronic system payment method make payments directly from one bank account to another. This payment method mostly used in UK.
+      type: object
+      required:
+      - accountNumber
+      - bankSortCode
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        bankSortCode:
+          description: Identifies the routing and transit number assigned by an administrative body to formally identify a chartered financial institution (bank) within a given country or common financial market for performing domestic transfers of funds to or from that institution's client accounts. Within the United States, this is known as the American Bankers Association Routing Number, and within Australia, this is known as a Bank State Branch Number. This common data element will house those two examples, along with the equivalent for any other country or financial market.
+          type: string
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        accountStatus:
+          $ref: '#/components/schemas/accountStatus'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    requestId:
+      description: Unique request identifier to track the request through application programming interface(API) .
+      type: string
+    profileStatus:
+      description: Codifies the current standing of a Party's profile.
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - PENDING
+      - ERRORED
+    postalCode:
+      description: The portion of a party’s address that is the encoded representation of a geographic area to facilitate mail delivery services.
+      type: string
+      pattern: ^[a-zA-Z0-9]+([-\s]*)[a-zA-Z0-9]+$
+      minLength: 3
+      maxLength: 12
+      example: '19342'
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: validationErrors
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    consumerProfileResponse:
+      description: Consumer Profile Response Object
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        consumerProfileId:
+          description: Identifies a unique occurrence of a consumer maintained in the firm as requested by merchant. Consumer profile contains information relevant to processing transactions such as name, address, account and payment methods information.
+          type: string
+          readOnly: true
+        consumerProfileUniqueId:
+          $ref: '#/components/schemas/consumerProfileUniqueId'
+        cardOnFileReferenceNumber:
+          description: Identifies a cardholder account profile which allows cardholder data (including, but not limited to, an account number or payment token) to be stored and subsequently used for transaction processing.
+          type: string
+        merchant:
+          $ref: '#/components/schemas/merchant'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        fullName:
+          $ref: '#/components/schemas/fullName'
+        communication:
+          $ref: '#/components/schemas/communication'
+        paymentMethodType:
+          $ref: '#/components/schemas/paymentMethodType'
+        addresses:
+          type: array
+          minItems: 0
+          description: This is used for specifying an attribute used on a model for collection object that will contain one or more attributes
+          items:
+            $ref: '#/components/schemas/address'
+        correlationIdentifier:
+          description: A unique key produced by the initial entry of a customer by the originating source system, that will provide a linkage between independent events. This will allow events from multiple applications to be linked together to represent a single string of events or a customer contact experience. This field should be considered generic (aka ability to use for document event tracking) to allow correlation of events not specific to customer contacts. This is unique per customer experience and should be passed between applications.
+          type: string
+        createTimestamp:
+          $ref: '#/components/schemas/createTimestamp'
+        createUserIdentifier:
+          $ref: '#/components/schemas/createUserIdentifier'
+        updateTimestamp:
+          $ref: '#/components/schemas/updateTimestamp'
+        updateUserIdentifier:
+          $ref: '#/components/schemas/updateUserIdentifier'
+        profileStatus:
+          $ref: '#/components/schemas/profileStatus'
+        orderOverrideCode:
+          $ref: '#/components/schemas/orderOverrideCode'
+    addressType:
+      description: 'Codifies the classification given to the various addresses captured for a party, such as Doing Business As Address, Legal Entity Address, and Tax Address.  Valid values:  ''SHIPPING'' or ''BILLING'''
+      type: string
+      enum:
+      - SHIPPING
+      - BILLING
+    sepa:
+      description: Sepa Payment Information
+      type: object
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        internationalBankAccountNumber:
+          description: Identifies the International Bank Account Number (IBAN) for the account.  IBAN is an internationally agreed system of identifying bank accounts across national borders to facilitate the communication and processing of cross border transactions with a reduced risk of transcription errors. Based on ISO 13616 standards, the IBAN consists of up to 34 alphanumeric characters, comprising a country code, two check digits and a long and detailed bank account-number. The check digits enable a sanity check of the bank account number to confirm its integrity before submitting a transaction.
+          type: string
+          writeOnly: true
+        internationalBusinessIdentifierCode:
+          description: Codifies the unique value that identifies a particular bank in the worldwide economy. The 8 to 11 digit code is based on ISO 9362 standards. This code has several aliases including SWIFT Code, SWIFT Bank Code and Bank Identification Code (BIC). ISO 9362:2014 specifies the elements and structure of a universal identifier code for financial and non-financial institutions where an international identifier is required to facilitate automated processing of information for financial services.  The BIC is used for addressing messages, routing business transactions and identifying business parties. This Standard applies to organizations and excludes individual persons.
+          type: string
+        accountStatus:
+          $ref: '#/components/schemas/accountStatus'
+        mandateList:
+          type: array
+          minItems: 0
+          description: List of mandate information
+          items:
+            $ref: '#/components/schemas/mandate'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    cardBadgeType:
+      description: 'Codifies the type of card that operate on single payment network or co-badge (more than one network) .Valid values : CO_BADGED or MONO_BADGED'
+      type: string
+      enum:
+      - CO_BADGED
+      - MONO_BADGED
+    firstName:
+      description: That part of an individual's full name considered a personal name or given name and generally positioned before the last name or family name.
+      type: string
+      pattern: '[\p{L}\p{P}0-9'' ]*$'
+      maxLength: 70
+      example: John
+    ach:
+      description: ACH payment Information
+      type: object
+      required:
+      - accountNumber
+      - financialInstitutionRoutingNumber
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        last4AccountNumber:
+          $ref: '#/components/schemas/last4AccountNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        financialInstitutionRoutingNumber:
+          $ref: '#/components/schemas/financialInstitutionRoutingNumber'
+        paymentType:
+          $ref: '#/components/schemas/paymentType'
+        accountType:
+          $ref: '#/components/schemas/accountType'
+        accountStatus:
+          $ref: '#/components/schemas/accountStatus'
+        isTransactionMicroEntry:
+          $ref: '#/components/schemas/isTransactionMicroEntry'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+    addressStatus:
+      description: Codifies the current status of the profile address.
+      type: string
+      example: ACTIVE
+      enum:
+      - ACTIVE
+      - INACTIVE
+    address:
+      description: Address Object
+      type: object
+      required:
+      - line1
+      - line2
+      properties:
+        addressIdentifier:
+          description: Identifies a classification of a geographic area that is captured for a consumer purchasing goods or services.
+          type: string
+          readOnly: true
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerAssignedAddressName:
+          $ref: '#/components/schemas/consumerAssignedAddressName'
+        primaryAddressIndicator:
+          $ref: '#/components/schemas/primaryAddressIndicator'
+        addressType:
+          $ref: '#/components/schemas/addressType'
+        line1:
+          $ref: '#/components/schemas/line1'
+        line2:
+          $ref: '#/components/schemas/line2'
+        city:
+          $ref: '#/components/schemas/city'
+        state:
+          $ref: '#/components/schemas/state'
+        postalCode:
+          $ref: '#/components/schemas/postalCode'
+        countryCode:
+          $ref: '#/components/schemas/countryCode'
+        addressStatus:
+          $ref: '#/components/schemas/addressStatus'
+        paymentMethodIdList:
+          type: array
+          minItems: 0
+          description: A collection of unique occurrences of the types of payments accepted by a level of the hierarchy of the merchant acquiring account.
+          items:
+            type: string
+    threeDSRequestorAuthenticationInfo:
+      description: Three DS Requestor Authentication Info
+      type: object
+      properties:
+        authenticationPurpose:
+          description: Codifies the purpose of the cardholder authentication request.
+          type: string
+          enum:
+          - PAYMENT_TRANSACTION
+          - RECURRING_TRANSACTION
+          - INSTALLMENT_TRANSACTION
+          - ADD_CARD
+          - MAINTAIN_CARD
+          - CARDHOLDER_VERIFICATION
+          - BILLING_AGREEMENT
+        threeDSChallengeType:
+          description: Indicates whether a challenge is requested for this transaction.
+          type: string
+          enum:
+          - NO_PREFERENCE
+          - NO_CHALLENGE
+          - CHALLENGE_REQUESTED
+          - CHALLENGE_MANDATE
+          - NO_CHALLENGE_TRA
+          - NO_CHALLENGE_DATA
+          - NO_CHALLENGE_DA
+          - NO_CHALLENGE_TRUSTED
+    authenticationResult:
+      description: Cardholder Authentication Result from the Payment request.
+      type: object
+      readOnly: true
+      properties:
+        authenticationId:
+          $ref: '#/components/schemas/authenticationId'
+        authenticationOrchestrationUrl:
+          description: This is the URL a merchant will need to launch to support 3ds authentication.
+          type: string
+        authenticationReturnUrl:
+          description: Once authentication is complete this is the URL the customer will be sent to.
+          type: string
+    threeDSPurchaseInfo:
+      description: Three DS Purchase Info
+      type: object
+      properties:
+        purchaseDate:
+          description: Designates the year, month and day of the most recent purchase which occurred on the Cardholder account.
+          type: string
+          format: date-time
+        threeDomainSecureTransactionType:
+          description: Identifies the type of transaction being authenticated. The values are derived from ISO 8583
+          type: string
+          enum:
+          - CHECK
+          - GOODS_SERVICES
+          - ACCOUNT_FUNDING
+          - QUASI_CASH
+          - PREPAID
+    createAddress:
+      description: Create Address Object
+      type: object
+      properties:
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerAssignedAddressName:
+          description: A short label defined by the consumer that will allow them to refer to the address by name.  E.g Home , Office , JohnDoe_Home
+          type: string
+        primaryAddressIndicator:
+          $ref: '#/components/schemas/primaryAddressIndicator'
+        addressType:
+          $ref: '#/components/schemas/addressType'
+        line1:
+          $ref: '#/components/schemas/line1'
+        line2:
+          $ref: '#/components/schemas/line2'
+        city:
+          description: A portion of a party's address which is the geographic area that is a municipality with legal power granted by a state/province charter.
+          type: string
+          maxLength: 40
+          pattern: '[\p{L}\d\s\-''.,&() ]*$'
+          example: Glen Mills
+        state:
+          description: 'Classifies a geographic area that represents a first level, legal and political subdivision of a country; it should be in the ISO 3166-2 format. For Example: the parish "Andorra la Vella" in Andorra will be represented as 07.   similarly the province "Bengo" in Angola will be represented as "BGO". state Texas in USA is represnted as "TX" etc.,'
+          type: string
+          minLength: 1
+          maxLength: 3
+          pattern: ^[A-Za-z0-9]+([\s-]+[A-Za-z0-9]+)*$
+          example: PA
+        postalCode:
+          description: The portion of a party’s address that is the encoded representation of a geographic area to facilitate mail delivery services.
+          type: string
+          minLength: 3
+          maxLength: 12
+          pattern: ^|([a-zA-Z0-9]+(-|\s?)[a-zA-Z0-9]+)$
+          example: '19342'
+        countryCode:
+          description: 'A code that identifies the Country, a Geographic Area, that is recognized as an independent political unit in world affairs. Note: This data element is a child of the Country Code CDE and valid values are based on ISO standards.'
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[a-zA-Z]{2,3}$
+          example: USA
+        addressStatus:
+          $ref: '#/components/schemas/addressStatus'
+    state:
+      description: 'Classifies a geographic area that represents a first level, legal and political subdivision of a country; it should be in the ISO 3166-2 format. For Example: the parish "Andorra la Vella" in Andorra will be represented as 07.   similarly the province "Bengo" in Angola will be represented as "BGO". state Texas in USA is represnted as "TX" etc.,'
+      type: string
+      pattern: ^[A-Za-z0-9]+([\s-]+[A-Za-z0-9]+)*$
+      minLength: 1
+      maxLength: 3
+      example: PA
+    primaryAddressIndicator:
+      description: Indicates the 'TRUE'/'FALSE' value that represents whether or not an address is the primary address for a given owner
+      type: boolean
+      example: true
+    city:
+      description: A portion of a party's address which is the geographic area that is a municipality with legal power granted by a state/province charter.
+      type: string
+      pattern: '[\p{L}\d\s\-''.,&() ]*$'
+      maxLength: 40
+      example: Glen Mills
+    cardType:
+      description: Codifies the method used to pay for the exchange of money, goods or services between a merchant and their customer such as VI,MC, AX.
+      type: string
+      pattern: '[A-Za-z]*'
+      minLength: 1
+      maxLength: 50
+      example: VI
+      enum:
+      - VI
+      - MC
+      - AX
+      - HC
+      - EO
+      - DI
+      - JC
+      - DC
+      - CC
+      - CZ
+      - CR
+      - OX
+      - IM
+      - SP
+      - PP
+      - AP
+      - NP
+      - VR
+      - MR
+      - EP
+      - CB
+      - DP
+      - PM
+    merchant:
+      description: Information about the merchant
+      type: object
+      properties:
+        merchantSoftware:
+          $ref: '#/components/schemas/merchantSoftware'
+    authenticationId:
+      description: A unique identifier for the card owner authentication provided by a global authentication solution such as Three Domain Secure (3DS) designed to make eCommerce transactions more secure and reduce fraud.
+      type: string
+    consumerPreferredPaymentNetwork:
+      description: The consumer’s chosen card network to route eligible transactions when multiple networks are available. Valid Values are VI,MC, CB
+      type: string
+      enum:
+      - VI
+      - MC
+      - CB
+    addressIdentifier:
+      description: Identifies a classification of a geographic area that is captured for a consumer purchasing goods or services.
+      type: string
+    createTimestamp:
+      description: Designates the hour, minute and second in a specific day when the record was created.
+      type: string
+      readOnly: true
+    last4CardNumber:
+      description: Identifies the final 4 digits of the 16 digit card number. The truncated value is used in place of the full number to protect against exposure of confidential information.
+      type: string
+      readOnly: true
+    updateAddress:
+      description: Update Address Object
+      type: object
+      properties:
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerAssignedAddressName:
+          $ref: '#/components/schemas/consumerAssignedAddressName'
+        primaryAddressIndicator:
+          $ref: '#/components/schemas/primaryAddressIndicator'
+        line1:
+          $ref: '#/components/schemas/line1'
+        line2:
+          $ref: '#/components/schemas/line2'
+        city:
+          $ref: '#/components/schemas/city'
+        state:
+          $ref: '#/components/schemas/state'
+        postalCode:
+          $ref: '#/components/schemas/postalCode'
+        countryCode:
+          $ref: '#/components/schemas/countryCode'
+        addressStatus:
+          $ref: '#/components/schemas/addressStatus'
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    cardExpirationMonthYearNumber:
+      description: A number in the form of Month/Year that is displayed on a card (Debit/Credit).  This number is used for the date which is no longer in effect for transactions being processed at the Point of Sale.
+      type: string
+      pattern: (0[1-9]|1[0-2])[/][0-9][0-9][0-9][0-9]
+      example: 02/2024
+    accountStatus:
+      description: Codifies the current status of the card.
+      type: string
+      example: ACTIVE
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - PENDING
+      - ERRORED
+      - SUSPENDED
+      - VERIFICATION_FAILED
+    accountType:
+      description: Codifies a bank account where funds are deposited or stored (e.g., checking and savings account). When shared with a financial institution as the client's primary automated payment mechanism for a debt, it may also be known as a DDA (Demand Deposit Account). A DDA can have funds withdrawn at any time from the depository institution, accessible by a teller, ATM or via online banking.
+      type: string
+      enum:
+      - CHECKING
+      - SAVING
+      - CORPORATE_CHECKING
+    consumerAssignedAddressName:
+      description: A short label defined by the consumer that will allow them to refer to the address by name.  E.g Home , Office , JohnDoe_Home
+      type: string
+      pattern: ^[^<>]*$
+      maxLength: 75
+    paymentMethodId:
+      description: Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account.
+      type: string
+      readOnly: true
+    code:
+      description: Codifies a raised exception encountered by an internal or external system, sub-system, interface, job, module, or system component with which the web service application interfaces. In this instance it refers to the error raised when the reporting job failed.
+      type: string
+    consumerProfileUniqueId:
+      description: Identifies a unique occurrence of a consumer's information maintained by the Firm acorss merchant.
+      type: string
+    defaultMOP:
+      description: Default payment method
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/card'
+        sepa:
+          $ref: '#/components/schemas/sepa'
+        ach:
+          $ref: '#/components/schemas/ach'
+        bacs:
+          $ref: '#/components/schemas/bacs'
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    consumerProfileAddress:
+      description: Address Information used for consumer profile
+      type: object
+      writeOnly: true
+      properties:
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerAssignedAddressName:
+          $ref: '#/components/schemas/consumerAssignedAddressName'
+        primaryAddressIndicator:
+          $ref: '#/components/schemas/primaryAddressIndicator'
+        addressType:
+          $ref: '#/components/schemas/addressType'
+        line1:
+          $ref: '#/components/schemas/line1'
+        line2:
+          $ref: '#/components/schemas/line2'
+        city:
+          $ref: '#/components/schemas/city'
+        state:
+          $ref: '#/components/schemas/state'
+        postalCode:
+          $ref: '#/components/schemas/postalCode'
+        countryCode:
+          $ref: '#/components/schemas/countryCode'
+        addressStatus:
+          $ref: '#/components/schemas/addressStatus'
+    merchantSoftware:
+      description: Contains information related to the merchant software
+      type: object
+      properties:
+        companyName:
+          description: Company name of software integrated to this API. If merchant is directly integrated, send "JPMC."
+          type: string
+          example: Payment Company
+        productName:
+          description: The name of the product used for marketing purposes from a customer perspective. I. e. what the customer would recognize.
+          type: string
+          example: Application Name
+        version:
+          description: Designates the unique state of computer software as it is developed and released. The version identifier can be a word, or a number, or both.
+          type: string
+          example: '1.235'
+    paymentType:
+      description: Identifies how accountholders  initiated debits to their accounts .
+      type: string
+      enum:
+      - WEB
+      - TEL
+      - RECURRING
+    line2:
+      description: 'A portion of a party''s address which is the line of the unstructured (unparsed) geographic street address containing any of the following: house number, street name, street direction, street type, dwelling type and number, PO Box number, rural delivery route number.'
+      type: string
+      pattern: ^[^<>{}]*$
+      maxLength: 100
+      example: Apt 123
+    updateUserIdentifier:
+      description: The identifier (id) of the user who last updated the object or the row. This could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+      type: string
+      readOnly: true
+    message:
+      description: Provides textual description of a problem that has occurred and which is preventing the system from completing a task. Messages can be a  confirmation, warning or notification, and can trigger the system to apply a customized default value or override to a field, record or file, halt or postpone processing, or skip or reject the entry generating the problem. Messages can be displayed on-screen in the user interface or in reporting.
+      type: string
+    financialInstitutionRoutingNumber:
+      description: Identifies the routing and transit number assigned by an administrative body to formally identify a chartered financial institution (bank) within a given country or common financial market for performing domestic transfers of funds to or from that institution's client accounts. Within the United States, this is known as the American Bankers Association Routing Number, and within Australia, this is known as a Bank State Branch Number. This common data element will house those two examples, along with the equivalent for any other country or financial market.
+      type: string
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    threeDSAuthenticatedData:
+      description: Three DS Authenticated Data
+      type: object
+      properties:
+        threeDSTransactionId:
+          description: Identifies a unique occurrence of a transaction. In this context, this is Universally unique transaction identifier to identify a single transaction. If the value does not exist or it is not a valid UUID, the 3DS Server will generate a new transaction ID. This value has 36 characters in a format defined in IETF RFC 4122.
+          type: string
+          writeOnly: true
+        transactionId:
+          description: Identifies a unique occurrence of a transaction.
+          type: string
+          readOnly: true
+        threeDSAuthenticationId:
+          description: Unique identifier for the  Authentication attempt.
+          type: string
+        threeDSTransactionDate:
+          description: Designates the hour, minute, seconds and date (if timestamp) or year, month, and date (if date) when the transaction (monetary or non-monetary) occurred.
+          type: string
+          format: date-time
+    first6CardNumber:
+      description: Identifies the first six digits of the primary account number of a credit, debit or pre-paid card. As of 2017, this does not necessarily align to the Issuer Identification Number (IIN).  IIN is also referred to as Bank Identification Number (BIN).
+      type: string
+      readOnly: true
+    createUserIdentifier:
+      description: The identifier (id) of the user who created the object or inserted the row. This could be the Firm’s Standard Identifier, or the identifier of a batch/functional process.
+      type: string
+      readOnly: true
+    authenticationRequest:
+      description: Authentication Request
+      type: object
+      writeOnly: true
+      properties:
+        authenticationReturnUrl:
+          description: Once authentication is complete this is the URL the customer will be sent to.
+          type: string
+        threeDSPurchaseInfo:
+          $ref: '#/components/schemas/threeDSPurchaseInfo'
+        threeDSRequestorAuthenticationInfo:
+          $ref: '#/components/schemas/threeDSRequestorAuthenticationInfo'
+    updateTimestamp:
+      description: Designates the hour, minute, and second in a specifc day when the record was last modified.
+      type: string
+      readOnly: true
+    lastName:
+      description: 'That part of an individual’s name generally placed at the end of the given name. The last name is also known as the surname or family name. (Note: name conventions may be different based on practices in different countries. Some countries use two or more last names; in other countries, the family name is placed before a person’s given name; in some countries, it is common for people to have only one name or a mononym.)'
+      type: string
+      pattern: '[\p{L}\p{P}0-9'' ]*$'
+      maxLength: 70
+      example: Babbitt
+    paymentMethodType:
+      description: Payment Method Object
+      type: object
+      properties:
+        cardList:
+          type: array
+          minItems: 0
+          description: List of card payment methods
+          items:
+            $ref: '#/components/schemas/card'
+        sepaList:
+          type: array
+          minItems: 0
+          description: List of SEPA payment methods
+          items:
+            $ref: '#/components/schemas/sepa'
+        achList:
+          type: array
+          minItems: 0
+          description: List of ACH payment methods
+          items:
+            $ref: '#/components/schemas/ach'
+        defaultMOP:
+          $ref: '#/components/schemas/defaultMOP'
+        bacsList:
+          type: array
+          minItems: 0
+          description: List of ACH payment methods
+          items:
+            $ref: '#/components/schemas/bacs'
+    card:
+      description: Card payment Information
+      type: object
+      required:
+      - accountNumber
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
+        cardExpirationMonthYearNumber:
+          $ref: '#/components/schemas/cardExpirationMonthYearNumber'
+        last4CardNumber:
+          $ref: '#/components/schemas/last4CardNumber'
+        first6CardNumber:
+          $ref: '#/components/schemas/first6CardNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        accountStatus:
+          $ref: '#/components/schemas/accountStatus'
+        cardType:
+          $ref: '#/components/schemas/cardType'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        consumerProfileAddress:
+          $ref: '#/components/schemas/consumerProfileAddress'
+        addressIdentifier:
+          $ref: '#/components/schemas/addressIdentifier'
+        authenticationRequest:
+          $ref: '#/components/schemas/authenticationRequest'
+        threeDSAuthenticatedData:
+          $ref: '#/components/schemas/threeDSAuthenticatedData'
+        authenticationResult:
+          $ref: '#/components/schemas/authenticationResult'
+        billerDebitCardReferenceNumber:
+          $ref: '#/components/schemas/billerDebitCardReferenceNumber'
+        isBillPayment:
+          description: Indicates whether or not the transaction is identified by Visa as a bill payment, prearranged between the cardholder and the merchant.
+          type: boolean
+        verificationResult:
+          $ref: '#/components/schemas/verificationResult'
+        profileCardSourceName:
+          description: This attribute is to inform if the card is converted card from safetech token or Apple Pay token or network token
+          type: string
+          enum:
+          - SAFETECH_TOKEN
+        currency:
+          $ref: '#/components/schemas/currency'
+        consumerPreferredPaymentNetwork:
+          $ref: '#/components/schemas/consumerPreferredPaymentNetwork'
+        cardBadgeType:
+          $ref: '#/components/schemas/cardBadgeType'
+    line1:
+      description: 'A portion of a party''s address which is the line of the unstructured (unparsed) geographic street address containing any of the following: house number, street name, street direction, street type, dwelling type and number, PO Box number, rural delivery route number.'
+      type: string
+      pattern: ^[^<>{}]*$
+      maxLength: 100
+      example: 400 Elton Farm
+    accountNumberType:
+      description: Specifies the type of payment method used by the account number in payment transaction.
+      type: string
+      default: PAN
+      enum:
+      - PAN
+      - NETWORK_TOKEN
+      - DEVICE_TOKEN
+      writeOnly: true
+    orderOverrideCode:
+      description: Codifies the option merchant has chosen to perform a non-systemic override on a payment order.
+      type: string
+      enum:
+      - NO_MAPPING
+      - CONSUMER_REFNUM_ORDERID
+      - CONSUMER_REFNUM_COMMENTS
+      - CONSUMER_REFNUM_ORDERID_COMMENTS
+    mandate:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      required:
+      - mandateId
+      - mandateType
+      - mandateSignatureDate
+      properties:
+        mandateId:
+          description: Identifies an agreement between the consumer, debtor bank (direct debit account of the consumer) and the merchant. This agreement (mandate) gives the merchant permission to withdraw funds from the consumer's account for some specific financial purpose. Typically mandates are used for recurring or installment payments; that is, a fixed amount to be withdrawn over a specific period of time (defined by the “Mandate Date”). One-time withdrawals are allowed. Mandates are specific to European programs such as Single Euro Payments Area (SEPA) Direct Debit (DD) scheme and Bankers' Automated Clearing System (BACS).
+          type: string
+        mandateType:
+          description: Codifies the category of an agreement between the consumer, debtor bank (direct debit account of the consumer) and the merchant. This agreement (mandate) gives the merchant permission to withdraw funds from the consumer's bank account for some specific financial purpose. Typically mandates are used for recurring or installment payments; that is, a fixed amount to be withdrawn over a specific period of time (defined by the “Mandate Date”). One-time withdrawals are allowed. Mandates are specific to European programs such as Single Euro Payments Area (SEPA) Direct Debit (DD) scheme and Bankers' Automated Clearing System (BACS).
+          type: string
+        mandateSignatureDate:
+          description: Designates the year, month and day when the consumer signs an agreement (mandate) that gives the merchant permission to withdraw funds from the consumer's bank account for some specific financial purpose. Typically mandates are used for recurring or installment payments; that is, a fixed amount to be withdrawn over a specific period of time (defined by the “Mandate Date”). One-time withdrawals are allowed. Mandates are specific to European programs such as Single Euro Payments Area (SEPA) Direct Debit (DD) scheme and Bankers' Automated Clearing System (BACS). mandateSignatureDate should be valid date with format YYYY-MM-DD.
+          type: string
+        mandateReferenceId:
+          description: Identifies an unique reference number generated by the consumer profile system for the agreement between the consumer, debtor bank (direct debit account of the consumer) and the merchant. This agreement (mandate) gives the merchant permission to withdraw funds from the consumer's account for some specific financial purpose.
+          type: string
+          readOnly: true
+    isTransactionMicroEntry:
+      description: Indicates the current transaction is an Automated Clearing House (ACH) credit or debit Entry used by an Originator for the purpose of verifying a Receiver’s account or an individual's access to an account.
+      type: boolean
+    last4AccountNumber:
+      description: Identifies the final 4 digits of the Payment Method Account Number. The truncated value is used in place of the full number to protect against exposure of confidential information.
+      type: string
+      readOnly: true
+    fullName:
+      description: Name of accoundholder business name.
+      type: string
+      pattern: '[\p{L}\p{P}0-9'' ]*$'
+      maxLength: 70
+    communication:
+      description: Communication Object
+      type: object
+      properties:
+        phoneList:
+          type: array
+          minItems: 0
+          description: List of phone information
+          items:
+            $ref: '#/components/schemas/phone'
+        emailList:
+          type: array
+          minItems: 0
+          description: List of email information
+          items:
+            $ref: '#/components/schemas/email'
+        defaultPhone:
+          $ref: '#/components/schemas/phone'
+        defaultEmail:
+          $ref: '#/components/schemas/email'
+    currency:
+      description: Codifies the monetary unit that was associated with the financial transaction (such as sale, returns, chargebacks etc.).
+      type: string
+      enum:
+      - USD
+      - EUR
+      - GBP
+      - AUD
+      - NZD
+      - SGD
+      - CAD
+      - JPY
+      - HKD
+      - KRW
+      - TWD
+      - MXN
+      - BRL
+      - DKK
+      - NOK
+      - ZAR
+      - SEK
+      - CHF
+      - CZK
+      - PLN
+      - TRY
+      - AFN
+      - ALL
+      - DZD
+      - AOA
+      - ARS
+      - AMD
+      - AWG
+      - AZN
+      - BSD
+      - BDT
+      - BBD
+      - BYN
+      - BZD
+      - BMD
+      - BOB
+      - BAM
+      - BWP
+      - BND
+      - BGN
+      - BIF
+      - BTN
+      - XOF
+      - XAF
+      - XPF
+      - KHR
+      - CVE
+      - KYD
+      - CLP
+      - CNY
+      - COP
+      - KMF
+      - CDF
+      - CRC
+      - HRK
+      - DJF
+      - DOP
+      - XCD
+      - EGP
+      - ETB
+      - FKP
+      - FJD
+      - GMD
+      - GEL
+      - GHS
+      - GIP
+      - GTQ
+      - GYD
+      - HTG
+      - HNL
+      - HUF
+      - ISK
+      - INR
+      - IDR
+      - ILS
+      - JMD
+      - KZT
+      - KES
+      - LAK
+      - LBP
+      - LSL
+      - LRD
+      - MOP
+      - MKD
+      - MGA
+      - MWK
+      - MYR
+      - MVR
+      - MRU
+      - MUR
+      - MDL
+      - MNT
+      - MAD
+      - MZN
+      - MMK
+      - NAD
+      - NPR
+      - ANG
+      - PGK
+      - NIO
+      - NGN
+      - PKR
+      - PAB
+      - PYG
+      - PEN
+      - PHP
+      - QAR
+      - RON
+      - RWF
+      - SHP
+      - WST
+      - STN
+      - SAR
+      - RSD
+      - SCR
+      - SLL
+      - SBD
+      - SOS
+      - LKR
+      - SRD
+      - SZL
+      - TJS
+      - TZS
+      - THB
+      - TOP
+      - TTD
+      - UGX
+      - UAH
+      - AED
+      - UYU
+      - UZS
+      - VUV
+      - VND
+      - YER
+      - ZMW
+      - RUB
+      - GNF
+      - VES
+      - XCG
+      - UNKNOWN
+    email:
+      description: Email information
+      type: object
+      required:
+      - emailAddress
+      properties:
+        emailAddress:
+          description: A mail system that allows a party to send and receive messages electronically. An email address is composed of a local part and a domain part. The local part is unique to the individual while the domain or host name must meet specific standards required by the host that administers the email service.
+          type: string
+        emailAddressType:
+          description: Codifies the type of formatted numeric address for routing electronic message communications via email to reach a party.
+          type: string
+        communicationIdentifier:
+          description: Internal Identifier generated by firm for each email information for a consumer stored in the system.
+          type: string
+          readOnly: true
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - NEED_INPUT
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - NEED_INPUT

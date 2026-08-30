@@ -1,0 +1,606 @@
+openapi: 3.2.0
+info:
+  title: Payment Initiation Service Payouts API
+  version: 2.0.8
+  description: Enable and manage payments, refunds, withdrawals, and provider connectivity across multiple markets using secure open banking infrastructure.
+  contact:
+    name: JPMorgan Chase & Co. API Support
+    url: https://apistore.jpmchase.net/support/contact
+    email: imsd.security.operations@jpmorgan.com
+servers:
+- url: https://apigateway.jpmorgan.com/tsapi/paybybank/v2
+  description: PRODUCTION
+- url: https://apigatewayqaf.jpmorgan.com/tsapi/paybybank/v2
+  description: CLIENT TESTING
+- url: https://apigatewaycat.jpmorgan.com/tsapi/paybybank/v2
+  description: CLIENT TESTING
+- url: https://api-mock.payments.jpmorgan.com/tsapi/paybybank/v2
+  description: MOCK
+tags:
+- name: Payouts
+  description: Pay By Bank - PayoutsPayments
+paths:
+  /payouts:
+    post:
+      tags:
+      - Payouts
+      summary: Create Payouts
+      operationId: createPayout
+      description: 'Creates a payout for a specific payment transaction as a refund or a withdrawal.
+
+
+        > The Pay By Bank - Payouts API facilitates businesses to carry out payments to beneficiaries efficiently within the context of Open Banking. By capitalizing on the secure infrastructure of Open Banking, it offers a robust, streamlined, and secure mechanism to process payouts, categorized into two types - Refunds and Withdrawals.
+
+        '
+      requestBody:
+        description: Representation of a Payout Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payout'
+            examples:
+              PayoutRefundRequest:
+                value:
+                  payoutReference: Refund 220-1z008
+                  payoutType: REFUND
+                  payoutReason: PARTIAL_REFUND
+                  payoutAmount:
+                    value: '10.50'
+                    currency: EUR
+                  paymentType: REAL_TIME_PAYMENTS
+                  sourcePaymentId: a14a49b4-b21e-416e-ab8d-c0e57efbd2ea
+              PayoutWithdrawalRequest:
+                value:
+                  payoutReference: Payout 221-1x009
+                  payoutType: WITHDRAWAL
+                  payoutReason: WITHDRAWAL
+                  payoutAmount:
+                    value: '20.50'
+                    currency: GBP
+                  paymentType: REAL_TIME_PAYMENTS
+                  sourcePaymentId: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        description: "Client provided unique Idempotency Key.\n          \n          \n**NOTE**:  *Creation of unique keys is up to the client, but usage of V4 UUIDs is suggested, \n          \nor another random string to avoid collisions.*"
+        schema:
+          $ref: '#/components/schemas/UniqueResourceIdentifier'
+        examples:
+          PayoutRefundRequest:
+            value: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+          PayoutWithdrawalRequest:
+            value: 1b036f9c-8c84-4ce6-b1dd-5979472945a2
+        required: true
+      responses:
+        '202':
+          $ref: '#/components/responses/20x-PayoutResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '409':
+          $ref: '#/components/responses/409-Conflict'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+      callbacks:
+        payoutStatus:
+          '{client-url}/status':
+            post:
+              description: Callback message to notify clients about the payout status
+              requestBody:
+                $ref: '#/components/requestBodies/PayoutsCallback'
+              responses:
+                '204':
+                  description: Callback received successfully
+  /payouts/{id}:
+    get:
+      tags:
+      - Payouts
+      summary: Retrieve Payouts
+      operationId: getPayoutId
+      description: 'Retrieves the details of a given payout by Id.
+
+        '
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique ID of the payout
+        schema:
+          $ref: '#/components/schemas/UniqueResourceIdentifier'
+        examples:
+          PayoutRefundCompleted:
+            value: a14a49b4-b21e-416e-ab8d-c0e57efbd2ea
+      responses:
+        '200':
+          $ref: '#/components/responses/200-PayoutStatusResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+components:
+  schemas:
+    PayoutDetails:
+      title: PayoutDetails
+      description: Representation of a Payout and associated metadata.
+      allOf:
+      - $ref: '#/components/schemas/PayoutMetadata'
+      - $ref: '#/components/schemas/Payout'
+    PayoutAmount:
+      title: PayoutAmount
+      description: The amount value and currency of a payout.Amount should be more than 0.01 with maximum of two decimal places allowed.
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/Value'
+        currency:
+          $ref: '#/components/schemas/ISOCurrencyCode'
+      required:
+      - value
+      - currency
+    ErrorContext:
+      title: ErrorContext
+      type: object
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+        message:
+          type: string
+          description: Humanly readable textual description of the error
+          minLength: 1
+          maxLength: 99
+        location:
+          type: string
+          description: The location of the error occurred in the request.
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+          minLength: 1
+          maxLength: 99
+        field:
+          type: string
+          description: The field which caused the error. Where the location of error occurred is BODY the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+      required:
+      - message
+    ISOCurrencyCode:
+      title: ISOCurrencyCode
+      description: '**Currency of the money movement**: a 3 alpha character ISO 4217 currency code.'
+      type: string
+      minLength: 3
+      maxLength: 3
+      pattern: ^[A-Z]{3}$
+      example: EUR
+    StatusUpdatedAt:
+      title: StatusUpdatedAt
+      type: string
+      format: date-time
+      description: The last updated date and time of the status, in ISO 8601 format.
+    Payout:
+      title: Payout
+      description: Representation of a Payout
+      type: object
+      properties:
+        payoutReference:
+          type: string
+          description: External Payout reference set by a merchant, must be between 6-18 characters long.
+          minLength: 6
+          maxLength: 18
+          example: Refund 220-1z008
+        payoutType:
+          type: string
+          description: "The type of payout being requested.\n\n  | Payout        | Description                                                                                                                             |\n  | --------------|-----------------------------------------------------------------------------------------------------------------------------------------|\n  | **REFUND**      | This represents a repayment of a specific amount to a customer, usually as a result of overpayment or product/service dissatisfaction.|\n  | **WITHDRAWAL**  | A payment from a merchant account to the same payment details previously used to make a payment to the merchant account. This is also known as a closed-loop payout."
+          enum:
+          - REFUND
+          - WITHDRAWAL
+        payoutAmount:
+          $ref: '#/components/schemas/PayoutAmount'
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        sourcePaymentId:
+          allOf:
+          - type: string
+            description: The source payment identifier associated with an earlier initiated payment, which can be used to determine the payee.
+          - $ref: '#/components/schemas/UniqueResourceIdentifier'
+        payoutReason:
+          description: Payout/refund reason
+          type: string
+          enum:
+          - WITHDRAWAL
+          - REFUND
+          - PARTIAL_REFUND
+          - DUPLICATE
+      required:
+      - payoutReference
+      - payoutType
+      - paymentType
+      - payoutAmount
+      - sourcePaymentId
+    Value:
+      title: Value
+      type: string
+      minLength: 3
+      maxLength: 18
+      pattern: ^(\d{1,15})\.(\d{2})$
+      example: '10.50'
+      description: The value representation of a monetary amount. The amount value should be more than 0.01 with maximum of two decimal places allowed.
+    Error:
+      title: Error
+      type: object
+      description: The error object returned by the API.
+      properties:
+        title:
+          type: string
+          description: Short humanly-readable title of the error
+          minLength: 1
+          maxLength: 99
+        httpStatus:
+          type: integer
+          format: int32
+          description: HTTP Status Code
+        traceId:
+          type: string
+          description: JPMC assigned trace identifier
+          minLength: 1
+          maxLength: 99
+        requestId:
+          type: string
+          description: The client originated requestId
+          minLength: 1
+          maxLength: 99
+        context:
+          type: array
+          description: Provides additional context and detail on the validation errors
+          minItems: 1
+          maxItems: 99
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+      required:
+      - title
+    PaymentType:
+      type: string
+      description: "The type of payment.\n\n  List of supported payment types, their usage and categorization by region:\n\n  Payment Type             | Description\n  -------------------------|-----------------------------------------------------------------------\n  **REAL_TIME_PAYMENTS**   | *Real-time Payments (Instant)* - `FASTER_PAYMENTS`, `SEPA_INSTANT_CREDIT_TRANSFER`\n  **LOW_VALUE_PAYMENTS**    | *Low-value Retail Payments* -  `BACS`, `SEPA_CREDIT_TRANSFER`\n  **HIGH_VALUE_PAYMENTS** | *High Value Business Payments* -  `CHAPS`\n  ---\n\n | | **Real-time Payments (INSTANT)**       | **Low Value Payments** | **High-Value Payments**    |\n |:-----------------:|:--------------------------------------:|:--------------------------------------:|:----------------------------------:|\n | **UK**            | Faster Payments                        |           BACS                     | CHAPS |\n | **SEPA**          | SEPA Instant Credit Transfer           | SEPA Credit Transfer |                       |\n\n **Real-time payments**: refer to payment solutions that process and settle financial transactions in real-time, typically within seconds, without any waiting period.\n\n **Low-value payments**: pertain to high-volume, low-value transactions mainly conducted by individuals or businesses for day-to-day expenses. These payments are usually processed in batches, not in real-time.\n\n **High Value Payments**: refer to large-sum transactions that are typically exchanged between banks or financial institutions."
+      enum:
+      - REAL_TIME_PAYMENTS
+      - LOW_VALUE_PAYMENTS
+      - HIGH_VALUE_PAYMENTS
+    UniqueResourceIdentifier:
+      title: Identifier
+      description: An immutable opaque string that uniquely identifies a resource.
+      type: string
+      minLength: 36
+      maxLength: 36
+      pattern: ^[-_.a-zA-Z0-9]{36}$
+      example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+    PayoutMetadata:
+      title: PayoutMetadata
+      description: Representation of a Payout Metadata
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the payout
+          example: 0f7d8749-555e-41fc-a947-98bca7f7310b
+          readOnly: true
+        status:
+          type: string
+          description: "Status of the payout\n\n\n**VALUE**      | DESCRIPTION              | \n-----------|--------------------------|\n **PENDING**   | Default status           |\n **COMPLETED** | Payout was successful    |\n **FAILED**    | Payout failed to complete|\n\t\n\n"
+          example: PENDING
+          readOnly: true
+        statusUpdatedAt:
+          $ref: '#/components/schemas/StatusUpdatedAt'
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time the payout was initiated, in ISO 8601 format.
+          example: '2023-07-24T14:15:22Z'
+          readOnly: true
+      required:
+      - id
+  examples:
+    Unauthorized:
+      value:
+        title: Unauthorized
+        httpStatus: 401
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - message: Unauthorized
+    ServiceUnavailableError:
+      value:
+        title: System Error
+        httpStatus: 503
+        traceId: d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '12000'
+          message: Service Unavailable. Please try again.
+    ConflictError:
+      value:
+        title: Idempotency Check Failure
+        httpStatus: 409
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '10106'
+          message: The request conflicts with the current state of the server. Please ensure your request is unique.
+          location: BODY
+    PayoutRefundFailed:
+      value:
+        id: 030bd614-2cd2-4e58-acff-51a41f713577
+        payoutReference: Refund 220-1z008
+        payoutType: REFUND
+        payoutReason: REFUND
+        payoutAmount:
+          value: '10.50'
+          currency: EUR
+        paymentType: REAL_TIME_PAYMENTS
+        sourcePaymentId: a14a49b4-b21e-416e-ab8d-c0e57efbd2ea
+        status: FAILED
+        statusUpdatedAt: '2023-07-24T14:15:22Z'
+        createdAt: '2023-07-24T14:15:22Z'
+    PayoutRefundResponse:
+      value:
+        id: 0f7d8749-555e-41fc-a947-98bca7f7310b
+        payoutReference: Refund 220-1z008
+        payoutType: REFUND
+        payoutReason: PARTIAL_REFUND
+        payoutAmount:
+          value: '10.50'
+          currency: EUR
+        paymentType: REAL_TIME_PAYMENTS
+        sourcePaymentId: a14a49b4-b21e-416e-ab8d-c0e57efbd2ea
+        status: PENDING
+        createdAt: '2023-07-24T14:15:22Z'
+    PayoutWithdrawalCompleted:
+      value:
+        id: 8cee00f7-fdfb-40af-8fde-9fcf6ddaa4c1
+        payoutReference: Payout 221-1x009
+        payoutType: WITHDRAWAL
+        payoutReason: WITHDRAWAL
+        payoutAmount:
+          value: '20.50'
+          currency: GBP
+        paymentType: REAL_TIME_PAYMENTS
+        sourcePaymentId: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+        status: COMPLETED
+        statusUpdatedAt: '2023-07-24T14:15:22Z'
+        createdAt: '2023-07-24T20:15:22Z'
+    IdempotencyKeyMissingError:
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '10106'
+          message: Idempotency-Key header is missing.
+          location: HEADER
+    PayoutWithdrawalFailed:
+      value:
+        id: 503ff9e5-d4fe-498d-9b57-e7ed07251b95
+        payoutReference: Payout 221-1x009
+        payoutType: WITHDRAWAL
+        payoutReason: WITHDRAWAL
+        payoutAmount:
+          value: '20.50'
+          currency: GBP
+        paymentType: REAL_TIME_PAYMENTS
+        sourcePaymentId: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+        statusUpdatedAt: '2023-07-24T14:15:22Z'
+        status: FAILED
+        createdAt: '2023-07-24T20:15:22Z'
+    PaymentResponseInvalidCurrency:
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 6b03ac09-0d9e-4c72-909d-fad6a627f0c2
+        requestId: 7215813e-ac80-4ddc-9f67-9fbfc1ac934c
+        context:
+        - code: '10001'
+          message: Destination country and currency combination is invalid.
+          field: $.market
+          location: BODY
+    PayoutRefundCompleted:
+      value:
+        id: 0f7d8749-555e-41fc-a947-98bca7f7310b
+        payoutReference: Refund 220-1z008
+        payoutType: REFUND
+        payoutReason: PARTIAL_REFUND
+        payoutAmount:
+          value: '10.50'
+          currency: EUR
+        paymentType: REAL_TIME_PAYMENTS
+        sourcePaymentId: a14a49b4-b21e-416e-ab8d-c0e57efbd2ea
+        status: COMPLETED
+        statusUpdatedAt: '2023-07-24T14:15:22Z'
+        createdAt: '2023-07-24T14:15:22Z'
+    ResourceNotFound:
+      value:
+        title: Resource Not Found
+        httpStatus: 404
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - message: Invalid resource identifier provided.
+          field: id
+          location: PATH
+    PaymentResponseAccountNotFound:
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: b183d4cb-cc4b-437a-9342-09f7696d0c1c
+        requestId: 71ed084e-4d25-492a-a942-4cbeea38e271
+        context:
+        - code: '10001'
+          message: creditor accountId not found
+          field: $.creditor.account.accountId
+          location: BODY
+    PayoutWithdrawalResponse:
+      value:
+        id: 8cee00f7-fdfb-40af-8fde-9fcf6ddaa4c1
+        payoutReference: Payout 221-1x009
+        payoutType: WITHDRAWAL
+        payoutReason: WITHDRAWAL
+        payoutAmount:
+          value: '20.50'
+          currency: GBP
+        paymentType: REAL_TIME_PAYMENTS
+        sourcePaymentId: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+        status: PENDING
+        createdAt: '2023-07-24T20:15:22Z'
+    PaymentResponseBadFormat:
+      value:
+        title: Bad Format
+        httpStatus: 400
+        traceId: b41cb267-51db-4eb1-9bc6-fc93d85d78a7
+        requestId: 442b4c6f-c52d-4e40-8a64-fd7fb9ca0089
+        context:
+        - code: '10103'
+          message: The accountId provided is in a bad format.
+          field: $.creditor.account.accountId
+          location: BODY
+    InvalidDataError:
+      value:
+        title: Invalid Data
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '10001'
+          message: Property amount is mandatory.
+          field: $.paymentAmount.amount
+          location: BODY
+    SecurityFailureError:
+      value:
+        title: Security Failure
+        httpStatus: 403
+        traceId: 5914f136-4544-4b1c-8004-6c2388ba76b4
+        requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+        context:
+        - code: '14000'
+          message: Invalid client profile
+  responses:
+    503-ServiceUnavailable:
+      description: "Service Unavailable.\n              \n*List of Error codes and Rule definitions.* \n| Error Code    | Description       |\n|---------------|-------------------|\n|   12000       | System error      |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            ServiceUnavailableError:
+              $ref: '#/components/examples/ServiceUnavailableError'
+    409-Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            ConflictError:
+              $ref: '#/components/examples/ConflictError'
+    403-Forbidden:
+      description: "Forbidden. \n| Error Code    | Description                                |\n|---------------|--------------------------------------------|\n|  14000        | Security failure                           |     "
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            SecurityFailureError:
+              $ref: '#/components/examples/SecurityFailureError'
+    404-NotFound:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            ResourceNotFoundError:
+              $ref: '#/components/examples/ResourceNotFound'
+    401-Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            UnauthorizedError:
+              $ref: '#/components/examples/Unauthorized'
+    400-BadRequest:
+      description: "Bad Request. \n              \n**List of Error codes and Usage explanations.**\n              \n| Error Code      |           Usage                                |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing                        |\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10106           | Idempotency Check Failure                      |\n| 10199           | Other                                          |\n| 13000           | Uncategorized error                            |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            InvalidDataError:
+              $ref: '#/components/examples/InvalidDataError'
+            IdempotencyKeyMissingError:
+              $ref: '#/components/examples/IdempotencyKeyMissingError'
+            BadAccountIdFormat:
+              $ref: '#/components/examples/PaymentResponseBadFormat'
+            InvalidCurrencyMarket:
+              $ref: '#/components/examples/PaymentResponseInvalidCurrency'
+            InvalidAccountId:
+              $ref: '#/components/examples/PaymentResponseAccountNotFound'
+    200-PayoutStatusResponse:
+      description: Payout Status Retrieval
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PayoutDetails'
+          examples:
+            PayoutRefundResponse:
+              $ref: '#/components/examples/PayoutRefundResponse'
+            PayoutRefundCompleted:
+              $ref: '#/components/examples/PayoutRefundCompleted'
+            PayoutRefundFailed:
+              $ref: '#/components/examples/PayoutRefundFailed'
+            PayoutWithdrawalResponse:
+              $ref: '#/components/examples/PayoutWithdrawalResponse'
+            PayoutWithdrawalCompleted:
+              $ref: '#/components/examples/PayoutWithdrawalCompleted'
+            PayoutWithdrawalFailed:
+              $ref: '#/components/examples/PayoutWithdrawalFailed'
+    20x-PayoutResponse:
+      description: Payout successfully Initiated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PayoutDetails'
+          examples:
+            PayoutRefundResponse:
+              $ref: '#/components/examples/PayoutRefundResponse'
+            PayoutWithdrawalResponse:
+              $ref: '#/components/examples/PayoutWithdrawalResponse'
+  requestBodies:
+    PayoutsCallback:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Payout'
+          examples:
+            Sample Callback Request - Refund:
+              $ref: '#/components/examples/PayoutRefundResponse'
+            Sample Callback Request - Withdrawal:
+              $ref: '#/components/examples/PayoutWithdrawalResponse'
+      required: true
+      description: Representation of Payout Callback
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2: {}
+x-jpmc-security: {}
+x-jpmc-securitySchemes:
+  MutualTLS:
+    type: x509
+    description: Mutual TLS authentication using client and server certificates.
+    x509: {}

@@ -1,0 +1,326 @@
+openapi: 3.2.0
+info:
+  title: Consumer Profile Management Bulk Import API
+  description: The consumer profile management API provides merchant functionality to create, store, update, and maintain customer or consumer profiles.
+  version: 2.4.2
+  contact:
+    name: Consumer Profile Management API Support
+    url: https://developer.payments.jpmorgan.com/contact
+servers:
+- url: https://profiles-api.merchant.jpmorgan.com/api/v2/mmp
+  description: PRODUCTION - OAUTH
+- url: https://cat-profiles-api.merchant.jpmorgan.com/api/v2/mmp
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/api/v2/mmp
+  description: MOCK
+security:
+- BearerAuth: []
+tags:
+- name: Bulk Import
+paths:
+  /bulk-import/status:
+    get:
+      summary: Retrieve the status of a bulk import file
+      operationId: v1GetBulkImportFileStatus
+      tags:
+      - Bulk Import
+      description: Retrieve the status of a bulk import file.
+      parameters:
+      - name: merchantIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+        examples:
+          Success:
+            value: '993371390059'
+      - name: correlationIdentifier
+        in: header
+        schema:
+          type: string
+        description: A unique key produced by the initial entry of a customer by the originating source system, that will provide a linkage between independent events. This will allow events from multiple applications to be linked together to represent a single string of events or a customer contact experience. This field should be considered generic (aka ability to use for document event tracking) to allow correlation of events not specific to customer contacts. This is unique per customer experience and should be passed between applications.
+        examples:
+          Success:
+            value: 6d66f2e5-ad81-4848-9884-d5ff32ee7690
+      - name: requestIdentifier
+        in: header
+        schema:
+          type: string
+        description: Unique request identifier to track the request through application programming interface(API) .
+      - name: applicationIdentifier
+        in: header
+        schema:
+          type: string
+        description: Identifies a unique occurrence of an application which can be a combination of in-house-developed software and/or vendor products that are designed to process, store or transmit the Firm's data.
+      - name: merchantFileName
+        in: header
+        required: true
+        schema:
+          type: string
+        description: This is used for specifying FileName of the Bulk Import File.
+        examples:
+          Success:
+            value: M123456789_TransactionData.csv
+      - name: submitterIdentifier
+        in: header
+        required: true
+        schema:
+          type: string
+        description: This is used for specifying Submitter Id of the Bulk Import File.
+        examples:
+          Success:
+            value: SUBMITTER001
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bulkImportFileStatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adfsError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '408':
+          description: Timeout Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messages'
+components:
+  schemas:
+    bulkTokenizationStatus:
+      description: Contains information related to the Tokenization status for the Bulk Import file.
+      type: object
+      properties:
+        toknRequestFilesExpectedCount:
+          description: This is used for specifiying the count of the expected token request files for the bulk import file.
+          type: integer
+          format: int64
+        toknRequestFilesCreatedCount:
+          description: This is used for specifiying the count of the created token request files for the bulk import file.
+          type: integer
+          format: int64
+        toknResponseFilesReceivedCount:
+          description: This is used for specifiying the count of the received token response files for the bulk import file.
+          type: integer
+          format: int64
+        toknRequestFilesSentPercent:
+          description: This is used for specifiying the percentage of the token files sent for bulk import file.
+          type: string
+        toknResponseFilesReceivedPercent:
+          description: This is used for specifiying the percentage of the token files received for bulk import file.
+          type: string
+    merchantFileName:
+      description: This is used for specifying FileName of the Bulk Import File.
+      type: string
+      example: M123456789_TransactionData.csv
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    submitterIdentifier:
+      description: This is used for specifying Submitter Id of the Bulk Import File.
+      type: string
+      example: SUBMITTER001
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    templateType:
+      description: Description type of template that is being processed
+      type: string
+    validationMessage:
+      description: Object containing information about transaction validation.
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          description: The name given to the module or program where the error was generated.
+          type: string
+    adfsError:
+      description: Object containing information about the active directory file system error.
+      type: object
+      required:
+      - errorSource
+      - errorCode
+      - errorDescription
+      properties:
+        errorSource:
+          description: The label of the component from where the error or warning originated.
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: Codifies a raised exception encountered by an internal or external system, sub-system, interface, job, module, or system component with which the web service application interfaces.  In this instance it refers to the error raised when reporting job failed.
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: The textual information of the code of the raised exception encountered by an internal or external system, sub-system, interface, job, module, or system component with which the web service application interfaces.
+          type: string
+          example: the signature could not be verified
+    bulkImportFileStatusResponse:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        merchantFileName:
+          $ref: '#/components/schemas/merchantFileName'
+        submitterIdentifier:
+          $ref: '#/components/schemas/submitterIdentifier'
+        totalRecordCount:
+          description: This is used for specifiying the count of the total records in the Bulk Import File.
+          type: integer
+          format: int64
+        processedRecordCount:
+          description: This is used for specifiying the count of the processed records out of the total records  in the Bulk Import File.
+          type: integer
+          format: int64
+        erroredRecordCount:
+          description: This is used for specifiying the count of the errored records out of the total records in the Bulk Import File.
+          type: integer
+          format: int64
+        fileReceivedTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the bulk import File received from submitter.
+          type: string
+        finalResponseTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the bulk import final response file sent to Submitter.
+          type: string
+        ackResponseTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the acknowledgment response file sent to submitter.
+          type: string
+        errorResponseTimestamp:
+          description: Designates the hour, minute, seconds and date in a specific day of the error response file sent to submitter.
+          type: string
+        fileFormat:
+          description: This is used for specifiying Format of the Bulk Import File.
+          type: string
+          enum:
+          - COLUMN_BASED
+          - JSON
+        fileVersion:
+          description: This is used for specifiying Version of the Bulk Import File.
+          type: string
+        overallFileStatusDescription:
+          description: Specifies the Overall Status description of the Bulk Import File process
+          type: string
+        fileProcessCompletionPercent:
+          description: Specifies the percentage of the progress of Bulk Import file process.
+          type: string
+        bulkTokenizationStatus:
+          $ref: '#/components/schemas/bulkTokenizationStatus'
+        signedUrl:
+          description: A Signed URL is a temporary, time-limited link that grants temporary access to a private object, allowing users to perform specific actions to download a file without needing AWS credentials or permissions
+          type: string
+        overallFileStatus:
+          $ref: '#/components/schemas/overallFileStatus'
+        templateType:
+          $ref: '#/components/schemas/templateType'
+    merchantId:
+      description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+      type: string
+    code:
+      description: Codifies a raised exception encountered by an internal or external system, sub-system, interface, job, module, or system component with which the web service application interfaces. In this instance it refers to the error raised when the reporting job failed.
+      type: string
+    requestId:
+      description: Unique request identifier to track the request through application programming interface(API) .
+      type: string
+    overallFileStatus:
+      description: Codifies the state of processing a file.
+      type: string
+      enum:
+      - FILE_RECEIVED
+      - FILE_PROCESSING_COMPLETED
+      - FILE_REJECTED
+      - FILE_PROCESSING
+      - FILE_UPLOADED
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: validationErrors
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    message:
+      description: Provides textual description of a problem that has occurred and which is preventing the system from completing a task. Messages can be a  confirmation, warning or notification, and can trigger the system to apply a customized default value or override to a field, record or file, halt or postpone processing, or skip or reject the entry generating the problem. Messages can be displayed on-screen in the user interface or in reporting.
+      type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - NEED_INPUT
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles:
+      - NEED_INPUT

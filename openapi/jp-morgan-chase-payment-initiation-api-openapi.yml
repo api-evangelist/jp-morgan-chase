@@ -1,0 +1,1750 @@
+openapi: 3.2.0
+info:
+  title: Global Payments Payment Initiation API
+  version: 1.2.3
+  description: Streamline your global payment operations by initiating, tracking, and managing multiple payment types across international markets through a single, unified interface, so you can handle everything from real-time payments to ACH and card payouts without juggling different systems.
+  contact:
+    name: JPMorgan Chase & Co. API Support
+    email: imsd.security.operations@jpmorgan.com
+    url: https://developer.payments.jpmorgan.com/contact/support
+servers:
+- url: https://apigateway.jpmorgan.com/tsapi/v1
+  description: PRODUCTION - MTLS
+- url: https://api-mtls.merchant.jpmorgan.com/tsapi/v1
+  description: PRODUCTION - MTLS - Payment Card Industry
+- url: https://apigatewaycat.jpmorgan.com/tsapi/v1
+  description: CLIENT TESTING - MTLS
+- url: https://apigatewaycat-pci.jpmorgan.com/tsapi/v1
+  description: CLIENT TESTING - MTLS - Payment Card Industry
+- url: https://api-mock.payments.jpmorgan.com/tsapi/v1
+  description: JPM-PROD - Global Payments Sandbox
+security:
+- BearerAuth: []
+tags:
+- name: Payment Initiation
+  description: API to initiate a payment
+paths:
+  /payments:
+    post:
+      summary: Payments Initiation API
+      operationId: initiatePayments
+      description: Initiate Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInitationDetails'
+            examples:
+              CBPR RTP SEPA Ultimate Debtor Hybrid:
+                $ref: '#/components/examples/PaymentInitiationSEPAMinimalUltimateDebtorHybridAddress'
+              CBPR RTP SEPA Creditor:
+                $ref: '#/components/examples/PaymentInitiationSEPAMinimalCreditorAddress'
+              CBPR RTP SEPA Ultimate Creditor:
+                $ref: '#/components/examples/PaymentInitiationSEPAMinimalUltimateCreditorAddress'
+      callbacks:
+        paymentInitiationStatus:
+          '{client-calback-url}/status':
+            post:
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        callbacks:
+                          $ref: '#/components/schemas/Callbacks'
+                required: true
+              responses:
+                '200':
+                  description: OK
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+      responses:
+        '202':
+          $ref: '#/components/responses/202-Accepted'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+      tags:
+      - Payment Initiation
+components:
+  schemas:
+    PrimaryAccountIdentification:
+      type: object
+      title: Primary Account Identification
+      required:
+      - accountId
+      properties:
+        accountId:
+          $ref: '#/components/schemas/AccountId'
+        accountType:
+          $ref: '#/components/schemas/AccountTypeEnum'
+        schemeName:
+          $ref: '#/components/schemas/SchemeName'
+        cardExpiryDate:
+          type: string
+          description: Mandatory for Push to Card. Acceptable format - YYMM
+          pattern: ^(?:[0-9]{2})(0[1-9]|1[0-2])$
+    UltimateDebtorName:
+      title: Ultimate Debtor Name
+      type: string
+      minLength: 0
+      maxLength: 140
+      description: '- Mandatory for US RTP
+
+
+        **Market specific maximum length limits** :-
+
+        | Market |Maximum Length|
+
+        |----------------- |----|
+
+        | **Push To Card**| 25 |       '
+    AdditionalAlternateAccountIdentifier:
+      type: object
+      description: "A value that can be used as an alternative identifier for an account. \n- Each `identifier` entry **MUST** identify its context as assigned by the associated acount platform as an idType. "
+      properties:
+        idType:
+          type: string
+          description: "One or more values that can be used as alternative identifiers for an account. \n  | Identifier Type    | Description                                                    |\n  | -------------------| ---------------------------------------------------------------|\n  | PROGRAM_ID         | A client program identifier.|\n  | CUSTOM             | A custom identifier that can be used to identify an account eg. `EMAIL`,`CARD_NUMBER` etc. *Should be used in conjunction with name field.*|"
+          enum:
+          - PROGRAM_ID
+          - CUSTOM
+        identifier:
+          $ref: '#/components/schemas/AlternateAccountIdentifier'
+        name:
+          type: string
+          minLength: 0
+          maxLength: 32
+          description: "Optional field to provide more context to the alternate account identifier type. With idType: `CUSTOM` it is recommended to provide a name for the identifier, for example:\n  | Identifier Type    | NAME        |\n  | -------------------|-------------|\n  | CUSTOM             |`EMAIL`      |\n  | CUSTOM             |`CARD_NUMBER`|"
+      required:
+      - idType
+      - identifier
+    IndividualIdentification:
+      type: object
+      title: Individual Identification
+      description: Individual Identification Schemes
+      properties:
+        individualIds:
+          type: array
+          minItems: 1
+          maxItems: 5
+          items:
+            $ref: '#/components/schemas/IndividualId'
+    Error:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          minLength: 0
+          maxLength: 32
+        errorDescription:
+          type: string
+          minLength: 0
+          maxLength: 1024
+    UltimateCreditor:
+      oneOf:
+      - $ref: '#/components/schemas/UltimateCreditorOrganization'
+      - $ref: '#/components/schemas/UltimateCreditorIndividual'
+    UltimateDebtor:
+      oneOf:
+      - $ref: '#/components/schemas/UltimateDebtorOrganization'
+      - $ref: '#/components/schemas/UltimateDebtorIndividual'
+    EndToEndId:
+      type: string
+      minLength: 0
+      maxLength: 128
+    Purpose:
+      type: object
+      description: "This field is mandatory for Singapore Faster Payments. Underlying reason for the payment transaction, eg., a charity payment, or  a commercial agreement between the creditor and the debtor. \nNot applicable for :-\n UK FPS\n Push To Card"
+      properties:
+        code:
+          $ref: '#/components/schemas/ServiceLevelCode'
+        type:
+          type: string
+          enum:
+          - CODE
+          - PROPRIETARY
+    PaymentIdentifiers:
+      type: object
+      description: Payment Id
+      required:
+      - endToEndId
+      properties:
+        endToEndId:
+          type: string
+          minLength: 0
+          maxLength: 128
+          description: "Customer assigned reference to the transaction.\nMaximum length supported for each instrument and market :-\n\n**Credit Transfer Payments**\n|Payment Type| Market       | Max Length |Format\n|------------|--------------|------------|-------------\n| RTP        | UK           | 31         |letters and numbers only\n| RTP        | Singapore    | 35         |letters and numbers only\n| RTP        | Australia    | 35         |letters and numbers only\n| RTP        | Hong Kong    | 35         |letters and numbers only\n| RTP        | Indonesia    | 35         |letters and numbers only\n| RTP        | Brazil       | 34         |letters and numbers only\n| RTP        | Mexico       | 16         |letters and numbers only\n| RTP        | US           | 31         |letters and numbers only\n| RTP        | SEPA          | 35         |letters and numbers only\n| Push To Card| US/Canada    | 16         |letters and numbers only\n| ACH        | Chile        | 35         |\n| BLOCKCHAIN  | Kinexys Digital Payments markets  | 16         |letters and numbers only\n| Push To Wallet  | PayPal/Venmo  | 35         |letters and numbers only\n| Interac  | JPM Canada markets  | 35         |letters and numbers only\n| Zelle  | US  | 16         |letters and numbers only                        \n**Direct Debit Payments**\n|Payment Type| Market       | Max Length |Format                   |\n|------------|--------------|------------|-------------------------|\n| RTP        | Malaysia     | 35         |Letters and numbers only |"
+        otherPaymentReferences:
+          type: object
+          description: 'The object becomes MANDATORY for below instrument and market when
+
+            transferType = ''DEBIT''
+
+
+            |Payment Type| Market       | Max Length |Format                   |
+
+            |------------|--------------|------------|-------------------------|
+
+            | RTP        | Malaysia     | 35         |Letters and numbers only |'
+          properties:
+            paymentReferenceValue:
+              type: string
+              minLength: 0
+              maxLength: 128
+              description: Clearing house originating mandate identifier to be provided for Direct debit payments.
+          required:
+          - paymentReferenceValue
+    PaymentType:
+      type: string
+      enum:
+      - ACH.TRF
+      - RTP
+      - BLOCKCHAIN
+      description: "Mandatory for RTP, ACH payments and and Kinexys Digital Payments.\n\nTo Specify the payment type, use:\n\n  - **RTP** for Faster Payments\n\n  - **ACH.TRF** for Chile ACH Payments\n\n  - **BLOCKCHAIN** for payments via Kinexys Digital Payments"
+    Payments:
+      type: object
+      required:
+      - requestedExecutionDate
+      - paymentIdentifiers
+      - paymentAmount
+      - paymentCurrency
+      - debtor
+      - debtorAgent
+      - creditor
+      - transferType
+      properties:
+        possibleDuplicateMessage:
+          type: boolean
+          description: Optional field to indicate a duplicate payment
+        requestedExecutionDate:
+          type: string
+          pattern: '[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])'
+          minLength: 0
+          maxLength: 10
+          description: Requested date on which/by which the transaction should be executed ISO Date format. (YYYY-MM-DD)
+        paymentIdentifiers:
+          $ref: '#/components/schemas/PaymentIdentifiers'
+        paymentCurrency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          description: 3- character ISO currency code e.g. `SGD`, `GBP`, `AUD`, `EUR`, `MXN`, `CLP`
+        paymentAmount:
+          type: number
+          description: "Amount should be more than 0.`01` with maximum of two decimal places allowed.\n\n**NOTE**: For Chile ACH, decimals are not accepted.\n\n**Maximum amount allowed per market/instrument** :-\n\n  - **UK FPS** - GBP 1,000,000\n\n  - **SEPA INSTANT**  - EUR 100,000"
+          example: 1000
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        debtor:
+          $ref: '#/components/schemas/Debtor'
+        debtorAgent:
+          $ref: '#/components/schemas/DebtorAgent'
+        creditorAgent:
+          $ref: '#/components/schemas/CreditorAgent'
+        creditor:
+          $ref: '#/components/schemas/Creditor'
+        additionalParties:
+          $ref: '#/components/schemas/AdditionalParties'
+        transferType:
+          type: string
+          enum:
+          - CREDIT
+          - DEBIT
+          description: "To indicate the transaction is a credit transfer or direct debit\ntransfer. This indicator also determines the originator and receiver\nis the debit and credit side of this transaction. \n\n**Supported value per market/instrument** :-\n  | Market |Value|\n  | --------------------|-------|\n  |  UK Faster Payments |CREDIT |\n  |  SEPA  INSTANT      |CREDIT |\n  |  US RTP             |CREDIT |\n  |Singapore Faster Payments | CREDIT|\n  |Australia Faster Payments | CREDIT|\n  |Singapore Faster Payments | CREDIT|\n  |Hong Kong Faster Payments |CREDIT|\n  |Malaysia Faster Payments  | CREDIT and DEBIT|\n  |Indonesia RTP             |CREDIT|\n  |Brazil RTP                |CREDIT|\n  |US RTP                    |CREDIT|\n  |Push To Card              |CREDIT|\n  |ACH Chile Low Value       |CREDIT|\n  |Blockchain (Kinexys Digital Payments) Payments | CREDIT|\n  |Push To Wallet (PayPal/Venmo)       |CREDIT|\n  |Interac (Canada)      |CREDIT|\n  |Zelle      |CREDIT|"
+        purpose:
+          $ref: '#/components/schemas/Purpose'
+        categoryPurpose:
+          $ref: '#/components/schemas/CategoryPurpose'
+        remittanceInformation:
+          $ref: '#/components/schemas/RemittanceInformation'
+        taxInformation:
+          $ref: '#/components/schemas/TaxInformation'
+        secureVerification:
+          type: array
+          description: Applies only for Interac proxy payments
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/SecureVerification'
+        paymentExpiryDate:
+          type: string
+          format: date-time
+          description: Applies only for Interac proxy Payments. Format expected - YYYY-MM-DDThh:mm:ss+/-time offset to UTC
+        chargeBearer:
+          type: string
+          enum:
+          - CREDITOR
+          - DEBTOR
+    RemittanceInformation:
+      type: object
+      title: Remittance Information
+      description: Mandatory for Malaysia Faster Payments, optional for other markets
+      properties:
+        unstructuredInformation:
+          type: array
+          minItems: 0
+          maxItems: 100
+          description: "**Maximum number of lines and characters supported per market/instrument** :-\n\n| Market |Maximum Line and Length limits|\n|--------|-----------------------------------|\n|  UK  FPS  |1 line, 140 characters          |\n|  SEPA INSTANT |1 line, 140 characters      |\n|  US RTP | 1 line, 140 charaters            |\n|  Singapore RTP  | 1 line, 140 characters   | \n|  Australia RTP  | 2 lines, 140 characters  | \n| Hong Kong RTP  | 1 line, 140 characters    |\n| Malaysia RTP  | 1 line, 140 characters     |\n|India IMPS | 1 line, 140 characters         |\n|  Brazil RTP  | 1 line, 140 characters      |\n|  Mexico RTP | 210 characters               |\n|Indonesia RTP | 1 line, 140 characters      |\n| Push To Card US and Canada | 1 line, 16 characters (Numbers, alphabets, SPACE and special chars  -./,$@&amp; allowed) |\n| Blockchain (Kinexys Digital Payments) Payments | 1 line, 140 characters|\n| Zelle | 1 line, 200 characters (Numbers, alphabets, SPACE and special chars  -./,$@&amp; allowed) |"
+          items:
+            type: string
+            minLength: 0
+            maxLength: 512
+        structuredInformation:
+          type: array
+          minItems: 0
+          maxItems: 100
+          description: 'Applicable Faster Payment Markets -
+
+            Malaysia
+
+            US'
+          items:
+            $ref: '#/components/schemas/StructuredInformation'
+        foreignCurrency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          description: Only applicable for Mexico Faster Payments
+        fx:
+          $ref: '#/components/schemas/FxApplied'
+    CountryOfResidence:
+      type: string
+      minLength: 2
+      maxLength: 2
+      description: 2 character `ISO country code` of residence. **Mandatory** for Interac payments.
+    AccountCurrency:
+      type: string
+      minLength: 3
+      maxLength: 3
+      pattern: ^[A-Z]{3}$
+      description: 'Originator account currency in 3 character ISO currency code. Field not applicable to Alternate Payments (Cards)
+
+        UK FPS - GBP only
+
+        SEPA INSTANT - EUR only '
+    Code:
+      type: string
+      minLength: 0
+      maxLength: 32
+    IndividualID:
+      type: object
+      description: "Can be used if the `organizationID` is not populated, when the underlying payer is an Individual. \n\nIt should be used together with `UltimateDebtorName` and `address`, and it should contain the payment account number of the underlying payer. \n\nIn case the transfer has not been initiated from a payment account, the value populated should be a unique transaction identifier of the underlying payer which permits the traceability of the transaction back to them.\n\n**Applicable RTP markets** :-\n  - SEPA \n\n  - Mexico \n\n  - UK\n\n  - US\n\n**ACH markets** :- \n  - Chile"
+      properties:
+        id:
+          type: string
+          minLength: 0
+          maxLength: 512
+          description: 'Max length for ACH :-
+
+            Chile - 255'
+        issuer:
+          type: string
+          minLength: 0
+          maxLength: 128
+          description: 'Max length for ACH :-
+
+            Chile - 35'
+        schemeName:
+          description: type of scheme
+          type: object
+          minProperties: 1
+          maxProperties: 1
+          properties:
+            code:
+              $ref: '#/components/schemas/Code'
+            proprietary:
+              $ref: '#/components/schemas/Proprietary'
+      required:
+      - id
+    InitiatingParty:
+      title: Initiating Party
+      description: The initiating Party
+      oneOf:
+      - $ref: '#/components/schemas/OrganizationPartyDetails'
+      - $ref: '#/components/schemas/IndividualPartyDetails'
+      example:
+        organizationIds:
+        - organizationId: BANK
+    FirmRootId:
+      type: string
+      minLength: 0
+      maxLength: 128
+    UltimateCreditorName:
+      title: UltimateCreditorName
+      type: string
+      minLength: 0
+      maxLength: 140
+      description: Mandatory for US RTP &amp; US FedNow
+    AdditionalCreditor:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 0
+          maxLength: 128
+    CoreInitiatingParty:
+      type: object
+      title: CoreInitiatingParty
+      description: Initiating party details
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Name of the party
+    DebtorFinancialInstitutionId:
+      type: object
+      description: Financial institution identifier of debtor
+      properties:
+        bic:
+          type: string
+          description: "**Credit Transfer Payment** Not applicable for **US RTP**\n\n**Mandatory RTP markets**:-\n\n  | Market     |\n  |------------|\n  |  UK        |\n  |  India     |\n  |  Singapore |\n  |Australia   |\n  |Malaysia    |\n  |Hong Kong   |\n  |SEPA INSTANT|\n  |Brazil      |\n  |Mexico      |\n\n**Alternate Payments**:-\n  - **Push To Card**: US/Canada\n  - **Interac**: Canada\n  - **Push To Wallet: Venmo/PayPal \n  - ** Zelle\n\n**ACH**:- \n  - Chile\n\n**Mandatory Blockchain (Kinexys Digital Payments) Payment markets**:-\n  - US\n  - SEPA"
+          enum:
+          - CHASGB2L
+          - CHASINBX
+          - CHASAU2X
+          - CHASSGSG
+          - CHASUS33
+          - CHASMYKX
+          - CHASHKHH
+          - CHASBRSP
+          - CHASDEFX
+          - CHASLULX
+          - CHASNL2X
+          - CHASIE4L
+          - CHASMXMX
+          - CHASCATT
+          - CHASIDJX
+          - CHASUS33MCY
+          - CHASDEFXONX
+          - CHASCLRM
+          - CHASFRPP
+          - CHASITMX
+          - CHASESM3
+          - CHASBEBX
+        clearingSystemId:
+          type: object
+          description: "**Credit Transfer Payment**:- \n\n  - Not applicable to UK, India, Singapore, Australia, Mexico Faster Payments.\n  - **Mandatory** for US RTP\n\n**Direct Debit Payment**:-\n  - **Mandatory** for Malaysia RTP"
+          properties:
+            id:
+              $ref: '#/components/schemas/AccountIdentification'
+            idType:
+              $ref: '#/components/schemas/IdType'
+    CreditorAccount:
+      oneOf:
+      - $ref: '#/components/schemas/PrimaryAccountIdentification'
+      - $ref: '#/components/schemas/AlternateAccountIdentification'
+    IdType:
+      type: string
+      minLength: 0
+      maxLength: 32
+      description: "**Credit Transfer Payment**\n    Creditor Agent -\n    Applicable and optional for Low value ACH payments (Chile).\n    Applicable and mandatory for US RTP - USABA\n\n    Debtor Agent -\n    Applicable and mandatory for US RTP - USABA\n\n**Direct Debit Payment** \n\n    Applicable and mandatory for Malaysia RTP - BIC"
+    Errors:
+      type: object
+      properties:
+        errorDetails:
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Error'
+    OrganizationId:
+      title: OrganizationId
+      type: object
+      description: 'Collection of registration information held against the party.
+
+        It can be used when the underlying payer is a Legal Entity.'
+      minProperties: 1
+      maxProperties: 4
+      properties:
+        organizationId:
+          type: string
+          description: Formally Issued Organization Identifier
+          minLength: 1
+          maxLength: 35
+        bic:
+          type: string
+          description: "Business Identifier Code, mean a unique code to identify \nany business as defined by the ISO9362 standard."
+          minLength: 8
+          maxLength: 11
+        issuer:
+          type: string
+          description: Entity that assigns the identification
+          minLength: 1
+          maxLength: 35
+        schemeName:
+          description: Name of the identification scheme
+          title: SchemeName
+          type: object
+          minProperties: 1
+          maxProperties: 1
+          properties:
+            code:
+              type: string
+              description: Name of the identification scheme in a coded form
+              minLength: 1
+              maxLength: 4
+            proprietary:
+              type: string
+              description: Specifies the type of scheme with a proprietary value
+              minLength: 1
+              maxLength: 35
+    FxApplied:
+      type: object
+      properties:
+        appliedRate:
+          $ref: '#/components/schemas/Decimal'
+    StructuredInformation:
+      type: object
+      properties:
+        creditReference:
+          type: string
+          description: Unique reference to unambiguously refer to the payment transaction.
+          minLength: 0
+          maxLength: 140
+        additionalRemittanceInformation:
+          type: string
+          minLength: 0
+          maxLength: 512
+          description: 'Applicable Faster Payment Markets -
+
+
+            Malaysia
+
+            Max length supported - 250 characters
+
+
+            US - mandatory if structuredInformation object is used     '
+        invoicer:
+          $ref: '#/components/schemas/PartyIdentifier'
+        invoicee:
+          $ref: '#/components/schemas/PartyIdentifier'
+        deliveryDetails:
+          $ref: '#/components/schemas/DeliveryDetails'
+    OrganizationPartyDetails:
+      title: OrganizationPartyDetails
+      allOf:
+      - $ref: '#/components/schemas/OrganizationIdentification'
+      - $ref: '#/components/schemas/CoreInitiatingParty'
+    OrganizationIdentification:
+      type: object
+      title: Organization Identification
+      description: Organization Identification Schemes
+      properties:
+        organizationIds:
+          type: array
+          minItems: 1
+          maxItems: 5
+          items:
+            $ref: '#/components/schemas/OrganizationId'
+    OrganizationID:
+      type: object
+      required:
+      - id
+      description: "Can be used when the underlying payer is a Legal Entity. It should be used together with Ultimate Debtor Name and address, and it should contain the payment account number of the underlying payer.\n\nIn case the transfer has not been initiated from a payment account, the value populated should be a unique transaction identifier of the underlying payer which permits the traceability of the transaction back to them.\n\n**Applicable markets and rules:**\n\nCan be used for ultimateDebtor and ultimateCreditor for the following: \n\n- RTP markets :-\n  \n  - **SEPA** \n\n  - **Mexico**\n\n  - **UK**\n\n  - **US**\n\n  - **Australia Faster Payments** - Only to be used for `ultimateCreditor`. *In addition, only* `id` and schemeName.`proprietary` *fields are applicable*.\n  \n  \n- ACH markets :- \n  - **Chile**\n  \n  "
+      properties:
+        id:
+          type: string
+          minLength: 0
+          maxLength: 512
+          description: "For AU Superannuation payment (category payment), populate with USI number for the Superannuation fund\n\nMax length for ACH :- \nChile - 255"
+        bic:
+          type: string
+          minLength: 0
+          maxLength: 128
+        issuer:
+          type: string
+          minLength: 0
+          maxLength: 128
+          description: 'Max length for ACH :-
+
+            Chile - 35'
+        schemeName:
+          description: 'type of scheme
+
+            Mandatory for SEPA Instant. Check proprietary field rules for more information.'
+          type: object
+          minProperties: 1
+          maxProperties: 1
+          properties:
+            code:
+              $ref: '#/components/schemas/Code'
+            proprietary:
+              $ref: '#/components/schemas/Proprietary'
+    AdditionalAlternateAccountIdentifiers:
+      type: array
+      description: One or more values that can be used as alternative identifiers for an account.
+      minItems: 0
+      maxItems: 10
+      items:
+        $ref: '#/components/schemas/AdditionalAlternateAccountIdentifier'
+    UltimateCreditorOrganization:
+      type: object
+      title: Ultimate Creditor Organization
+      description: ultimate creditor organization party details
+      required:
+      - organizationId
+      properties:
+        organizationId:
+          $ref: '#/components/schemas/OrganizationID'
+        ultimateCreditorName:
+          $ref: '#/components/schemas/UltimateCreditorName'
+        dateAndPlaceOfBirth:
+          $ref: '#/components/schemas/DateAndPlaceOfBirth'
+        countryOfResidence:
+          $ref: '#/components/schemas/CountryOfResidence'
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+    AlternateAccountIdentification:
+      type: object
+      title: Alternate Account Identification
+      required:
+      - alternateAccountIdentifier
+      properties:
+        alternateAccountIdentifier:
+          $ref: '#/components/schemas/AlternateAccountIdentifier'
+        additionalAlternateIdentifiers:
+          $ref: '#/components/schemas/AdditionalAlternateAccountIdentifiers'
+        accountType:
+          $ref: '#/components/schemas/AccountTypeEnum'
+        schemeName:
+          $ref: '#/components/schemas/SchemeName'
+        cardExpiryDate:
+          type: string
+          description: Mandatory for Push to Card. Acceptable format - YYMM
+          pattern: ^(?:[0-9]{2})(0[1-9]|1[0-2])$
+    Decimal:
+      description: A String representation of a (potentially) decimal positive number.
+      type: string
+      minLength: 1
+      maxLength: 40
+      pattern: ^\d+(\.\d+)?$
+    ErrorDetails:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          minLength: 0
+          maxLength: 32
+        errorDescription:
+          type: string
+          minLength: 0
+          maxLength: 1024
+        ruleDefinition:
+          type: string
+          minLength: 0
+          maxLength: 128
+    SecureVerification:
+      type: object
+      properties:
+        key:
+          type: string
+          minLength: 0
+          maxLength: 256
+          description: Key identifies the security question
+        secret:
+          type: string
+          minLength: 0
+          maxLength: 256
+          description: Authenticate the key using secret answer to the question
+    UltimateDebtorIndividual:
+      type: object
+      title: Ultimate Debtor Individual
+      description: ultimate debtor individual party details
+      required:
+      - individualId
+      properties:
+        individualId:
+          $ref: '#/components/schemas/IndividualID'
+        ultimateDebtorName:
+          $ref: '#/components/schemas/UltimateDebtorName'
+        dateAndPlaceOfBirth:
+          $ref: '#/components/schemas/DateAndPlaceOfBirth'
+        countryOfResidence:
+          $ref: '#/components/schemas/CountryOfResidence'
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+        additionalIdentifiers:
+          title: Additional Identifiers
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/AdditionalIdentifier'
+    AlternateAccountIdentifier:
+      type: string
+      minLength: 0
+      maxLength: 128
+      description: 'Alternate Account Identifier eg. email, program id, card number or other types of identifiers, used as a different means of identifying an account.
+
+
+        *Mandatory for the following payment types*:
+
+        | Payment Type         | description                                                                 |
+
+        |----------------------|-----------------------------------------------------------------------------|
+
+        | **Push To Card**     | Use program id while specifying the debtor details.                         |
+
+        |                      | Use card number while specifying the creditor details.                      |'
+    ServiceLevelCode:
+      type: string
+      minLength: 0
+      maxLength: 32
+      description: service Level in coded form.
+    CreditorAgent:
+      type: object
+      description: "- Not applicable for Push To Card, Push To Wallet, Zelle and Interac\n- Mandatory for pay by account and optional for pay by proxy.\n- Mandatory for Mexico RTP if the creditor is a bank \n\n***NOTE: Creditor Agent is MANDATORY for RTP Direct Debit payments for all markets.***"
+      properties:
+        financialInstitutionId:
+          $ref: '#/components/schemas/CreditorFinancialInstitutionId'
+        additionalInstitutions:
+          type: array
+          description: '- Only applicable to UK Faster Payments. Instructing agent of the ultimate debtor. '
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/AdditionalInstitution'
+      required:
+      - financialInstitutionId
+    TaxInformation:
+      type: object
+      description: 'mandatory for Brazil PIX and Chile Low value ACH payments
+
+        Optional for Mexico RTP'
+      properties:
+        taxAmount:
+          type: number
+          description: Applicable only for Mexico RTP
+          example: 1000
+        creditorTaxInformation:
+          type: object
+          properties:
+            taxId:
+              type: string
+              minLength: 0
+              maxLength: 512
+              description: 'Maximum lengths allowed per instrument/market :-
+
+                ACH Chile - 35'
+            taxpayerCategory:
+              type: string
+              enum:
+              - INDIVIDUAL
+              - CORPORATE
+          required:
+          - taxId
+          - taxpayerCategory
+        debtorTaxInformation:
+          type: object
+          required:
+          - taxId
+          properties:
+            taxId:
+              type: string
+    CategoryPurpose:
+      type: object
+      description: 'Mandatory RTP markets :-
+
+
+        Hong Kong - Mandatory'
+      properties:
+        code:
+          type: string
+          enum:
+          - SALA
+          - PENS
+          - TAXS
+          - SUPP
+          description: 'Not applicable for Hong Kong '
+        proprietary:
+          type: string
+          enum:
+          - CXSALA
+          - CXBSNS
+          - CXMRCH
+          - CXTOPU
+          - WEALTH_TRANSFER
+          - INVESTMENT
+          - PURCHASE
+          - OTHER
+          description: "Coded form\nHong Kong RTP\nFor credit transfers -\n\"CXSALA\" - Salary and Benefits Payment\n\"CXBSNS\" - General Business Payment\n\"CXMRCH\" - FPS Merchant Payment\n\"CXTOPU\" - Account Top-up Payment\n\nIndonesia RTP \nWEALTH_TRANSFER\nINVESTMENT\nPURCHASE\nOTHER\nCXSALA"
+    PostalAddress:
+      type: object
+      description: "Address of the party\n\n- For **UK FPS** it is recommended that the combined length of all structured\nfields should be less than 140 characters\n\n- **SEPA Instant** :\n\n  - `creditor`, `ultimateCreditor` and `ultimateDebtor` - unstructured address field, up to 2 lines, 70 characters each including spaces.\n\n  - **FOLLOWING 2023 RULEBOOK GO LIVE IN MARCH 2024** \n    - Structured address fields will be supported\n    - If client elects to use the structured address fields populate:\n      - Address Line + Country + Town Name *OR*\n      - Town Name + Country *OR*\n      - (Postal Address fields except Address Line) + Town Name + Country\n\n  - **THE FOLLOWING SEPA RULEBOOK GUIDELINES GO LIVE IN NOVEMBER 2026:**\n    - Fully unstructured (free-text) postal addresses will be not supported.\n    - Town Name and Country are mandatory when Postal Address is present.\n\n*For ultimateDebtor postalAddress is only required for cross-border flows to be compliant with FTR regulation, not required for intra-EEA flows*\n\n**Push To Card** - Include buildingNumber and streetName"
+      properties:
+        addressType:
+          type: string
+          enum:
+          - ADDR
+          - BIZZ
+          - DLVY
+          - HOME
+          - MLTO
+          - PBOX
+          description: "| Address Type  |            Description                                               |  \n|---------------|----------------------------------------------------------------------|\n| `ADDR`        | Postal Address is the complete postal address.                       | \n| `BIZZ`        | Business Address is the business address.                            | \n| `DLVY`        | DeliveryTo Address is the address to which delivery is to take place.|  \n| `HOME`        | Residential Address is the home address.                             |  \n| `MLTO`        | MailTo Address is the address to which mail is sent.                 | \n| `PBOX`        | PO Box Address is a postal office (PO) box.                          | "
+        streetName:
+          type: string
+          description: 'Name of street. Mandatory for US RTP
+
+            Maximum length applicable :-
+
+            Push To Card - 35'
+          minLength: 0
+          maxLength: 70
+        buildingNumber:
+          type: string
+          description: 'Building name or number.
+
+            Maximum length applicable :-
+
+            Push To Card - 35'
+          minLength: 0
+          maxLength: 16
+        postalCode:
+          type: string
+          description: 'Zip code. Mandatory for Wallet Payments and US RTP
+
+            Maximum length applicable :-
+
+            Push To Card - 9'
+          minLength: 0
+          maxLength: 16
+        townName:
+          type: string
+          description: 'Name of the town. Mandatory for US RTP and SEPA Instant.
+
+            Maximum length applicable :-
+
+            Push To Card - 25'
+          minLength: 0
+          maxLength: 35
+        countrySubDvsn:
+          type: string
+          minLength: 0
+          maxLength: 35
+          description: Mandatory for US RTP
+        country:
+          type: string
+          description: '2 character ISO country code.
+
+            Mandatory for Wallet Payments, US RTP, SEPA Instant and Interac'
+          minLength: 2
+          maxLength: 2
+        addressLine:
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            type: string
+            minLength: 0
+            maxLength: 1024
+          description: "Not applicable to Wallet Payments. Free form text address lines Up\nto 4 lines.\n\n**Maximum number of characters allowed per instrument/market** :-\n\n  | Market          | Max Lines and length limits    |\n  | ----------------|--------------------------------|\n  | **UK FPS**      |4 lines, 140 characters including spaces |\n  | **SEPA INSTANT**| 2 lines, 70 characters each including spaces |\n  | **Brazil RTP** |7 lines, 70 characters          |\n  | **Chile ACH**   |2 lines, 35 characters + 1 additional line containing 32 characters|"
+    DeviceInfo:
+      type: object
+      description: "Contains Creditor device info.\n\n**Applicable for Direct Debit Payments Only(transferType=DEBIT)** \n\n**Refer the table below for the applicable and mandatory markets**\n\n| Markets        | Significance |\n|----------------|--------------|\n|   Malaysia     | MANDATORY    |"
+      properties:
+        ipAddress:
+          type: string
+          minLength: 0
+          maxLength: 39
+          description: "Device IP address\n\n**Applicable for Direct Debit Payments Only(transferType=DEBIT)**\n\n**Refer the table below for the applicable and mandatory markets**\n\n    | Markets        | Significance |\n    |----------------|--------------|\n    |   Malaysia     | MANDATORY    | "
+        geoCoordinates:
+          type: object
+          description: "Contains the geographical coordinates.\n\n**Applicable for Direct Debit Payments Only(transferType=DEBIT)** \n\n**Refer the table below for the applicable and mandatory markets**\n\n    | Markets        | Significance |\n    |----------------|--------------|\n    |   Malaysia     | MANDATORY    | "
+          properties:
+            latitude:
+              type: string
+              minLength: 0
+              maxLength: 12
+            longitude:
+              type: string
+              minLength: 0
+              maxLength: 12
+    PaymentInitationDetails:
+      type: object
+      required:
+      - payments
+      properties:
+        payments:
+          $ref: '#/components/schemas/Payments'
+    Debtor:
+      type: object
+      properties:
+        debtorAccount:
+          $ref: '#/components/schemas/DebtorAccount'
+        debtorName:
+          type: string
+          minLength: 0
+          maxLength: 128
+          description: "Mandatory and Supported for :-\n\n- ACH Chile\n- Push To Card\n- US RTP\n- US FedNow\n- SARIE IPS\n- INTERAC\n- Push To Wallet\n\n\n**Maximum length supported per instrument/market** :-\n\n| Market                          | Max Length |\n|---------------------------------|------------|\n| **US RTP**                      | 140        | \n| **Push To Card** US and Canada  | 30         | \n| **ACH Chile**                   | 140        | \n| **Zelle | 50  (Optional)      | \n| **Malaysia RTP** (Direct Debit) | 140        | "
+        partyIdentifiers:
+          $ref: '#/components/schemas/PartyIdentifier'
+        debtorDevice:
+          $ref: '#/components/schemas/DebtorDevice'
+        ultimateDebtor:
+          $ref: '#/components/schemas/UltimateDebtor'
+      required:
+      - debtorAccount
+    SchemeName:
+      title: Scheme Name
+      type: object
+      description: "\nMandatory - \nAlternate Payments :- Push To Wallet (PayPal/Venmo/Zelle)\n\n\n\nMandatory for pay by proxy -\nRTP :- Singapore, Australia, Hong Kong, Malaysia, Brazil, Mexico\nInterac - Canada "
+      properties:
+        proprietary:
+          type: string
+          enum:
+          - MSIDN
+          - NRIC
+          - UEN
+          - VPA
+          - EMAL
+          - ORGN
+          - TELI
+          - AUBN
+          - PSPT
+          - BREG
+          - MBNO
+          - ARMN
+          - MOBN
+          - SVID
+          - CPF
+          - CNPJ
+          - EVP
+          - QRCD
+          - ACCN
+          - ALIS
+          description: "Specifies the type of Proxy account. Mandatory if creditorAccount.alternateAccountIdentifier is present\nProprietary types applicable per market and instrument:\n\nRTP - Singapore :-\nMSIDN - Mobile number \nUEN - Unique Entity Number\nVPA - Virtual Payment Address\nNRIC - IC number \n\nRTP - Australia :-\nEMAL - Email Address\nTELI - Telephone Number\nAUBN - Australia Business number\nORGN - Organization Id\n\nRTP - Malaysia :-\nMBNO - Mobile number\nNRIC - IC number \nPSPT - Passport number \nARMN - Army or Police Number \nBREG - Business registration number\n\nRTP - Hong Kong :-\nEMAL - Email Address\nMOBN - Mobile Number (or fixed-line number)\nSVID - FPS Identifier\n\nRTP - Brazil :-\nCPF - Tax ID of Individual\nCNPJ - Tax ID of Corporate\nEVP - Random Key\nQRCD - QR Code\nEMAL - Email id \nMOBN - Mobile number \n\nRTP - Mexico :-\nMOBN - Mobile number\nBANK - Transfer to a Bank identifier \nCARD - Transfer to a debit card number\n\nRTP - Indonesia :-\nMOBN - Mobile number\nEMAL - Email id \nCARD - Transfer to a debit card number   \nALIS - eMoney transfer\n\nAlternate Payments - Wallet (For Zelle and Interac only EMAL and TELI are applicable) :-\nEMAL - Email Address \nTELI - Telephone Number\nACCN - Alternate account number\nALIS - Alias identification"
+    AdditionalInstitution:
+      type: object
+      description: Only applicable to UK Faster Payments and Mexico RTP (foreign remittances)
+      properties:
+        bic:
+          type: string
+        name:
+          type: string
+        isForeignParty:
+          type: boolean
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+    DeliveryDetails:
+      type: object
+      properties:
+        deliveryMethod:
+          type: string
+          description: "Method used to deliver the remittance advice information. Only EMAL and URID allowed. \nThis field is currently not available for client usage *****"
+        deliveryAddress:
+          type: string
+          maxLength: 2048
+          description: 'Electronic address to which an agent is to send the remittance information. '
+    Callbacks:
+      type: array
+      description: "List of Error codes and Rule definitions. errorDescription is\ndynamically generated hence not shown here.\n\n    | Error Code        |            Rule Definition                          |  \n    |-------------------|-----------------------------------------------------|\n    | `10001`           | Mandatory field is missing or invalid               | \n    | `10002`           | Minimum length validation failure                   | \n    | `10003`           | Maximum length validation failure                   | \n    | `10004`           | Date validation failure                             |  \n    | `10005`           | Amount validation failure ~ value more than maximum |  \n    | `10006`           | Amount validation failure ~ value less than minimum |  \n    | `10007`           | Amount validation failure ~ value is not a number   |  \n    | `10008`           | Validation failure ~ unexpected value provided      |  \n    | `10009`           | Invalid Id provided                                 |  \n    | `10010`           | Personal information validation failure             |  \n    | `11000`           | Clearing/Regulatory failure                         |  \n    | `12000`           | System error                                        | \n    | `13000`           | Uncategorized error                                 |  "
+      minItems: 0
+      maxItems: 100
+      items:
+        type: object
+        properties:
+          endToEndId:
+            type: string
+            minLength: 0
+            maxLength: 128
+          firmRootId:
+            type: string
+            minLength: 0
+            maxLength: 128
+          clearingSystemReference:
+            type: string
+            minLength: 0
+            maxLength: 128
+            description: The clearing system reference
+          createDateTime:
+            type: string
+          paymentStatus:
+            type: string
+            enum:
+            - PENDING
+            - PENDING_POSTING
+            - COMPLETED
+            - COMPLETED_CREDITED
+            - REJECTED
+            - RETURNED
+            - WAREHOUSED
+            - BLOCKED
+            - PENDING_JPM_REVIEW
+            description: "Status of the payment.\n\nPENDING - Payment is pending processing\n\nPENDING_POSTING - Payment is yet to be posted in the beneficiary\naccount\n\nCOMPLETED - Payment has successfully completed\n\nCOMPLETED_CREDITED - Status indicating the beneficiary's account\nhas been credited\n\nREJECTED - Payment has been rejected. Please refer to the\nexception object for error details\n\nRETURNED - Payment has been retured to the debtor party\n\nWAREHOUSED - Payment request was successfully received. The request will be processed in the next available window, typically the next calendar day\n\nBLOCKED - Payment blocked due to sanctions issue \n\nPENDING_JPM_REVIEW - Payment is pending JPMorgan review\n\n\nRTP Flows (All Markets) - \n\nPENDING -> COMPLETED  \n\nPENDING -> REJECTED\n\n\nAdditional Flows(RTP)-> \n\nUS  - \n\nPENDING -> PENDING_POSTING -> COMPLETED\n\nPENDING -> BLOCKED\n\n\nHong Kong - \n\nPENDING -> COMPLETED -> COMPLETED_CREDITED\n\n\nPush To Card Flows - \n\nPENDING -> COMPLETED\n\nPENDING -> REJECTED\n\nPENDING -> COMPLETED -> RETURNED\n\n\nACH Flows (Chile) - \n\nPENDING -> COMPLETED \n\nPENDING - REJECTED\n\n\nBlockchain (Kinexys Digital Payments) Flows - \n\nPENDING -> PENDING_POSTING -> COMPLETED \n\nPENDING -> REJECTED"
+          exceptions:
+            type: array
+            minItems: 0
+            maxItems: 100
+            items:
+              type: object
+              properties:
+                errorCode:
+                  type: string
+                  minLength: 0
+                  maxLength: 32
+                errorDescription:
+                  type: string
+                  minLength: 0
+                  maxLength: 1024
+                ruleDefinition:
+                  type: string
+                  minLength: 0
+                  maxLength: 128
+                externalCode:
+                  type: string
+                  minLength: 0
+                  maxLength: 32
+                externalDescription:
+                  type: string
+                  minLength: 0
+                  maxLength: 1024
+                  description: This field is currently not available for client usage *****
+          fx:
+            $ref: '#/components/schemas/FxApplied'
+          paymentRedirected:
+            $ref: '#/components/schemas/PaymentRedirected'
+    AccountId:
+      type: string
+      minLength: 0
+      maxLength: 128
+      description: '**Direct Debit Payments**
+
+
+        | Payment Type | Market   | Max Length |
+
+        | -------------| -------- | ---------- |
+
+        |     RTP      | Malaysia |    34      |
+
+
+        ---
+
+
+        **Credit Transfer Payments**
+
+
+        ***Applicable and mandatory for RTP and Blockchain (Kinexys Digital Payments) Payments, Push To Wallet (PayPal/Venmo) and Zelle Payments.***
+
+
+        This field is to provide the regular account id when it is a pay by
+
+        Account instruction. If pay by proxy, this does not need to be filled.
+
+
+        **Maximum length supported for each instrument and market** :-
+
+
+        | Payment Type | Market | Max Length |
+
+        | --- | --- | --- |
+
+        | RTP | UK | 8 (7 digit A/C numbers should be padded with a leading zero) |
+
+        | RTP | Singapore | 35 |
+
+        | RTP | Australia | 35 |
+
+        | RTP | Hong Kong | 35 |
+
+        | RTP | Indonesia | 35 |
+
+        | RTP | Brazil | 34 |
+
+        | RTP | Mexico | 16 |
+
+        | RTP | US | 31 |
+
+        | Push To Card | US/Canada | 16 |
+
+        | INTERAC | Canada | 35 |
+
+        | ACH | Chile | 17 |
+
+        | SEPA |  | 34 (IBAN) |
+
+        | Kinexys |  | 34 |
+
+        | Push To Wallet (PayPal/Venmo|  | 35 |
+
+        | Zelle |  | 35 |'
+    IndividualPartyDetails:
+      title: IndividualPartyDetails
+      allOf:
+      - $ref: '#/components/schemas/IndividualIdentification'
+      - $ref: '#/components/schemas/CoreInitiatingParty'
+    AccountIdentification:
+      type: string
+      minLength: 0
+      maxLength: 128
+      description: '**Maximum length supported for each instrument and market** :-
+
+        | Market |Maximum length limits|
+
+        | ------ |--------------------------|
+
+        |  US RTP       |9 (**Routing and Transit Number**: alphabetic characters may be present)|
+
+        |  SEPA INSTANT |8 (numeric only)  |
+
+        |  Brazil RTP   |8                 |
+
+        |  UK FPS       |6 (numeric only)  |'
+    CreditorFinancialInstitutionId:
+      type: object
+      description: 'Financial institution identifier of creditor.
+
+
+        For **Mexico RTP** use either `bic` or `clearingSystemId` for a bank transfer use case. Length supported `8` or `11`'
+      properties:
+        bic:
+          type: string
+          description: 'SWIFT BIC. Applicable and Mandatory for RTP markets :-
+
+            - Singapore
+
+            - Malaysia (Credit Transfer and Direct Debit Payments)
+
+
+            Optional markets :-
+
+            - SEPA INSTANT
+
+            - Mexico
+
+
+            Mandatory for Blockchain(Kinexys Digital Paymentsm) Payments:-
+
+            - US - CHASUS33
+
+            - SEPA - CHASDEFX
+
+
+            ***NOTE: Mandatory for RTP Direct Debit Payments for all Markets***'
+          minLength: 0
+          maxLength: 12
+        clearingSystemId:
+          type: object
+          description: "Clearing system identifier. Applicable and Mandatory for Faster/Real-time payment markets :-\nUK\nAustralia\nIndia\nHong Kong\nUS\nBrazil\n\nACH :- \nChile"
+          properties:
+            id:
+              $ref: '#/components/schemas/AccountIdentification'
+            branchNumber:
+              type: string
+              description: Branch of the bank. Applicable and Mandatory for Brazil PIX only
+            idType:
+              $ref: '#/components/schemas/IdType'
+          required:
+          - id
+    ErrorsInit:
+      type: object
+      properties:
+        endToEndId:
+          type: string
+          minLength: 0
+          maxLength: 128
+        errorDetails:
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    PaymentRedirected:
+      type: object
+      description: Object capturing details of a payment that has been redirected to another account Applicable to UK FPS
+      properties:
+        isPaymentRedirected:
+          type: boolean
+          description: Flag to indicate if a payment has been redirected to another account
+        redirectedAccountId:
+          type: string
+          minLength: 0
+          maxLength: 128
+          description: Account id to which payment is redirected
+        redirectedBankId:
+          type: string
+          description: Bank identifier of the redirected account id.
+    DebtorAlternateAccountIdentification:
+      type: object
+      title: Debtor Alternate Account Identification
+      required:
+      - alternateAccountIdentifier
+      properties:
+        alternateAccountIdentifier:
+          $ref: '#/components/schemas/AlternateAccountIdentifier'
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        accountCurrency:
+          $ref: '#/components/schemas/AccountCurrency'
+    IndividualId:
+      type: object
+      title: IndividualId
+      minProperties: 1
+      maxProperties: 3
+      description: Can be used if organization ID is not populated, when the underlying payer is an Individual.
+      properties:
+        individualId:
+          type: string
+          description: Unique and unambiguous identification of an individual
+          minLength: 1
+          maxLength: 35
+        issuer:
+          type: string
+          description: Entity that assigns the identification
+          minLength: 1
+          maxLength: 35
+        schemeName:
+          description: Name of the identification scheme
+          title: SchemeName
+          type: object
+          minProperties: 1
+          maxProperties: 1
+          properties:
+            code:
+              type: string
+              description: Name of the identification scheme in a coded form
+              minLength: 1
+              maxLength: 4
+            proprietary:
+              type: string
+              description: Specifies the type of scheme with a proprietary value.
+              minLength: 1
+              maxLength: 35
+    PartyIdentifier:
+      oneOf:
+      - type: object
+        title: Organization ID Wrapper
+        required:
+        - organizationId
+        properties:
+          organizationId:
+            $ref: '#/components/schemas/OrganizationID'
+      - type: object
+        title: Individual ID Wrapper
+        required:
+        - individualId
+        properties:
+          individualId:
+            $ref: '#/components/schemas/IndividualID'
+    Proprietary:
+      type: string
+      minLength: 0
+      maxLength: 128
+      description: 'Usage rules :-
+
+        Australia RTP - For AU Superannuation payment (category payment), populate "USI"
+
+        SEPA Instant - Use value "LEI" to indicate the organization id is a legal entity. Mandatory.'
+    DebtorAccountIdentification:
+      type: object
+      title: Debtor Account Identification
+      required:
+      - accountId
+      properties:
+        accountId:
+          $ref: '#/components/schemas/AccountId'
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        accountCurrency:
+          $ref: '#/components/schemas/AccountCurrency'
+    AdditionalIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 0
+          maxLength: 128
+        idType:
+          type: string
+          enum:
+          - ORGANIZATION
+          - INDIVIDUAL
+        issuer:
+          type: string
+          minLength: 0
+          maxLength: 128
+        schemeName:
+          description: type of scheme
+          type: object
+          minProperties: 1
+          maxProperties: 1
+          properties:
+            code:
+              $ref: '#/components/schemas/Code'
+            proprietary:
+              $ref: '#/components/schemas/Proprietary'
+      required:
+      - idType
+      - id
+    UltimateDebtorOrganization:
+      type: object
+      title: Ultimate Debtor Organization
+      description: ultimate debtor organization party details
+      required:
+      - organizationId
+      properties:
+        organizationId:
+          $ref: '#/components/schemas/OrganizationID'
+        ultimateDebtorName:
+          $ref: '#/components/schemas/UltimateDebtorName'
+        dateAndPlaceOfBirth:
+          $ref: '#/components/schemas/DateAndPlaceOfBirth'
+        countryOfResidence:
+          $ref: '#/components/schemas/CountryOfResidence'
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+        additionalIdentifiers:
+          title: Additional Identifiers
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/AdditionalIdentifier'
+    DateAndPlaceOfBirth:
+      type: object
+      properties:
+        birthDate:
+          type: string
+          pattern: '[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])'
+        cityOfBirth:
+          type: string
+          minLength: 0
+          maxLength: 35
+        countryOfBirth:
+          type: string
+          minLength: 2
+          maxLength: 2
+    Creditor:
+      type: object
+      required:
+      - creditorAccount
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/CreditorAccount'
+        creditorName:
+          type: string
+          description: "**Credit Transfer Payments**\n\n  Mandatory for RTP Markets :- \n\n  | Market |\n  | ------ |\n  |  UK    |\n  |  SEPA  |\n  |  US    |\n\n\n  Mandatory for RTP markets for Pay to Account transactions :-\n\n  |  Market    |\n  | -----------|\n  |  Singapore |\n  |  Australia |\n  |  Mexico    |\n  |  Hong Kong |\n  |  Brazil    |\n\n\n  Mandatory For Alternate Payments :- \n\n  | Alternate Payments | Market        |\n  | -------------------| --------------|\n  | Push To Card       | US and Canada |\n  | Push To Wallet       | PayPal/Venmo |\n  | Interac       | Canada |\n  | Zelle       | US |\n\n\n  Mandatory for ACH Payments :-\n\n  |  Market    |\n  | -----------|\n  |  Chile |\n\n\n  Maximum length supported per instrument/market :-\n\n  | Payment Type | Market | Max Length |\n  | --- | --- | --- |\n  | RTP | UK | 40 |\n  | RTP | Singapore | 140 |\n  | RTP | Australia | 140 |\n  | RTP | Hong Kong | 140 |\n  | RTP | Indonesia | 140 |\n  | RTP | Mexico | 40 |\n  | Push To Card | US/Canada | 30 |\n  | ACH | Chile | 70 |\n  | SEPA Instant| SEPA Zone | 140 |\n\n**Direct Debit Payments**\n\n  Maximum length supported per instrument/market :-\n\n  | Payment Type | Market | Max Length |\n  | --- | --- | --- |\n  | RTP | Malaysia | 140 |"
+        creditorDevice:
+          $ref: '#/components/schemas/DeviceInfo'
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+        dateAndPlaceOfBirth:
+          $ref: '#/components/schemas/DateAndPlaceOfBirth'
+        countryOfResidence:
+          $ref: '#/components/schemas/CountryOfResidence'
+        ultimateCreditor:
+          $ref: '#/components/schemas/UltimateCreditor'
+        additionalCreditors:
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/AdditionalCreditor'
+        partyIdentifiers:
+          $ref: '#/components/schemas/PartyIdentifier'
+    PaymentInitiationResponse:
+      type: object
+      properties:
+        paymentInitiationResponse:
+          type: object
+          properties:
+            endToEndId:
+              $ref: '#/components/schemas/EndToEndId'
+            firmRootId:
+              $ref: '#/components/schemas/FirmRootId'
+    AccountTypeEnum:
+      type: string
+      enum:
+      - VENMO
+      - PAYPAL
+      - INTERAC
+      - CARD
+      - DDA
+      - LOAN
+      - ODFT
+      - NREX
+      - OTHER
+      - CACC
+      - SVGS
+      - TRAN
+      - CLABE
+      - VOSTRO
+      - IBAN
+      - BBAN
+      - DFLT
+      - SLRY
+      - BDA
+      - ZELLE
+      description: "Mandatory for :\n  1. Card Payments\n  2. Venmo/PayPal wallets\n  3. Interac \n  4. India IMPS\n  6. Malaysia RTP (Credit Transfer &amp; Direct Debit)\n  8. Brazil RTP (Pay to account only)\n  9. Blockchain Payments (Kinexys Digital Payments)\n  10. Zelle \n  \n\nNot supported for United States RTP\n  \nIndia IMPS - \n\nLOAN - Loan account\nODFT - Overdraft\nNREX - NonResidentExternal\nOTHER - For Book and cross branch with VRN accounts\nCACC - Cash Credit/Current account\nDDA - DDA account\nSVGS - Savings account\n\nSEPA Instant - \nIBAN\n\nHong Kong RTP -\nBBAN\n\nMalaysia RTP - \nLOAN\nDFLT\nSVGS\nCACC\n\nBrazil RTP - \nCACC\nSLRY\nTRAN\nSVGS\n\nMexico RTP - \nCLABE\nVOSTRO\nDDA\n\nAlternate Payments - \n\nVENMO - Push to wallet\nPayPal - Push to wallet\nINTERAC - Interac canada payments\nCARD - Push to card payments\nZELLE - Zelle Payments\n\n\n\nBlockchain Payments (Kinexys Digital Payments) - \nDDA\nBDA - Blockchain Deposit Account\n\n\n\nACH - (Chile Only)\nSVGS \nCACC\nOTHER\nschemeName:\n  type: object\n  description: |-\n    Mandatory for pay by proxy -\n    RTP :- Singapore, Australia, Hong Kong, Malaysia, Brazil, Mexico\n    Alternate Payments :- Push To Wallet\n  properties:\n    proprietary:\n      type: string\n      enum:\n        - MSIDN\n        - NRIC\n        - UEN\n        - VPA\n        - EMAL\n        - ORGN\n        - TELI\n        - AUBN\n        - PSPT\n        - BREG\n        - MBNO\n        - ARMN\n        - MOBN\n        - SVID\n        - CPF\n        - CNPJ\n        - EVP\n        - QRCD\n        - ACCN\n        - ALIS\n      description: |-\n        Specifies the type of Proxy account. Mandatory if creditorAccount.alternateAccountIdentifier is present\n        Proprietary types applicable per market and instrument:\n\n        RTP - Singapore :-\n        MSIDN - Mobile number \n        UEN - Unique Entity Number\n        VPA - Virtual Payment Address\n        NRIC - IC number \n\n        RTP - Australia :-\n        EMAL - Email Address\n        TELI - Telephone Number\n        AUBN - Australia Business number\n        ORGN - Organization Id\n\n        RTP - Malaysia :-\n        MBNO - Mobile number\n        NRIC - IC number \n        PSPT - Passport number \n        ARMN - Army or Police Number \n        BREG - Business registration number\n\n        RTP - Hong Kong :-\n        EMAL - Email Address\n        MOBN - Mobile Number (or fixed-line number)\n        SVID - FPS Identifier\n\n        RTP - Brazil :-\n        CPF - Tax ID of Individual\n        CNPJ - Tax ID of Corporate\n        EVP - Random Key\n        QRCD - QR Code\n        EMAL - Email id \n        MOBN - Mobile number \n\n        RTP - Mexico :-\n        MOBN - Mobile number\n        BANK - Transfer to a Bank identifier \n        CARD - Transfer to a debit card number\n\n        RTP - Indonesia :-\n        MOBN - Mobile number\n        EMAL - Email id \n        CARD - Transfer to a debit card number   \n        ALIS - eMoney transfer\n\n        Alternate Payments - Wallet (For Zelle and Interac only EMAL and TELI are applicable) :-\n        EMAL - Email Address \n        TELI - Telephone Number\n        ACCN - Alternate account number\n        ALIS - Alias identification"
+    UltimateCreditorIndividual:
+      type: object
+      title: Ultimate Creditor Individual
+      description: ultimate creditor individual party details
+      required:
+      - individualId
+      properties:
+        individualId:
+          $ref: '#/components/schemas/IndividualID'
+        ultimateCreditorName:
+          $ref: '#/components/schemas/UltimateCreditorName'
+        dateAndPlaceOfBirth:
+          $ref: '#/components/schemas/DateAndPlaceOfBirth'
+        countryOfResidence:
+          $ref: '#/components/schemas/CountryOfResidence'
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+    AdditionalParties:
+      type: object
+      title: Additional Parties
+      description: Additional parties involved in the money movement.
+      properties:
+        initiatingParty:
+          $ref: '#/components/schemas/InitiatingParty'
+      minProperties: 1
+      maxProperties: 1
+    DebtorAgent:
+      type: object
+      description: ''
+      properties:
+        financialInstitutionId:
+          $ref: '#/components/schemas/DebtorFinancialInstitutionId'
+        additionalInstitutions:
+          type: array
+          description: Only applicable to UK Faster Payments. Instructing agent of the ultimate debtor.
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/AdditionalInstitution'
+      required:
+      - financialInstitutionId
+    DebtorDevice:
+      type: object
+      description: Applicable and mandatory for Malaysia Faster Payments
+      properties:
+        ipAddress:
+          type: string
+          minLength: 0
+          maxLength: 128
+    AccountType:
+      type: string
+      description: '- Mandatory for SEPA Instant - Use IBAN
+
+        - Mandatory for Blockchain Payments (Kinexys Digital Payments)- DDA, BDA (Blockchain Deposit
+
+        Account)
+
+        - Field not applicable to Alternate Payments (Cards)'
+      enum:
+      - DDA
+      - VAM
+      - IBAN
+      - BDA
+      - CACC
+      - SVGS
+      - CARD
+      - LIMITED_DDA
+      - EMBEDDED_DDA
+      - WALLET
+    DebtorAccount:
+      oneOf:
+      - $ref: '#/components/schemas/DebtorAccountIdentification'
+      - $ref: '#/components/schemas/DebtorAlternateAccountIdentification'
+  examples:
+    MandatoryFieldMissing:
+      summary: Mandatory field missing
+      value:
+        errors:
+          errorDetails:
+          - errorCode: GCA-148
+            errorDescription: debtor Account id must be provided
+    SystemUnavailable:
+      summary: System Unavailable
+      value:
+        errors:
+          errorDetails:
+          - errorCode: GCA-099
+            errorDescription: System Unavailable
+    PaymentInitiationSEPAMinimalUltimateCreditorAddress:
+      summary: CBPR RTP SEPA Ultimate Creditor
+      value:
+        payments:
+          possibleDuplicateMessage: false
+          paymentIdentifiers:
+            endToEndId: 20SP21I092S02T31T154-XBRD
+          requestedExecutionDate: '2023-02-06'
+          transferType: CREDIT
+          paymentType: RTP
+          paymentCurrency: EUR
+          paymentAmount: 4550
+          debtor:
+            debtorName: JPM Client Corp
+            debtorAccount:
+              accountId: DE40501108006169009120
+              accountCurrency: EUR
+              accountType: IBAN
+            postalAddress:
+              townName: Frankfurt
+              country: DE
+            ultimateDebtor:
+              ultimateDebtorName: Donatella Kimmich
+              postalAddress:
+                townName: Berlin
+                country: DE
+              organizationId:
+                id: DE88501108006231400596
+                schemeName:
+                  proprietary: LEI
+          debtorAgent:
+            financialInstitutionId:
+              bic: CHASDEFX
+          creditorAgent:
+            financialInstitutionId:
+              bic: CHASDEFX
+          creditor:
+            creditorName: Joshua Klose
+            countryOfResidence: DE
+            creditorAccount:
+              accountId: DE39501108006169009138
+              accountType: IBAN
+            partyIdentifiers:
+              organizationId:
+                id: '87654322'
+                schemeName:
+                  proprietary: LEI
+            ultimateCreditor:
+              ultimateCreditorName: Bastian Kahn
+              postalAddress:
+                townName: Erding
+                country: DE
+              organizationId:
+                id: DEBT11080260066666
+                schemeName:
+                  proprietary: LEI
+          purpose:
+            code: '113'
+            type: PROPRIETARY
+          remittanceInformation:
+            unstructuredInformation:
+            - Payment for equipment supply
+    DebtorAccountNotFound:
+      summary: Debtor Account ID not found
+      value:
+        errors:
+          errorDetails:
+          - errorCode: GCA-150
+            errorDescription: debtor Account id/bic was not found
+    SystemUnavailableWithRetryAfterHeader:
+      summary: System is temporarily unavailable
+      value:
+        errors:
+          errorDetails:
+          - errorCode: GCA-200
+            errorDescription: Service is temporarily unavailable. Please try again after sometime.
+    InvalidDataError:
+      summary: Invalid Data Error
+      value:
+        errors:
+          errorDetails:
+          - errorCode: GCA-154
+            errorDescription: Mandatory field paymentType is invalid or missing
+    ClientIneligible:
+      summary: Client is not eligible for the API Service
+      value:
+        errors:
+          errorDetails:
+          - errorCode: GCA-001
+            errorDescription: Client is not eligible for the API Service
+    PaymentInitiationSEPAMinimalCreditorAddress:
+      summary: CBPR RTP SEPA Creditor
+      value:
+        payments:
+          possibleDuplicateMessage: false
+          paymentIdentifiers:
+            endToEndId: 20SP21I092S02T31T153-XBRD
+          requestedExecutionDate: '2023-02-06'
+          transferType: CREDIT
+          paymentType: RTP
+          paymentCurrency: EUR
+          paymentAmount: 4550
+          debtor:
+            debtorName: JPM Client Corp
+            debtorAccount:
+              accountId: DE40501108006169009120
+              accountCurrency: EUR
+              accountType: IBAN
+            postalAddress:
+              townName: Frankfurt
+              country: DE
+            ultimateDebtor:
+              ultimateDebtorName: Donatella Kimmich
+              postalAddress:
+                townName: Berlin
+                country: DE
+              organizationId:
+                id: DE88501108006231400596
+                schemeName:
+                  proprietary: LEI
+          debtorAgent:
+            financialInstitutionId:
+              bic: CHASDEFX
+          creditorAgent:
+            financialInstitutionId:
+              bic: CHASDEFX
+          creditor:
+            creditorName: Joshua Klose
+            postalAddress:
+              townName: Erding
+              country: DE
+            dateAndPlaceOfBirth:
+              birthDate: '1989-12-01'
+              cityOfBirth: Munich
+              countryOfBirth: DE
+            creditorAccount:
+              accountId: DE39501108006169009138
+              accountType: IBAN
+            partyIdentifiers:
+              organizationId:
+                id: '87654322'
+                schemeName:
+                  proprietary: LEI
+          purpose:
+            code: '113'
+            type: PROPRIETARY
+          remittanceInformation:
+            unstructuredInformation:
+            - Payment for equipment supply
+    PaymentInitiationSEPAMinimalUltimateDebtorHybridAddress:
+      summary: CBPR RTP SEPA Ultimate Debtor Hybrid
+      value:
+        payments:
+          possibleDuplicateMessage: false
+          paymentIdentifiers:
+            endToEndId: 20SP21I092S02T31T152-XBRD
+          requestedExecutionDate: '2023-02-06'
+          transferType: CREDIT
+          paymentType: RTP
+          paymentCurrency: EUR
+          paymentAmount: 4550
+          debtor:
+            debtorName: JPM Client Corp
+            debtorAccount:
+              accountId: DE40501108006169009120
+              accountCurrency: EUR
+              accountType: IBAN
+            postalAddress:
+              townName: Frankfurt
+              country: DE
+            ultimateDebtor:
+              ultimateDebtorName: Donatella Kimmich
+              postalAddress:
+                addressType: ADDR
+                townName: Berlin
+                country: DE
+              organizationId:
+                id: DE88501108006231400596
+                schemeName:
+                  proprietary: LEI
+              dateAndPlaceOfBirth:
+                birthDate: '2000-10-07'
+                cityOfBirth: Hamburg
+                countryOfBirth: DE
+          debtorAgent:
+            financialInstitutionId:
+              bic: CHASDEFX
+          creditorAgent:
+            financialInstitutionId:
+              bic: CHASDEFX
+          creditor:
+            creditorName: Joshua Klose
+            creditorAccount:
+              accountId: DE39501108006169009138
+              accountType: IBAN
+          purpose:
+            code: '113'
+            type: PROPRIETARY
+          remittanceInformation:
+            unstructuredInformation:
+            - Payment for equipment supply
+  responses:
+    403-Forbidden:
+      description: "Forbidden. \n\n  | Error Code |           Description                     |  \n  |----------- |-------------------------------------------|\n  | `GCA-001`  |Client is not eligible for the API Service | \n  | `GCA-003`  |Client is not eligible for the API Service | \n  | `GCA-145`  |incorrect originator account id provided   | \n  | `GCA-150`  |debtor account id/bic was not found        |  "
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                $ref: '#/components/schemas/Errors'
+          examples:
+            ClientIneligible:
+              $ref: '#/components/examples/ClientIneligible'
+            DebtorAccountIdNotFound:
+              $ref: '#/components/examples/DebtorAccountNotFound'
+    400-BadRequest:
+      description: "Bad Request.\n\nList of Error codes and Rule definitions.\n---\n\n  | Error Code        |            Rule Definition                          |  \n  |-------------------|-----------------------------------------------------|\n  | `10001`           | Mandatory field is missing or invalid               | \n  | `10002`           | Minimum length validation failure                   | \n  | `10003`           | Maximum length validation failure                   | \n  | `10004`           | Date validation failure                             |  \n  | `10005`           | Amount validation failure ~ value more than maximum |  \n  | `10006`           | Amount validation failure ~ value less than minimum |  \n  | `10007`           | Amount validation failure ~ value is not a number   |  \n  | `10008`           | Validation failure ~ unexpected value provided      |  \n  | `10009`           | Invalid Id provided                                 |  \n  | `10010`           | Personal information validation failure             |  \n  | `12000`           | System error                                        | \n  | `13000`           | Uncategorized error                                 |  \n\n`errorDescription` is dynamically generated, hence not shown here.\n\nStandard API Gateway Error codes and descriptions \n---\n\n  | Error Code |           Description                              |  \n  |----------- |----------------------------------------------------|\n  | `GCA-023`  |Please re-send request in valid format              | \n  | `GCA-030`  |API Processing Error                                | \n  | `GCA-148`  |debtor Account id must be provided                  | \n  | `GCA-149`  |debtorAgent bic or clearingSystemId must be provided|  \n  | `GCA-150`  |debtor account id/bic was not found                 |  \n  | `GCA-154`  |Mandatory field paymentType is invalid or missing   |"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                $ref: '#/components/schemas/ErrorsInit'
+          examples:
+            InvadlidRequest:
+              $ref: '#/components/examples/InvalidDataError'
+            MandatoryFieldMissing:
+              $ref: '#/components/examples/MandatoryFieldMissing'
+    503-ServiceUnavailable:
+      description: "Service Unavailable.\n  | Error Code |           Description                     |  \n  |----------- |-------------------------------------------|\n  | `GCA-099`  |System Unavailable                         |\n  | `GCA-200`  |Service is temporarily unavailable. Please try again after sometime.(Accompanied by Retry-After header) |"
+      headers:
+        Retry-After:
+          description: The number of seconds to wait before retrying the request.
+          schema:
+            type: integer
+            minimum: 1
+            default: 600
+            example: 600
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                $ref: '#/components/schemas/Errors'
+          examples:
+            SystemUnavailable:
+              $ref: '#/components/examples/SystemUnavailable'
+            SystemUnavailableWithRetryAfterHeader:
+              $ref: '#/components/examples/SystemUnavailableWithRetryAfterHeader'
+    202-Accepted:
+      description: Payment has been accepted for processing
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentInitiationResponse'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-jpmc-security:
+- MutualTLS: []
+x-jpmc-securitySchemes:
+  MutualTLS:
+    type: x509
+    description: Mutual TLS authentication using client and server certificates.
+x-jpmc-securityDefinitions:
+  MutualTLS:
+    type: x509
+    description: Mutual TLS authentication using client and server certificates.

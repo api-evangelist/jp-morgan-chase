@@ -1,0 +1,428 @@
+openapi: 3.2.0
+info:
+  title: Jp Morgan Chase Health API
+  version: '1.0'
+  description: 'Operations tagged Health across 2 of this provider''s published API definitions: jp-morgan-chase-alerts-and-decisioning-api-openapi.yml, jp-morgan-chase-product-configuration-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.payments.jpmorgan.com/trust-safety/v1
+  description: PRODUCTION - MTLS
+- url: https://api-cat.payments.jpmorgan.com/trust-safety/v1
+  description: CLIENT TESTING - MTLS
+- url: https://api-mock.payments.jpmorgan.com/trust-safety/v1
+  description: MOCK
+- url: https://api.payments.jpmorgan.com/commerce/configuration/v1
+  description: PRODUCTION - OAUTH
+- url: https://api-cat.payments.jpmorgan.com/commerce/configuration/v1
+  description: CLIENT TESTING - OAUTH
+- url: https://api-mock.payments.jpmorgan.com/commerce/configuration/v1
+  description: MOCK
+tags:
+- name: Health
+  description: Service Health Checks
+paths:
+  /health:
+    get:
+      summary: Shallow Health Check
+      description: '**Shallow Health Check**
+
+
+        Returns the health status of the API service. This endpoint performs a lightweight check
+
+        to confirm the service is running and able to accept requests. It does not verify
+
+        downstream dependencies.
+
+        '
+      tags:
+      - Health
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+              example:
+                status: UP
+                isReady: true
+                version: 2.1.0
+                applicationName: Example App
+                statusUpdatedAt: '2025-09-25T12:00:00Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                title: Invalid Data
+                httpStatus: 400
+                traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+                requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+                context:
+                - code: '10104'
+                  message: Bad Value
+                  location: BODY
+                  field: type
+        '401':
+          description: Unauthorized - Authentication credentials are missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                title: Authentication Failure
+                httpStatus: 401
+                traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+                requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+                context:
+                - code: '14000'
+                  message: Client could not be authenticated
+        '403':
+          description: Forbidden. The client does not have the required permissions to access this resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                title: Authorization Failure
+                httpStatus: 403
+                traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+                requestId: d3dd646b-1fd0-4389-b6b4-0c3ab486bvg1
+                context:
+                - code: '14000'
+                  message: Client forbidden from accessing the requested resource
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                title: Service Unavailable
+                httpStatus: 503
+                context:
+                - code: '12000'
+                  message: Service Unavailable
+    servers:
+    - url: https://api.payments.jpmorgan.com/trust-safety/v1
+      description: PRODUCTION - MTLS
+    - url: https://api-cat.payments.jpmorgan.com/trust-safety/v1
+      description: CLIENT TESTING - MTLS
+    - url: https://api-mock.payments.jpmorgan.com/trust-safety/v1
+      description: MOCK
+components:
+  schemas:
+    Error:
+      type: object
+      x-tags:
+      - common-error-model
+      - common-components
+      title: Error
+      description: Common Error Model
+      properties:
+        title:
+          type: string
+          title: Short humanly-readable title of the error.
+          minLength: 1
+          maxLength: 100
+        httpStatus:
+          type: integer
+          format: int32
+          minimum: 100
+          maximum: 599
+          default: 400
+          title: HTTP Status Code
+        traceId:
+          type: string
+          title: JPMC Assigned traced identifier
+          minLength: 1
+          maxLength: 100
+        requestId:
+          type: string
+          title: The 'client originated' requestId
+          minLength: 1
+          maxLength: 100
+        context:
+          type: array
+          title: Provides additional context and detail on the validation errors
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 1
+          maxItems: 100
+      required:
+      - title
+      readOnly: true
+    ErrorContext:
+      title: ErrorContext
+      x-tags:
+      - common-error-model
+      - common-components
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+        location:
+          type: string
+          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
+          description: The location of the error occurred in the request.
+          minLength: 1
+          maxLength: 99
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+        field:
+          type: string
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+          pattern: ^[\$0-9a-zA-Z-_.()\[\]{}'"\s@=><!?,]+$
+        additionalContext:
+          $ref: '#/components/schemas/AdditionalContext'
+      description: Error Context
+    HealthStatus:
+      type: object
+      title: HealthStatus
+      description: Health check response indicating the status of the service and its readiness.
+      properties:
+        status:
+          type: string
+          description: Overall health status of the service.
+          enum:
+          - UP
+          - DOWN
+          example: UP
+        isReady:
+          type: boolean
+          description: Indicates whether the service is ready to accept requests.
+          example: true
+        version:
+          type: string
+          description: The current version of the service.
+          example: 2.1.0
+          minLength: 1
+          maxLength: 50
+        applicationName:
+          type: string
+          description: The name of the application.
+          example: Example App
+          minLength: 1
+          maxLength: 200
+        statusUpdatedAt:
+          type: string
+          format: date-time
+          description: The date and time when the health status was last updated.
+          example: '2025-09-25T12:00:00Z'
+      required:
+      - status
+      - isReady
+    AdditionalContext:
+      title: Additional Context
+      type: array
+      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
+      items:
+        $ref: '#/components/schemas/StandardCodeContext'
+      minItems: 1
+      maxItems: 5
+    StandardCodeContext:
+      title: Standard Code Context
+      description: Standard Code Context for error codes
+      type: object
+      required:
+      - code
+      - message
+      - type
+      properties:
+        type:
+          title: CategoryType
+          type: string
+          description: 'Category of the error code such as ISO or a Clearing Code (NACHA, BACS etc)
+
+
+            | Category Type | Description |
+
+            |---------------|-----------------|
+
+            | **ISO20022** | ISO Codes based on an ISO standard e.g. ISO20022 |
+
+            | **CLEARING_NACHA** | Clearing codes |
+
+            | **EXTERNAL** | External code sets |
+
+            '
+          minLength: 2
+          maxLength: 16
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+    LocationType:
+      type: string
+      enum:
+      - BODY
+      - PATH
+      - QUERY
+      - HEADER
+      title: LocationType
+      description: Location where the error occurred in the request
+    Error_2:
+      properties:
+        title:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\x20-\x7E\xA0-\uFFFF]+$
+          title: Title
+          description: Short humanly-readable title of the error.
+        httpStatus:
+          type: integer
+          title: Httpstatus
+          description: HTTP Status Code
+          default: 400
+          min: 100
+          max: 599
+        traceId:
+          type: string
+          pattern: ^[\x21-\x7E\xA1-\uFFFF]+$
+          title: Traceid
+          description: JPMC Assigned traced identifier
+        requestId:
+          type: string
+          pattern: ^[\x21-\x7E\xA1-\uFFFF]+$
+          title: Requestid
+          description: The 'client originated' requestId
+        context:
+          items:
+            $ref: '#/components/schemas/ErrorContext_2'
+          type: array
+          maxItems: 100
+          minItems: 0
+          title: Context
+          description: Provides additional context and detail on the validation errors
+      additionalProperties: false
+      type: object
+      required:
+      - title
+      title: Error
+      description: Common Error Model matching the api-template schema
+      example:
+        context:
+        - code: '10001'
+          field: notificationId
+          location: BODY
+          message: Required field missing - ensure the path, body and headers matches the specification
+        httpStatus: 400
+        requestId: trace-123456
+        title: Invaliddata
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+    ErrorContext_2:
+      properties:
+        code:
+          type: string
+          maxLength: 5
+          minLength: 5
+          pattern: ^[0-9]+$
+          title: Code
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+        message:
+          type: string
+          maxLength: 99
+          minLength: 1
+          pattern: ^[\x20-\x7E\xA0-\uFFFF\r\n]+$
+          title: Message
+          description: Human readable textual description of the error
+        location:
+          $ref: '#/components/schemas/LocationType'
+          description: The location of the error occurred in the request.
+        field:
+          type: string
+          maxLength: 99
+          minLength: 1
+          pattern: ^\$?[0-9a-zA-Z-_.()\[\]{}]+$
+          title: Field
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+      type: object
+      required:
+      - message
+      title: ErrorContext
+      description: Error Context model
+      example:
+        code: '10001'
+        field: notificationId
+        location: BODY
+        message: Required field missing - ensure the path, body and headers matches the specification
+    HealthStatus_2:
+      title: Healthstatus
+      type: string
+      enum:
+      - UP
+      - DOWN
+      description: Health status enumeration
+    HealthResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/HealthStatus_2'
+          description: Overall health status of the application
+        version:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Version
+          description: Version of the application or service
+        applicationName:
+          type: string
+          title: Applicationname
+          description: Name of the application for which the health status is being reported
+        statusUpdatedAt:
+          type: string
+          title: Statusupdatedat
+          description: Timestamp of the last status update in ISO format
+      type: object
+      required:
+      - status
+      - version
+      - statusUpdatedAt
+      title: HealthResponse
+      description: Model for health check response
+      example:
+        status: UP
+        version: 1.0.0
+        applicationName: Merchant Onboarding API
+        statusUpdatedAt: '2025-10-24T12:00:00Z'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- jp-morgan-chase-alerts-and-decisioning-api-openapi.yml
+- jp-morgan-chase-product-configuration-api-openapi.yml
+x-jpmc-securityDefinitions:
+  JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles: []
+x-jpmc-security:
+- JPMC-OAuth2:
+    jpmc-claims:
+      jpmc-roles: []

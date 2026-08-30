@@ -1,0 +1,2584 @@
+openapi: 3.2.0
+info:
+  title: Alerts and Decisioning Payment Holds API
+  version: 1.0.5
+  contact:
+    name: JPMorgan Chase & Co. API support
+    email: ismd.security.operations@jpmorgan.com
+    url: https://apistore.jpmchase.net/support/contact
+  description: 'Programmatically receives and decisions Payment Holds, automating your fraud review and hold resolution workflow to minimize operational delays while adhering to corporate IT standards.
+
+    '
+servers:
+- url: https://api.payments.jpmorgan.com/trust-safety/v1
+  description: PRODUCTION - MTLS
+- url: https://api-cat.payments.jpmorgan.com/trust-safety/v1
+  description: CLIENT TESTING - MTLS
+- url: https://api-mock.payments.jpmorgan.com/trust-safety/v1
+  description: MOCK
+tags:
+- name: Payment Holds
+  description: Manage Payment Holds
+paths:
+  /holds:
+    get:
+      summary: Retrieve Payment Holds
+      description: '**Retrieve payment holds**
+
+
+        Returns a paginated list of payment holds, optionally filtered by status, substatus, and date range.
+
+
+        #### Filtering by `status` vs `substatus`
+
+        The `status` and `substatus` query parameters are **mutually exclusive** — you may use one or the other, but not both in the same request. If both are provided, the API will return a `400 Bad Request` error.
+
+
+        Use **`status`** for broad filtering based on the high-level state of a hold:
+
+
+        | Value | Description |
+
+        |-------|-------------|
+
+        | `PENDING` | Returns all holds awaiting a decision, regardless of whether they are pending client action or bank review |
+
+        | `APPROVED` | Returns holds that have been approved |
+
+        | `REJECTED` | Returns holds that have been rejected. Can use both `APPROVED` and `REJECTED` together to retrieve all decisioned holds. |
+
+
+        Use **`substatus`** for more granular filtering when you need to distinguish _who_ needs to act or _how_ a hold was resolved:
+
+
+        | Value | Description |
+
+        |-------|-------------|
+
+        | `PENDING_ACTION_CLIENT` | Holds awaiting a decision by the client |
+
+        | `PENDING_ACTION_JPM` | Holds under review by the bank |
+
+
+        Can also use substatus to filter for holds decisioned by specific entity (client or JPM) or for a particular reason.
+
+
+        If neither parameter is provided, holds across all statuses are returned.
+
+        '
+      tags:
+      - Payment Holds
+      operationId: getPaymentHolds
+      x-parameter-constraints:
+      - type: mutually-exclusive
+        params:
+        - status
+        - substatus
+      parameters:
+      - $ref: '#/components/parameters/Status'
+      - $ref: '#/components/parameters/substatus'
+      - $ref: '#/components/parameters/StartDateTime'
+      - $ref: '#/components/parameters/EndDateTime'
+      - $ref: '#/components/parameters/Sort'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Retrieve Payment Holds
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                default: no-store
+              description: Caching directive for sensitive financial data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentHolds'
+              examples:
+                Pending Client Action:
+                  $ref: '#/components/examples/PendingClientDecisionResponse'
+                Pending JPM Review:
+                  $ref: '#/components/examples/PendingBankDecisionResponse'
+                Pending Bank Or Client Decision:
+                  $ref: '#/components/examples/PendingBankOrClientDecisionResponse'
+                Already Decisioned:
+                  $ref: '#/components/examples/AlreadyDecisionedResponse'
+        '400':
+          description: "Bad Request. \n\n**List of error codes and descriptions**\n\n| Error Code      |          Description                           |\n| --------------  |------------------------------------------------|\n| 10001           | Mandatory field missing or invalid             |\n| 10103           | Bad Format                                      |\n| 10104           | Bad Value                                      |\n| 10108           | Mutually exclusive fields violation            |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Bad Status:
+                  $ref: '#/components/examples/BadIdentifier'
+                Filter By Status And Substatus (Not Allowed):
+                  $ref: '#/components/examples/FilterByStatusAndSubstatusErrorResponse'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /holds/{id}:
+    get:
+      summary: Retrieve details of a payment hold
+      description: '**Retrieve details of a single payment hold by identifier**'
+      tags:
+      - Payment Holds
+      operationId: getPaymentHoldDetails
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for the payment hold
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
+        examples:
+          By Id:
+            value: 06bca14f-1fc0-4cd7-9e0b-8bb7e06334f7
+      responses:
+        '200':
+          description: Payment Hold Details
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                default: no-store
+              description: Caching directive for sensitive financial data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentHold'
+              examples:
+                Wire Transfer:
+                  $ref: '#/components/examples/RetrieveSingleHoldResponse'
+                ACH Distributed:
+                  $ref: '#/components/examples/RetrieveSingleHoldAchDistributedResponse'
+        '400':
+          description: 'Bad Request.
+
+
+            **List of error codes and descriptions**
+
+
+            | Error Code      |          Description                           |
+
+            | --------------  |------------------------------------------------|
+
+            | 10103           | Bad Format                                      |
+
+            | 11004           | Wrong channel for hold                          |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Bad Identifier:
+                  $ref: '#/components/examples/BadIdentifier'
+                Wrong Channel:
+                  value:
+                    title: Bad Request
+                    httpStatus: 400
+                    traceId: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+                    requestId: 123e4567-e89b-12d3-a456-426614174000
+                    context:
+                    - code: '11004'
+                      message: Wrong channel for hold
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /holds/{id}/decision:
+    post:
+      summary: Decision Single Payment Hold
+      description: '**Decision Single Payment Hold**
+
+        This endpoint allows users to take action on a single payment hold by approving or rejecting it.  Users can specify the decision action (APPROVE or REJECT), provide a reason for rejection, and  indicate the type of confirmed fraud if applicable. For bulk processing of multiple hold decisions,  use the `/holds/decision/bulk` endpoint instead.'
+      tags:
+      - Payment Holds
+      operationId: decisionPaymentHold
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for the payment hold
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
+        examples:
+          Approve:
+            value: f1c2b3a4-5d6e-4f70-8a9c-1234abcd5678
+          Reject:
+            value: 550e8400-e29b-41d4-a716-446655440000
+          Expired:
+            value: 9b1d3f2a-6c8e-4f5a-9d2b-3e7a1c4b8d90
+          Already Decisioned:
+            value: 3d6f9a2c-5e47-4b1f-8c3a-0d2e7f9b6a10
+      requestBody:
+        required: true
+        description: Hold Action
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DecisionActionRequest'
+            examples:
+              Approve:
+                $ref: '#/components/examples/HoldDecisionApproveActionRequest'
+              Reject:
+                $ref: '#/components/examples/HoldDecisionRejectActionRequest'
+              Incorrect Field Values:
+                $ref: '#/components/examples/HoldBadValuesRequest'
+      responses:
+        '200':
+          description: Decision response for the payment hold action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecisionResponse'
+              examples:
+                Approve:
+                  $ref: '#/components/examples/HoldDecisionApproveActionResponse'
+                Reject:
+                  $ref: '#/components/examples/HoldDecisionRejectActionResponse'
+        '400':
+          description: "Bad Request. \n\n**List of error codes and descriptions**\n\n| Error Code      |          Description                                     |\n| --------------  |----------------------------------------------------------|\n| 10001           | Mandatory field missing                                  |\n| 10103           | Bad format                                               |\n| 10104           | Bad Value                                                |\n| 11003           | Field only allowed for specific value of other field     |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Bad Identifier:
+                  $ref: '#/components/examples/BadIdentifier'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '409':
+          description: 'Conflict
+
+
+            **List of error codes and descriptions**
+
+
+            | Error Code      |           Description                          |
+
+            | --------------  |------------------------------------------------|
+
+            | 11000           | Hold has expired                               |
+
+            | 11001           | Hold already decisioned                        |
+
+            | 11004           | Wrong channel for hold                         |
+
+
+            **Hold Already Decisioned (11001):** A payment hold may only be decisioned once. In rare cases, two users may attempt to decision the same hold at nearly the same time. When this occurs, only the first request will succeed — the subsequent request will receive a `409 Conflict` with error code `11001`. While this scenario is uncommon, API consumers must handle this response gracefully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Expired:
+                  $ref: '#/components/examples/HoldExpiredResponse'
+                Already Decisioned:
+                  $ref: '#/components/examples/HoldAlreadyDecisionedResponse'
+                Wrong Channel:
+                  value:
+                    title: Conflict
+                    httpStatus: 409
+                    traceId: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+                    requestId: 123e4567-e89b-12d3-a456-426614174000
+                    context:
+                    - code: '11004'
+                      message: Wrong channel for hold
+                Incorrect Field Values:
+                  $ref: '#/components/examples/HoldBadValuesResponse'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+  /holds/decision/bulk:
+    post:
+      summary: Decision Multiple Payment Holds (Bulk)
+      description: '**Decision Multiple Payment Holds (Bulk)**
+
+        This endpoint allows users to take action on multiple payment holds simultaneously by approving or rejecting them.  The API supports batch processing of multiple hold decisions, enabling efficient processing of large volumes of holds.  Each decision in the batch can have its own action (APPROVE or REJECT), rejection reason, and confirmed fraud type.  For processing a single hold decision, use the `/holds/{id}/decision` endpoint instead.'
+      tags:
+      - Payment Holds
+      operationId: decisionPaymentHoldsBulk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DecisionBulkRequest'
+            examples:
+              Mixed Results:
+                $ref: '#/components/examples/HoldDecisionManyRequest'
+      responses:
+        '200':
+          description: Bulk response object containing decision responses for each hold
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecisionBulkResponse'
+              examples:
+                Mixed Results:
+                  $ref: '#/components/examples/HoldDecisionManyResponse'
+        '400':
+          description: 'Bad Request.
+
+
+            **List of error codes and descriptions**
+
+
+            | Error Code      |          Description                           |
+
+            | --------------  |------------------------------------------------|
+
+            | 10001           | Mandatory field missing or invalid             |
+
+            | 10103           | Bad Format                                      |
+
+            | 10104           | Bad Value                                      |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Bad Identifier:
+                  $ref: '#/components/examples/BadIdentifier'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '409':
+          description: 'Conflict
+
+
+            **List of error codes and descriptions**
+
+
+            | Error Code      |           Description                          |
+
+            | --------------  |------------------------------------------------|
+
+            | 11000           | Hold has expired                               |
+
+            | 11001           | Hold already decisioned                        |'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Expired:
+                  $ref: '#/components/examples/HoldExpiredResponse'
+                Already Decisioned:
+                  $ref: '#/components/examples/HoldAlreadyDecisionedResponse'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '503':
+          $ref: '#/components/responses/503-ServiceUnavailable'
+components:
+  schemas:
+    FailureReason:
+      type: object
+      title: FailureReason
+      description: Failure reason details with code and message
+      properties:
+        code:
+          type: string
+          description: Error code that identifies the failure reason
+          minLength: 1
+          maxLength: 50
+        message:
+          type: string
+          description: Human readable textual description of the failure
+          minLength: 1
+          maxLength: 500
+      example:
+        code: '10001'
+        message: Invalid hold version provided
+    AdditionalContext:
+      title: Additional Context
+      type: array
+      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
+      items:
+        $ref: '#/components/schemas/StandardCodeContext'
+      minItems: 1
+      maxItems: 5
+    PaymentHolds:
+      type: object
+      title: PaymentHolds
+      description: List of Payment Holds
+      properties:
+        items:
+          type: array
+          minItems: 0
+          maxItems: 25
+          items:
+            $ref: '#/components/schemas/PaymentHold'
+        metadata:
+          title: PaymentHoldsMetadata
+          type: object
+          description: Contains pagination information to move through the result set
+          properties:
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+            asOf:
+              type: string
+              format: date-time
+              description: Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+      required:
+      - items
+      - metadata
+    UnstructuredAddress:
+      title: UnstructuredAddress
+      type: array
+      description: Unstructured Addresses
+      minItems: 1
+      maxItems: 7
+      items:
+        type: string
+        minLength: 1
+        maxLength: 70
+    IndividualIdentification:
+      type: object
+      title: Individual Identification
+      description: Individual Identification Schemes
+      required:
+      - individualIds
+      properties:
+        individualIds:
+          type: array
+          minItems: 1
+          maxItems: 16
+          items:
+            $ref: '#/components/schemas/IndividualId'
+    Error:
+      type: object
+      x-tags:
+      - common-error-model
+      - common-components
+      title: Error
+      description: Common Error Model
+      properties:
+        title:
+          type: string
+          title: Short humanly-readable title of the error.
+          minLength: 1
+          maxLength: 100
+        httpStatus:
+          type: integer
+          format: int32
+          minimum: 100
+          maximum: 599
+          default: 400
+          title: HTTP Status Code
+        traceId:
+          type: string
+          title: JPMC Assigned traced identifier
+          minLength: 1
+          maxLength: 100
+        requestId:
+          type: string
+          title: The 'client originated' requestId
+          minLength: 1
+          maxLength: 100
+        context:
+          type: array
+          title: Provides additional context and detail on the validation errors
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 1
+          maxItems: 100
+      required:
+      - title
+      readOnly: true
+    UltimateCreditor:
+      title: UltimateCreditor
+      type: object
+      description: Represents the ultimate beneficiary of the funds in the payment transaction. This is the final recipient who will receive the funds, even if the payment is credited to an intermediary account first. This schema captures all relevant identifying and account details of the ultimate creditor.
+      allOf:
+      - $ref: '#/components/schemas/Party'
+    UltimateDebtor:
+      title: UltimateDebtor
+      type: object
+      description: Represents the ultimate party responsible for the payment, who is the original source of funds in the transaction, even if the payment is made on their behalf by another party. This schema captures all relevant identifying and account details of the ultimate debtor.
+      allOf:
+      - $ref: '#/components/schemas/Party'
+    AdditionalInstitutions:
+      title: AdditionalInstitutions
+      type: array
+      description: Additional Institutions
+      minItems: 1
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/AdditionalInstitution'
+    TransferType:
+      title: TransferType
+      type: string
+      enum:
+      - CREDIT
+      - DEBIT
+      description: 'Indicates the direction of the money movement. The transaction is either a `credit` push transfer or a direct `debit` pull transfer.
+
+
+        | Market/Instrument | Transfer Type |
+
+        |-------------------|---------------|
+
+        | Credit Transfers | CREDIT |
+
+        | Direct-Debits | DEBIT |
+
+        '
+    EndToEndId:
+      type: string
+      title: EndToEndId
+      minLength: 1
+      maxLength: 128
+      x-faker: random.uuid
+      description: 'Customer assigned Unique identifier to unambiguously identify the Payment transaction.
+
+        This identification is passed on, unchanged, throughout the entire end-to-end chain.'
+      example: AD202109311354152
+    StreetName:
+      title: StreetName
+      type: string
+      description: Street name
+      minLength: 1
+      maxLength: 70
+      example: Main St
+    PaymentIdentifiers:
+      type: object
+      title: PaymentIdentifiers
+      description: Identifiers associated with the Payment Instruction throughout its lifecycle.
+      required:
+      - endToEndId
+      properties:
+        endToEndId:
+          $ref: '#/components/schemas/EndToEndId'
+        otherPaymentReferences:
+          type: object
+          title: OtherPaymentReferences
+          description: Other Payment Reference Identifiers
+          properties:
+            relatedReferenceId:
+              type: string
+              description: Related reference Identifier, applicable for ACH and WIRES only.
+            uetr:
+              type: string
+              description: A Unique End-to-end Transaction Reference (commonly known as a UETR) is a string of 36 unique characters featured in all payment instruction messages carried over SWIFT.
+          minProperties: 1
+    PaymentType:
+      title: PaymentType
+      type: string
+      enum:
+      - WIRE
+      - ACH
+      - RTP
+      description: The type of payment being initiated - **WIRE** for Wire Payments, **ACH** for ACH Payments, **RTP** for Real-Time Payments
+    DecisionBulkResponse:
+      type: object
+      title: DecisionBulkResponse
+      description: Bulk response for multiple payment hold decisions
+      properties:
+        items:
+          type: array
+          minItems: 0
+          maxItems: 25
+          items:
+            $ref: '#/components/schemas/DecisionResponse'
+      example:
+        items:
+        - holdId: 550e8400-e29b-41d4-a716-446655440000
+          result: SUCCESS
+          status: REJECTED
+          substatus: REJECTED_FRAUD_CLIENT
+        - holdId: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+          result: FAILURE
+          failureReason:
+            code: '10001'
+            message: Invalid hold version provided
+    FinancialInstitutionIdType:
+      type: string
+      enum:
+      - BIC
+      - USABA
+      - SORT_CODE
+      - CLEARING_SYSTEM_ID
+    Fraud:
+      type: object
+      title: Fraud
+      description: 'Fraud details associated with a rejected payment hold. Only present when `rejectReason` is `FRAUD`.
+
+        '
+      properties:
+        type:
+          $ref: '#/components/schemas/FraudType'
+        additionalInformation:
+          type: string
+          description: Free-form text providing additional context about the fraud. Recommended when `type` is `OTHER`.
+          minLength: 1
+          maxLength: 500
+    Distribution:
+      title: Distribution
+      description: 'Describes distribution details for ACH payment hold.  JPM might distribute the payment after a hold is created,but
+
+        before the hold is decisioned.  You should still decision the hold.  If you choose `REJECT`, that will kick off a
+
+        back office process to recover the funds.
+
+
+        This field is only present when `paymentType` is `ACH`
+
+        '
+      type: object
+      properties:
+        isDistributed:
+          type: boolean
+          description: Indicates whether the ACH payment has been distributed.
+          default: false
+        distributedAt:
+          type: string
+          description: The date and time at which the ACH payment was distributed. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC. Only present when `isDistributed` is `true`.
+          format: date-time
+    DecisionRejectReason:
+      type: string
+      description: 'Reason for REJECT action. Only populated for action=REJECT and when status=REJECTED.
+
+
+        If the reason is "Fraud", additional fraud details should be provided in the `fraud` field.
+
+
+        | Enum Value | Description |
+
+        |------------|-------------|
+
+        | TRANSACTION_NO_LONGER_NEEDED | The transaction is no longer required by the client |
+
+        | DUPLICATE_TRANSACTION | The transaction is a duplicate of another payment |
+
+        | INCORRECT_BENEFICIARY | The beneficiary details are incorrect or invalid |
+
+        | FRAUD | Fraud is suspected; requires `fraud` field |
+
+        '
+      enum:
+      - TRANSACTION_NO_LONGER_NEEDED
+      - DUPLICATE_TRANSACTION
+      - INCORRECT_BENEFICIARY
+      - FRAUD
+    IsoCountryCode:
+      title: IsoCountryCode
+      type: string
+      description: ISO 3166-1 Alpha-2 Country Code
+      minLength: 2
+      maxLength: 2
+      pattern: ^[A-Z]{2}$
+      example: AU
+    InitiatingParty:
+      title: InitiatingParty
+      type: object
+      description: The financial institution or agent that initiates the payment or transaction on behalf of the ordering party.
+      allOf:
+      - $ref: '#/components/schemas/Party'
+    DecisionSubstatus:
+      type: string
+      description: 'Substatus providing additional detail on the current state of the payment hold.
+
+
+        | Enum Value | Description |
+
+        |------------|-------------|
+
+        | PENDING_ACTION_CLIENT | Payment is pending a decision by client. Payment held until decision is made, at which time it can be released or canceled depending on decision |
+
+        | PENDING_ACTION_JPM | Payment is pending a decision by bank. Only bank can release or reject this payment |
+
+        | APPROVED_CLIENT | Hold has been approved by client |
+
+        | APPROVED_JPM | Hold has been approved by the bank |
+
+        | REJECTED_FRAUD_CLIENT | Hold marked as fraud by client |
+
+        | REJECTED_FRAUD_JPM | Fraud has been confirmed by bank |
+
+        | REJECTED_AUTO_CANCELLED_JPM | Payment was automatically cancelled by JPM due to expiration |
+
+        | REJECTED_TXN_NOT_NEEDED_CLIENT | Payment rejected as transaction is not needed by client |
+
+        | REJECTED_TXN_NOT_NEEDED_JPM | Payment rejected as transaction is not needed by bank |
+
+        | REJECTED_DUPLICATE_TXN_CLIENT | Payment rejected as duplicate transaction by client |
+
+        | REJECTED_DUPLICATE_TXN_JPM | Payment rejected as duplicate transaction by bank |
+
+        | REJECTED_INCORRECT_BENEFICIARY_CLIENT | Payment rejected due to incorrect beneficiary by client |
+
+        | REJECTED_INCORRECT_BENEFICIARY_JPM | Payment rejected due to incorrect beneficiary by bank |
+
+        '
+      enum:
+      - PENDING_ACTION_CLIENT
+      - PENDING_ACTION_JPM
+      - APPROVED_CLIENT
+      - APPROVED_JPM
+      - REJECTED_FRAUD_CLIENT
+      - REJECTED_FRAUD_JPM
+      - REJECTED_AUTO_CANCELLED_JPM
+      - REJECTED_TXN_NOT_NEEDED_CLIENT
+      - REJECTED_TXN_NOT_NEEDED_JPM
+      - REJECTED_DUPLICATE_TXN_CLIENT
+      - REJECTED_DUPLICATE_TXN_JPM
+      - REJECTED_INCORRECT_BENEFICIARY_CLIENT
+      - REJECTED_INCORRECT_BENEFICIARY_JPM
+    IntermediaryAgent:
+      title: IntermediaryAgent
+      type: object
+      description: 'An agent between the debtor''s agent and the creditor''s agent. Usage: If more than one intermediary agent is present, then IntermediaryAgent1 identifies the agent between the DebtorAgent and the IntermediaryAgent2.'
+      properties:
+        name:
+          type: string
+          description: Name of the agent
+          minLength: 1
+          maxLength: 140
+        financialInstitutionIds:
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            $ref: '#/components/schemas/FinancialInstitutionId'
+        postalAddress:
+          $ref: '#/components/schemas/Address'
+    BasicParty:
+      title: BasicParty
+      type: object
+      description: A party is an entity involved in a financial transaction. This entity can be an individual, a corporation, or any other organization that participates in the transaction.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 140
+          description: Party name
+        postalAddress:
+          $ref: '#/components/schemas/Address'
+        dateAndPlaceOfBirth:
+          type: object
+          title: DateAndPlaceOfBirth
+          description: Date and place of birth
+          properties:
+            birthDate:
+              type: string
+              format: date
+              description: Date of birth
+            city:
+              type: string
+              minLength: 1
+              maxLength: 35
+              description: City of birth
+            country:
+              $ref: '#/components/schemas/IsoCountryCode'
+        countryOfResidence:
+          $ref: '#/components/schemas/IsoCountryCode'
+    IsoCurrencyCode:
+      title: IsoCurrencyCode
+      type: string
+      description: ISO 4217 Alpha-3 Currency Code
+      minLength: 3
+      maxLength: 3
+      pattern: ^[A-Z]{3}$
+      example: AUD
+    OrganizationId:
+      title: OrganizationId
+      type: object
+      required:
+      - organizationId
+      description: "Collection of registration information held against the party.\nIt can be used when the underlying payer is a Legal Entity. It should be used together with Ultimate Debtor Name and address, and it should contain the payment account number of the underlying payer. In case the transfer has not been initiated from a payment account, the value populated should be a unique transaction identifier of the underlying payer which permits the traceability of the transaction back to them.\n\nApplicable markets and rules: - Can be used for ultimateDebtor and ultimateCreditor for the following RTP markets:\n  - SEPA \n  - Mexico \n  - UK\n  - United States\n\n***Australia Faster Payments - Only to be used for ultimateCreditor. For Australia Faster Payments, only id and schemeName.proprietary fields are applicable\nWIRE Payments:\n  - WHEM\n  - LATAM\n  - EMEA\n  - APAC"
+      properties:
+        organizationId:
+          type: string
+          minLength: 1
+          maxLength: 35
+          description: 'Formally Issued Organization Identifier - **Note**: For AU Superannuation payment (category payment), populate with USI number for the Superannuation fund.'
+        bic:
+          type: string
+          description: "Business Identifier Code, mean a unique code to identify \nany business as defined by the ISO9362 standard. "
+          minLength: 8
+          maxLength: 11
+        lei:
+          type: string
+          description: Legal entity identifier
+          minLength: 20
+          maxLength: 20
+        issuer:
+          type: string
+          description: Entity that assigns the identification
+          minLength: 1
+          maxLength: 35
+        schemeName:
+          description: Name of the identification scheme
+          title: SchemeName
+          type: object
+          minProperties: 1
+          maxProperties: 1
+          properties:
+            code:
+              type: string
+              description: Name of the identification scheme in a coded form
+              minLength: 1
+              maxLength: 4
+            proprietary:
+              type: string
+              description: Specifies the type of scheme with a proprietary value. For AU Superannuation payment (category payment), populate "USI"
+              minLength: 1
+              maxLength: 35
+    OrganizationIdentification:
+      type: object
+      title: Organization Identification
+      description: Organization Identification Schemes
+      required:
+      - organizationIds
+      properties:
+        organizationIds:
+          type: array
+          minItems: 1
+          maxItems: 16
+          items:
+            $ref: '#/components/schemas/OrganizationId'
+    AddressType:
+      title: AddressType
+      type: string
+      description: Type of address
+      enum:
+      - ADDR
+      - BIZZ
+      - DLVY
+      - HOME
+      - MLTO
+      - PBOX
+      example: HOME
+    PaymentValue:
+      title: PaymentValue
+      description: A positive amount of value.
+      type: object
+      required:
+      - currency
+      - amount
+      properties:
+        currency:
+          $ref: '#/components/schemas/IsoCurrencyCode'
+        amount:
+          $ref: '#/components/schemas/AmountDecimal'
+    ErrorContext:
+      title: ErrorContext
+      x-tags:
+      - common-error-model
+      - common-components
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+        location:
+          type: string
+          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
+          description: The location of the error occurred in the request.
+          minLength: 1
+          maxLength: 99
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+        field:
+          type: string
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+          pattern: ^[\$0-9a-zA-Z-_.()\[\]{}'"\s@=><!?,]+$
+        additionalContext:
+          $ref: '#/components/schemas/AdditionalContext'
+      description: Error Context
+    DecisionAction:
+      type: string
+      description: 'Action taken on the payment instruction
+
+
+        | Enum Value | Description |
+
+        |------------|-------------|
+
+        | APPROVE | Approve the payment hold for processing |
+
+        | REJECT | Reject the payment hold |
+
+        '
+      enum:
+      - APPROVE
+      - REJECT
+    StandardCodeContext:
+      title: Standard Code Context
+      description: Standard Code Context for error codes
+      type: object
+      required:
+      - code
+      - message
+      - type
+      properties:
+        type:
+          title: CategoryType
+          type: string
+          description: 'Category of the error code such as ISO or a Clearing Code (NACHA, BACS etc)
+
+
+            | Category Type | Description |
+
+            |---------------|-----------------|
+
+            | **ISO20022** | ISO Codes based on an ISO standard e.g. ISO20022 |
+
+            | **CLEARING_NACHA** | Clearing codes |
+
+            | **EXTERNAL** | External code sets |
+
+            '
+          minLength: 2
+          maxLength: 16
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+    Payment:
+      type: object
+      title: Payment
+      description: Representation of the payment instruction.
+      required:
+      - requestedExecutionDate
+      - paymentIdentifiers
+      - value
+      - transferType
+      - paymentType
+      - debtor
+      - debtorAgent
+      - creditor
+      additionalProperties: false
+      properties:
+        requestedExecutionDate:
+          type: string
+          format: date
+          description: The requested execution date for the payment instruction (e.g., value date) in ISO 8601 `yyyy-mm-dd` format, which can be either the current date or a future date
+        paymentIdentifiers:
+          $ref: '#/components/schemas/PaymentIdentifiers'
+        value:
+          $ref: '#/components/schemas/PaymentValue'
+        transferType:
+          $ref: '#/components/schemas/TransferType'
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        debtor:
+          $ref: '#/components/schemas/Debtor'
+        creditor:
+          $ref: '#/components/schemas/Creditor'
+        debtorAgent:
+          $ref: '#/components/schemas/DebtorAgent'
+        creditorAgent:
+          $ref: '#/components/schemas/CreditorAgent'
+        additionalParties:
+          $ref: '#/components/schemas/AdditionalParties'
+    CreditorAgent:
+      title: CreditorAgent
+      type: object
+      description: The Bank or financial institution of the creditor (the party receiving the payment).
+      required:
+      - financialInstitutionIds
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the agent
+          minLength: 1
+          maxLength: 140
+          example: JPM CHASE NEW YORK
+        financialInstitutionIds:
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            $ref: '#/components/schemas/FinancialInstitutionId'
+        postalAddress:
+          $ref: '#/components/schemas/Address'
+        additionalInstitutions:
+          $ref: '#/components/schemas/AdditionalInstitutions'
+    DecisionStatus:
+      title: DecisionStatus
+      type: string
+      description: 'Status of the payment hold
+
+
+        | Enum Value | Description |
+
+        |------------|-------------|
+
+        | PENDING | Payment hold is pending review and decision |
+
+        | APPROVED | Payment hold has been approved and will be processed |
+
+        | REJECTED | Payment hold has been rejected and will not be processed |
+
+        '
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+    IsoCountrySubdivisionCode:
+      title: IsoCountrySubdivisionCode
+      type: string
+      description: ISO 3166-2 Alphanumeric Country Subdivision Code
+      minLength: 1
+      maxLength: 3
+      pattern: ^[0-9A-Z]{1,3}$
+      example: ACT
+    DecisionBulkRequest:
+      type: object
+      title: DecisionBulkRequest
+      description: Bulk request to take action on multiple payment holds
+      properties:
+        items:
+          type: array
+          minItems: 1
+          maxItems: 25
+          items:
+            $ref: '#/components/schemas/DecisionRequest'
+      example:
+        items:
+        - holdId: 550e8400-e29b-41d4-a716-446655440000
+          action: REJECT
+          rejectReason: FRAUD
+          fraud:
+            type: OTHER
+            additionalInformation: Suspicious wire transfer to unknown beneficiary
+        - holdId: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+          action: APPROVE
+    Debtor:
+      title: Debtor
+      type: object
+      description: The party that owes money and is responsible for repaying the debt.
+      allOf:
+      - $ref: '#/components/schemas/Party'
+    DecisionResponse:
+      type: object
+      title: DecisionResponse
+      description: Response for a decision action on a payment hold
+      required:
+      - holdId
+      - result
+      properties:
+        holdId:
+          allOf:
+          - $ref: '#/components/schemas/Uuid'
+          readOnly: true
+        result:
+          allOf:
+          - $ref: '#/components/schemas/HoldDecisionResult'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/DecisionStatus'
+        substatus:
+          $ref: '#/components/schemas/DecisionSubstatus'
+        failureReason:
+          $ref: '#/components/schemas/FailureReason'
+      example:
+        holdId: 550e8400-e29b-41d4-a716-446655440000
+        result: SUCCESS
+        status: REJECTED
+        substatus: REJECTED_FRAUD_CLIENT
+    AdditionalInstitution:
+      type: object
+      title: AdditionalInstitution
+      description: Additional Institution
+      properties:
+        id:
+          type: string
+        idType:
+          $ref: '#/components/schemas/FinancialInstitutionIdType'
+        name:
+          type: string
+        postalAddress:
+          $ref: '#/components/schemas/Address'
+      required:
+      - id
+      - idType
+    Address:
+      title: Address
+      type: object
+      description: Information that locates and identifies a specific address
+      minProperties: 1
+      properties:
+        type:
+          $ref: '#/components/schemas/AddressType'
+        addressLines:
+          $ref: '#/components/schemas/UnstructuredAddress'
+        buildingNumber:
+          type: string
+          description: Name of the building or house
+          minLength: 1
+          maxLength: 16
+        streetName:
+          $ref: '#/components/schemas/StreetName'
+        city:
+          type: string
+          description: City name
+          minLength: 1
+          maxLength: 35
+          example: New York
+        postalCode:
+          $ref: '#/components/schemas/PostalCode'
+        countrySubDivision:
+          $ref: '#/components/schemas/IsoCountrySubdivisionCode'
+        country:
+          $ref: '#/components/schemas/IsoCountryCode'
+      example:
+        type: HOME
+        addressLines:
+        - 123 Main St
+        - Apt 4B
+        buildingNumber: '123'
+        streetName: Main St
+        city: New York
+        postalCode: '10001'
+        countrySubDivision: NY
+        country: US
+    PostalCode:
+      title: PostalCode
+      type: string
+      description: Postal code
+      minLength: 1
+      maxLength: 20
+      example: '10001'
+    AccountId:
+      title: AccountId
+      type: string
+      minLength: 1
+      maxLength: 128
+      description: Account number.
+    Uuid:
+      title: Uuid
+      type: string
+      description: Unique payment hold identifier generated by JPMC
+      minLength: 32
+      maxLength: 36
+      x-faker: random.uuid
+      example: 253f67f3-b640-44cb-aabd-2cc348b52658
+    DecisionRequest:
+      type: object
+      title: DecisionRequest
+      description: Request to take action on a payment hold
+      properties:
+        holdId:
+          $ref: '#/components/schemas/Uuid'
+        action:
+          $ref: '#/components/schemas/DecisionAction'
+        rejectReason:
+          $ref: '#/components/schemas/DecisionRejectReason'
+        fraud:
+          allOf:
+          - $ref: '#/components/schemas/Fraud'
+          description: 'Fraud details. Only applicable when `rejectReason` is `FRAUD`.
+
+            '
+      required:
+      - holdId
+      - action
+      example:
+        holdId: 550e8400-e29b-41d4-a716-446655440000
+        action: REJECT
+        rejectReason: FRAUD
+        fraud:
+          type: OTHER
+          additionalInformation: Suspicious wire transfer to unknown beneficiary
+    Account:
+      type: object
+      title: Account
+      description: Representation of a bank account. Features of the model may vary between different account types.
+      required:
+      - accountNumber
+      properties:
+        accountNumber:
+          $ref: '#/components/schemas/AccountId'
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        accountCurrency:
+          $ref: '#/components/schemas/IsoCurrencyCode'
+    HoldDecisionResult:
+      title: HoldDecisionResult
+      type: string
+      description: Outcome of the action (Success or Failure)
+      enum:
+      - SUCCESS
+      - FAILURE
+    FinancialInstitutionId:
+      title: FinancialInstitutionId
+      description: Financial Institution Identifier
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Financial Institution Identifier
+
+
+            - US RTP: Use `USABA`
+
+            - BRAZIL TED WIRE and other markets requiring member Ids, use the Clearing System Member Id: `CLEARING_SYSTEM_ID`
+
+            - UK FI Clients: Use `SORT_CODE`
+
+            - For all other instruments/markets: `BIC`'
+        idType:
+          $ref: '#/components/schemas/FinancialInstitutionIdType'
+        branchNumber:
+          type: string
+          description: Branch of the bank or financial institution.
+      required:
+      - id
+      - idType
+    IndividualId:
+      type: object
+      title: IndividualId
+      required:
+      - individualId
+      description: "Can be used if organization ID is not populated, when the underlying payer is an Individual. It should be used together with Ultimate Debtor Name and address, and it should contain the payment account number of the underlying payer. In case the transfer has not been initiated from a payment account, the value populated should be a unique transaction identifier of the underlying payer which permits the traceability of the transaction back to them\n\nApplicable RTP markets:\n\n    SEPA \n    Mexico \n    UK\n    United States"
+      properties:
+        individualId:
+          type: string
+          description: Unique and unambiguous identification of an individual
+          minLength: 1
+          maxLength: 35
+        issuer:
+          type: string
+          description: Entity that assigns the identification
+          minLength: 1
+          maxLength: 35
+        schemeName:
+          description: Name of the identification scheme
+          title: SchemeName
+          type: object
+          minProperties: 1
+          maxProperties: 1
+          properties:
+            code:
+              type: string
+              description: Name of the identification scheme in a coded form
+              minLength: 1
+              maxLength: 4
+            proprietary:
+              type: string
+              description: Specifies the type of scheme with a proprietary value. For AU Superannuation payment (category payment), populate "USI"
+              minLength: 1
+              maxLength: 35
+    DecisionActionRequest:
+      type: object
+      title: DecisionActionRequest
+      description: Request to take action on a payment hold
+      properties:
+        action:
+          $ref: '#/components/schemas/DecisionAction'
+        rejectReason:
+          $ref: '#/components/schemas/DecisionRejectReason'
+        fraud:
+          allOf:
+          - $ref: '#/components/schemas/Fraud'
+          description: 'Fraud details. Only applicable when `rejectReason` is `FRAUD`.
+
+            '
+      required:
+      - action
+      example:
+        action: REJECT
+        rejectReason: FRAUD
+        fraud:
+          type: OTHER
+          additionalInformation: Suspicious wire transfer to unknown beneficiary
+    AmountDecimal:
+      title: PaymentAmountDecimal
+      type: string
+      description: A String representation of a (potentially) whole number or decimal positive number. - Amount should be more than 0.01 with maximum of two decimal places allowed in most markets.
+      minLength: 1
+      maxLength: 40
+      pattern: ^\d+(\.\d+)?$
+    PaymentHold:
+      type: object
+      title: PaymentHold
+      description: Payment Hold Details including the original payment instructions along with the rules or criteria and pending action for the hold.
+      properties:
+        id:
+          allOf:
+          - $ref: '#/components/schemas/Uuid'
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/DecisionStatus'
+          readOnly: true
+        substatus:
+          $ref: '#/components/schemas/DecisionSubstatus'
+        exceptionType:
+          type: string
+          description: "Exception Type\n\n|Enum Value|Description|        \n|:----|:----------|\n|BANK_RULE|Bank Rule - Payments are identified and flagged by JPMorgan's fraud screening program for potential fraudulent activity|\n|CUSTOM_RULE|Custom Rule - Outbound wires are monitored and flagged according to client-defined rules, focusing on exceptions related to beneficiary, amount, and country across various payment channels.|\n|CUSTOM_RULE_AND_BANK_RULE|Custom Rule and Bank Rule - Payments are identified and flagged according to both Bank Rule and Custom Rule criteria.|\n"
+          enum:
+          - BANK_RULE
+          - CUSTOM_RULE
+          - CUSTOM_RULE_AND_BANK_RULE
+        heldAt:
+          type: string
+          description: Payment Instruction held time stamp. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+          format: date-time
+          readOnly: true
+        reasons:
+          type: array
+          description: 'One or more reasons the payment was held by the bank. Reasons may be provided when `exceptionType` is `BANK_RULE` or `CUSTOM_RULE_AND_BANK_RULE`, describing why JPMorgan''s fraud screening program flagged the payment. However, reasons are not guaranteed — this array may be empty or absent even when a bank rule triggered the hold.
+
+            '
+          minItems: 0
+          maxItems: 25
+          items:
+            type: string
+            minLength: 1
+            maxLength: 550
+        cutOffAt:
+          type: string
+          description: 'The date and time at which the hold will expire and be automatically cancelled. The cutoff is calculated based on the transaction type and how long the hold has been active. After the cutoff time passes, the hold expires and payment is auto-cancelled, producing a substatus of `REJECTED_AUTO_CANCELLED_JPM` for the hold. No further action can be taken on an expired hold.
+
+            '
+          format: date-time
+        rules:
+          description: 'Rules/Criteria that initiated the payment hold. When `exceptionType` is `CUSTOM_RULE` or `CUSTOM_RULE_AND_BANK_RULE`.  This array will contain an entry for each client-defined (custom) rule associated with the hold.
+
+            '
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Rule'
+        payment:
+          $ref: '#/components/schemas/Payment'
+        decision:
+          $ref: '#/components/schemas/Decision'
+        distribution:
+          allOf:
+          - $ref: '#/components/schemas/Distribution'
+          description: 'Describes distribution details for ACH payment hold.  JPM might distribute the payment after a hold is created,but
+
+            before the hold is decisioned.  You should still decision the hold.  If you choose `REJECT`, that will kick off a
+
+            back office process to recover the funds.
+
+
+            This field is only present when `paymentType` is `ACH`
+
+            '
+      required:
+      - id
+      - status
+      - exceptionType
+      - heldAt
+    Source:
+      type: string
+      description: 'Indicates the source of the decision on the payment hold.
+
+
+        | Enum Value | Description |
+
+        |------------|-------------|
+
+        | API | Decision made via the API |
+
+        | JPMC_UI | Decision made via JPMC UI |
+
+        '
+      enum:
+      - API
+      - JPMC_UI
+      example: API
+    Creditor:
+      title: Creditor
+      type: object
+      description: The creditor (payee) of the payment instruction.
+      allOf:
+      - $ref: '#/components/schemas/Party'
+    Party:
+      title: Party
+      allOf:
+      - $ref: '#/components/schemas/BasicParty'
+      - title: PartyDetails
+        type: object
+        description: Additional details of the party including account, contact details, and party identifier.
+        properties:
+          account:
+            $ref: '#/components/schemas/Account'
+          contactDetails:
+            title: ContactDetails
+            type: object
+            description: Contact details of the party
+            properties:
+              emailAddress:
+                type: string
+                format: email
+                description: Email address
+                example: john.doe@email.com
+              phoneNumber:
+                type: string
+                description: Phone number
+                minLength: 1
+                maxLength: 35
+          partyId:
+            $ref: '#/components/schemas/PartyId'
+    FraudType:
+      type: string
+      description: 'Type of fraud
+
+
+        | Enum Value | Description |
+
+        |------------|-------------|
+
+        | BUSINESS_EMAIL_COMPROMISE | Fraudulent email schemes targeting business transactions |
+
+        | JPM_PLATFORM_ACCOUNT_TAKEOVER | Unauthorized access to JPMorgan platform accounts |
+
+        | SCAM | Various types of fraudulent schemes and deceptive practices |
+
+        | OTHER | Any other type of fraud (free format description can be provided) |
+
+        '
+      enum:
+      - BUSINESS_EMAIL_COMPROMISE
+      - JPM_PLATFORM_ACCOUNT_TAKEOVER
+      - SCAM
+      - OTHER
+    Rule:
+      type: object
+      title: Rule
+      description: Client defined rule
+      properties:
+        id:
+          type: string
+          description: Unique rule identifier
+          minLength: 1
+          maxLength: 50
+        name:
+          type: string
+          description: Rule Name
+          minLength: 1
+          maxLength: 250
+        description:
+          type: string
+          description: Rule Description
+          minLength: 0
+          maxLength: 500
+        effectiveAt:
+          type: string
+          description: Rule Effective Date
+          format: date
+    PreviousInstructingAgent:
+      title: PreviousInstructingAgent
+      type: object
+      description: The Previous Instructing Agent represents the financial institution or agent that previously transmitted the payment instruction within the payment chain, before the current instructing agent.
+      properties:
+        name:
+          type: string
+          description: Name of the agent
+          minLength: 1
+          maxLength: 140
+        financialInstitutionIds:
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            $ref: '#/components/schemas/FinancialInstitutionId'
+        postalAddress:
+          $ref: '#/components/schemas/Address'
+    Pagination:
+      title: Pagination
+      type: object
+      description: Contains the pagination details
+      properties:
+        page:
+          title: PageNumber
+          description: A page number to skip to when using page based paging.
+          format: int32
+          minimum: 0
+          maximum: 10000
+          type: integer
+        size:
+          description: The number of items per page in a paginated response.
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 1000
+        totalCount:
+          description: Total number of items in the collection.
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 1000000
+        totalPages:
+          description: Total number of pages in the collection.
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 10000
+      required:
+      - page
+      - size
+      - totalCount
+    Decision:
+      type: object
+      title: Decision
+      description: 'Details of how the hold was resolved. Present only for holds that have already been decisioned.
+
+        '
+      properties:
+        source:
+          $ref: '#/components/schemas/Source'
+        rejectReason:
+          $ref: '#/components/schemas/DecisionRejectReason'
+        fraud:
+          allOf:
+          - $ref: '#/components/schemas/Fraud'
+          description: 'Fraud details for the decision. Only present when `rejectReason` is `FRAUD`.
+
+            '
+    AdditionalParties:
+      title: AdditionalParties
+      type: object
+      description: Additional parties involved in the payment transaction.
+      properties:
+        ultimateCreditor:
+          $ref: '#/components/schemas/UltimateCreditor'
+        ultimateDebtor:
+          $ref: '#/components/schemas/UltimateDebtor'
+        initiatingParty:
+          $ref: '#/components/schemas/InitiatingParty'
+        instructedAgent:
+          $ref: '#/components/schemas/FinancialInstitutionId'
+        intermediaryAgents:
+          type: array
+          description: Intermediary agents between the debtor's agent and the creditor's agent.
+          minItems: 1
+          maxItems: 3
+          items:
+            $ref: '#/components/schemas/IntermediaryAgent'
+        previousInstructingAgent:
+          $ref: '#/components/schemas/PreviousInstructingAgent'
+    DebtorAgent:
+      title: DebtorAgent
+      type: object
+      description: An agent is a financial institution that acts on behalf of the debtor in a financial transaction. The agent facilitates the transaction by processing payments, managing accounts, and ensuring the transfer of funds between parties.
+      required:
+      - financialInstitutionIds
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the agent
+          minLength: 1
+          maxLength: 140
+          example: JPM CHASE NEW YORK
+        financialInstitutionIds:
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            $ref: '#/components/schemas/FinancialInstitutionId'
+        postalAddress:
+          $ref: '#/components/schemas/Address'
+        additionalInstitutions:
+          $ref: '#/components/schemas/AdditionalInstitutions'
+    PartyId:
+      title: PartyId
+      description: Party Identification
+      oneOf:
+      - $ref: '#/components/schemas/OrganizationIdentification'
+      - $ref: '#/components/schemas/IndividualIdentification'
+      example:
+        organizationIds:
+        - organizationId: '123456'
+          schemeName:
+            proprietary: JPMCOID
+    AccountType:
+      title: AccountType
+      type: string
+      enum:
+      - DDA
+      - BDA
+      - CARD
+      - LOAN
+      - ODFT
+      - NREX
+      - CACC
+      - SVGS
+      - TRAN
+      - CLABE
+      - VOSTRO
+      - IBAN
+      - BBAN
+      - DFLT
+      - SLRY
+      - EMBEDDED_DDA
+      - LIMITED_DDA
+      - WALLET
+      - VAM
+      - INTERAC
+      - PAYPAL
+      - VENMO
+      - OTHER
+      description: Account Type
+  examples:
+    HoldBadValuesResponse:
+      description: Incomplete or incorrect field values in the request body
+      summary: Incomplete or incorrect field values in the request body
+      value:
+        title: Bad Request
+        httpStatus: 400
+        traceId: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+        requestId: 123e4567-e89b-12d3-a456-426614174000
+        context:
+        - code: '11003'
+          message: Cannot populate 'additionalInformation' unless fraud type is 'OTHER'
+          location: BODY
+          field: fraud.additionalInformation
+    HoldExpiredResponse:
+      description: Hold expired
+      summary: The hold you're trying to decision has expired and can no longer be actioned.
+      value:
+        title: Conflict
+        httpStatus: 409
+        traceId: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+        requestId: 123e4567-e89b-12d3-a456-426614174000
+        context:
+        - code: '11000'
+          message: Hold has expired
+    HoldAlreadyDecisionedResponse:
+      description: Incorrect request values
+      summary: Incorrect request values
+      value:
+        title: Conflict
+        httpStatus: 409
+        traceId: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+        requestId: 123e4567-e89b-12d3-a456-426614174000
+        context:
+        - code: '11001'
+          message: Hold already decisioned
+    BadIdentifier:
+      value:
+        title: Bad Request
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - code: '10103'
+          message: Invalid resource identifier format.
+          field: id
+          location: PATH
+    RetrieveSingleHoldResponse:
+      description: Retrieve single hold
+      summary: Retrieve single hold by id
+      value:
+        id: 06bca14f-1fc0-4cd7-9e0b-8bb7e06334f7
+        status: PENDING
+        substatus: PENDING_ACTION_CLIENT
+        exceptionType: BANK_RULE
+        heldAt: '2026-02-01T14:15:22Z'
+        cutOffAt: '2026-02-06T14:15:22Z'
+        rules:
+        - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+          name: Client ABC Rule for Suspicious Beneficiary
+          effectiveAt: '2019-08-24'
+        payment:
+          requestedExecutionDate: '2026-02-01'
+          paymentIdentifiers:
+            endToEndId: E2E3000113WEBXX
+          value:
+            currency: USD
+            amount: '10.50'
+          transferType: DEBIT
+          paymentType: WIRE
+          debtorAgent:
+            financialInstitutionIds:
+            - id: CHASUS33XXX
+              idType: BIC
+          debtor:
+            name: Nicholas Tesla
+            account:
+              accountNumber: '987654321'
+              accountCurrency: USD
+            postalAddress:
+              type: HOME
+              addressLines:
+              - 10007 S. Lake Drive
+              streetName: 10007 Lake Dr
+              postalCode: '48035'
+              city: Clinton Township
+              countrySubDivision: MI
+              country: US
+          creditor:
+            name: Comrade Musics
+            account:
+              accountNumber: '123456011'
+              accountCurrency: USD
+            postalAddress:
+              country: US
+    SecurityFailureError:
+      value:
+        title: Forbidden
+        httpStatus: 403
+        traceId: 5914f136-4544-4b1c-8004-6c2388ba76b4
+        requestId: UK202109202311354152
+        context:
+        - code: '14000'
+          message: Invalid client profile
+    PendingBankOrClientDecisionResponse:
+      description: Retrieve holds pending bank or client decision
+      summary: Retrieve holds the bank is currently reviewing
+      value:
+        items:
+        - id: 1f8c3a2e-7b54-4d9a-8c3f-12ab34cd56ef
+          status: PENDING
+          substatus: PENDING_ACTION_JPM
+          exceptionType: BANK_RULE
+          heldAt: '2026-02-01T14:15:22Z'
+          cutOffAt: '2026-02-06T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-02-01'
+            paymentIdentifiers:
+              endToEndId: E2E3000113WEBXX
+            value:
+              currency: USD
+              amount: '10.50'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Nicholas Tesla
+              account:
+                accountNumber: '987654321'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 S. Lake Drive
+                streetName: 10007 Lake Dr
+                postalCode: '48035'
+                city: Clinton Township
+                countrySubDivision: MI
+                country: US
+            creditor:
+              name: Comrade Musics
+              account:
+                accountNumber: '123456011'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+        - id: 92ad7c1b-3e6f-4a2d-9b10-0fa1c2d3e4b5
+          status: PENDING
+          substatus: PENDING_ACTION_JPM
+          exceptionType: BANK_RULE
+          heldAt: '2026-03-01T14:15:22Z'
+          cutOffAt: '2026-03-15T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-03-10'
+            paymentIdentifiers:
+              endToEndId: E2E5908713WEBXX
+            value:
+              currency: USD
+              amount: '250000'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Thomas Edison
+              account:
+                accountNumber: '123456789'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 W Shore Drive
+                streetName: 10007 Shore Dr
+                postalCode: '20147'
+                city: Union City
+                countrySubDivision: NJ
+                country: US
+            creditor:
+              name: Superior Cleaning LLC
+              account:
+                accountNumber: '556677889'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+        - id: 06bca14f-1fc0-4cd7-9e0b-8bb7e06334f7
+          status: PENDING
+          substatus: PENDING_ACTION_CLIENT
+          exceptionType: BANK_RULE
+          heldAt: '2026-02-01T14:15:22Z'
+          cutOffAt: '2026-02-06T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-02-01'
+            paymentIdentifiers:
+              endToEndId: E2E3000113WEBXX
+            value:
+              currency: USD
+              amount: '10.50'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Nicholas Tesla
+              account:
+                accountNumber: '987654321'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 S. Lake Drive
+                streetName: 10007 Lake Dr
+                postalCode: '48035'
+                city: Clinton Township
+                countrySubDivision: MI
+                country: US
+            creditor:
+              name: Comrade Musics
+              account:
+                accountNumber: '123456011'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+        - id: 06bca14f-1fc0-4cd7-9e0b-8bb7e06334f7
+          status: PENDING
+          substatus: PENDING_ACTION_CLIENT
+          exceptionType: BANK_RULE
+          heldAt: '2026-03-01T14:15:22Z'
+          cutOffAt: '2026-03-15T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-03-10'
+            paymentIdentifiers:
+              endToEndId: E2E5908713WEBXX
+            value:
+              currency: USD
+              amount: '250000'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Thomas Edison
+              account:
+                accountNumber: '123456789'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 W Shore Drive
+                streetName: 10007 Shore Dr
+                postalCode: '20147'
+                city: Union City
+                countrySubDivision: NJ
+                country: US
+            creditor:
+              name: Superior Cleaning LLC
+              account:
+                accountNumber: '556677889'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+        metadata:
+          pagination:
+            page: 1
+            size: 25
+            totalCount: 4
+            totalPages: 1
+          asOf: '2026-04-01T00:00:00+00:00'
+    PendingBankDecisionResponse:
+      description: Retrieve holds pending bank review
+      summary: Retrieve holds the bank is currently reviewing
+      value:
+        items:
+        - id: 1f8c3a2e-7b54-4d9a-8c3f-12ab34cd56ef
+          status: PENDING
+          substatus: PENDING_ACTION_JPM
+          exceptionType: BANK_RULE
+          heldAt: '2026-02-01T14:15:22Z'
+          cutOffAt: '2026-02-06T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-02-01'
+            paymentIdentifiers:
+              endToEndId: E2E3000113WEBXX
+            value:
+              currency: USD
+              amount: '10.50'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Nicholas Tesla
+              account:
+                accountNumber: '987654321'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 S. Lake Drive
+                streetName: 10007 Lake Dr
+                postalCode: '48035'
+                city: Clinton Township
+                countrySubDivision: MI
+                country: US
+            creditor:
+              name: Comrade Musics
+              account:
+                accountNumber: '123456011'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+        - id: 92ad7c1b-3e6f-4a2d-9b10-0fa1c2d3e4b5
+          status: PENDING
+          substatus: PENDING_ACTION_JPM
+          exceptionType: BANK_RULE
+          heldAt: '2026-03-01T14:15:22Z'
+          cutOffAt: '2026-03-15T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-03-10'
+            paymentIdentifiers:
+              endToEndId: E2E5908713WEBXX
+            value:
+              currency: USD
+              amount: '250000'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Thomas Edison
+              account:
+                accountNumber: '123456789'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 W Shore Drive
+                streetName: 10007 Shore Dr
+                postalCode: '20147'
+                city: Union City
+                countrySubDivision: NJ
+                country: US
+            creditor:
+              name: Superior Cleaning LLC
+              account:
+                accountNumber: '556677889'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+        metadata:
+          pagination:
+            page: 1
+            size: 25
+            totalCount: 2
+            totalPages: 1
+          asOf: '2026-04-01T00:00:00+00:00'
+    ServiceUnavailableError:
+      value:
+        title: Service Unavailable
+        httpStatus: 503
+        traceId: d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4
+        requestId: UK202109202311354152
+        context:
+        - code: '12000'
+          message: Service Unavailable
+    HoldDecisionApproveActionRequest:
+      description: Approve a single hold
+      summary: Approve a single hold
+      value:
+        action: APPROVE
+    HoldDecisionApproveActionResponse:
+      description: Successfully decision a single hold
+      summary: Successfully decision a single hold
+      value:
+        holdId: a1000001-aaaa-4aaa-aaaa-000000000001
+        result: SUCCESS
+        status: APPROVED
+        substatus: APPROVED_CLIENT
+    FilterByStatusAndSubstatusErrorResponse:
+      description: Filter holds by status and substatus
+      summary: Attempt filter holds by statsu and substatus, which is not allowed
+      value:
+        title: Bad Request
+        httpStatus: 400
+        traceId: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+        requestId: 123e4567-e89b-12d3-a456-426614174000
+        context:
+        - code: '10108'
+          message: Cannot use 'status' and 'substatus' fields together in the same request.
+    HoldDecisionRejectActionRequest:
+      description: Successfully decision a single hold
+      summary: Successfully decision a single hold
+      value:
+        action: REJECT
+        rejectReason: FRAUD
+        fraud:
+          type: OTHER
+          additionalInformation: Suspicious wire transfer to unknown beneficiary
+    HoldDecisionManyResponse:
+      description: Decision many hold
+      summary: Send multiple holds in same request to decision
+      value:
+        items:
+        - holdId: 6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54
+          result: SUCCESS
+          status: REJECTED
+          substatus: REJECTED_DUPLICATE_TXN_CLIENT
+        - holdId: a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31
+          result: FAILURE
+          failureReason:
+            code: '11001'
+            message: Hold already decisioned
+          status: PENDING
+          substatus: PENDING_ACTION_CLIENT
+    PendingClientDecisionResponse:
+      description: Retrieve holds requiring action by client
+      summary: Retrieve holds that require action by client
+      value:
+        items:
+        - id: 06bca14f-1fc0-4cd7-9e0b-8bb7e06334f7
+          status: PENDING
+          substatus: PENDING_ACTION_CLIENT
+          exceptionType: BANK_RULE
+          heldAt: '2026-02-01T14:15:22Z'
+          cutOffAt: '2026-02-06T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-02-01'
+            paymentIdentifiers:
+              endToEndId: E2E3000113WEBXX
+            value:
+              currency: USD
+              amount: '10.50'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Nicholas Tesla
+              account:
+                accountNumber: '987654321'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 S. Lake Drive
+                streetName: 10007 Lake Dr
+                postalCode: '48035'
+                city: Clinton Township
+                countrySubDivision: MI
+                country: US
+            creditor:
+              name: Comrade Musics
+              account:
+                accountNumber: '123456011'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+        - id: 06bca14f-1fc0-4cd7-9e0b-8bb7e06334f7
+          status: PENDING
+          substatus: PENDING_ACTION_CLIENT
+          exceptionType: BANK_RULE
+          heldAt: '2026-03-01T14:15:22Z'
+          cutOffAt: '2026-03-15T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-03-10'
+            paymentIdentifiers:
+              endToEndId: E2E5908713WEBXX
+            value:
+              currency: USD
+              amount: '250000'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Thomas Edison
+              account:
+                accountNumber: '123456789'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 W Shore Drive
+                streetName: 10007 Shore Dr
+                postalCode: '20147'
+                city: Union City
+                countrySubDivision: NJ
+                country: US
+            creditor:
+              name: Superior Cleaning LLC
+              account:
+                accountNumber: '556677889'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+        metadata:
+          pagination:
+            page: 1
+            size: 25
+            totalCount: 2
+            totalPages: 1
+          asOf: '2026-04-01T00:00:00+00:00'
+    NotFound:
+      summary: Not Found
+      value:
+        title: Not Found
+        httpStatus: 404
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+    RetrieveSingleHoldAchDistributedResponse:
+      description: Retrieve single ACH hold with distribution details
+      summary: Retrieve single ACH hold where payment has been distributed
+      value:
+        id: 7a1f93e4-d826-4c5b-b3a7-9e4d2f6c8b10
+        status: PENDING
+        substatus: PENDING_ACTION_CLIENT
+        exceptionType: BANK_RULE
+        heldAt: '2026-04-10T08:30:00Z'
+        cutOffAt: '2026-04-15T08:30:00Z'
+        rules:
+        - id: b5c8d2e1-7f3a-4a9b-8c6d-1e0f3a5b7d92
+          name: ACH Distribution Monitoring Rule
+          effectiveAt: '2025-09-01'
+        payment:
+          requestedExecutionDate: '2026-04-10'
+          paymentIdentifiers:
+            endToEndId: E2E4000215ACHXX
+          value:
+            currency: USD
+            amount: '15750.00'
+          transferType: CREDIT
+          paymentType: ACH
+          debtorAgent:
+            financialInstitutionIds:
+            - id: CHASUS33XXX
+              idType: BIC
+          debtor:
+            name: Summit Industries LLC
+            account:
+              accountNumber: '33445566'
+              accountCurrency: USD
+            postalAddress:
+              country: US
+          creditor:
+            name: Pacific Supplies Inc
+            account:
+              accountNumber: '99887766'
+            postalAddress:
+              country: US
+        distribution:
+          isDistributed: true
+          distributedAt: '2026-04-10T09:15:00Z'
+    HoldDecisionRejectActionResponse:
+      description: Successfully decision a single hold
+      summary: Successfully decision a single hold
+      value:
+        holdId: a1000001-bbbb-4aaa-aaaa-000000000001
+        result: SUCCESS
+        status: REJECTED
+        substatus: REJECTED_FRAUD_CLIENT
+    AlreadyDecisionedResponse:
+      description: Retrieve holds pending bank review
+      summary: Retrieve holds the bank is reviewing
+      value:
+        items:
+        - id: c5e1d9a3-2f48-4c7b-a5d2-7e9f01b2c3d4
+          status: REJECTED
+          substatus: REJECTED_FRAUD_JPM
+          exceptionType: BANK_RULE
+          heldAt: '2026-02-01T14:15:22Z'
+          cutOffAt: '2026-02-06T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-02-01'
+            paymentIdentifiers:
+              endToEndId: E2E3000113WEBXX
+            value:
+              currency: USD
+              amount: '10.50'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Nicholas Tesla
+              account:
+                accountNumber: '987654321'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 S. Lake Drive
+                streetName: 10007 Lake Dr
+                postalCode: '48035'
+                city: Clinton Township
+                countrySubDivision: MI
+                country: US
+            creditor:
+              name: Comrade Musics
+              account:
+                accountNumber: '123456011'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+          decision:
+            source: API
+            rejectReason: FRAUD
+            fraud:
+              type: OTHER
+              additionalInformation: Suspicious wire transfer to unknown beneficiary
+        - id: 0a7f3d9c-8b21-4e5f-b6a9-5c1d2e3f4a70
+          status: APPROVED
+          substatus: APPROVED_CLIENT
+          exceptionType: BANK_RULE
+          heldAt: '2026-03-01T14:15:22Z'
+          cutOffAt: '2026-03-15T14:15:22Z'
+          rules:
+          - id: 59be9844-3a70-4fbc-8d58-9637c1b34b18
+            name: Client ABC Rule for Suspicious Beneficiary
+            effectiveAt: '2019-08-24'
+          payment:
+            requestedExecutionDate: '2026-03-10'
+            paymentIdentifiers:
+              endToEndId: E2E5908713WEBXX
+            value:
+              currency: USD
+              amount: '250000'
+            transferType: DEBIT
+            paymentType: WIRE
+            debtorAgent:
+              financialInstitutionIds:
+              - id: CHASUS33XXX
+                idType: BIC
+            debtor:
+              name: Thomas Edison
+              account:
+                accountNumber: '123456789'
+                accountCurrency: USD
+              postalAddress:
+                type: HOME
+                addressLines:
+                - 10007 W Shore Drive
+                streetName: 10007 Shore Dr
+                postalCode: '20147'
+                city: Union City
+                countrySubDivision: NJ
+                country: US
+            creditor:
+              name: Superior Cleaning LLC
+              account:
+                accountNumber: '556677889'
+                accountCurrency: USD
+              postalAddress:
+                country: US
+        metadata:
+          pagination:
+            page: 1
+            size: 25
+            totalCount: 2
+            totalPages: 1
+          asOf: '2026-04-01T00:00:00+00:00'
+    HoldDecisionManyRequest:
+      description: Decision many hold
+      summary: Send multiple holds in same request to decision
+      value:
+        items:
+        - holdId: 6c4e9a21-3f72-4b8c-8d3a-2f1e7c9b0d54
+          action: REJECT
+          rejectReason: DUPLICATE_TRANSACTION
+        - holdId: a1d7f3c9-2b45-4e1a-b6c2-3d9e8f0a7c31
+          action: APPROVE
+    HoldBadValuesRequest:
+      description: Incorrect request values
+      summary: Incorrect request values
+      value:
+        action: REJECT
+        rejectReason: FRAUD
+        fraud:
+          type: SCAM
+          additionalInformation: Shouldn't populate this field unless fraud type is OTHER
+  parameters:
+    EndDateTime:
+      name: endDateTime
+      in: query
+      description: End of hold date/time range (inclusive). If only endDateTime provided, returns anything <= endDateTime. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+      required: false
+      schema:
+        type: string
+        format: date-time
+      example: '2026-02-01T00:00:00+00:00'
+    Status:
+      name: status
+      in: query
+      description: One or more hold statuses to filter by. If substatus is used, this must not be provided. If multiple values are specified (comma-separated), treated as OR. If not provided, returns holds for any status.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        minItems: 0
+        maxItems: 10
+        items:
+          $ref: '#/components/schemas/DecisionStatus'
+      examples:
+        Pending Client Action:
+          summary: Not specified - using substatus instead
+          value: []
+        Pending JPM Review:
+          summary: Not specified - using substatus instead
+          value: []
+        Pending Bank Or Client Decision:
+          summary: Filter by any pending status
+          value:
+          - PENDING
+        Approved Only:
+          summary: Filter by approved status
+          value:
+          - APPROVED
+        Rejected Only:
+          summary: Filter by rejected status
+          value:
+          - REJECTED
+        Filter By Status And Substatus (Not Allowed):
+          summary: Not allowed - mutually exclusive with substatus
+          value:
+          - APPROVED
+          - REJECTED
+    Offset:
+      name: offset
+      in: query
+      description: Page offset for pagination (0-based)
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 10000
+        default: 0
+    Sort:
+      name: sort
+      in: query
+      description: 'Sort order for the collection results. Uses the format field.`direction` where direction is `asc` (ascending) or `desc` (descending).
+
+
+        Supported sort fields: `heldAt`, `cutOffAt`, `status`.
+
+
+        If not provided, defaults to heldAt.`desc` (most recently held first).
+
+        '
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 50
+        default: heldAt.desc
+    StartDateTime:
+      name: startDateTime
+      in: query
+      description: Start of hold date/time range (inclusive). If only startDateTime provided, returns anything >= startDateTime. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+      required: false
+      schema:
+        type: string
+        format: date-time
+      example: '2026-01-01T00:00:00+00:00'
+    substatus:
+      name: substatus
+      in: query
+      description: One or more hold sub-statuses. If status is used, substatus must not be provided. If multiple values are specified (comma-separated), treated as OR. If not provided, returns holds for any sub-status.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        minItems: 0
+        maxItems: 20
+        items:
+          $ref: '#/components/schemas/DecisionSubstatus'
+      examples:
+        Pending Client Action:
+          summary: Filter by pending client action
+          value:
+          - PENDING_ACTION_CLIENT
+        Pending JPM Review:
+          summary: Filter by pending JPM review
+          value:
+          - PENDING_ACTION_JPM
+        Pending Bank Or Client Decision:
+          summary: Not specified - using status instead
+          value: []
+        Filter By Status And Substatus (Not Allowed):
+          summary: Not allowed - mutually exclusive with status
+          value:
+          - REJECTED_TXN_NOT_NEEDED_CLIENT
+    PageSize:
+      name: pageSize
+      in: query
+      description: The number of records per page
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+        default: 25
+  responses:
+    403-Forbidden:
+      description: Forbidden. The client does not have the required permissions to access this resource. Verify that the correct entitlements and scopes have been granted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            Security Failure Error:
+              $ref: '#/components/examples/SecurityFailureError'
+    429-TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            Too Many Requests:
+              value:
+                title: Too Many Requests
+                httpStatus: 429
+                traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+                context:
+                - code: '10109'
+                  message: Rate limit exceeded. Please retry after some time.
+    404-NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            Not Found:
+              $ref: '#/components/examples/NotFound'
+    503-ServiceUnavailable:
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            Service Unavailable Error:
+              $ref: '#/components/examples/ServiceUnavailableError'
+    401-Unauthorized:
+      description: Unauthorized - Authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            Unauthorized:
+              value:
+                title: Unauthorized
+                httpStatus: 401
+                traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+                context:
+                - code: '14001'
+                  message: Authentication credentials are missing or invalid
+x-jpmc-securityDefinitions:
+  MutualTLS:
+    type: x509
+    description: Mutual TLS authentication using client and server certificates.
+x-jpmc-security:
+- MutualTLS: []
