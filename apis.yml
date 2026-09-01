@@ -3151,6 +3151,8 @@ apis:
   humanURL: https://developer.payments.jpmorgan.com/api
   baseURL: https://api.payments.jpmorgan.com/onboarding/v1
   tags:
+  - Reporting groups
+  tags_raw:
   - Reporting Groups
   properties:
   - type: OpenAPI
