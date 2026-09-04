@@ -1,11 +1,12 @@
 ---
-title: J.P. Morgan Payments Developer Blog — index
-url: https://developer.payments.jpmorgan.com/blog
-method: searched
-source: https://developer.payments.jpmorgan.com/blog
-content: post URLs + index summaries only (post bodies are not served in the page payload)
-post_count: 72
-summary_count: 70
+title: "J.P. Morgan Payments Developer Blog — index"
+url: "https://developer.payments.jpmorgan.com/blog"
+method: "searched"
+source: "https://developer.payments.jpmorgan.com/blog"
+content: "post URLs + index summaries only (post bodies are not served in the page payload)"
+post_count: "72"
+summary_count: "70"
+date: ""
 ---
 
 # Post URLs by category
@@ -115,7 +116,7 @@ summary_count: 70
 - Seamlessly accept, process, and settle online transactions with flexible integration options tailored to your business needs.
 - Simplify your payments ecosystem with a single solution using one integration and advanced checkout opportunities.
 - Enhance your payments solutions with customizable, secure Optimization and Protection APIs
-- Initiate payments, track payment statuses â or subscribe to webhooks for immediate notifications with a single API.
+- Initiate payments, track payment statuses â or subscribe to webhooks for immediate notifications with a single API.
 - Streamline payments, refunds, account data access, and consent management across markets with secure open banking connectivity and financial insights.
 - Optimize cash flow and simplify accounts receivable process with Request to Pay via QR Code for faster and more efficient collections.
 - The Checks API allows you to inquire on a range of checks and view a check image.
@@ -150,7 +151,7 @@ summary_count: 70
 - Powering Marketplaces With Embedded Finance Solutions (Part 2)
 - Discover three flexible payment processing solutions that work outside app marketplaces, from hosted pages to mobile SDK integration
 - Learn how we leveraged AI for a 24/7 client-facing virtual assistant that streamlines reporting for merchant services clients.
-- Learn how our innovative Embedded Finance Solutions help marketplaces grow, simplify management, and deliver an experience thatâs secure and seamless. 
+- Learn how our innovative Embedded Finance Solutions help marketplaces grow, simplify management, and deliver an experience thatâs secure and seamless. 
 - Learn how Automated Clearing House (ACH) payments simplify electronic funds transfers between financial institutions, and the benefits of using ACH for payrolls, vendors and subscriptions. 
 - Explore the differences between ACH and wire transfers, such as speed, cost, and use cases, to optimize your business's payment strategy and cash flow management.
 - Discover how our updated Reporting API drives growth and operational efficiency through real-time payment insights.
@@ -171,13 +172,13 @@ summary_count: 70
 - Learn how J.P. Morgan and Elastic are partnering to empower developers to revolutionize payment processing using tools like SearchAI.
 - A recap of our recent fintech event in San Francisco featuring two talks, networking, API innovation, and insights into the J.P. Morgan PDP.
 - Video game developers can turn to ACH payments and other innovative, alternative solutions to cut costs and avoid risks
-- Watch Twilio's demo of J.P. Morgan Paymentâs API integration at Money20/20, Oct. 27-30. Experience frictionless payments and data-driven customer engagement.
+- Watch Twilio's demo of J.P. Morgan Paymentâs API integration at Money20/20, Oct. 27-30. Experience frictionless payments and data-driven customer engagement.
 - Explore the importance of validation services in preventing fraud, reducing payment errors, and ensuring compliance in financial operations.
 - Optimization & Protection Payments APIs provide a robust suite of tools that help streamline the payment process and also help in the fight against fraud. 
 - Our Global Payments API offers several fund disbursement options to cater to different payout needs and preferences for sending money.
 - Understand payment rails, methods of acceptance, and how our Online Payments API streamlines the way merchants accept, process, and settle payments.
 - Learn more about the participants, lifecycle and the evolving landscape of Payments
-- The Online Payments API simplifies the process by assigning unique identifiers for each transaction. Letâs look at the payment lifecycle through the lens of the Online Payments API and discover how these identifiers are used from request to capture.
+- The Online Payments API simplifies the process by assigning unique identifiers for each transaction. Letâs look at the payment lifecycle through the lens of the Online Payments API and discover how these identifiers are used from request to capture.
 - Learn how the Scotland-based charity inspires children to become digital creators with an inclusive, scalable model that integrates into school curriculum
 - Join the J.P. Morgan Payments Developer team as they discuss fintech collaborations and innovations at fintech_devcon in Austin, August 7-9
 - Authentication is a complex but essential aspect of securely developing with APIs. To make this easier we created a repository of example code snippets in various languages to get you up and running quickly.
