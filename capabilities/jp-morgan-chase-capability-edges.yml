@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 24
+edge_count: 28
 edges:
 - tag: PIS
   spec_file: jp-morgan-chase-pis-api-openapi.yml
@@ -33,6 +33,29 @@ edges:
     'RemittanceInformation'
   reason: Single operation initiates payment instructions with debtor/creditor and remittance data — payment
     initiation management.
+- tag: Webhooks
+  spec_file: jp-morgan-chase-webhooks-api-openapi.yml
+  capability_id: BC-4270.80
+  capability_id_l1: BC-4270
+  capability_name: Webhook & Event Subscription Management
+  confidence: 0.88
+  evidence: POST /webhooks "Create a webhook subscription."; "Set up and manage webhook subscriptions
+    to receive real-time notifications about key events"
+  reason: Explicit lifecycle management of outbound webhook endpoints and their event selection, with
+    callback event schemas — squarely webhook and event subscription management.
+  recovered_from: sweep-20260829T005356Z-edges.json
+- tag: Subscriptions
+  spec_file: jp-morgan-chase-subscriptions-api-openapi.yml
+  capability_id: BC-4270.80
+  capability_id_l1: BC-4270
+  capability_name: Webhook & Event Subscription Management
+  confidence: 0.85
+  evidence: '"Notification API enables merchants to subscribe to and receive notifications in real-time";
+    POST /subscriptions "Subscribe to a notification"; schemas subscriptionChannels, tokenLifecycleNotificationType'
+  reason: Full CRUD lifecycle over outbound event/notification subscriptions with channel and event-type
+    schemas — this is webhook and event subscription management on a developer platform, not a business
+    subscription/billing capability.
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Authentication
   spec_file: jp-morgan-chase-authentication-api-openapi.yml
   capability_id: BC-1340.70
@@ -170,6 +193,17 @@ edges:
   reason: Provisioning and retrieval of network/acquirer payment tokens for cards on file is card payment
     credential management. Mapped at L1 Payments & Card Management; the evidence does not clearly name
     card issuance versus transaction processing, so no L2.
+- tag: Addresses
+  spec_file: jp-morgan-chase-addresses-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.72
+  evidence: '"provides merchant functionality to create, store, update, and maintain customer or consumer
+    profiles"; "Add a new address to an existing consumer profile"'
+  reason: Operations maintain address attributes on stored consumer profiles — customer master/profile
+    data upkeep, which is Customer Data Management. Not a payment capability despite the payments vendor.
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Payment Link
   spec_file: jp-morgan-chase-payment-link-api-openapi.yml
   capability_id: BC-1340.10
@@ -222,6 +256,17 @@ edges:
     account", schema "ClientRequestedClosureReason"'
   reason: Operations create, maintain and close bank accounts and read balances — account opening/closure
     lifecycle operations for deposit accounts.
+- tag: Balances
+  spec_file: jp-morgan-chase-balances-api-openapi.yml
+  capability_id: BC-210.10
+  capability_id_l1: BC-210
+  capability_name: Cash Management
+  confidence: 0.7
+  evidence: '"easily track cash positions and reconcile transactions across up to 100 accounts per request
+    ... helping you streamline your treasury operations and reporting"'
+  reason: Retrieval of current-day and historical account balances explicitly framed as cash positioning
+    and treasury operations, which is Cash Management.
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Payment Holds
   spec_file: jp-morgan-chase-payment-holds-api-openapi.yml
   capability_id: BC-1400.30
