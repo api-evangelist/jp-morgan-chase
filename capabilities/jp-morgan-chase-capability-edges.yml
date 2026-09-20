@@ -1,0 +1,264 @@
+slug: jp-morgan-chase
+provider: JPMorgan Chase
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 24
+edges:
+- tag: PIS
+  spec_file: jp-morgan-chase-pis-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.9
+  evidence: POST /pisp/payment/request createPaymentIntent 'Request for Payment Initiation'; 'clients
+    can initiate payments (serving as a Payment Initiation Service Provider, or PISP)'
+  reason: Open Banking PISP surface that captures, authorises and status-checks payment instructions —
+    squarely payment initiation management within Payments & Card Management.
+- tag: Payment Initiation
+  spec_file: jp-morgan-chase-payment-initiation-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.9
+  evidence: POST /payments initiatePayments 'Payments Initiation API'; schemas 'UltimateDebtor', 'PaymentIdentifiers',
+    'RemittanceInformation'
+  reason: Single operation initiates payment instructions with debtor/creditor and remittance data — payment
+    initiation management.
+- tag: Authentication
+  spec_file: jp-morgan-chase-authentication-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.8
+  evidence: '"Standalone authentication API for processing consumer payments"; "POST /authentications/{authentication-id}
+    Perform a 3DS authentication"; schema "issuerAssignedAuthenticationFraudScore"'
+  reason: Despite the generic tag, the operations perform 3-D Secure cardholder authentication for card
+    payments — part of card authorisation/fraud screening, not API security.
+- tag: Disputes Data Retrieval
+  spec_file: jp-morgan-chase-disputes-data-retrieval-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.8
+  evidence: '"End to end disputes management interface"; operations "Retrieve a list of disputes", "Get
+    dispute details"; schemas disputeCategoryCode, merchantId, authorizationReferenceNumber, transactionDataDetailed'
+  reason: Card/merchant transaction dispute (chargeback) case data retrieval within a card acquiring dispute
+    management service — this is card transaction processing including chargebacks, not generic customer
+    complaints. Slight ambiguity between chargeback handling and complaint management keeps confidence
+    at 0.8.
+- tag: Merchant Onboarding
+  spec_file: jp-morgan-chase-merchant-onboarding-api-openapi.yml
+  capability_id: BC-1300.10
+  capability_id_l1: BC-1300
+  capability_name: Customer Onboarding Management
+  confidence: 0.8
+  evidence: POST /merchant-boarding-requests createMerchantOnboardingReq "Create a merchant onboarding
+    request"; schemas merchantOnboardingRequest, onboardRequestStatus, businessProfile
+  reason: Creation, update and status tracking of merchant onboarding requests to open a commerce/acquiring
+    account — customer onboarding management for a banking client.
+- tag: Payouts
+  spec_file: jp-morgan-chase-payouts-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.8
+  evidence: POST /payouts createPayout "Create Payouts"; "Enable and manage payments, refunds, withdrawals
+    ... using secure open banking infrastructure"
+  reason: Operations create and retrieve outbound payment instructions (payouts), i.e. payment instruction
+    capture and initiation, not merely reporting. Payment initiation is the closest fit; some ambiguity
+    vs. payment processing.
+- tag: Payments
+  spec_file: jp-morgan-chase-payments-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.78
+  evidence: POST /payments createPayment 'Initiate Payments'; POST /payments/{id}/acknowledge 'Acknowledge
+    Payments'
+  reason: Aggregated Payments tag initiates and acknowledges payment instructions; initiation dominates
+    although retrieval operations also touch payment processing.
+- tag: Transactions
+  spec_file: jp-morgan-chase-transactions-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.78
+  evidence: POST /transactions createTransactionV2 "Create transaction"; schemas PaymentType, RecipientAccount,
+    RoutingNumber, PostTransactionV2FxInformation, TransactionStatus
+  reason: Creating and retrieving payment transactions with recipient account, routing and payment type
+    data is payment instruction capture and status tracking — payment initiation. The wallet-decryption
+    path is a minor adjunct within the same payments domain.
+- tag: Checkout Intent
+  spec_file: jp-morgan-chase-checkout-intent-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.75
+  evidence: '"The Checkout API provides a unified interface for merchants to enable consumer checkout
+    and accept payments"; POST /checkout/intent "Set up checkout intent"'
+  reason: Sets up a payment instruction/authorisation intent at checkout, with cart, capture and fraud-check
+    options — payment initiation capture and authorisation.
+- tag: Clients
+  spec_file: jp-morgan-chase-clients-api-openapi.yml
+  capability_id: BC-1300.10
+  capability_id_l1: BC-1300
+  capability_name: Customer Onboarding Management
+  confidence: 0.75
+  evidence: '"Streamline your client onboarding process to create, update, and manage clients, parties,
+    documents, and due diligence requirements... automate Know Your Customer (KYC)"; POST /clients/{id}/verifications
+    "Perform client verifications"'
+  reason: Operations create and verify client records as part of a digital onboarding workflow, which
+    is banking customer onboarding; KYC/CDD is an adjacent reading, hence not 0.9.
+- tag: Disputes Actions
+  spec_file: jp-morgan-chase-disputes-actions-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.75
+  evidence: '"End to end disputes management interface"; POST /disputes/{disputeId}/challenge "Challenge
+    a dispute"; "Fulfill a retrieval request dispute"; schemas last4CardNumber, supportingDocument'
+  reason: Card dispute/chargeback handling actions with retrieval requests and supporting documents; chargebacks
+    are explicitly within card transaction processing management.
+- tag: Party
+  spec_file: jp-morgan-chase-party-api-openapi.yml
+  capability_id: BC-1300.10
+  capability_id_l1: BC-1300
+  capability_name: Customer Onboarding Management
+  confidence: 0.75
+  evidence: '''Streamline your client onboarding process to create, update, and manage clients, parties,
+    documents, and due diligence requirements''; POST /parties/{partyId}/validations ''Start party validation'''
+  reason: Digital onboarding of client parties with validation and due-diligence/KYC workflow; onboarding
+    is the dominant framing, though KYC & CDD (BC-1300.20) is a close alternative.
+- tag: Payment Information Retrieval
+  spec_file: jp-morgan-chase-payment-information-retrieval-api-openapi.yml
+  capability_id: BC-1340.20
+  capability_id_l1: BC-1340
+  capability_name: Payment Processing Management
+  confidence: 0.75
+  evidence: GET /payments 'Retrieve payment details'; GET /payments/status 'Retrieve payment status'
+  reason: Tracking and retrieving status of payments across ACH, RTP and card payouts is part of payment
+    processing management.
+- tag: Token Lifecycle Management
+  spec_file: jp-morgan-chase-token-lifecycle-management-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.75
+  evidence: '"Merchant Services Tokenization APIs enable merchants to secure their cards on file by replacing
+    the sensitive Primary Account Number (PAN) with a token ... network tokenization via Mastercard, Visa
+    & Amex"; PATCH /tokens/{token-reference-id}/lifecycle-states'
+  reason: Operations suspend/resume/inspect the state of network payment card tokens, i.e. management
+    of card payment credentials. Clearly within Payments & Card Management; L2 left null because it straddles
+    card credential issuance and card transaction processing.
+- tag: Token Processing
+  spec_file: jp-morgan-chase-token-processing-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.75
+  evidence: POST /tokens v1ProvisionToken "Token provisioning request"; POST /acquirertokens "Provision
+    a acquirer token for a payment instrument"
+  reason: Provisioning and retrieval of network/acquirer payment tokens for cards on file is card payment
+    credential management. Mapped at L1 Payments & Card Management; the evidence does not clearly name
+    card issuance versus transaction processing, so no L2.
+- tag: Payment Link
+  spec_file: jp-morgan-chase-payment-link-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.72
+  evidence: POST /payment-links generatePaymentLink 'Generate a Payment Link'; 'manage payment requests
+    and payment links, letting your customers pay instantly via shareable QR codes'
+  reason: Request-to-Pay links are instruments for capturing and initiating payment instructions from
+    payers, mapping to payment initiation management.
+- tag: Payment Request
+  spec_file: jp-morgan-chase-payment-request-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.72
+  evidence: POST /payment-requests 'Create a Payment Request'; POST /payment-requests/{id}/cancel 'Cancel
+    a Single Payment Request'
+  reason: Creation, update and cancellation of payment requests (Request to Pay) is capture and authorisation
+    of payment instructions.
+- tag: Account Information
+  spec_file: jp-morgan-chase-account-information-api-openapi.yml
+  capability_id: BC-1330.10
+  capability_id_l1: BC-1330
+  capability_name: Deposit Account Management
+  confidence: 0.7
+  evidence: '"retrieve account details, transactions, payment network information, and statements for
+    eligible USD-denominated US checking, savings, and money market accounts"; "GET /accounts/{accountId}
+    getAccount Retrieve account details"'
+  reason: Operations read details of checking/savings/money-market deposit accounts, which is deposit
+    account information management rather than any payment execution capability.
+- tag: Account Updates
+  spec_file: jp-morgan-chase-account-updates-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.7
+  evidence: '"The Account Updater API provides recurring and stored payment merchants with their customers
+    latest card account credentials."'
+  reason: Card account updater keeps stored card credentials (numbers/expiry) current for recurring card
+    payments, which is card payment management; evidence does not clearly select issuance vs transaction
+    processing sub-capability.
+- tag: Accounts
+  spec_file: jp-morgan-chase-accounts-api-openapi.yml
+  capability_id: BC-1330.40
+  capability_id_l1: BC-1330
+  capability_name: Account Lifecycle Operations Management
+  confidence: 0.7
+  evidence: '"POST /accounts postAccountsV2 Create account", "PATCH /accounts/{id} manageAccountsV2 Manage
+    account", schema "ClientRequestedClosureReason"'
+  reason: Operations create, maintain and close bank accounts and read balances — account opening/closure
+    lifecycle operations for deposit accounts.
+- tag: Payment Holds
+  spec_file: jp-morgan-chase-payment-holds-api-openapi.yml
+  capability_id: BC-1400.30
+  capability_id_l1: BC-1400
+  capability_name: Fraud Detection & Investigation Management
+  confidence: 0.7
+  evidence: '''Programmatically receives and decisions Payment Holds, automating your fraud review and
+    hold resolution workflow''; schema ''Fraud'', ''DecisionRejectReason'''
+  reason: Operations decision held payments arising from fraud review, which is fraud detection and investigation
+    handling rather than routine payment processing.
+- tag: Payment Request - Bulk
+  spec_file: jp-morgan-chase-payment-request-bulk-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: POST /payment-requests/bulk createPaymentRequests 'Create Bulk Payment Requests'; schema 'BulkPaymentRequest'
+  reason: Bulk creation of Request-to-Pay instructions; same payment initiation capability, bulk being
+    a technical mode rather than a distinct capability.
+- tag: Recipients
+  spec_file: jp-morgan-chase-recipients-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: '"set up, manage, and verify payees by creating, updating, listing, and validating recipients
+    for your payment transactions"; POST /recipients/{id}/verify-microdeposit'
+  reason: Payee/recipient set-up and account validation (microdeposit, routing number) is preparatory
+    validation for payment instructions, so payment initiation management fits; some chance it is better
+    read as customer/beneficiary data management.
+- tag: Refunds
+  spec_file: jp-morgan-chase-refunds-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: POST /pisp/payments/refunds createRefunds "Request for Payment refunds"; "clients can initiate
+    payments (serving as a Payment Initiation Service Provider, or PISP)"
+  reason: Initiates and tracks refund payment instructions over open-banking PIS rails — payment initiation.
+    Ambiguity between initiation and processing sub-capabilities.
