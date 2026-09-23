@@ -24,7 +24,7 @@ tags:
 paths:
   /report-files/{report-id}:
     get:
-      summary: Get a specific report file.
+      summary: Get a specific report file
       operationId: v1GetReportFileByReportId
       tags:
       - Report Files
@@ -110,32 +110,28 @@ components:
     errorMessage:
       description: Describes a message if  problem occurred or error preventing the system from completing a  task.
       type: string
-    responseMessage:
-      description: Long explanation of the response message.
+    fileContent:
+      description: Provide texual information about the values stored in a file
       type: string
-      readOnly: true
-      example: Request Accepted
-    responseCode:
-      description: Short explanation of the response code.
-      type: string
-      readOnly: true
-      minLength: 2
-      maxLength: 50
-      example: ACCEPTED
-    validationMessage:
-      description: Object containing information about transaction validation
+    messages:
+      description: A list of errors and warnings.
       type: object
       required:
-      - code
-      - message
+      - responseStatus
+      - responseCode
       properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/errorMessage'
-        entity:
-          description: Information about the entity that experienced an error.
-          type: string
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in transaction validation
+          items:
+            $ref: '#/components/schemas/validationMessage'
     adfsError:
       description: Object containing information in the file
       type: object
@@ -167,28 +163,32 @@ components:
       enum:
       - SUCCESS
       - ERROR
-    messages:
-      description: A list of errors and warnings.
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    validationMessage:
+      description: Object containing information about transaction validation
       type: object
       required:
-      - responseStatus
-      - responseCode
+      - code
+      - message
       properties:
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        validationErrors:
-          type: array
-          minItems: 0
-          description: Information about errors occurred in transaction validation
-          items:
-            $ref: '#/components/schemas/validationMessage'
-    fileContent:
-      description: Provide texual information about the values stored in a file
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    responseCode:
+      description: Short explanation of the response code.
       type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
   securitySchemes:
     BearerAuth:
       type: http

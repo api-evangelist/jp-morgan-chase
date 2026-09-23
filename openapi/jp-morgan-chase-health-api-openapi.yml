@@ -30,9 +30,7 @@ paths:
 
         to confirm the service is running and able to accept requests. It does not verify
 
-        downstream dependencies.
-
-        '
+        downstream dependencies.'
       tags:
       - Health
       operationId: getHealth
@@ -114,6 +112,89 @@ paths:
       description: MOCK
 components:
   schemas:
+    AdditionalContext:
+      title: Additional Context
+      type: array
+      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
+      items:
+        $ref: '#/components/schemas/StandardCodeContext'
+      minItems: 1
+      maxItems: 5
+    StandardCodeContext:
+      title: Standard Code Context
+      description: Standard Code Context for error codes
+      type: object
+      required:
+      - code
+      - message
+      - type
+      properties:
+        type:
+          title: CategoryType
+          type: string
+          description: 'Category of the error code such as ISO or a Clearing Code (NACHA, BACS etc)
+
+
+            | Category Type | Description |
+
+            |---------------|-----------------|
+
+            | **ISO20022** | ISO Codes based on an ISO standard e.g. ISO20022 |
+
+            | **CLEARING_NACHA** | Clearing codes |
+
+            | **EXTERNAL** | External code sets |
+
+            '
+          minLength: 2
+          maxLength: 16
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+    HealthStatus:
+      type: object
+      title: HealthStatus
+      description: Health check response indicating the status of the service and its readiness.
+      properties:
+        status:
+          type: string
+          description: Overall health status of the service.
+          enum:
+          - UP
+          - DOWN
+          example: UP
+        isReady:
+          type: boolean
+          description: Indicates whether the service is ready to accept requests.
+          example: true
+        version:
+          type: string
+          description: The current version of the service.
+          example: 2.1.0
+          minLength: 1
+          maxLength: 50
+        applicationName:
+          type: string
+          description: The name of the application.
+          example: Example App
+          minLength: 1
+          maxLength: 200
+        statusUpdatedAt:
+          type: string
+          format: date-time
+          description: The date and time when the health status was last updated.
+          example: '2025-09-25T12:00:00Z'
+      required:
+      - status
+      - isReady
     Error:
       type: object
       x-tags:
@@ -194,89 +275,13 @@ components:
         additionalContext:
           $ref: '#/components/schemas/AdditionalContext'
       description: Error Context
-    HealthStatus:
-      type: object
-      title: HealthStatus
-      description: Health check response indicating the status of the service and its readiness.
-      properties:
-        status:
-          type: string
-          description: Overall health status of the service.
-          enum:
-          - UP
-          - DOWN
-          example: UP
-        isReady:
-          type: boolean
-          description: Indicates whether the service is ready to accept requests.
-          example: true
-        version:
-          type: string
-          description: The current version of the service.
-          example: 2.1.0
-          minLength: 1
-          maxLength: 50
-        applicationName:
-          type: string
-          description: The name of the application.
-          example: Example App
-          minLength: 1
-          maxLength: 200
-        statusUpdatedAt:
-          type: string
-          format: date-time
-          description: The date and time when the health status was last updated.
-          example: '2025-09-25T12:00:00Z'
-      required:
-      - status
-      - isReady
-    AdditionalContext:
-      title: Additional Context
-      type: array
-      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
-      items:
-        $ref: '#/components/schemas/StandardCodeContext'
-      minItems: 1
-      maxItems: 5
-    StandardCodeContext:
-      title: Standard Code Context
-      description: Standard Code Context for error codes
-      type: object
-      required:
-      - code
-      - message
-      - type
-      properties:
-        type:
-          title: CategoryType
-          type: string
-          description: 'Category of the error code such as ISO or a Clearing Code (NACHA, BACS etc)
-
-
-            | Category Type | Description |
-
-            |---------------|-----------------|
-
-            | **ISO20022** | ISO Codes based on an ISO standard e.g. ISO20022 |
-
-            | **CLEARING_NACHA** | Clearing codes |
-
-            | **EXTERNAL** | External code sets |
-
-            '
-          minLength: 2
-          maxLength: 16
-        code:
-          type: string
-          description: Short code that identifies the error - publicly cataloged and documented
-          minLength: 2
-          maxLength: 10
-          pattern: ^[a-zA-Z0-9]+$
-        message:
-          type: string
-          description: Human readable textual description of the error
-          minLength: 1
-          maxLength: 99
+    HealthStatus_2:
+      title: Healthstatus
+      type: string
+      enum:
+      - UP
+      - DOWN
+      description: Health status enumeration
     LocationType:
       type: string
       enum:
@@ -286,6 +291,37 @@ components:
       - HEADER
       title: LocationType
       description: Location where the error occurred in the request
+    HealthResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/HealthStatus_2'
+          description: Overall health status of the application
+        version:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Version
+          description: Version of the application or service
+        applicationName:
+          type: string
+          title: Applicationname
+          description: Name of the application for which the health status is being reported
+        statusUpdatedAt:
+          type: string
+          title: Statusupdatedat
+          description: Timestamp of the last status update in ISO format
+      type: object
+      required:
+      - status
+      - version
+      - statusUpdatedAt
+      title: HealthResponse
+      description: Model for health check response
+      example:
+        status: UP
+        version: 1.0.0
+        applicationName: Merchant Onboarding API
+        statusUpdatedAt: '2025-10-24T12:00:00Z'
     Error_2:
       properties:
         title:
@@ -372,44 +408,6 @@ components:
         field: notificationId
         location: BODY
         message: Required field missing - ensure the path, body and headers matches the specification
-    HealthStatus_2:
-      title: Healthstatus
-      type: string
-      enum:
-      - UP
-      - DOWN
-      description: Health status enumeration
-    HealthResponse:
-      properties:
-        status:
-          $ref: '#/components/schemas/HealthStatus_2'
-          description: Overall health status of the application
-        version:
-          type: string
-          maxLength: 50
-          minLength: 1
-          title: Version
-          description: Version of the application or service
-        applicationName:
-          type: string
-          title: Applicationname
-          description: Name of the application for which the health status is being reported
-        statusUpdatedAt:
-          type: string
-          title: Statusupdatedat
-          description: Timestamp of the last status update in ISO format
-      type: object
-      required:
-      - status
-      - version
-      - statusUpdatedAt
-      title: HealthResponse
-      description: Model for health check response
-      example:
-        status: UP
-        version: 1.0.0
-        applicationName: Merchant Onboarding API
-        statusUpdatedAt: '2025-10-24T12:00:00Z'
   securitySchemes:
     BearerAuth:
       type: http

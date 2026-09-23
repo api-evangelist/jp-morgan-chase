@@ -26,7 +26,6 @@ paths:
       operationId: V2SuthenticationPost
       tags:
       - Authentication
-      description: Prepare a 3DS authentication
       parameters:
       - name: request-id
         in: header
@@ -502,7 +501,6 @@ paths:
       operationId: V2SuthenticationByIdGet
       tags:
       - Authentication
-      description: Retrieve an authentication request
       parameters:
       - name: request-id
         in: header
@@ -616,721 +614,81 @@ paths:
                 $ref: '#/components/schemas/messages'
 components:
   schemas:
-    middleName:
-      description: Given name between first name and last name/surname.
-      type: string
-      pattern: '[\p{L}\p{P}0-9''. ]*'
-      minLength: 1
-      maxLength: 70
-      writeOnly: true
-    authenticationMethod:
-      description: Information about how the 3DS Requestor previously  authenticated the cardholder.
+    issuerAssignedAuthenticationExemption:
+      description: Identifies the coded values assigned by issuer based on information in the authentication request, so that transactions do not have to go through strong customer.
       type: string
       enum:
-      - FRICTIONLESS
-      - CHALLENGED
-      - AVS_VERIFIED
-      - OTHER
-    phone:
-      description: Phone number in ITU-T E.164 format. Country code and phone number (subscriber number) are mandatory values
-      type: object
-      writeOnly: true
-      required:
-      - phoneNumber
-      properties:
-        countryCode:
-          description: Telephone country code
-          type: integer
-          minimum: 1
-          maximum: 999
-          example: 1
-        phoneNumber:
-          description: Phone number
-          type: string
-          maxLength: 12
-          writeOnly: true
-    purchasedItemCount:
-      description: The number of items in the sale for the payment processing request.
-      type: integer
-      format: int32
-      minimum: 0
-      maximum: 99
-    threeDomainSecureExemption:
-      description: Three Domain Secure Closure
-      type: object
-      properties:
-        authenticationExemptionReason:
-          description: EEA/UK Supported SCA exemptions
-          type: string
-          enum:
-          - LOW_VALUE_PAYMENT
-          - TRANSACTION_RISK_ANALYSIS
-          - NOT_EXEMPTED
-          - NOT_ENTITLED
-          - MERCHANT_INITIATED_TRANSACTION
-          - RECURRING_PAYMENT
-          - ONE_LEG_OUT
-        authenticationStatusReasonText:
-          $ref: '#/components/schemas/authenticationStatusReasonText'
-        updateTimestamp:
-          $ref: '#/components/schemas/updateTimestamp'
-    threeDSRequestorPriorAuthenticationInfo:
-      description: Contains information about how the 3DS Requestor authenticated the cardholder as part of a previous 3DS transaction.
-      type: object
-      properties:
-        priorAcsTransactionId:
-          description: ACS Transaction ID for a prior authenticated transaction
-          type: string
-        authenticationMethod:
-          $ref: '#/components/schemas/authenticationMethod'
-        authenticationTimestamp:
-          description: Designates the hour, minute and second of the prior authentication.
-          type: string
-          format: date-time
-    threeDSMessageExtension:
-      description: Contains Data necessary to support requirements not otherwise defined in the 3D Secure message are carried in a Message Extension. This field is limited to 81.920 characters and it is used in the Authentication Request.
-      type: object
-      properties:
-        messageExtensionId:
-          description: A unique identifier for the additional message necessary to support requirements not otherwise defined in the 3D Secure message.
-          type: string
-          maxLength: 64
-        messageExtensionName:
-          description: The label for additional message necessary to support requirements not otherwise defined in the 3D Secure message.
-          type: string
-          maxLength: 64
-        messageExtensionCriticality:
-          description: Indicate if the additional message is critical for the cardholder authentication process by the vendor. The additional message necessary to support requirements not otherwise defined in the 3D Secure message.
-          type: boolean
-        messageExtensionData:
-          description: The additional textual data carried in the extension to support requirements not otherwise defined in the 3D Secure message.
-          type: string
-          maxLength: 8059
-    paymentToken:
-      description: Token Information for the payment transaction
-      type: object
-      properties:
-        tokenProvider:
-          $ref: '#/components/schemas/tokenProvider'
-        tokenNumber:
-          $ref: '#/components/schemas/tokenNumber'
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        tokenServiceResponseMessage:
-          $ref: '#/components/schemas/tokenServiceResponseMessage'
-        tokenServiceResponseCode:
-          $ref: '#/components/schemas/tokenServiceResponseCode'
-    issuerAssignedAuthenticationFraudScore:
-      description: Assigned by the card issuer this specifies the likelihood that an authorization will be fraudulent. The scale ranges from 0 to 99. The higher the score, the more likely the authorization will be fraudulent.
-      type: string
-    paymentMethodId:
-      description: Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account.
-      type: string
-    tokenNumber:
-      description: The token number is a secure surrogate value generated for an account number in a payment transaction. The token is substituted for the card number or primary account number (PAN), Demand Deposit Account (DDA) Number or other payment account and is used to process and identify transactions originating from that account.
-      type: string
-      readOnly: true
-    responseStatus:
-      description: Indicates whether API request resulted in success, error, or denial.
-      type: string
-      enum:
-      - SUCCESS
-      - DENIED
-      - ERROR
-    tokenServiceResponseMessage:
-      description: Long explanation of response Message received from token service
-      type: string
-      readOnly: true
-    authenticationResponse:
-      description: Authentication Response Information
-      type: object
-      properties:
-        requestId:
-          $ref: '#/components/schemas/requestId'
-        authenticationId:
-          $ref: '#/components/schemas/authenticationId'
-        authenticationPaymentMethodType:
-          $ref: '#/components/schemas/authenticationPaymentMethodType'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        authenticationResult:
-          $ref: '#/components/schemas/authenticationResult'
-        threeDSMethodMerchantNotificationUrl:
-          description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving. In this context, this is the notification URL from Three Domain Secure to merchant after initial authentication request is complete.
-          type: string
-        authenticationType:
-          $ref: '#/components/schemas/authenticationType'
-        threeDSSchemeId:
-          $ref: '#/components/schemas/threeDSSchemeId'
-        information:
-          $ref: '#/components/schemas/information'
-        softMerchant:
-          $ref: '#/components/schemas/softMerchant'
-        merchantCategoryCode:
-          $ref: '#/components/schemas/merchantCategoryCode'
-    authenticationValueCalculationMethod:
-      description: Identifies the calculation method used by the issuer to generate the electronic commerce cryptogram for cardholder authentication.
-      type: string
-      enum:
-      - '0'
-      - '1'
-      - '2'
-      - '3'
-      - A
-    message:
-      description: Long informative message about error
-      type: string
-    entity:
-      description: The moniker given to the module or program where the error generated.
-      type: string
-    threeDSChallengeMerchantNotificationUrl:
-      description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving. In this context, this is the notification URL from Three Domain Secure to merchant after challenge is complete.
-      type: string
-    lastName:
-      description: Last name or surname
-      type: string
-      pattern: '[\p{L}\p{P}0-9''. ]*'
-      minLength: 1
-      maxLength: 70
-      writeOnly: true
-    accountHolderReferenceId:
-      description: Merchant defined identifier for a consumer
-      type: string
-      minLength: 0
-      maxLength: 25
-      example: AB12345678
-      writeOnly: true
-    cvv:
-      description: Card verification value (CVV/CV2)
-      type: string
-      pattern: ^[A-Za-z0-9]{3,6}$
-      minLength: 3
-      maxLength: 6
-      writeOnly: true
-    threeDomainSecureCompletion:
-      description: Three Domain Secure Closure
-      type: object
-      properties:
-        authenticationStatusReasonText:
-          $ref: '#/components/schemas/authenticationStatusReasonText'
-        threeDSTransactionStatus:
-          $ref: '#/components/schemas/threeDSTransactionStatus'
-        threeDSTransactionStatusReasonText:
-          description: The textual description of detailed rationale for authentication success or failure of the Three Domain Secure (3-D Secure or 3DS) Transaction Status.
-          type: string
-        updateTimestamp:
-          $ref: '#/components/schemas/updateTimestamp'
-        threeDSDirectoryServerTransactionId:
-          $ref: '#/components/schemas/threeDSDirectoryServerTransactionId'
-        threeDSVersion:
-          description: Codifies the version of the Three Domain Secure (3-D Secure or 3DS) software that is used by the merchant. 3DS is a protocol designed to be an additional multi-factor security layer and is performed for online debit and credit card authorization requests. The acquirer domain initiates the transaction for 3DS authentication. The interoperability domain sends a message to the corresponding issuing bank based on the Bank Identification Number (BIN) range. The issuing bank domain authenticates the card user.
-          type: string
-        authenticationValue:
-          $ref: '#/components/schemas/authenticationValue'
-        electronicCommerceIndicator:
-          $ref: '#/components/schemas/electronicCommerceIndicator'
-        threeDSAuthenticationValue:
-          description: Payment System-specific value provided by the Access Control Server (ACS)  or the DS using an algorithm defined by Payment System. Authentication Value may be used to provide proof of authentication.
-          type: string
-        challengeAuthenticationMethod:
-          $ref: '#/components/schemas/challengeAuthenticationMethod'
-        challengeAuthenticationType:
-          $ref: '#/components/schemas/challengeAuthenticationType'
-        acsTransactionId:
-          $ref: '#/components/schemas/acsTransactionId'
-        issuerAssignedAuthenticationExemption:
-          $ref: '#/components/schemas/issuerAssignedAuthenticationExemption'
-        issuerAssignedAuthenticationExemptionEncoded:
-          $ref: '#/components/schemas/issuerAssignedAuthenticationExemptionEncoded'
-        issuerAssignedAuthenticationFraudScore:
-          $ref: '#/components/schemas/issuerAssignedAuthenticationFraudScore'
-        authenticationValueCalculationMethod:
-          $ref: '#/components/schemas/authenticationValueCalculationMethod'
-        threeDSMessageExtensions:
-          type: array
-          description: List of Three DS Message Extension information
-          minItems: 0
-          items:
-            $ref: '#/components/schemas/threeDSMessageExtension'
-        threeDSTransactionStatusReasonCode:
-          $ref: '#/components/schemas/threeDSTransactionStatusReasonCode'
-    authenticationPaymentMethodType:
-      description: Authentication Payment Method Type
-      type: object
-      properties:
-        card:
-          $ref: '#/components/schemas/authenticationCard'
-        consumerProfile:
-          $ref: '#/components/schemas/authenticationConsumerProfile'
-    validationMessage:
-      description: Object containing information about transaction validation
-      type: object
-      properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/message'
-        entity:
-          $ref: '#/components/schemas/entity'
-    issuerAssignedAuthenticationExemptionEncoded:
-      description: Identifies the encoded textual value assigned by issuer based on information in the authentication request, so that transactions do not have to go through strong customer.
-      type: string
-      minLength: 4
-      maxLength: 4
-    merchantCategoryCode:
-      description: MCC or Merchant Category Code. Defaults to MCC configured at the merchant profile level. Some configurations allow multiple MCC's under a single Merchant ID. Sending an MCC not configured will result in an error.
-      type: string
-      pattern: ^\d{4}$
-      minLength: 4
-      maxLength: 4
-      example: '4819'
-    requestId:
-      description: Merchant identifier for the request. The value must be unique.
-      type: string
-      maxLength: 40
-      example: 10cc0270-7bed-11e9-a188-1763956dd7f6
-    firstName:
-      description: That part of an individual's full name considered a personal name or given name and generally positioned before the last name or family name.
-      type: string
-      pattern: '[\p{L}\p{P}0-9''. ]*'
-      minLength: 1
-      maxLength: 70
-      writeOnly: true
-    authenticationValue:
-      description: 3DS Base 64 cryptogram obtained prior to payment request.
-      type: string
-      format: base64
-      maxLength: 56
-      writeOnly: true
-      deprecated: true
-    threeDSPurchaseInfo:
-      description: Three DS Purchase Info
-      type: object
-      required:
-      - purchaseDate
-      - threeDomainSecureTransactionType
-      properties:
-        consumerInstallmentAuthorizationCount:
-          $ref: '#/components/schemas/consumerInstallmentAuthorizationCount'
-        purchaseDate:
-          description: Designates the year, month and day of the most recent purchase which occurred on the Cardholder account.
-          type: string
-          format: date-time
-        recurringAuthorizationExpirationDate:
-          $ref: '#/components/schemas/recurringAuthorizationExpirationDate'
-        recurringAuthorizationDayCount:
-          description: Indicates the minimum number of days between authorizations. The field is limited to maximum 4 characters.
-          type: integer
-          maximum: 9999
-        threeDomainSecureTransactionType:
-          description: Identifies the type of transaction being authenticated by cardholder authentication process as requested by requestor. The values are derived from ISO 8583.
-          type: string
-          enum:
-          - CHECK
-          - GOODS_SERVICES
-          - ACCOUNT_FUNDING
-          - QUASI_CASH
-          - PREPAID
-        purchasedItemCount:
-          $ref: '#/components/schemas/purchasedItemCount'
-    threeDomainSecureCreation:
-      description: Three Domain Secure Creation
-      type: object
-      properties:
-        authenticationStatusReasonText:
-          $ref: '#/components/schemas/authenticationStatusReasonText'
-        updateTimestamp:
-          $ref: '#/components/schemas/updateTimestamp'
-        threeDSMethodUrl:
-          $ref: '#/components/schemas/threeDSMethodUrl'
-        threeDSVersion:
-          $ref: '#/components/schemas/threeDSVersion'
-        threeDSMethodDataForm:
-          description: Identifies a base 64 encoded representation of the map containing a key 'threeDSMethodData' and value encoded ThreeDSMethodData JSON object (containing 3DS Server Transaction ID and 3DS Method Notification URL).
-          type: string
-          readOnly: true
-          example: eyJ0aHJlZURTTWV0aG9kTm90aWZpY2F0aW9uVVJMIjoiaHR0cDovL3d3dy4zZHMuY29tL25vdGlmaWNhdGlvbi11cmwiLCJ0aHJlZURTU2VydmVyVHJhbnNJRCI6IjhhODgwZGMwLWQyZDItNDA2Ny1iY2IxLWIwOGQxNjkwYjI2ZSJ9
-    authenticationId:
-      description: Unique identifier for the  Authentication attempt.
-      type: string
-    messageType:
-      description: Codifies type of message requested by authentication server for cardholder authentication request initiated by requestor.
-      type: string
-      enum:
-      - PAYMENT_AUTHENTICATION
-      - NON_PAYMENT_AUTHENTICATION
-    threeDomainSecureChallenge:
-      description: Three Domain Secure Challenge
-      type: object
-      properties:
-        authenticationStatusReasonText:
-          $ref: '#/components/schemas/authenticationStatusReasonText'
-        threeDSTransactionStatus:
-          $ref: '#/components/schemas/threeDSTransactionStatus'
-        updateTimestamp:
-          $ref: '#/components/schemas/updateTimestamp'
-        challengeWindowSize:
-          $ref: '#/components/schemas/challengeWindowSize'
-        threeDSChallengeRequest:
-          description: The textual information containing the base64-encoded challenge response message to Access Control Server returned from accountholder.
-          type: string
-        threeDSMessageExtensions:
-          type: array
-          description: List of Three DS Message Extension information
-          minItems: 0
-          items:
-            $ref: '#/components/schemas/threeDSMessageExtension'
-        threeDSAcsUrl:
-          description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving.
-          type: string
-          readOnly: true
-    electronicCommerceIndicator:
-      description: Describes the Electronic Commerce Indicator used in cardholder authentication on a network token
-      type: string
-      pattern: ^\d{1,2}$
-      example: '05'
-      readOnly: true
-    threeDSPurchaseRisk:
-      description: Contains Risk related information provided by the  3DS Requestor.
-      type: object
-      properties:
-        shipmentType:
-          description: Indicates shipping method chosen for the transaction.
-          type: string
-          enum:
-          - CARDHOLDER_ADDRESS
-          - ADDRESS_ON_FILE
-          - NOT_ON_FILE
-          - SHIP_TO_STORE
-          - DIGITAL_GOODS
-          - TICKETS
-          - OTHER
-        deliveryTimeframe:
-          description: Indicates the merchandise delivery timeframe
-          type: string
-          enum:
-          - ELECTRONIC
-          - SAME_DAY
-          - OVERNIGHT
-          - TWO_OR_MORE
-        orderEmailAddress:
-          description: For electronic delivery, the email address to which the merchandise was delivered
-          type: string
-        productRepurchaseIndicator:
-          description: Indicates whether the cardholder is reordering previously purchased merchandise.
-          type: boolean
-        productAvailabilityCode:
-          description: Indicates whether Cardholder is placing an order for merchandise with a future availability or release date.
-          type: string
-          enum:
-          - AVAILABLE
-          - FUTURE
-        preOrderDate:
-          description: For a pre-ordered purchase, the expected date that the merchandise will be available.
-          type: string
-          format: date
-        purchasedPrepaidCardTotalAmount:
-          description: For prepaid or gift card purchase, the purchase amount total of prepaid or gift card(s)
-          type: integer
-          format: int64
-        purchasedPrepaidCardCount:
-          description: For prepaid or gift card purchase, total count of individual prepaid or gift cards/codes purchased.
-          type: integer
-          maximum: 99
-        prepaidCardCurrency:
-          $ref: '#/components/schemas/currency'
-        requestorEstimatedTransactionFraudRiskScore:
-          description: Specifies the estimated likelihood of the transaction is fraudulent as assessed by the 3DS requestor.
-          type: string
-          maxLength: 4
-    authenticationStatusReasonText:
-      description: Long explanation of the Authentication Status
-      type: string
-    code:
-      description: Short informative code about error
-      type: string
-    authenticationType:
-      description: Indicates the type of cardholder Authentication request requested by the authentication requestor.
-      type: string
-      enum:
-      - EXEMPTION
-      - AUTHENTICATION
-      - DEFAULT
-    tokenProvider:
-      description: The label given to a provider who creates the digital token for cards.
-      type: string
-      readOnly: true
-      enum:
-      - NETWORK
-      - SAFETECH
-      - WALLET
+      - TRUSTED_MERCHANT
+      - SECURE_CORPORATE_PAYMENT
+      - TRANSACTION_RISK_ANALYSIS
+      - LOW_VALUE_PAYMENT
+      - RECURRING_PAYMENT
+      - SCA_DELEGATION
     responseMessage:
       description: Long explanation of response code
       type: string
-    authenticationByIdRequest:
-      description: Request information for authentication by Id call
-      type: object
-      required:
-      - threeDSRequestorAuthenticationInfo
-      - threeDSPurchaseInfo
-      - messageType
-      properties:
-        channelType:
-          $ref: '#/components/schemas/channelType'
-        accountType:
-          $ref: '#/components/schemas/threeDSAccountType'
-        threeDSRequestorAuthenticationInfo:
-          $ref: '#/components/schemas/threeDSRequestorAuthenticationInfo'
-        threeDSRequestorPriorAuthenticationInfo:
-          $ref: '#/components/schemas/threeDSRequestorPriorAuthenticationInfo'
-        threeDSAccountAdditionalInfo:
-          $ref: '#/components/schemas/threeDSAccountAdditionalInfo'
-        threeDSPurchaseInfo:
-          $ref: '#/components/schemas/threeDSPurchaseInfo'
-        threeDSPurchaseRisk:
-          $ref: '#/components/schemas/threeDSPurchaseRisk'
-        browserInfo:
-          $ref: '#/components/schemas/browserInfo'
-        threeDSMessageExtensions:
-          type: array
-          description: List of Three DS Message Extension information
-          minItems: 0
-          items:
-            $ref: '#/components/schemas/threeDSMessageExtension'
-        threeDSChallengeMerchantNotificationUrl:
-          $ref: '#/components/schemas/threeDSChallengeMerchantNotificationUrl'
-        authenticationAccount:
-          $ref: '#/components/schemas/authenticationAccount'
-        shippingAddress:
-          $ref: '#/components/schemas/address'
-        authenticationSupportUrl:
-          $ref: '#/components/schemas/authenticationSupportUrl'
-        messageType:
-          $ref: '#/components/schemas/messageType'
-    threeDSTransactionId:
-      description: Identifies a unique occurrence of a transaction. In this context, this is Universally unique transaction identifier to identify a single transaction. If the value does not exist or it is not a valid UUID, the 3DS Server will generate a new transaction ID. This value has 36 characters in a format defined in IETF RFC 4122.
-      type: string
-      readOnly: true
-      example: 8a880dc0-d2d2-4067-bcb1-b08d1690b26e
-    threeDSChallengeType:
-      description: Indicates whether a challenge is requested for this transaction.
+    threeDSSchemeId:
+      description: The identifier of the scheme for better resolving of the versioning data for the security protocol used on cardholder authentication using 3DS.
       type: string
       enum:
-      - NO_PREFERENCE
-      - NO_CHALLENGE
-      - CHALLENGE_REQUESTED
-      - CHALLENGE_MANDATE
-      - NO_CHALLENGE_LVP
-      - NO_CHALLENGE_TRA
-      - NO_CHALLENGE_MIT
-      - NO_CHALLENGE_DATA
-      - NO_CHALLENGE_DA
-      - NO_CHALLENGE_TRUSTED
-    authenticationConsumerProfile:
-      description: Consumer Profile information used for authentication purpose.
-      type: object
-      required:
-      - consumerProfileId
-      - paymentMethodId
-      properties:
-        consumerProfileId:
-          $ref: '#/components/schemas/consumerProfileId'
-        paymentMethodId:
-          $ref: '#/components/schemas/paymentMethodId'
-    month:
-      description: The month of the expiration date
-      type: integer
-      format: int32
-      minimum: 1
-      maximum: 12
-      example: 5
-      writeOnly: true
-    email:
-      description: Optional value for merchants to provide for a transaction
-      type: string
-      minLength: 6
-      maxLength: 60
-      example: john.doe@email.xyz
-      writeOnly: true
-    channelType:
-      description: Codifies the method in which the order was initiated. If not provided, defaults to browser value.
-      type: string
-      enum:
-      - APP
-      - BROWSER
-      - 3RI
-    messages:
-      description: A list of errors and warnings.
-      type: object
-      required:
-      - responseStatus
-      - responseCode
-      properties:
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        validationErrors:
-          type: array
-          description: Information about errors occurred in transaction validation
-          minItems: 0
-          items:
-            $ref: '#/components/schemas/validationMessage'
-        information:
-          $ref: '#/components/schemas/information'
-    consumerProfileId:
-      description: Identifies a unique occurrence of a consumer maintained in the firm as requested by merchant. Consumer profile contains information relevant to processing transactions such as name, address, account and payment methods information.
-      type: string
-    address:
-      description: Address Object
-      type: object
-      writeOnly: true
-      properties:
-        line1:
-          description: First line of street address.
-          type: string
-          maxLength: 40
-          pattern: ^[^<>{}]*$
-          example: 123 Some Street
-        line2:
-          description: Second line of street address.
-          type: string
-          maxLength: 40
-          pattern: ^[^<>{}]*$
-          example: Apartment 3b
-        city:
-          description: Name of municipality
-          type: string
-          maxLength: 40
-          pattern: ^[\p{L}\d\s\-.,'&()]*$
-          example: Tampa
-        state:
-          description: Name of state or province
-          type: string
-          minLength: 1
-          maxLength: 3
-          pattern: ^[A-Za-z0-9]+([\s-]+[A-Za-z0-9]+)*$
-          example: FL
-        postalCode:
-          description: The postal code of the shipping address.
-          type: string
-          minLength: 3
-          maxLength: 12
-          pattern: ^[a-zA-Z0-9]+([-\s]*)[a-zA-Z0-9]+$
-          example: '99999'
-        countryCode:
-          description: The country code of the address based on Alpha 3 ISO standards.
-          type: string
-          maxLength: 3
-          format: ^[A-Za-z]*$
-          example: USA
-        addressTypeCode:
-          description: Codifies the classification given to the various addresses captured for a party, such as Doing Business As Address, Legal Entity Address, and Tax Address.
-          type: string
-    threeDSVersion:
-      description: Codifies the version of the Three Domain Secure (3-D Secure or 3DS) software that is used by the merchant. 3DS is a protocol designed to be an additional multi-factor security layer and is performed for online debit and credit card authorization requests. The acquirer domain initiates the transaction for 3DS authentication. The interoperability domain sends a message to the corresponding issuing bank based on the Bank Identification Number (BIN) range. The issuing bank domain authenticates the card user.
-      type: string
-      readOnly: true
-    authenticationResult:
-      description: Accountholder Authentication
-      type: object
-      properties:
-        threeDomainSecureExemption:
-          $ref: '#/components/schemas/threeDomainSecureExemption'
-        threeDomainSecureCreation:
-          $ref: '#/components/schemas/threeDomainSecureCreation'
-        threeDomainSecureChallenge:
-          $ref: '#/components/schemas/threeDomainSecureChallenge'
-        threeDomainSecureCompletion:
-          $ref: '#/components/schemas/threeDomainSecureCompletion'
-        threeDSServerTransactionId:
-          description: Identifies a unique occurrence of a transaction. In this context, this is Universally unique transaction identifier to identify a single transaction. If the value does not exist or it is not a valid UUID, the 3DS Server will generate a new transaction ID. This value has 36 characters in a format defined in IETF RFC 4122.
-          type: string
-        threeDSTransactionId:
-          $ref: '#/components/schemas/threeDSTransactionId'
-    recurringAuthorizationExpirationDate:
-      description: Date after which no further authorizations shall be performed. This field is limited to 8 characters, and the accepted format is YYYYMMDD.
-      type: string
-    challengeAuthenticationMethod:
-      description: Information about how the 3DS Requestor authenticated the cardholder for the challenge request.
-      type: string
-      enum:
-      - STATIC_PASSCODE
-      - SMS_OTP
-      - KEY_FOB
-      - APP_OTP
-      - OTP_OTHER
-      - KBA
-      - OOB_BIOMETRICS
-      - OOB_LOGIN
-      - OOB_OTHER
-      - OTHER
-      - PUSH_CONFIRMATION
-    threeDSMethodUrl:
-      description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving.
-      type: string
-      readOnly: true
-    threeDSAuthenticationTimestamp:
-      description: Designates the hour, minute and second  of the cardholder authentication
-      type: string
-      format: date-time
-    threeDSTransactionStatusReasonCode:
-      description: Contains code indicating the reason for the transaction status in threeDSTransactionStatus.
-      type: string
-      maxLength: 2
-      example: '01'
-    acsTransactionId:
-      description: This data element provides additional information to the ACS to determine the best approach for handling a request. The field is limited to 36 characters containing ACS Transaction ID for a prior authenticated transaction (for example, the first  recurring transaction that was authenticated with the cardholder).
-      type: string
-    cardTypeName:
-      description: Name of the payment network
-      type: string
-      readOnly: true
-      maxLength: 40
-      example: VISA
-      enum:
-      - VISA
-      - MASTERCARD
-      - AMERICAN_EXPRESS
-      - DISCOVER
+      - Visa
+      - Mastercard
+      - American Express
       - JCB
-      - DINERS_CLUB
-      - CHINA_UNION_PAY
-      - CHASENET_CREDIT
-      - CHASENET_SIGNATURE_DEBIT
-      - INTERNATIONAL_MAESTRO
-      - STAR_PINLESS
-      - PULSE_PINLESS
-      - EFTPOS_PINLESS
-      - ACCEL_PINLESS
-      - NYCE_PINLESS
-      - VISA_RESTRICTED_DEBIT
-      - MASTERCARD_RESTRICTED_DEBIT
-      - CARTES_BANCAIRES
-    responseCode:
-      description: Short explanation for response status
+      - Diners
+      - Mir
+      - CB
+      - UnionPay
+    threeDSRequestorAuthenticationInfo:
+      description: Information about how the 3DS Requestor authenticated the cardholder before or during the transaction.
+      type: object
+      required:
+      - authenticationPurpose
+      properties:
+        threeDSAuthenticationTimestamp:
+          $ref: '#/components/schemas/threeDSAuthenticationTimestamp'
+        threeDSAuthenticationData:
+          description: Provides additional data about the  authentication process in requestorAuthenticationMethod.
+          type: string
+        threeDSChallengeType:
+          $ref: '#/components/schemas/threeDSChallengeType'
+        requestorAuthenticationMethod:
+          description: Information about how the 3DS Requestor authenticated the cardholder before or during the transaction.
+          type: string
+          enum:
+          - NONE
+          - REQUESTOR_CRED
+          - FEDERATED_ID
+          - ISSUER_CRED
+          - FIDO
+        authenticationPurpose:
+          description: Indicates the type of Authentication request.
+          type: string
+          enum:
+          - PAYMENT_TRANSACTION
+          - RECURRING_TRANSACTION
+          - INSTALLMENT_TRANSACTION
+          - ADD_CARD
+          - MAINTAIN_CARD
+          - CARDHOLDER_VERIFICATION
+          - BILLING_AGREEMENT
+        authenticationUseCase:
+          description: Codifies the use case for the purchase for which cardholder authentication is done.
+          type: string
+          enum:
+          - SINGLE_PAYMENT
+          - RECURRING_PAYMENT_FIXED
+          - INSTALLMENT_PAYMENT
+          - PAYMENT_ON_SHIPMENT
+          - RECURRING_PAYMENT_OTHER
+          - PREAUTHORIZATION_RENTAL
+          - PREAUTHORIZATION_NO_RENTAL
+    issuerAssignedAuthenticationFraudScore:
+      description: Assigned by the card issuer this specifies the likelihood that an authorization will be fraudulent. The scale ranges from 0 to 99. The higher the score, the more likely the authorization will be fraudulent.
       type: string
-      minLength: 2
-      maxLength: 50
-    updateTimestamp:
-      description: Designates the hour, minute, and second in a specific day when the record was last modified.
+    message:
+      description: Long informative message about error
       type: string
-    authenticationSupportUrl:
-      description: Fully qualified URL of 3DS Requestor website or customer care site. This field is optional and it is recommended to be configured in the configuration.
-      type: string
-    amount:
-      description: Total monetary value of the payment including all taxes and fees. For zero exponent currency codes (i.e. Japanese Yen) a virtual decimal of 2 is not expected
-      type: integer
-      format: int64
-      minimum: 0
-      maximum: 999999999999
-      example: 1234
     threeDSAccountAdditionalInfo:
       description: This field contains additional information about the Cardholder’s account provided by the 3DS Requestor.
       type: object
@@ -1415,149 +773,6 @@ components:
           type: boolean
         accountHolderReferenceId:
           $ref: '#/components/schemas/accountHolderReferenceId'
-    information:
-      description: A list of informational messages
-      type: object
-      properties:
-        code:
-          description: Codifies the instruction provided in the application
-          type: string
-          maxLength: 40
-        message:
-          description: Long explanation of the instruction provided in the application
-          type: string
-          maxLength: 120
-    threeDSRequestorAuthenticationInfo:
-      description: Information about how the 3DS Requestor authenticated the cardholder before or during the transaction.
-      type: object
-      required:
-      - authenticationPurpose
-      properties:
-        threeDSAuthenticationTimestamp:
-          $ref: '#/components/schemas/threeDSAuthenticationTimestamp'
-        threeDSAuthenticationData:
-          description: Provides additional data about the  authentication process in requestorAuthenticationMethod.
-          type: string
-        threeDSChallengeType:
-          $ref: '#/components/schemas/threeDSChallengeType'
-        requestorAuthenticationMethod:
-          description: Information about how the 3DS Requestor authenticated the cardholder before or during the transaction.
-          type: string
-          enum:
-          - NONE
-          - REQUESTOR_CRED
-          - FEDERATED_ID
-          - ISSUER_CRED
-          - FIDO
-        authenticationPurpose:
-          description: Indicates the type of Authentication request.
-          type: string
-          enum:
-          - PAYMENT_TRANSACTION
-          - RECURRING_TRANSACTION
-          - INSTALLMENT_TRANSACTION
-          - ADD_CARD
-          - MAINTAIN_CARD
-          - CARDHOLDER_VERIFICATION
-          - BILLING_AGREEMENT
-        authenticationUseCase:
-          description: Codifies the use case for the purchase for which cardholder authentication is done.
-          type: string
-          enum:
-          - SINGLE_PAYMENT
-          - RECURRING_PAYMENT_FIXED
-          - INSTALLMENT_PAYMENT
-          - PAYMENT_ON_SHIPMENT
-          - RECURRING_PAYMENT_OTHER
-          - PREAUTHORIZATION_RENTAL
-          - PREAUTHORIZATION_NO_RENTAL
-    challengeAuthenticationType:
-      description: Indicates the category of authentication request the Issuer will use to challenge the Cardholder in a three domain secure authentication process.
-      type: string
-      enum:
-      - STATIC
-      - DYNAMIC
-      - OOB
-      - DECOUPLED
-    authenticationCard:
-      description: card information used for authentication purpose.
-      type: object
-      required:
-      - accountNumber
-      properties:
-        expiry:
-          $ref: '#/components/schemas/expiry'
-        accountNumber:
-          $ref: '#/components/schemas/accountNumber'
-        maskedAccountNumber:
-          $ref: '#/components/schemas/maskedAccountNumber'
-        accountNumberType:
-          description: Specifies the type of payment method used by the account number in payment transaction.
-          type: string
-          enum:
-          - PAN
-          - NETWORK_TOKEN
-          - SAFETECH_TOKEN
-          - SAFETECH_PAGE_ENCRYPTION
-        cardTypeName:
-          $ref: '#/components/schemas/cardTypeName'
-        cardType:
-          description: Abbreviation of card name
-          type: string
-          enum:
-          - VI
-          - MC
-          - AX
-          - DI
-          - JC
-          - DC
-          - CC
-          - CZ
-          - CR
-          - IM
-          - SP
-          - PP
-          - EP
-          - AP
-          - NP
-          - VR
-          - MR
-          - CB
-          example: VI
-        paymentTokens:
-          type: array
-          readOnly: true
-          description: List of payment tokens for the transaction
-          minItems: 0
-          items:
-            $ref: '#/components/schemas/paymentToken'
-        cvv:
-          $ref: '#/components/schemas/cvv'
-        encryptionIntegrityCheck:
-          $ref: '#/components/schemas/encryptionIntegrityCheck'
-    tokenServiceResponseCode:
-      description: Short explanation of response Code
-      type: string
-      readOnly: true
-    accountNumber:
-      description: The card or token number.
-      type: string
-      writeOnly: true
-    expiry:
-      description: Expiration date
-      type: object
-      writeOnly: true
-      required:
-      - month
-      - year
-      properties:
-        month:
-          $ref: '#/components/schemas/month'
-        year:
-          $ref: '#/components/schemas/year'
-    merchantPurchaseDescription:
-      description: Description of goods or services sold according to merchant's internal systems.
-      type: string
     threeDSAccountType:
       description: Indicates the type of consumer account is requested for authentication.
       type: string
@@ -1566,65 +781,6 @@ components:
       - CREDIT
       - DEBIT
       - JCB_PREPAID
-    consumerAccountPasswordChangeLength:
-      description: Indicates  the length of time since the consumer account password was last updated in days.
-      type: string
-      example: NO_CHANGE
-      enum:
-      - NO_CHANGE
-      - CURRENT_TXN_CHANGE
-      - LESS_THAN_THIRTY
-      - BETWEEN_THIRTY_AND_SIXTY
-      - GREATER_THAN_SIXTY
-    threeDSDirectoryServerTransactionId:
-      description: Universally unique transaction identifier assigned by the DirectoryServer to identify a single transaction.
-      type: string
-    threeDSTransactionStatus:
-      description: Indicates whether a transaction qualifies as an authenticated transaction.
-      type: string
-      enum:
-      - Y
-      - N
-      - U
-      - C
-      - R
-      - A
-      - D
-      - I
-      - E
-    consumerInstallmentAuthorizationCount:
-      description: Indicates the maximum number of authorisations permitted for instalment payments.
-      type: integer
-      maximum: 999
-    authenticationByIdResponse:
-      description: Authentication By Id Response
-      type: object
-      properties:
-        requestId:
-          $ref: '#/components/schemas/requestId'
-        authenticationId:
-          $ref: '#/components/schemas/authenticationId'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        authenticationPaymentMethodType:
-          $ref: '#/components/schemas/authenticationPaymentMethodType'
-        authenticationResult:
-          $ref: '#/components/schemas/authenticationResult'
-        threeDSChallengeMerchantNotificationUrl:
-          description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving. In this context, this is the notification URL from Three Domain Secure to merchant after challenge is complete.
-          type: string
-        authenticationType:
-          $ref: '#/components/schemas/authenticationType'
-        threeDSSchemeId:
-          $ref: '#/components/schemas/threeDSSchemeId'
-        softMerchant:
-          $ref: '#/components/schemas/softMerchant'
-        merchantCategoryCode:
-          $ref: '#/components/schemas/merchantCategoryCode'
     challengeWindowSize:
       description: Dimensions of the challenge window that has been displayed to the Cardholder. The ACS shall reply with content that is formatted to appropriately render in this window to provide the best possible user experience.
       type: string
@@ -1634,16 +790,107 @@ components:
       - '500_600'
       - '600_400'
       - FULL_SCREEN
-    issuerAssignedAuthenticationExemption:
-      description: Identifies the coded values assigned by issuer based on information in the authentication request, so that transactions do not have to go through strong customer.
+    address:
+      description: Address Object
+      type: object
+      writeOnly: true
+      properties:
+        line1:
+          description: First line of street address.
+          type: string
+          maxLength: 40
+          pattern: ^[^<>{}]*$
+          example: 123 Some Street
+        line2:
+          description: Second line of street address.
+          type: string
+          maxLength: 40
+          pattern: ^[^<>{}]*$
+          example: Apartment 3b
+        city:
+          description: Name of municipality
+          type: string
+          maxLength: 40
+          pattern: ^[\p{L}\d\s\-.,'&()]*$
+          example: Tampa
+        state:
+          description: Name of state or province
+          type: string
+          minLength: 1
+          maxLength: 3
+          pattern: ^[A-Za-z0-9]+([\s-]+[A-Za-z0-9]+)*$
+          example: FL
+        postalCode:
+          description: The postal code of the shipping address.
+          type: string
+          minLength: 3
+          maxLength: 12
+          pattern: ^[a-zA-Z0-9]+([-\s]*)[a-zA-Z0-9]+$
+          example: '99999'
+        countryCode:
+          description: The country code of the address based on Alpha 3 ISO standards.
+          type: string
+          maxLength: 3
+          format: ^[A-Za-z]*$
+          example: USA
+        addressTypeCode:
+          description: Codifies the classification given to the various addresses captured for a party, such as Doing Business As Address, Legal Entity Address, and Tax Address.
+          type: string
+    threeDSMessageExtension:
+      description: Contains Data necessary to support requirements not otherwise defined in the 3D Secure message are carried in a Message Extension. This field is limited to 81.920 characters and it is used in the Authentication Request.
+      type: object
+      properties:
+        messageExtensionId:
+          description: A unique identifier for the additional message necessary to support requirements not otherwise defined in the 3D Secure message.
+          type: string
+          maxLength: 64
+        messageExtensionName:
+          description: The label for additional message necessary to support requirements not otherwise defined in the 3D Secure message.
+          type: string
+          maxLength: 64
+        messageExtensionCriticality:
+          description: Indicate if the additional message is critical for the cardholder authentication process by the vendor. The additional message necessary to support requirements not otherwise defined in the 3D Secure message.
+          type: boolean
+        messageExtensionData:
+          description: The additional textual data carried in the extension to support requirements not otherwise defined in the 3D Secure message.
+          type: string
+          maxLength: 8059
+    middleName:
+      description: Given name between first name and last name/surname.
       type: string
-      enum:
-      - TRUSTED_MERCHANT
-      - SECURE_CORPORATE_PAYMENT
-      - TRANSACTION_RISK_ANALYSIS
-      - LOW_VALUE_PAYMENT
-      - RECURRING_PAYMENT
-      - SCA_DELEGATION
+      pattern: '[\p{L}\p{P}0-9''. ]*'
+      minLength: 1
+      maxLength: 70
+      writeOnly: true
+    issuerAssignedAuthenticationExemptionEncoded:
+      description: Identifies the encoded textual value assigned by issuer based on information in the authentication request, so that transactions do not have to go through strong customer.
+      type: string
+      minLength: 4
+      maxLength: 4
+    threeDSVersion:
+      description: Codifies the version of the Three Domain Secure (3-D Secure or 3DS) software that is used by the merchant. 3DS is a protocol designed to be an additional multi-factor security layer and is performed for online debit and credit card authorization requests. The acquirer domain initiates the transaction for 3DS authentication. The interoperability domain sends a message to the corresponding issuing bank based on the Bank Identification Number (BIN) range. The issuing bank domain authenticates the card user.
+      type: string
+      readOnly: true
+    acsTransactionId:
+      description: This data element provides additional information to the ACS to determine the best approach for handling a request. The field is limited to 36 characters containing ACS Transaction ID for a prior authenticated transaction (for example, the first  recurring transaction that was authenticated with the cardholder).
+      type: string
+    threeDomainSecureCreation:
+      description: Three Domain Secure Creation
+      type: object
+      properties:
+        authenticationStatusReasonText:
+          $ref: '#/components/schemas/authenticationStatusReasonText'
+        updateTimestamp:
+          $ref: '#/components/schemas/updateTimestamp'
+        threeDSMethodUrl:
+          $ref: '#/components/schemas/threeDSMethodUrl'
+        threeDSVersion:
+          $ref: '#/components/schemas/threeDSVersion'
+        threeDSMethodDataForm:
+          description: Identifies a base 64 encoded representation of the map containing a key 'threeDSMethodData' and value encoded ThreeDSMethodData JSON object (containing 3DS Server Transaction ID and 3DS Method Notification URL).
+          type: string
+          readOnly: true
+          example: eyJ0aHJlZURTTWV0aG9kTm90aWZpY2F0aW9uVVJMIjoiaHR0cDovL3d3dy4zZHMuY29tL25vdGlmaWNhdGlvbi11cmwiLCJ0aHJlZURTU2VydmVyVHJhbnNJRCI6IjhhODgwZGMwLWQyZDItNDA2Ny1iY2IxLWIwOGQxNjkwYjI2ZSJ9
     year:
       description: The year of the expiration date
       type: integer
@@ -1654,42 +901,32 @@ components:
       maximum: 2999
       example: 2020
       writeOnly: true
-    threeDSSchemeId:
-      description: The identifier of the scheme for better resolving of the versioning data for the security protocol used on cardholder authentication using 3DS.
-      type: string
-      enum:
-      - Visa
-      - Mastercard
-      - American Express
-      - JCB
-      - Diners
-      - Mir
-      - CB
-      - UnionPay
-    authenticationAccount:
-      description: Authentication Account
+    authenticationRequest:
+      description: Authentication Request information
       type: object
       required:
-      - firstName
-      - lastName
+      - amount
+      - currency
       properties:
-        email:
-          $ref: '#/components/schemas/email'
-        firstName:
-          $ref: '#/components/schemas/firstName'
-        lastName:
-          $ref: '#/components/schemas/lastName'
-        middleName:
-          $ref: '#/components/schemas/middleName'
-        phone:
-          $ref: '#/components/schemas/phone'
-        billingAddress:
+        authenticationPaymentMethodType:
+          $ref: '#/components/schemas/authenticationPaymentMethodType'
+        amount:
+          $ref: '#/components/schemas/amount'
+        currency:
+          $ref: '#/components/schemas/currency'
+        authenticationAccount:
+          $ref: '#/components/schemas/authenticationAccount'
+        shippingAddress:
           $ref: '#/components/schemas/address'
-    maskedAccountNumber:
-      description: Identifies a concealed number associated with the card number recognized by various payment systems. This is typically concealed by storing only the first 6 and/or last 4 digits of the payment account number or some variation.
-      type: string
-      readOnly: true
-      example: 123456XXXXXX9876
+        threeDSMethodMerchantNotificationUrl:
+          description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving. In this context, this is the notification URL from Three Domain Secure to merchant after initial authentication request is complete.
+          type: string
+        authenticationType:
+          $ref: '#/components/schemas/authenticationType'
+        softMerchant:
+          $ref: '#/components/schemas/softMerchant'
+        merchantCategoryCode:
+          $ref: '#/components/schemas/merchantCategoryCode'
     softMerchant:
       description: Soft merchant information is passed to the card association along with the transaction. This soft merchant information may also be used for cases where smaller businesses or franchise outlets are making a sale in which a merchant aggregator or payment facilitatorprocesses the payment transaction on their behalf.
       type: object
@@ -1735,88 +972,196 @@ components:
         visaEnablerVerificationValueIdentifier:
           description: Identifies the unique number assigned by payment brands to enablers (such as payment facilitators or aggregators) that have registered to participate in specific payment programs. The EVV enables payment brands to track and manage transactions processed by enablers across various merchants. Participation in these programs allows enablers and their associated merchants to benefit from specialized processing rules, enhanced reporting, and potentially more favorable interchange rates.
           type: string
-    authenticationRequest:
-      description: Authentication Request information
+    authenticationValueCalculationMethod:
+      description: Identifies the calculation method used by the issuer to generate the electronic commerce cryptogram for cardholder authentication.
+      type: string
+      enum:
+      - '0'
+      - '1'
+      - '2'
+      - '3'
+      - A
+    threeDSAuthenticationTimestamp:
+      description: Designates the hour, minute and second  of the cardholder authentication
+      type: string
+      format: date-time
+    authenticationResponse:
+      description: Authentication Response Information
       type: object
-      required:
-      - amount
-      - currency
       properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        authenticationId:
+          $ref: '#/components/schemas/authenticationId'
         authenticationPaymentMethodType:
           $ref: '#/components/schemas/authenticationPaymentMethodType'
-        amount:
-          $ref: '#/components/schemas/amount'
-        currency:
-          $ref: '#/components/schemas/currency'
-        authenticationAccount:
-          $ref: '#/components/schemas/authenticationAccount'
-        shippingAddress:
-          $ref: '#/components/schemas/address'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        authenticationResult:
+          $ref: '#/components/schemas/authenticationResult'
         threeDSMethodMerchantNotificationUrl:
           description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving. In this context, this is the notification URL from Three Domain Secure to merchant after initial authentication request is complete.
           type: string
         authenticationType:
           $ref: '#/components/schemas/authenticationType'
+        threeDSSchemeId:
+          $ref: '#/components/schemas/threeDSSchemeId'
+        information:
+          $ref: '#/components/schemas/information'
         softMerchant:
           $ref: '#/components/schemas/softMerchant'
         merchantCategoryCode:
           $ref: '#/components/schemas/merchantCategoryCode'
-    browserInfo:
-      description: Browser Information of the consumer
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          description: Information about errors occurred in transaction validation
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/validationMessage'
+        information:
+          $ref: '#/components/schemas/information'
+    updateTimestamp:
+      description: Designates the hour, minute, and second in a specific day when the record was last modified.
+      type: string
+    month:
+      description: The month of the expiration date
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 12
+      example: 5
+      writeOnly: true
+    tokenServiceResponseMessage:
+      description: Long explanation of response Message received from token service
+      type: string
+      readOnly: true
+    threeDSDirectoryServerTransactionId:
+      description: Universally unique transaction identifier assigned by the DirectoryServer to identify a single transaction.
+      type: string
+    cvv:
+      description: Card verification value (CVV/CV2)
+      type: string
+      pattern: ^[A-Za-z0-9]{3,6}$
+      minLength: 3
+      maxLength: 6
+      writeOnly: true
+    authenticationByIdRequest:
+      description: Request information for authentication by Id call
+      type: object
+      required:
+      - threeDSRequestorAuthenticationInfo
+      - threeDSPurchaseInfo
+      - messageType
+      properties:
+        channelType:
+          $ref: '#/components/schemas/channelType'
+        accountType:
+          $ref: '#/components/schemas/threeDSAccountType'
+        threeDSRequestorAuthenticationInfo:
+          $ref: '#/components/schemas/threeDSRequestorAuthenticationInfo'
+        threeDSRequestorPriorAuthenticationInfo:
+          $ref: '#/components/schemas/threeDSRequestorPriorAuthenticationInfo'
+        threeDSAccountAdditionalInfo:
+          $ref: '#/components/schemas/threeDSAccountAdditionalInfo'
+        threeDSPurchaseInfo:
+          $ref: '#/components/schemas/threeDSPurchaseInfo'
+        threeDSPurchaseRisk:
+          $ref: '#/components/schemas/threeDSPurchaseRisk'
+        browserInfo:
+          $ref: '#/components/schemas/browserInfo'
+        threeDSMessageExtensions:
+          type: array
+          description: List of Three DS Message Extension information
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/threeDSMessageExtension'
+        threeDSChallengeMerchantNotificationUrl:
+          $ref: '#/components/schemas/threeDSChallengeMerchantNotificationUrl'
+        authenticationAccount:
+          $ref: '#/components/schemas/authenticationAccount'
+        shippingAddress:
+          $ref: '#/components/schemas/address'
+        authenticationSupportUrl:
+          $ref: '#/components/schemas/authenticationSupportUrl'
+        messageType:
+          $ref: '#/components/schemas/messageType'
+    tokenNumber:
+      description: The token number is a secure surrogate value generated for an account number in a payment transaction. The token is substituted for the card number or primary account number (PAN), Demand Deposit Account (DDA) Number or other payment account and is used to process and identify transactions originating from that account.
+      type: string
+      readOnly: true
+    threeDomainSecureExemption:
+      description: Three Domain Secure Closure
       type: object
       properties:
-        browserAcceptHeader:
-          description: Exact content of the HTTP accept headers from the cardholder browser.
+        authenticationExemptionReason:
+          description: EEA/UK Supported SCA exemptions
           type: string
-          minLength: 1
-          maxLength: 2048
-        deviceIPAddress:
-          description: IP address of the cardholder browser as returned by the HTTP headers This can be represented by an IPv4 address (Four sets of decimal numbers separated by dots) or an IPv6 address (Eight groups of four hexadecimal digits separated by colons).
+          enum:
+          - LOW_VALUE_PAYMENT
+          - TRANSACTION_RISK_ANALYSIS
+          - NOT_EXEMPTED
+          - NOT_ENTITLED
+          - MERCHANT_INITIATED_TRANSACTION
+          - RECURRING_PAYMENT
+          - ONE_LEG_OUT
+        authenticationStatusReasonText:
+          $ref: '#/components/schemas/authenticationStatusReasonText'
+        updateTimestamp:
+          $ref: '#/components/schemas/updateTimestamp'
+    authenticationByIdResponse:
+      description: Authentication By Id Response
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        authenticationId:
+          $ref: '#/components/schemas/authenticationId'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        authenticationPaymentMethodType:
+          $ref: '#/components/schemas/authenticationPaymentMethodType'
+        authenticationResult:
+          $ref: '#/components/schemas/authenticationResult'
+        threeDSChallengeMerchantNotificationUrl:
+          description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving. In this context, this is the notification URL from Three Domain Secure to merchant after challenge is complete.
           type: string
-          minLength: 1
-          maxLength: 45
-        browserLanguage:
-          description: Value representing the cardholder browser language as defined in IETF BCP47. This value is limited to 1-8 characters.
-          type: string
-          minLength: 1
-          maxLength: 8
-        browserColorDepth:
-          description: Value representing the bit depth of the color palette of the cardholder browser for displaying images, in bits per pixel.  The field is limited to 1-2 characters.
-          type: string
-          minLength: 1
-          maxLength: 2
-        browserScreenHeight:
-          description: Total height of the cardholder browser screen in pixels.
-          type: string
-          minLength: 1
-          maxLength: 6
-        browserScreenWidth:
-          description: Total width of the cardholder browser screen in pixels.
-          type: string
-          minLength: 1
-          maxLength: 6
-        deviceLocalTimeZone:
-          description: Represents a unique code assigned by the firm for a geographical area that observes a uniform standard time for legal, commercial, and social purposes. In this context, this is the local time the device owner has set in the device settings.
-          type: string
-          minLength: 1
-          maxLength: 5
-        browserUserAgent:
-          description: Exact content of the HTTP user-agent header. The field is limited to a maximum of 2048 characters.
-          type: string
-          minLength: 1
-          maxLength: 2048
-        challengeWindowSize:
-          $ref: '#/components/schemas/challengeWindowSize'
-        javaEnabled:
-          description: Boolean that represents the ability of the cardholder browser to execute Java.
-          type: boolean
-        javaScriptEnabled:
-          description: Boolean that represents the ability of the cardholder browser to execute JavaScript.
-          type: boolean
-    encryptionIntegrityCheck:
-      description: The alphanumeric string generated by voltage to verify the soundness of the encrypted key used by merchant and payment process. The merchant passed this in the API call. The backend process validates the subscriber id and format matches - between the merchant request for a key and the UPG request
+        authenticationType:
+          $ref: '#/components/schemas/authenticationType'
+        threeDSSchemeId:
+          $ref: '#/components/schemas/threeDSSchemeId'
+        softMerchant:
+          $ref: '#/components/schemas/softMerchant'
+        merchantCategoryCode:
+          $ref: '#/components/schemas/merchantCategoryCode'
+    authenticationMethod:
+      description: Information about how the 3DS Requestor previously  authenticated the cardholder.
       type: string
-      writeOnly: true
+      enum:
+      - FRICTIONLESS
+      - CHALLENGED
+      - AVS_VERIFIED
+      - OTHER
     currency:
       description: Describes the currency type of the transaction
       type: string
@@ -1959,6 +1304,659 @@ components:
       - RUB
       - GNF
       - VES
+    email:
+      description: Optional value for merchants to provide for a transaction
+      type: string
+      minLength: 6
+      maxLength: 60
+      example: john.doe@email.xyz
+      writeOnly: true
+    threeDSTransactionId:
+      description: Identifies a unique occurrence of a transaction. In this context, this is Universally unique transaction identifier to identify a single transaction. If the value does not exist or it is not a valid UUID, the 3DS Server will generate a new transaction ID. This value has 36 characters in a format defined in IETF RFC 4122.
+      type: string
+      readOnly: true
+      example: 8a880dc0-d2d2-4067-bcb1-b08d1690b26e
+    threeDomainSecureCompletion:
+      description: Three Domain Secure Closure
+      type: object
+      properties:
+        authenticationStatusReasonText:
+          $ref: '#/components/schemas/authenticationStatusReasonText'
+        threeDSTransactionStatus:
+          $ref: '#/components/schemas/threeDSTransactionStatus'
+        threeDSTransactionStatusReasonText:
+          description: The textual description of detailed rationale for authentication success or failure of the Three Domain Secure (3-D Secure or 3DS) Transaction Status.
+          type: string
+        updateTimestamp:
+          $ref: '#/components/schemas/updateTimestamp'
+        threeDSDirectoryServerTransactionId:
+          $ref: '#/components/schemas/threeDSDirectoryServerTransactionId'
+        threeDSVersion:
+          description: Codifies the version of the Three Domain Secure (3-D Secure or 3DS) software that is used by the merchant. 3DS is a protocol designed to be an additional multi-factor security layer and is performed for online debit and credit card authorization requests. The acquirer domain initiates the transaction for 3DS authentication. The interoperability domain sends a message to the corresponding issuing bank based on the Bank Identification Number (BIN) range. The issuing bank domain authenticates the card user.
+          type: string
+        authenticationValue:
+          $ref: '#/components/schemas/authenticationValue'
+        electronicCommerceIndicator:
+          $ref: '#/components/schemas/electronicCommerceIndicator'
+        threeDSAuthenticationValue:
+          description: Payment System-specific value provided by the Access Control Server (ACS)  or the DS using an algorithm defined by Payment System. Authentication Value may be used to provide proof of authentication.
+          type: string
+        challengeAuthenticationMethod:
+          $ref: '#/components/schemas/challengeAuthenticationMethod'
+        challengeAuthenticationType:
+          $ref: '#/components/schemas/challengeAuthenticationType'
+        acsTransactionId:
+          $ref: '#/components/schemas/acsTransactionId'
+        issuerAssignedAuthenticationExemption:
+          $ref: '#/components/schemas/issuerAssignedAuthenticationExemption'
+        issuerAssignedAuthenticationExemptionEncoded:
+          $ref: '#/components/schemas/issuerAssignedAuthenticationExemptionEncoded'
+        issuerAssignedAuthenticationFraudScore:
+          $ref: '#/components/schemas/issuerAssignedAuthenticationFraudScore'
+        authenticationValueCalculationMethod:
+          $ref: '#/components/schemas/authenticationValueCalculationMethod'
+        threeDSMessageExtensions:
+          type: array
+          description: List of Three DS Message Extension information
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/threeDSMessageExtension'
+        threeDSTransactionStatusReasonCode:
+          $ref: '#/components/schemas/threeDSTransactionStatusReasonCode'
+    tokenProvider:
+      description: The label given to a provider who creates the digital token for cards.
+      type: string
+      readOnly: true
+      enum:
+      - NETWORK
+      - SAFETECH
+      - WALLET
+    authenticationType:
+      description: Indicates the type of cardholder Authentication request requested by the authentication requestor.
+      type: string
+      enum:
+      - EXEMPTION
+      - AUTHENTICATION
+      - DEFAULT
+    responseStatus:
+      description: Indicates whether API request resulted in success, error, or denial.
+      type: string
+      enum:
+      - SUCCESS
+      - DENIED
+      - ERROR
+    consumerProfileId:
+      description: Identifies a unique occurrence of a consumer maintained in the firm as requested by merchant. Consumer profile contains information relevant to processing transactions such as name, address, account and payment methods information.
+      type: string
+    authenticationId:
+      description: Unique identifier for the  Authentication attempt.
+      type: string
+    encryptionIntegrityCheck:
+      description: The alphanumeric string generated by voltage to verify the soundness of the encrypted key used by merchant and payment process. The merchant passed this in the API call. The backend process validates the subscriber id and format matches - between the merchant request for a key and the UPG request
+      type: string
+      writeOnly: true
+    purchasedItemCount:
+      description: The number of items in the sale for the payment processing request.
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 99
+    merchantPurchaseDescription:
+      description: Description of goods or services sold according to merchant's internal systems.
+      type: string
+    authenticationConsumerProfile:
+      description: Consumer Profile information used for authentication purpose.
+      type: object
+      required:
+      - consumerProfileId
+      - paymentMethodId
+      properties:
+        consumerProfileId:
+          $ref: '#/components/schemas/consumerProfileId'
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+    consumerAccountPasswordChangeLength:
+      description: Indicates  the length of time since the consumer account password was last updated in days.
+      type: string
+      example: NO_CHANGE
+      enum:
+      - NO_CHANGE
+      - CURRENT_TXN_CHANGE
+      - LESS_THAN_THIRTY
+      - BETWEEN_THIRTY_AND_SIXTY
+      - GREATER_THAN_SIXTY
+    accountNumber:
+      description: The card or token number.
+      type: string
+      writeOnly: true
+    threeDSTransactionStatusReasonCode:
+      description: Contains code indicating the reason for the transaction status in threeDSTransactionStatus.
+      type: string
+      maxLength: 2
+      example: '01'
+    expiry:
+      description: Expiration date
+      type: object
+      writeOnly: true
+      required:
+      - month
+      - year
+      properties:
+        month:
+          $ref: '#/components/schemas/month'
+        year:
+          $ref: '#/components/schemas/year'
+    cardTypeName:
+      description: Name of the payment network
+      type: string
+      readOnly: true
+      maxLength: 40
+      example: VISA
+      enum:
+      - VISA
+      - MASTERCARD
+      - AMERICAN_EXPRESS
+      - DISCOVER
+      - JCB
+      - DINERS_CLUB
+      - CHINA_UNION_PAY
+      - CHASENET_CREDIT
+      - CHASENET_SIGNATURE_DEBIT
+      - INTERNATIONAL_MAESTRO
+      - STAR_PINLESS
+      - PULSE_PINLESS
+      - EFTPOS_PINLESS
+      - ACCEL_PINLESS
+      - NYCE_PINLESS
+      - VISA_RESTRICTED_DEBIT
+      - MASTERCARD_RESTRICTED_DEBIT
+      - CARTES_BANCAIRES
+    threeDSChallengeMerchantNotificationUrl:
+      description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving. In this context, this is the notification URL from Three Domain Secure to merchant after challenge is complete.
+      type: string
+    authenticationResult:
+      description: Accountholder Authentication
+      type: object
+      properties:
+        threeDomainSecureExemption:
+          $ref: '#/components/schemas/threeDomainSecureExemption'
+        threeDomainSecureCreation:
+          $ref: '#/components/schemas/threeDomainSecureCreation'
+        threeDomainSecureChallenge:
+          $ref: '#/components/schemas/threeDomainSecureChallenge'
+        threeDomainSecureCompletion:
+          $ref: '#/components/schemas/threeDomainSecureCompletion'
+        threeDSServerTransactionId:
+          description: Identifies a unique occurrence of a transaction. In this context, this is Universally unique transaction identifier to identify a single transaction. If the value does not exist or it is not a valid UUID, the 3DS Server will generate a new transaction ID. This value has 36 characters in a format defined in IETF RFC 4122.
+          type: string
+        threeDSTransactionId:
+          $ref: '#/components/schemas/threeDSTransactionId'
+    entity:
+      description: The moniker given to the module or program where the error generated.
+      type: string
+    challengeAuthenticationType:
+      description: Indicates the category of authentication request the Issuer will use to challenge the Cardholder in a three domain secure authentication process.
+      type: string
+      enum:
+      - STATIC
+      - DYNAMIC
+      - OOB
+      - DECOUPLED
+    paymentMethodId:
+      description: Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account.
+      type: string
+    threeDSMethodUrl:
+      description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving.
+      type: string
+      readOnly: true
+    firstName:
+      description: That part of an individual's full name considered a personal name or given name and generally positioned before the last name or family name.
+      type: string
+      pattern: '[\p{L}\p{P}0-9''. ]*'
+      minLength: 1
+      maxLength: 70
+      writeOnly: true
+    threeDSPurchaseRisk:
+      description: Contains Risk related information provided by the  3DS Requestor.
+      type: object
+      properties:
+        shipmentType:
+          description: Indicates shipping method chosen for the transaction.
+          type: string
+          enum:
+          - CARDHOLDER_ADDRESS
+          - ADDRESS_ON_FILE
+          - NOT_ON_FILE
+          - SHIP_TO_STORE
+          - DIGITAL_GOODS
+          - TICKETS
+          - OTHER
+        deliveryTimeframe:
+          description: Indicates the merchandise delivery timeframe
+          type: string
+          enum:
+          - ELECTRONIC
+          - SAME_DAY
+          - OVERNIGHT
+          - TWO_OR_MORE
+        orderEmailAddress:
+          description: For electronic delivery, the email address to which the merchandise was delivered
+          type: string
+        productRepurchaseIndicator:
+          description: Indicates whether the cardholder is reordering previously purchased merchandise.
+          type: boolean
+        productAvailabilityCode:
+          description: Indicates whether Cardholder is placing an order for merchandise with a future availability or release date.
+          type: string
+          enum:
+          - AVAILABLE
+          - FUTURE
+        preOrderDate:
+          description: For a pre-ordered purchase, the expected date that the merchandise will be available.
+          type: string
+          format: date
+        purchasedPrepaidCardTotalAmount:
+          description: For prepaid or gift card purchase, the purchase amount total of prepaid or gift card(s)
+          type: integer
+          format: int64
+        purchasedPrepaidCardCount:
+          description: For prepaid or gift card purchase, total count of individual prepaid or gift cards/codes purchased.
+          type: integer
+          maximum: 99
+        prepaidCardCurrency:
+          $ref: '#/components/schemas/currency'
+        requestorEstimatedTransactionFraudRiskScore:
+          description: Specifies the estimated likelihood of the transaction is fraudulent as assessed by the 3DS requestor.
+          type: string
+          maxLength: 4
+    authenticationAccount:
+      description: Authentication Account
+      type: object
+      required:
+      - firstName
+      - lastName
+      properties:
+        email:
+          $ref: '#/components/schemas/email'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        phone:
+          $ref: '#/components/schemas/phone'
+        billingAddress:
+          $ref: '#/components/schemas/address'
+    requestId:
+      description: Merchant identifier for the request. The value must be unique.
+      type: string
+      maxLength: 40
+      example: 10cc0270-7bed-11e9-a188-1763956dd7f6
+    authenticationValue:
+      description: 3DS Base 64 cryptogram obtained prior to payment request.
+      type: string
+      format: base64
+      maxLength: 56
+      writeOnly: true
+      deprecated: true
+    threeDSChallengeType:
+      description: Indicates whether a challenge is requested for this transaction.
+      type: string
+      enum:
+      - NO_PREFERENCE
+      - NO_CHALLENGE
+      - CHALLENGE_REQUESTED
+      - CHALLENGE_MANDATE
+      - NO_CHALLENGE_LVP
+      - NO_CHALLENGE_TRA
+      - NO_CHALLENGE_MIT
+      - NO_CHALLENGE_DATA
+      - NO_CHALLENGE_DA
+      - NO_CHALLENGE_TRUSTED
+    code:
+      description: Short informative code about error
+      type: string
+    responseCode:
+      description: Short explanation for response status
+      type: string
+      minLength: 2
+      maxLength: 50
+    authenticationStatusReasonText:
+      description: Long explanation of the Authentication Status
+      type: string
+    information:
+      description: A list of informational messages
+      type: object
+      properties:
+        code:
+          description: Codifies the instruction provided in the application
+          type: string
+          maxLength: 40
+        message:
+          description: Long explanation of the instruction provided in the application
+          type: string
+          maxLength: 120
+    lastName:
+      description: Last name or surname
+      type: string
+      pattern: '[\p{L}\p{P}0-9''. ]*'
+      minLength: 1
+      maxLength: 70
+      writeOnly: true
+    authenticationPaymentMethodType:
+      description: Authentication Payment Method Type
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/authenticationCard'
+        consumerProfile:
+          $ref: '#/components/schemas/authenticationConsumerProfile'
+    challengeAuthenticationMethod:
+      description: Information about how the 3DS Requestor authenticated the cardholder for the challenge request.
+      type: string
+      enum:
+      - STATIC_PASSCODE
+      - SMS_OTP
+      - KEY_FOB
+      - APP_OTP
+      - OTP_OTHER
+      - KBA
+      - OOB_BIOMETRICS
+      - OOB_LOGIN
+      - OOB_OTHER
+      - OTHER
+      - PUSH_CONFIRMATION
+    authenticationSupportUrl:
+      description: Fully qualified URL of 3DS Requestor website or customer care site. This field is optional and it is recommended to be configured in the configuration.
+      type: string
+    paymentToken:
+      description: Token Information for the payment transaction
+      type: object
+      properties:
+        tokenProvider:
+          $ref: '#/components/schemas/tokenProvider'
+        tokenNumber:
+          $ref: '#/components/schemas/tokenNumber'
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        tokenServiceResponseMessage:
+          $ref: '#/components/schemas/tokenServiceResponseMessage'
+        tokenServiceResponseCode:
+          $ref: '#/components/schemas/tokenServiceResponseCode'
+    messageType:
+      description: Codifies type of message requested by authentication server for cardholder authentication request initiated by requestor.
+      type: string
+      enum:
+      - PAYMENT_AUTHENTICATION
+      - NON_PAYMENT_AUTHENTICATION
+    merchantCategoryCode:
+      description: MCC or Merchant Category Code. Defaults to MCC configured at the merchant profile level. Some configurations allow multiple MCC's under a single Merchant ID. Sending an MCC not configured will result in an error.
+      type: string
+      pattern: ^\d{4}$
+      minLength: 4
+      maxLength: 4
+      example: '4819'
+    authenticationCard:
+      description: card information used for authentication purpose.
+      type: object
+      required:
+      - accountNumber
+      properties:
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+        maskedAccountNumber:
+          $ref: '#/components/schemas/maskedAccountNumber'
+        accountNumberType:
+          description: Specifies the type of payment method used by the account number in payment transaction.
+          type: string
+          enum:
+          - PAN
+          - NETWORK_TOKEN
+          - SAFETECH_TOKEN
+          - SAFETECH_PAGE_ENCRYPTION
+        cardTypeName:
+          $ref: '#/components/schemas/cardTypeName'
+        cardType:
+          description: Abbreviation of card name
+          type: string
+          enum:
+          - VI
+          - MC
+          - AX
+          - DI
+          - JC
+          - DC
+          - CC
+          - CZ
+          - CR
+          - IM
+          - SP
+          - PP
+          - EP
+          - AP
+          - NP
+          - VR
+          - MR
+          - CB
+          example: VI
+        paymentTokens:
+          type: array
+          readOnly: true
+          description: List of payment tokens for the transaction
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/paymentToken'
+        cvv:
+          $ref: '#/components/schemas/cvv'
+        encryptionIntegrityCheck:
+          $ref: '#/components/schemas/encryptionIntegrityCheck'
+    threeDSRequestorPriorAuthenticationInfo:
+      description: Contains information about how the 3DS Requestor authenticated the cardholder as part of a previous 3DS transaction.
+      type: object
+      properties:
+        priorAcsTransactionId:
+          description: ACS Transaction ID for a prior authenticated transaction
+          type: string
+        authenticationMethod:
+          $ref: '#/components/schemas/authenticationMethod'
+        authenticationTimestamp:
+          description: Designates the hour, minute and second of the prior authentication.
+          type: string
+          format: date-time
+    amount:
+      description: Total monetary value of the payment including all taxes and fees. For zero exponent currency codes (i.e. Japanese Yen) a virtual decimal of 2 is not expected
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 999999999999
+      example: 1234
+    browserInfo:
+      description: Browser Information of the consumer
+      type: object
+      properties:
+        browserAcceptHeader:
+          description: Exact content of the HTTP accept headers from the cardholder browser.
+          type: string
+          minLength: 1
+          maxLength: 2048
+        deviceIPAddress:
+          description: IP address of the cardholder browser as returned by the HTTP headers This can be represented by an IPv4 address (Four sets of decimal numbers separated by dots) or an IPv6 address (Eight groups of four hexadecimal digits separated by colons).
+          type: string
+          minLength: 1
+          maxLength: 45
+        browserLanguage:
+          description: Value representing the cardholder browser language as defined in IETF BCP47. This value is limited to 1-8 characters.
+          type: string
+          minLength: 1
+          maxLength: 8
+        browserColorDepth:
+          description: Value representing the bit depth of the color palette of the cardholder browser for displaying images, in bits per pixel.  The field is limited to 1-2 characters.
+          type: string
+          minLength: 1
+          maxLength: 2
+        browserScreenHeight:
+          description: Total height of the cardholder browser screen in pixels.
+          type: string
+          minLength: 1
+          maxLength: 6
+        browserScreenWidth:
+          description: Total width of the cardholder browser screen in pixels.
+          type: string
+          minLength: 1
+          maxLength: 6
+        deviceLocalTimeZone:
+          description: Represents a unique code assigned by the firm for a geographical area that observes a uniform standard time for legal, commercial, and social purposes. In this context, this is the local time the device owner has set in the device settings.
+          type: string
+          minLength: 1
+          maxLength: 5
+        browserUserAgent:
+          description: Exact content of the HTTP user-agent header. The field is limited to a maximum of 2048 characters.
+          type: string
+          minLength: 1
+          maxLength: 2048
+        challengeWindowSize:
+          $ref: '#/components/schemas/challengeWindowSize'
+        javaEnabled:
+          description: Boolean that represents the ability of the cardholder browser to execute Java.
+          type: boolean
+        javaScriptEnabled:
+          description: Boolean that represents the ability of the cardholder browser to execute JavaScript.
+          type: boolean
+    electronicCommerceIndicator:
+      description: Describes the Electronic Commerce Indicator used in cardholder authentication on a network token
+      type: string
+      pattern: ^\d{1,2}$
+      example: '05'
+      readOnly: true
+    tokenServiceResponseCode:
+      description: Short explanation of response Code
+      type: string
+      readOnly: true
+    maskedAccountNumber:
+      description: Identifies a concealed number associated with the card number recognized by various payment systems. This is typically concealed by storing only the first 6 and/or last 4 digits of the payment account number or some variation.
+      type: string
+      readOnly: true
+      example: 123456XXXXXX9876
+    consumerInstallmentAuthorizationCount:
+      description: Indicates the maximum number of authorisations permitted for instalment payments.
+      type: integer
+      maximum: 999
+    channelType:
+      description: Codifies the method in which the order was initiated. If not provided, defaults to browser value.
+      type: string
+      enum:
+      - APP
+      - BROWSER
+      - 3RI
+    threeDomainSecureChallenge:
+      description: Three Domain Secure Challenge
+      type: object
+      properties:
+        authenticationStatusReasonText:
+          $ref: '#/components/schemas/authenticationStatusReasonText'
+        threeDSTransactionStatus:
+          $ref: '#/components/schemas/threeDSTransactionStatus'
+        updateTimestamp:
+          $ref: '#/components/schemas/updateTimestamp'
+        challengeWindowSize:
+          $ref: '#/components/schemas/challengeWindowSize'
+        threeDSChallengeRequest:
+          description: The textual information containing the base64-encoded challenge response message to Access Control Server returned from accountholder.
+          type: string
+        threeDSMessageExtensions:
+          type: array
+          description: List of Three DS Message Extension information
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/threeDSMessageExtension'
+        threeDSAcsUrl:
+          description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving.
+          type: string
+          readOnly: true
+    threeDSPurchaseInfo:
+      description: Three DS Purchase Info
+      type: object
+      required:
+      - purchaseDate
+      - threeDomainSecureTransactionType
+      properties:
+        consumerInstallmentAuthorizationCount:
+          $ref: '#/components/schemas/consumerInstallmentAuthorizationCount'
+        purchaseDate:
+          description: Designates the year, month and day of the most recent purchase which occurred on the Cardholder account.
+          type: string
+          format: date-time
+        recurringAuthorizationExpirationDate:
+          $ref: '#/components/schemas/recurringAuthorizationExpirationDate'
+        recurringAuthorizationDayCount:
+          description: Indicates the minimum number of days between authorizations. The field is limited to maximum 4 characters.
+          type: integer
+          maximum: 9999
+        threeDomainSecureTransactionType:
+          description: Identifies the type of transaction being authenticated by cardholder authentication process as requested by requestor. The values are derived from ISO 8583.
+          type: string
+          enum:
+          - CHECK
+          - GOODS_SERVICES
+          - ACCOUNT_FUNDING
+          - QUASI_CASH
+          - PREPAID
+        purchasedItemCount:
+          $ref: '#/components/schemas/purchasedItemCount'
+    accountHolderReferenceId:
+      description: Merchant defined identifier for a consumer
+      type: string
+      minLength: 0
+      maxLength: 25
+      example: AB12345678
+      writeOnly: true
+    recurringAuthorizationExpirationDate:
+      description: Date after which no further authorizations shall be performed. This field is limited to 8 characters, and the accepted format is YYYYMMDD.
+      type: string
+    phone:
+      description: Phone number in ITU-T E.164 format. Country code and phone number (subscriber number) are mandatory values
+      type: object
+      writeOnly: true
+      required:
+      - phoneNumber
+      properties:
+        countryCode:
+          description: Telephone country code
+          type: integer
+          minimum: 1
+          maximum: 999
+          example: 1
+        phoneNumber:
+          description: Phone number
+          type: string
+          maxLength: 12
+          writeOnly: true
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          $ref: '#/components/schemas/entity'
+    threeDSTransactionStatus:
+      description: Indicates whether a transaction qualifies as an authenticated transaction.
+      type: string
+      enum:
+      - Y
+      - N
+      - U
+      - C
+      - R
+      - A
+      - D
+      - I
+      - E
   securitySchemes:
     BearerAuth:
       type: http

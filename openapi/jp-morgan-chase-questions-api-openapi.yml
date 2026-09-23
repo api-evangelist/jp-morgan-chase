@@ -30,9 +30,7 @@ paths:
       tags:
       - Questions
       summary: List questions
-      description: 'Lists customer due diligence questions.
-
-        '
+      description: Lists customer due diligence questions.
       operationId: smbdo-listQuestions
       responses:
         '200':
@@ -71,9 +69,7 @@ paths:
       tags:
       - Questions
       summary: Get question
-      description: 'Get a customer due diligence question.
-
-        '
+      description: Get a customer due diligence question.
       operationId: smbdo-getQuestion
       responses:
         '200':
@@ -101,25 +97,10 @@ paths:
           $ref: '#/components/responses/503'
 components:
   schemas:
-    QuestionId:
-      description: The ID uniquely identifying a question.
+    QuestionDescription:
+      description: A description of the question.
+      example: Individuals must additionally provide info regarding cash flow.
       type: string
-      maxLength: 10
-      example: '30024'
-    ContentItem:
-      description: Content displayed to a user for a given locale.
-      type: object
-      properties:
-        description:
-          type: string
-        label:
-          description: Exact text to be displayed to a user.
-          type: string
-        locale:
-          $ref: '#/components/schemas/LocaleId'
-      required:
-      - label
-      - locale
     QuestionListResponse:
       type: object
       properties:
@@ -131,59 +112,6 @@ components:
             $ref: '#/components/schemas/QuestionResponse'
           minItems: 0
           maxItems: 100
-    ResponseSchema:
-      description: A subset of JSON Schema used to validate the response values.
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - array
-        minItems:
-          type: integer
-        maxItems:
-          type: integer
-        items:
-          $ref: '#/components/schemas/ResponseSchemaItem'
-      example:
-        type: array
-        items:
-          type: boolean
-        minItems: 1
-        maxItems: 1
-    ApiErrorContext:
-      description: Context of the API error.
-      type: object
-      required:
-      - message
-      properties:
-        code:
-          type: string
-          description: Short code that identifies the error - publicly cataloged and documented
-          example: '11000'
-        location:
-          type: string
-          enum:
-          - BODY
-          - QUERY
-          - PATH
-          - HEADER
-          example: BODY
-          description: Part of the request which is responsible for the reason
-        field:
-          type: string
-          description: The location of the property or parameter in error
-        message:
-          type: string
-          example: The server can not find the requested resource.
-          description: Message describing the reason.
-    QuestionIdList:
-      description: A list of question IDs.
-      type: array
-      items:
-        $ref: '#/components/schemas/QuestionId'
-      minItems: 0
-      maxItems: 200
     schemas-ApiError:
       description: An API error.
       type: object
@@ -212,75 +140,6 @@ components:
           description: Provides additional context and detail on the errors
           minItems: 0
           maxItems: 100
-    QuestionDescription:
-      description: A description of the question.
-      example: Individuals must additionally provide info regarding cash flow.
-      type: string
-    AnyValuesMatch:
-      description: Describes the answer value that would require dependent questions.
-      type: string
-      maxLength: 255
-      example: 'true'
-    PageMetaData:
-      description: Page metadata.
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-          example: 0
-          description: 'Page number.
-
-            '
-          minimum: 0
-          maximum: 2147483647
-        limit:
-          type: integer
-          format: int32
-          example: 25
-          description: 'Number of records per page.
-
-            '
-          minimum: 1
-          maximum: 25
-        total:
-          type: integer
-          format: int64
-          example: 340
-          description: 'Total number of items.
-
-            '
-          minimum: 0
-          maximum: 9999999999
-    QuestionResponse:
-      type: object
-      properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContentItem'
-          minItems: 1
-          maxItems: 50
-        defaultLocale:
-          $ref: '#/components/schemas/LocaleId'
-        description:
-          $ref: '#/components/schemas/QuestionDescription'
-        id:
-          $ref: '#/components/schemas/QuestionId'
-        parentQuestionId:
-          $ref: '#/components/schemas/QuestionId'
-        responseSchema:
-          $ref: '#/components/schemas/ResponseSchema'
-        subQuestions:
-          type: array
-          items:
-            type: object
-            properties:
-              anyValuesMatch:
-                $ref: '#/components/schemas/AnyValuesMatch'
-              questionIds:
-                $ref: '#/components/schemas/QuestionIdList'
-          minItems: 0
     ResponseSchemaItem:
       description: A limited subset of JSON Schema used to validate the response value items.
       type: object
@@ -329,22 +188,170 @@ components:
           maxItems: 100
       required:
       - type
+    ContentItem:
+      description: Content displayed to a user for a given locale.
+      type: object
+      properties:
+        description:
+          type: string
+        label:
+          description: Exact text to be displayed to a user.
+          type: string
+        locale:
+          $ref: '#/components/schemas/LocaleId'
+      required:
+      - label
+      - locale
+    ResponseSchema:
+      description: A subset of JSON Schema used to validate the response values.
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - array
+        minItems:
+          type: integer
+        maxItems:
+          type: integer
+        items:
+          $ref: '#/components/schemas/ResponseSchemaItem'
+      example:
+        type: array
+        items:
+          type: boolean
+        minItems: 1
+        maxItems: 1
     LocaleId:
       description: The identifier for a language and location.
       type: string
       example: en-US
+    ApiErrorContext:
+      description: Context of the API error.
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          example: '11000'
+        location:
+          type: string
+          enum:
+          - BODY
+          - QUERY
+          - PATH
+          - HEADER
+          example: BODY
+          description: Part of the request which is responsible for the reason
+        field:
+          type: string
+          description: The location of the property or parameter in error
+        message:
+          type: string
+          example: The server can not find the requested resource.
+          description: Message describing the reason.
+    QuestionId:
+      description: The ID uniquely identifying a question.
+      type: string
+      maxLength: 10
+      example: '30024'
+    PageMetaData:
+      description: Page metadata.
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          example: 0
+          description: 'Page number.
+
+            '
+          minimum: 0
+          maximum: 2147483647
+        limit:
+          type: integer
+          format: int32
+          example: 25
+          description: 'Number of records per page.
+
+            '
+          minimum: 1
+          maximum: 25
+        total:
+          type: integer
+          format: int64
+          example: 340
+          description: 'Total number of items.
+
+            '
+          minimum: 0
+          maximum: 9999999999
+    QuestionIdList:
+      description: A list of question IDs.
+      type: array
+      items:
+        $ref: '#/components/schemas/QuestionId'
+      minItems: 0
+      maxItems: 200
+    QuestionResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentItem'
+          minItems: 1
+          maxItems: 50
+        defaultLocale:
+          $ref: '#/components/schemas/LocaleId'
+        description:
+          $ref: '#/components/schemas/QuestionDescription'
+        id:
+          $ref: '#/components/schemas/QuestionId'
+        parentQuestionId:
+          $ref: '#/components/schemas/QuestionId'
+        responseSchema:
+          $ref: '#/components/schemas/ResponseSchema'
+        subQuestions:
+          type: array
+          items:
+            type: object
+            properties:
+              anyValuesMatch:
+                $ref: '#/components/schemas/AnyValuesMatch'
+              questionIds:
+                $ref: '#/components/schemas/QuestionIdList'
+          minItems: 0
+    AnyValuesMatch:
+      description: Describes the answer value that would require dependent questions.
+      type: string
+      maxLength: 255
+      example: 'true'
   responses:
-    '403':
-      description: Forbidden - Unauthorized Access
+    '503':
+      description: Service Unavailable - API Processing Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/schemas-ApiError'
           example:
-            title: Forbidden
-            httpStatus: 403
+            title: Service Unavailable
+            httpStatus: 503
             context:
-            - message: Platform is not authorized to access client.
+            - message: Service unavailable.
+    '404':
+      description: No data found for the criteria specified
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Not Found
+            httpStatus: 404
+            context:
+            - message: Party with ID [2000000555] not found.
     '500':
       description: Internal Server Error - Generic Error
       content:
@@ -381,28 +388,17 @@ components:
             httpStatus: 401
             context:
             - message: Provided token does not follow required JWT format. It may also be missing mandatory parts
-    '503':
-      description: Service Unavailable - API Processing Error
+    '403':
+      description: Forbidden - Unauthorized Access
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/schemas-ApiError'
           example:
-            title: Service Unavailable
-            httpStatus: 503
+            title: Forbidden
+            httpStatus: 403
             context:
-            - message: Service unavailable.
-    '404':
-      description: No data found for the criteria specified
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Not Found
-            httpStatus: 404
-            context:
-            - message: Party with ID [2000000555] not found.
+            - message: Platform is not authorized to access client.
   examples:
     QuestionResponse:
       summary: Question response
@@ -500,15 +496,6 @@ components:
           maxItems: 1
         subQuestions: []
   parameters:
-    TokenInHeader:
-      name: token
-      in: header
-      description: JWT Client token
-      required: false
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 8192
     QuestionIdListInQuery:
       name: questionIds
       in: query
@@ -519,6 +506,15 @@ components:
         type: string
         pattern: ^[0-9]{1,19}(,[0-9]{1,19})*$
         maxLength: 4096
+    TokenInHeader:
+      name: token
+      in: header
+      description: JWT Client token
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 8192
   securitySchemes:
     BearerAuth:
       type: http

@@ -785,7 +785,6 @@ paths:
       operationId: v1DeleteSubscriptionBySubscriptionId
       tags:
       - Subscriptions
-      description: Delete a specific subscription
       parameters:
       - name: merchant-id
         in: header
@@ -948,7 +947,7 @@ paths:
       operationId: v1PublicKeyGet
       tags:
       - Subscriptions
-      description: (***DEPRECATED***)  Retrieve a public key using the Entity Id.
+      description: (***DEPRECATED***) Retrieve a public key using the Entity Id.
       deprecated: true
       parameters:
       - name: request-id
@@ -1202,230 +1201,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/messages'
+      operationId: getSubscriptionsVerificationsById
+      x-operation-id-source: derived
 components:
   schemas:
-    subscriptionStatus:
-      description: 'Codifies the state of the message category that merchant has registered for. Sample values are: Active, Inactive, pending authorization.'
+    subscriptionUpdatedTimestamp:
+      description: Designates the hour, minute and second in a specific day when the notification subscription has been modified.
+      type: string
+    allocationOrderInstructionNotificationTypeCode:
+      description: Defines the  allocation order instruction notification sub types.  Possible values are "AllocationOrderInstructionUpdate", "AllocationOrderInstructionRequest" "All"
       type: string
       enum:
-      - PENDING_VERIFICATION
-      - ACTIVATED
-      - FAILED_VERIFICATION
-    subscriptionChannels:
-      type: array
-      minItems: 0
-      deprecated: true
-      description: (***DEPRECATED***) List of medium through which event notifications will be delivered to recipient. Use `subscriptionChannel` (singular) instead.
-      items:
-        type: string
-        enum:
-        - WEBHOOK
-        - EMAIL
-        - IN-APP-COMMERCE-CENTER
-    recommendationNotificationType:
-      description: Codifies the subscription type to merchant for recommendations from firm.
-      type: string
-      enum:
-      - PaymentRetry
-      - All
-    enrollmentNotificationType:
-      description: Codifies the subscription type to Enrollment notifications. Possible values are EnrollmentSuccess, EnrollmentPaymentMethodAdded, enrollmentNoPaymentMethodAdded, All
-      type: string
-      enum:
-      - EnrollmentSuccess
-      - EnrollmentPaymentMethodAdded
-      - EnrollmentNoPaymentMethodAdded
+      - AllocationOrderInstructionUpdate
+      - AllocationOrderInstructionRequest
       - All
     authenticationNotificationType:
       description: 'Codifies the categories of messages the firm uses to communicate with the merchant. Sample values are: chargeback, alerts, funding. In this context, this is for the notifications for the pay by bank feature. The possible values are  "AuthenticationComplete"'
       type: string
       enum:
       - AuthenticationComplete
-    validationMessage:
-      description: Object containing information about transaction validation
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          description: Short informative code about the error.
-          type: string
-        message:
-          description: Long informative message about the error.
-          type: string
-        entity:
-          description: Information about the entity that experienced an error.
-          type: string
-    clientCredentials:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      type: object
-      properties:
-        clientSecret:
-          description: A confidential string known only to the application and the authorization server.
-          type: string
-        clientId:
-          description: A public identifier for the application using Auth for authenticating the client.
-          type: string
-        contentType:
-          description: If your IDA server expects a value other than `application/x-www-form-urlencoded`, provide it here
-          type: string
-        clientCredentialRequestBody:
-          description: Define parameters like grant type, scope, etc, to include in the request body
-          type: object
-          additionalProperties:
-            type: string
-    subscriptionResponse:
-      description: Response Object for Merchant Notification Subscription
-      type: object
-      properties:
-        notifications:
-          $ref: '#/components/schemas/notifications'
-        subscriptionId:
-          $ref: '#/components/schemas/subscriptionId'
-        subscriptionCreateTimestamp:
-          $ref: '#/components/schemas/subscriptionCreateTimestamp'
-        subscriptionUpdatedTimestamp:
-          $ref: '#/components/schemas/subscriptionUpdatedTimestamp'
-        subscriptionChannels:
-          $ref: '#/components/schemas/subscriptionChannels'
-        callbackURL:
-          $ref: '#/components/schemas/callbackURL'
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        publicKey:
-          $ref: '#/components/schemas/publicKey'
-        subscriptionStatus:
-          $ref: '#/components/schemas/subscriptionStatus'
-        subscriptionCategory:
-          $ref: '#/components/schemas/subscriptionCategory'
-        subscriptionChannel:
-          $ref: '#/components/schemas/subscriptionChannel'
-    processingThresholdNotificationType:
-      description: Defines the threshold notification sub types.  Possible values are "ProcessingThresholdStatus", "ALL"]
+    transactionUpdateNotificationType:
+      description: Codifies the categories of messages between merchant and Firm for the transaction Update.
       type: string
       enum:
-      - ProcessingThresholdStatus
+      - TransactionChangeRequested
+      - TransactionCompleted
+      - TransactionFailed
       - All
-    adfsError:
-      description: Object containing information about the active directory file system error.
-      type: object
-      required:
-      - errorSource
-      - errorCode
-      - errorDescription
-      properties:
-        errorSource:
-          description: The label of the component from where the error or warning was generated.
-          type: string
-          example: APG-EDGE
-        errorCode:
-          description: General status of all resources.
-          type: string
-          example: EDG00012
-        errorDescription:
-          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
-          type: string
-          example: the signature could not be verified
-    entityOnboardingEventNotificationType:
-      description: Codifies the onboarding status of merchant and entities by our firm
+    allocationOrderNotificationType:
+      description: Defines the  allocation order notification sub types.  Possible values are "AllocationOrderUpdateNotification", "All"
       type: string
       enum:
-      - EntityNetworkRegistrationException
-      - All
-    accountInformationServiceNotificationType:
-      description: Codifies the subscription type to Account Information Service notifications. Possible values are ConsentLinkInitiated, ConsentLinkOpened, ConsentLinkSuccessful, ConsentLinkCancelled, ConsentLinkExpired, ConsentLinkAbandoned, ConsentLinkPending, ConsentLinkFailed, ConsentSuccessful, ConsentFailed, ConsentRevoked, ConsentPending, ConsentReadyToValidate, ConsentFixSuccessful, ConsentFixFailed, All
-      type: string
-      enum:
-      - ConsentLinkInitiated
-      - ConsentLinkOpened
-      - ConsentLinkSuccessful
-      - ConsentLinkCancelled
-      - ConsentLinkExpired
-      - ConsentLinkAbandoned
-      - ConsentLinkPending
-      - ConsentLinkFailed
-      - ConsentSuccessful
-      - ConsentFailed
-      - ConsentRevoked
-      - ConsentFixSuccessful
-      - ConsentFixFailed
-      - ConsentPending
-      - ConsentReadyToValidate
-      - All
-    recurringProgramNotificationType:
-      description: 'Codifies the categories of messages the firm uses to communicate with the merchant. Sample vaues are: chargeback, alerts, funding.'
-      type: string
-      enum:
-      - PlanUpdated
-      - ProgramUpdated
-      - PaymentApplied
-      - PaymentNotApplied
-      - ConsumerCommunicationUpdated
-      - All
-    payoutNotificationType:
-      description: Codifies the subscription type to Payout notifications. Possible values include PayoutFailure, PayoutUnderReview, PayoutCreated, PayoutDenied, PayoutCompleted, PayoutRejected, PayoutFailureResolved, PayoutUnderReviewReleased, PayoutRejectedResolved, All
-      type: string
-      enum:
-      - PayoutFailure
-      - PayoutUnderReview
-      - PayoutCreated
-      - PayoutDenied
-      - PayoutCompleted
-      - PayoutRejected
-      - PayoutFailureResolved
-      - PayoutUnderReviewReleased
-      - PayoutRejectedResolved
-      - FinancialAdjustmentInitiated
-      - All
-    productOnboardingNotificationType:
-      description: Codifies the subscription type to product onboarding notifications
-      type: string
-      enum:
-      - OnboardingStatus
-    publicKey:
-      description: (***DEPRECATED***) Public Key information
-      type: object
-      readOnly: true
-      deprecated: true
-      properties:
-        publicKeyIdentifier:
-          description: Unique Identifier of the cipher key for exchanging data via an associated string or byte image. This is a public key generated by the producer of the data and shared with the consumer.
-          type: string
-        publicKeyText:
-          description: Provides textual information about a cipher key for exchanging data via an associated string or byte image. This is a public key generated by the producer of the data and shared with the consumer.
-          type: string
-        publicKeyExpirationDate:
-          description: Designates the year, month and day when a cipher key for exchanging data via an associated string or byte image is terminated.
-          type: string
-    tokenLifecycleNotificationType:
-      description: Codifies the subscription type to Token lifecycle notifications
-      type: string
-      enum:
-      - All
-      - CardDetailsUpdate
-      - TokenStateChange
-      - TokenProvisionUpdate
-      - BulkTokenUpdate
-    merchantStatusNotificationType:
-      description: Codifies the subscription type to product onboarding notifications
-      type: string
-      enum:
-      - MerchantOnboardingInProgress
-      - MerchantOnboardingDeclined
-      - MerchantOnboardingCompleted
-      - MerchantSuspendedAutoblock
-      - MerchantSuspendedWithFundHold
-      - MerchantSuspendedWithoutFundHold
-      - MerchantAccountClosed
-      - MerchantOnboardingDeclinedWithCreditPull
-      - MopActivationCompleted
-      - MopActivationDeclined
-      - MerchantPerfPlatUpgrade
+      - AllocationOrderUpdateNotification
       - All
     orderUpdateNotificationType:
       description: (***DEPRECATED***) Subscribe to notifications for order update
@@ -1436,19 +1243,6 @@ components:
       - OrderErrored
       - All
       deprecated: true
-    entityOnboardingNotificationType:
-      description: Codifies the onboarding status of merchant and entities by our firm
-      type: string
-      enum:
-      - EntityScreening
-      - EntityOnboarding
-      - EntityOnboardingV2
-      - EntityOnboardingNew
-      - EntityOnboardingReviewInProgress
-      - EntityOnboardingInformationRequested
-      - EntityOnboardingApproved
-      - EntityOnboardingDeclined
-      - All
     messages:
       description: A list of errors and warnings.
       type: object
@@ -1473,68 +1267,171 @@ components:
           description: Information about errors occurred in validation.
           items:
             $ref: '#/components/schemas/validationMessage'
+    subscriptionCategory:
+      description: Delineates a set of rules for the management of a subscription.
+      type: string
+      enum:
+      - DEFAULT
+      - MANDATORY
+      writeOnly: true
+    callbackURL:
+      description: URL/Endpoint to receive Webhook notifications by merchant.
+      type: string
     documentNotificationType:
       description: Codifies the categories of messages between merchant and Firm for the document update.
       type: string
       enum:
       - DocumentGenerated
       - DocumentFailed
-    refundUpdateNotificationType:
-      description: Codifies the refund notification subscription type to merchant for recommendations from firm.
-      type: string
-      enum:
-      - RefundApproved
-      - RefundDeclined
-      - RefundErrored
-      - RefundClosed
-      - All
-    canadianKycNotificationType:
-      description: Notifications for Canadian KYC mandates.
-      type: string
-      enum:
-      - UpliftInitiated
-      - UpliftReminder
-      - TerminalDeactivation
-      - PaymentHold
-    recipientDetails:
-      description: Individual details information
+    pageInfo:
+      description: Page Information
       type: object
       properties:
-        firstName:
-          description: That part of an individual's full name considered a personal name or given name and generally positioned before the last name or family name.
+        pageNumber:
+          description: Identifies a page within a document
           type: string
-        lastName:
-          description: 'That part of an individual’s name generally placed at the end of the given name. The last name is also known as the surname or family name. (Note: name conventions may be different based on practices in different countries. Some countries use two or more last names; in other countries, the family name is placed before a person’s given name; in some countries, it is common for people to have only one name or a mononym.)'
-          type: string
-        emailAddress:
-          description: A mail system that allows a party to send and receive messages electronically. An email address is composed of a local part and a domain part. The local part is unique to the individual while the domain or host name must meet specific standards required by the host that administers the email service.
-          type: string
-        telephoneNumber:
-          description: 'A locator whose value identifies the formatted numeric address for routing voice or data communications via telephony, to reach a party. NOTE: Telephone number formats may vary; this field can include domestic and international telephone numbers.'
-          type: string
-        telephoneCountryCode:
-          description: The telephone dialing prefix for a member country in the International Telecommunication Union (ITU) that is defined by the ITU-T E.164 standard. The code is a combination of one, two or three digits identifying a specific country, countries in an integrated numbering plan, or a specific geographic area.
-          type: string
-        preferredLanguage:
-          description: 'Codifies the language of spoken and written communication consisting of the use of words, grammar and pronunciations that are different from other varieties of the standard language. Allowed values :'
-          type: string
-          enum:
-          - en-US
-          - en-CA
-          - fr-CA
-    transactionUpdateNotificationType:
-      description: Codifies the categories of messages between merchant and Firm for the transaction Update.
+        recordPerPage:
+          description: Enumerates the quantity of records in a data object that is returned based on a query.
+          type: integer
+        totalRecord:
+          description: Enumerates the quantity of total records returned based on a query.
+          type: integer
+    responseMessage:
+      description: Long explanation of the response code.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    systemNotificationType:
+      description: Codifies the subscription type to system notifications
       type: string
       enum:
-      - TransactionChangeRequested
-      - TransactionCompleted
-      - TransactionFailed
+      - MessageAlert
       - All
-    eCommerceServiceUpdateNotificationType:
-      description: Codifies the subscription type to eCommerce Service Update notifications. Possible values are WixOnboardingComplete, All
+    consumerAccountUpdateType:
+      description: Codifies the categories of messages the firm uses to communicate with the biometric merchant regarding consumer account update.
       type: string
       enum:
-      - WixOnboardingComplete
+      - InfoUpdateSuccess
+      - CardUpdateSuccess
+      - AccountClosedByConsumerSuccess
+      - AccountClosedSuccess
+      - ProfileFreeze
+      - ProfileUnFreeze
+      - InfoUpdateFailure
+      - All
+    responseCode:
+      description: Codifies the Firm's representation of the response code being sent back to the merchant.
+      type: string
+      readOnly: true
+    recommendationNotificationType:
+      description: Codifies the subscription type to merchant for recommendations from firm.
+      type: string
+      enum:
+      - PaymentRetry
+      - All
+    directDebitAccountNotificationTypeCode:
+      description: Information regarding Direct Debit Account updates. Sample values are "DirectDebitAccountUpdateSuccess", "DirectDebitAccountUpdateFailure", "DirectDebitAccountUpdatePending".
+      type: string
+      enum:
+      - DirectDebitAccountUpdateSuccess
+      - DirectDebitAccountUpdateFailure
+      - DirectDebitAccountUpdatePending
+      - All
+    commerceCenterUserAccessNotificationType:
+      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding Commerce Center user access registration.
+      type: string
+      enum:
+      - firstTimeRegistration
+      - All
+    accountInformationServiceNotificationType:
+      description: Codifies the subscription type to Account Information Service notifications. Possible values are ConsentLinkInitiated, ConsentLinkOpened, ConsentLinkSuccessful, ConsentLinkCancelled, ConsentLinkExpired, ConsentLinkAbandoned, ConsentLinkPending, ConsentLinkFailed, ConsentSuccessful, ConsentFailed, ConsentRevoked, ConsentPending, ConsentReadyToValidate, ConsentFixSuccessful, ConsentFixFailed, All
+      type: string
+      enum:
+      - ConsentLinkInitiated
+      - ConsentLinkOpened
+      - ConsentLinkSuccessful
+      - ConsentLinkCancelled
+      - ConsentLinkExpired
+      - ConsentLinkAbandoned
+      - ConsentLinkPending
+      - ConsentLinkFailed
+      - ConsentSuccessful
+      - ConsentFailed
+      - ConsentRevoked
+      - ConsentFixSuccessful
+      - ConsentFixFailed
+      - ConsentPending
+      - ConsentReadyToValidate
+      - All
+    jwtDetails:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      properties:
+        clientSecret:
+          description: A confidential string that will be used to sign the JWT Token in case of tokenEndpointAuthorizationType client_secret_jwt.
+          type: string
+        jwtHeaderFields:
+          description: Hashmap object with key value pairs that will be used as header part of JWT token
+          type: object
+          additionalProperties:
+            type: string
+        jwtRequestBody:
+          description: Hashmap object with key value pairs that will be used as body part of JWT token
+          type: object
+          additionalProperties:
+            type: string
+        jwtRequestParameters:
+          description: Define the JWT request parameters and values you expect to receive as part of authenticating in to your servers for webhook delivery.
+          type: object
+          additionalProperties:
+            type: string
+    securityPreferences:
+      description: Parent Object which holds information on security preferences for sending Webhook Notifications.
+      type: object
+      writeOnly: true
+      properties:
+        oAuthNotificationEnabled:
+          description: (***DEPRECATED***) Indicate merchant is setup to receive notification messages supported by Open Authorization standard such as webhook notifications.
+          type: boolean
+          deprecated: true
+        sslAuthNotificationEnabled:
+          description: (***DEPRECATED***) Indicate merchant is setup to receive notification messages supported by Secure Socket Layer certificates authentication standard.
+          type: boolean
+          deprecated: true
+        webhookAuthorizationType:
+          description: Indicates auth needed to set up to receive notification messages supported by Open Authorization standard such as webhook notifications. Values include none, basic, and token.
+          type: string
+        tokenEndpointAuthorizationType:
+          description: Valid values include client_secret_post, private_key_jwt, none.
+          type: string
+        mTLSEnabled:
+          description: Signifies if mTLS is enabled on the given webhook endpoint
+          type: boolean
+        authorizationDetails:
+          $ref: '#/components/schemas/authorizationDetails'
+        headerFields:
+          description: Hashmap object with key value pairs that need to pass into request header while connecting to merchant server. Merchant put some validations based on those headers and their values at their side.
+          type: object
+          additionalProperties:
+            type: string
+        oAuthDetails:
+          $ref: '#/components/schemas/oAuthDetails'
+        signingAlgorithm:
+          description: Enumerates the Digital Signing Algorithm preferred by the Client, used to sign payloads and for identity verification.  For RSA key length will be 3072 and for EC key length will be 256.
+          type: string
+    reportStatusNotificationType:
+      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding merchant reports run by firm.
+      type: string
+      enum:
+      - DailyCompleted
+      - MonthlyCompleted
+      - WeeklyCompleted
+      - AdhocRunCompleted
+      - DailyErrored
+      - MonthlyErrored
+      - WeeklyErrored
+      - AdhocRunErrored
+      - IcPlusStatementCompleted
       - All
     notifications:
       description: Array of Notification Types.
@@ -1764,8 +1661,58 @@ components:
           description: Get notifications about migrated Orbital merchant activity
           items:
             $ref: '#/components/schemas/orbitalOperationsNotificationType'
-    subscriptionGetResponse:
-      description: subscriptionGetResponse
+    merchantStatusNotificationType:
+      description: Codifies the subscription type to product onboarding notifications
+      type: string
+      enum:
+      - MerchantOnboardingInProgress
+      - MerchantOnboardingDeclined
+      - MerchantOnboardingCompleted
+      - MerchantSuspendedAutoblock
+      - MerchantSuspendedWithFundHold
+      - MerchantSuspendedWithoutFundHold
+      - MerchantAccountClosed
+      - MerchantOnboardingDeclinedWithCreditPull
+      - MopActivationCompleted
+      - MopActivationDeclined
+      - MerchantPerfPlatUpgrade
+      - All
+    entityOnboardingEventNotificationType:
+      description: Codifies the onboarding status of merchant and entities by our firm
+      type: string
+      enum:
+      - EntityNetworkRegistrationException
+      - All
+    adfsError:
+      description: Object containing information about the active directory file system error.
+      type: object
+      required:
+      - errorSource
+      - errorCode
+      - errorDescription
+      properties:
+        errorSource:
+          description: The label of the component from where the error or warning was generated.
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: General status of all resources.
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
+          type: string
+          example: the signature could not be verified
+    securityAlertNotificationType:
+      description: Codifies the subscription type to Login Locked notifications. Possible values are LoginLocked, PasswordReset, LoginFailed, All
+      type: string
+      enum:
+      - LoginLocked
+      - PasswordReset
+      - LoginFailed
+      - All
+    subscriptionResponse:
+      description: Response Object for Merchant Notification Subscription
       type: object
       properties:
         notifications:
@@ -1776,85 +1723,63 @@ components:
           $ref: '#/components/schemas/subscriptionCreateTimestamp'
         subscriptionUpdatedTimestamp:
           $ref: '#/components/schemas/subscriptionUpdatedTimestamp'
-        callbackURL:
-          $ref: '#/components/schemas/callbackURL'
-        publicKey:
-          $ref: '#/components/schemas/publicKey'
         subscriptionChannels:
           $ref: '#/components/schemas/subscriptionChannels'
-        recipientDetails:
-          $ref: '#/components/schemas/recipientDetails'
+        callbackURL:
+          $ref: '#/components/schemas/callbackURL'
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        publicKey:
+          $ref: '#/components/schemas/publicKey'
+        subscriptionStatus:
+          $ref: '#/components/schemas/subscriptionStatus'
         subscriptionCategory:
           $ref: '#/components/schemas/subscriptionCategory'
         subscriptionChannel:
           $ref: '#/components/schemas/subscriptionChannel'
-    subscriptionCreateTimestamp:
-      description: Designates the hour, minute and second in a specific day when the notification subscription was created.
+    accountUpdateNotificationType:
+      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding consumer account update.
       type: string
-    subscriptionResponseList:
-      description: Response Object for Notification Get Subscription Response
-      type: object
-      properties:
-        pageInfo:
-          $ref: '#/components/schemas/pageInfo'
-        subscriptionGetResponses:
-          type: array
-          minItems: 0
-          description: List of Subscription Responses
-          items:
-            $ref: '#/components/schemas/subscriptionGetResponse'
+      enum:
+      - AccountCreated
+      - AccountClosed
+      - AccountOverdrawn
+      - RecipientAccountValidation
+      - AccountLinkSuccess
+      - AccountLinkException
+      - AccountUpdaterStatus
+      - MicroDepositInitiated
+      - MicroDepositSent
+      - MicroDepositVerificationFailed
+      - MicroDepositVerified
+      - MicroDepositReadyToValidate
+      - RecipientUpdated
+      - All
     achStatusNotificationType:
       description: Codifies the subscription type to Ach status notifications. Possible values include AchReturnReceived, All.
       type: string
       enum:
       - AchReturnReceived
       - All
-    securityPreferences:
-      description: Parent Object which holds information on security preferences for sending Webhook Notifications.
-      type: object
-      writeOnly: true
-      properties:
-        oAuthNotificationEnabled:
-          description: (***DEPRECATED***) Indicate merchant is setup to receive notification messages supported by Open Authorization standard such as webhook notifications.
-          type: boolean
-          deprecated: true
-        sslAuthNotificationEnabled:
-          description: (***DEPRECATED***) Indicate merchant is setup to receive notification messages supported by Secure Socket Layer certificates authentication standard.
-          type: boolean
-          deprecated: true
-        webhookAuthorizationType:
-          description: Indicates auth needed to set up to receive notification messages supported by Open Authorization standard such as webhook notifications. Values include none, basic, and token.
-          type: string
-        tokenEndpointAuthorizationType:
-          description: Valid values include client_secret_post, private_key_jwt, none.
-          type: string
-        mTLSEnabled:
-          description: Signifies if mTLS is enabled on the given webhook endpoint
-          type: boolean
-        authorizationDetails:
-          $ref: '#/components/schemas/authorizationDetails'
-        headerFields:
-          description: Hashmap object with key value pairs that need to pass into request header while connecting to merchant server. Merchant put some validations based on those headers and their values at their side.
-          type: object
-          additionalProperties:
-            type: string
-        oAuthDetails:
-          $ref: '#/components/schemas/oAuthDetails'
-        signingAlgorithm:
-          description: Enumerates the Digital Signing Algorithm preferred by the Client, used to sign payloads and for identity verification.  For RSA key length will be 3072 and for EC key length will be 256.
-          type: string
-    allocationOrderInstructionNotificationTypeCode:
-      description: Defines the  allocation order instruction notification sub types.  Possible values are "AllocationOrderInstructionUpdate", "AllocationOrderInstructionRequest" "All"
+    paymentUpdateNotificationType:
+      description: Subscribe to notifications for payment update
       type: string
       enum:
-      - AllocationOrderInstructionUpdate
-      - AllocationOrderInstructionRequest
+      - PaymentApproved
+      - PaymentDeclined
+      - PaymentErrored
+      - PaymentVoid
+      - PaymentClosed
       - All
-    commerceCenterUserAccessNotificationType:
-      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding Commerce Center user access registration.
+    eCommerceServiceUpdateNotificationType:
+      description: Codifies the subscription type to eCommerce Service Update notifications. Possible values are WixOnboardingComplete, All
       type: string
       enum:
-      - firstTimeRegistration
+      - WixOnboardingComplete
       - All
     subscriptionsResponse:
       description: Response Object for Merchant Notification Subscription
@@ -1888,30 +1813,50 @@ components:
           $ref: '#/components/schemas/subscriptionChannel'
         subscriptionCategory:
           $ref: '#/components/schemas/subscriptionCategory'
-    pageInfo:
-      description: Page Information
-      type: object
-      properties:
-        pageNumber:
-          description: Identifies a page within a document
-          type: string
-        recordPerPage:
-          description: Enumerates the quantity of records in a data object that is returned based on a query.
-          type: integer
-        totalRecord:
-          description: Enumerates the quantity of total records returned based on a query.
-          type: integer
-    securityAlertNotificationType:
-      description: Codifies the subscription type to Login Locked notifications. Possible values are LoginLocked, PasswordReset, LoginFailed, All
+    recurringProgramNotificationType:
+      description: 'Codifies the categories of messages the firm uses to communicate with the merchant. Sample vaues are: chargeback, alerts, funding.'
       type: string
       enum:
-      - LoginLocked
-      - PasswordReset
-      - LoginFailed
+      - PlanUpdated
+      - ProgramUpdated
+      - PaymentApplied
+      - PaymentNotApplied
+      - ConsumerCommunicationUpdated
       - All
-    subscriptionUpdatedTimestamp:
-      description: Designates the hour, minute and second in a specific day when the notification subscription has been modified.
-      type: string
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          description: Short informative code about the error.
+          type: string
+        message:
+          description: Long informative message about the error.
+          type: string
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    clientCredentials:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      properties:
+        clientSecret:
+          description: A confidential string known only to the application and the authorization server.
+          type: string
+        clientId:
+          description: A public identifier for the application using Auth for authenticating the client.
+          type: string
+        contentType:
+          description: If your IDA server expects a value other than `application/x-www-form-urlencoded`, provide it here
+          type: string
+        clientCredentialRequestBody:
+          description: Define parameters like grant type, scope, etc, to include in the request body
+          type: object
+          additionalProperties:
+            type: string
     subscribingForEntity:
       description: Determines whether the subscription is for an entity within CPM (PAYER), or the subscription is for a prospective entity (BUYER).
       type: string
@@ -1919,21 +1864,132 @@ components:
       - PAYER
       - BUYER
       writeOnly: true
-    responseCode:
-      description: Codifies the Firm's representation of the response code being sent back to the merchant.
-      type: string
-      readOnly: true
-    callbackURL:
-      description: URL/Endpoint to receive Webhook notifications by merchant.
-      type: string
-    passcodeUpdateNotificationType:
-      description: Codifies the subscription type to Passcode Update notifications. Possible values are PasscodeUpdateSuccess, PasscodeEnabledByUser, PasscodeEnabledBySystem, All
+    subscriptionChannels:
+      type: array
+      minItems: 0
+      deprecated: true
+      description: (***DEPRECATED***) List of medium through which event notifications will be delivered to recipient. Use `subscriptionChannel` (singular) instead.
+      items:
+        type: string
+        enum:
+        - WEBHOOK
+        - EMAIL
+        - IN-APP-COMMERCE-CENTER
+    recipientDetails:
+      description: Individual details information
+      type: object
+      properties:
+        firstName:
+          description: That part of an individual's full name considered a personal name or given name and generally positioned before the last name or family name.
+          type: string
+        lastName:
+          description: 'That part of an individual’s name generally placed at the end of the given name. The last name is also known as the surname or family name. (Note: name conventions may be different based on practices in different countries. Some countries use two or more last names; in other countries, the family name is placed before a person’s given name; in some countries, it is common for people to have only one name or a mononym.)'
+          type: string
+        emailAddress:
+          description: A mail system that allows a party to send and receive messages electronically. An email address is composed of a local part and a domain part. The local part is unique to the individual while the domain or host name must meet specific standards required by the host that administers the email service.
+          type: string
+        telephoneNumber:
+          description: 'A locator whose value identifies the formatted numeric address for routing voice or data communications via telephony, to reach a party. NOTE: Telephone number formats may vary; this field can include domestic and international telephone numbers.'
+          type: string
+        telephoneCountryCode:
+          description: The telephone dialing prefix for a member country in the International Telecommunication Union (ITU) that is defined by the ITU-T E.164 standard. The code is a combination of one, two or three digits identifying a specific country, countries in an integrated numbering plan, or a specific geographic area.
+          type: string
+        preferredLanguage:
+          description: 'Codifies the language of spoken and written communication consisting of the use of words, grammar and pronunciations that are different from other varieties of the standard language. Allowed values :'
+          type: string
+          enum:
+          - en-US
+          - en-CA
+          - fr-CA
+    taxNotificationType:
+      description: Codifies the subscription type to Tax notifications. Possible values are BackupWithholdingPending, BackupWithholdingPendingTwo, BackupWithholdingPrevented, BackupWithholdingPreventedTwo, BackupWithholdingStarted, BackupWithholdingStartedTwo, BackupWithholdingStopped, BackupWithholdingStoppedTwo, All
       type: string
       enum:
-      - PasscodeUpdateSuccess
-      - PasscodeEnabledByUser
-      - PasscodeEnabledBySystem
+      - BackupWithholdingPending
+      - BackupWithholdingPendingTwo
+      - BackupWithholdingPrevented
+      - BackupWithholdingPreventedTwo
+      - BackupWithholdingStarted
+      - BackupWithholdingStartedTwo
+      - BackupWithholdingStopped
+      - BackupWithholdingStoppedTwo
       - All
+    subscriptionId:
+      description: Identifies unique occurrence of notification subscription message by the merchant for new subscription or modification of an existing subscription.
+      type: string
+      readOnly: true
+    balanceMonitoringNotificationType:
+      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding consumer account balance monitoring.
+      type: string
+      enum:
+      - DirectDebitInitiated
+      - DirectDebitRetry
+      - DirectDebitReturn
+      - All
+    subscriptionResponseList:
+      description: Response Object for Notification Get Subscription Response
+      type: object
+      properties:
+        pageInfo:
+          $ref: '#/components/schemas/pageInfo'
+        subscriptionGetResponses:
+          type: array
+          minItems: 0
+          description: List of Subscription Responses
+          items:
+            $ref: '#/components/schemas/subscriptionGetResponse'
+    processingThresholdNotificationType:
+      description: Defines the threshold notification sub types.  Possible values are "ProcessingThresholdStatus", "ALL"]
+      type: string
+      enum:
+      - ProcessingThresholdStatus
+      - All
+    payoutNotificationType:
+      description: Codifies the subscription type to Payout notifications. Possible values include PayoutFailure, PayoutUnderReview, PayoutCreated, PayoutDenied, PayoutCompleted, PayoutRejected, PayoutFailureResolved, PayoutUnderReviewReleased, PayoutRejectedResolved, All
+      type: string
+      enum:
+      - PayoutFailure
+      - PayoutUnderReview
+      - PayoutCreated
+      - PayoutDenied
+      - PayoutCompleted
+      - PayoutRejected
+      - PayoutFailureResolved
+      - PayoutUnderReviewReleased
+      - PayoutRejectedResolved
+      - FinancialAdjustmentInitiated
+      - All
+    subscriptionCreateTimestamp:
+      description: Designates the hour, minute and second in a specific day when the notification subscription was created.
+      type: string
+    refundUpdateNotificationType:
+      description: Codifies the refund notification subscription type to merchant for recommendations from firm.
+      type: string
+      enum:
+      - RefundApproved
+      - RefundDeclined
+      - RefundErrored
+      - RefundClosed
+      - All
+    authorizationDetails:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      properties:
+        clientSecret:
+          description: (***DEPRECATED***) A confidential string known only to the application and the authorization server.
+          type: string
+          deprecated: true
+        clientId:
+          description: (***DEPRECATED***) A public identifier for the application using Auth for authenticating the client.
+          type: string
+          deprecated: true
+        tokenEndpoint:
+          description: A reference to a web resource on the internet that specifies the location and mechanism for the identity provider to fetch.
+          type: string
+        clientCredentials:
+          $ref: '#/components/schemas/clientCredentials'
+        jwtDetails:
+          $ref: '#/components/schemas/jwtDetails'
     oAuthDetails:
       description: (***DEPRECATED***) Information on potential oAuth details to apply when sending Webhook Notification to Merchant.
       type: object
@@ -1948,6 +2004,131 @@ components:
         tokenURL:
           description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for the identity provider to fetch the token.
           type: string
+    secretKey:
+      description: (***DEPRECATED***) This is the endpoint's confidential text used for generating signatures.  This is only returned at creation.
+      type: string
+    passcodeUpdateNotificationType:
+      description: Codifies the subscription type to Passcode Update notifications. Possible values are PasscodeUpdateSuccess, PasscodeEnabledByUser, PasscodeEnabledBySystem, All
+      type: string
+      enum:
+      - PasscodeUpdateSuccess
+      - PasscodeEnabledByUser
+      - PasscodeEnabledBySystem
+      - All
+    productOnboardingNotificationType:
+      description: Codifies the subscription type to product onboarding notifications
+      type: string
+      enum:
+      - OnboardingStatus
+    subscriptionGetResponse:
+      description: subscriptionGetResponse
+      type: object
+      properties:
+        notifications:
+          $ref: '#/components/schemas/notifications'
+        subscriptionId:
+          $ref: '#/components/schemas/subscriptionId'
+        subscriptionCreateTimestamp:
+          $ref: '#/components/schemas/subscriptionCreateTimestamp'
+        subscriptionUpdatedTimestamp:
+          $ref: '#/components/schemas/subscriptionUpdatedTimestamp'
+        callbackURL:
+          $ref: '#/components/schemas/callbackURL'
+        publicKey:
+          $ref: '#/components/schemas/publicKey'
+        subscriptionChannels:
+          $ref: '#/components/schemas/subscriptionChannels'
+        recipientDetails:
+          $ref: '#/components/schemas/recipientDetails'
+        subscriptionCategory:
+          $ref: '#/components/schemas/subscriptionCategory'
+        subscriptionChannel:
+          $ref: '#/components/schemas/subscriptionChannel'
+    qrCodeStatusNotificationType:
+      description: Codifies the subscription type to QR Status notifications. Possible values are QRCodeCreated, QRCodeExpired, QRCodePaid, QRCodeSettlementProcessing, QRCodeCancelled, All
+      type: string
+      enum:
+      - QRCodeCreated
+      - QRCodeExpired
+      - QRCodePaid
+      - QRCodeSettlementProcessing
+      - QRCodeCancelled
+      - All
+    subscriptionStatus:
+      description: 'Codifies the state of the message category that merchant has registered for. Sample values are: Active, Inactive, pending authorization.'
+      type: string
+      enum:
+      - PENDING_VERIFICATION
+      - ACTIVATED
+      - FAILED_VERIFICATION
+    publicKey:
+      description: (***DEPRECATED***) Public Key information
+      type: object
+      readOnly: true
+      deprecated: true
+      properties:
+        publicKeyIdentifier:
+          description: Unique Identifier of the cipher key for exchanging data via an associated string or byte image. This is a public key generated by the producer of the data and shared with the consumer.
+          type: string
+        publicKeyText:
+          description: Provides textual information about a cipher key for exchanging data via an associated string or byte image. This is a public key generated by the producer of the data and shared with the consumer.
+          type: string
+        publicKeyExpirationDate:
+          description: Designates the year, month and day when a cipher key for exchanging data via an associated string or byte image is terminated.
+          type: string
+    enrollmentNotificationType:
+      description: Codifies the subscription type to Enrollment notifications. Possible values are EnrollmentSuccess, EnrollmentPaymentMethodAdded, enrollmentNoPaymentMethodAdded, All
+      type: string
+      enum:
+      - EnrollmentSuccess
+      - EnrollmentPaymentMethodAdded
+      - EnrollmentNoPaymentMethodAdded
+      - All
+    subscriptionChannel:
+      description: Codifies the method in which the Firm communicates with the Party.
+      type: string
+      enum:
+      - WEBHOOK
+      - EMAIL
+      - IN-APP-COMMERCE-CENTER
+      - SMS
+    canadianKycNotificationType:
+      description: Notifications for Canadian KYC mandates.
+      type: string
+      enum:
+      - UpliftInitiated
+      - UpliftReminder
+      - TerminalDeactivation
+      - PaymentHold
+    disputeNotificationType:
+      description: Subscribe to notifications for dispute
+      type: string
+      enum:
+      - All
+      - Closed
+      - Received
+      - Response
+      - DisputeClosed
+      - DisputeReceived
+      - DisputeMerchantResponseRequested
+      deprecated: true
+    tokenLifecycleNotificationType:
+      description: Codifies the subscription type to Token lifecycle notifications
+      type: string
+      enum:
+      - All
+      - CardDetailsUpdate
+      - TokenStateChange
+      - TokenProvisionUpdate
+      - BulkTokenUpdate
+    allocationOrderSettlementNotificationTypeCode:
+      description: Defines the  allocation order settlement notification sub types.  Possible values are "PspSettlementTransferUpdate", "DistributionTransferUpdate", "PlatformSettlementTransferUpdate", "All"
+      type: string
+      enum:
+      - PspSettlementTransferUpdate
+      - DistributionTransferUpdate
+      - PlatformSettlementTransferUpdate
+      - All
     subscription:
       description: Request Object for Merchant Notification Subscription
       type: object
@@ -2003,13 +2184,11 @@ components:
           - DEFAULT
           - MANDATORY
           writeOnly: true
-    subscriptionCategory:
-      description: Delineates a set of rules for the management of a subscription.
+    orbitalOperationsNotificationType:
+      description: Get notifications about migrated Orbital merchant activity.
       type: string
       enum:
-      - DEFAULT
-      - MANDATORY
-      writeOnly: true
+      - BulkFileStatus
     consumerProfileNotificationType:
       description: Codifies the subscription type to consumer profile notifications
       type: string
@@ -2019,201 +2198,23 @@ components:
       - PaymentMethodDeleted
       - BulkConsumerProfileUpdate
       - All
+    entityOnboardingNotificationType:
+      description: Codifies the onboarding status of merchant and entities by our firm
+      type: string
+      enum:
+      - EntityScreening
+      - EntityOnboarding
+      - EntityOnboardingV2
+      - EntityOnboardingNew
+      - EntityOnboardingReviewInProgress
+      - EntityOnboardingInformationRequested
+      - EntityOnboardingApproved
+      - EntityOnboardingDeclined
+      - All
     responseStatus:
       description: Codifies the general categorization by the Firm of the response code being sent back to the merchant.
       type: string
       readOnly: true
-    subscriptionId:
-      description: Identifies unique occurrence of notification subscription message by the merchant for new subscription or modification of an existing subscription.
-      type: string
-      readOnly: true
-    reportStatusNotificationType:
-      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding merchant reports run by firm.
-      type: string
-      enum:
-      - DailyCompleted
-      - MonthlyCompleted
-      - WeeklyCompleted
-      - AdhocRunCompleted
-      - DailyErrored
-      - MonthlyErrored
-      - WeeklyErrored
-      - AdhocRunErrored
-      - IcPlusStatementCompleted
-      - All
-    paymentUpdateNotificationType:
-      description: Subscribe to notifications for payment update
-      type: string
-      enum:
-      - PaymentApproved
-      - PaymentDeclined
-      - PaymentErrored
-      - PaymentVoid
-      - PaymentClosed
-      - All
-    responseMessage:
-      description: Long explanation of the response code.
-      type: string
-      readOnly: true
-      example: Request Accepted
-    authorizationDetails:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      type: object
-      properties:
-        clientSecret:
-          description: (***DEPRECATED***) A confidential string known only to the application and the authorization server.
-          type: string
-          deprecated: true
-        clientId:
-          description: (***DEPRECATED***) A public identifier for the application using Auth for authenticating the client.
-          type: string
-          deprecated: true
-        tokenEndpoint:
-          description: A reference to a web resource on the internet that specifies the location and mechanism for the identity provider to fetch.
-          type: string
-        clientCredentials:
-          $ref: '#/components/schemas/clientCredentials'
-        jwtDetails:
-          $ref: '#/components/schemas/jwtDetails'
-    disputeNotificationType:
-      description: Subscribe to notifications for dispute
-      type: string
-      enum:
-      - All
-      - Closed
-      - Received
-      - Response
-      - DisputeClosed
-      - DisputeReceived
-      - DisputeMerchantResponseRequested
-      deprecated: true
-    allocationOrderNotificationType:
-      description: Defines the  allocation order notification sub types.  Possible values are "AllocationOrderUpdateNotification", "All"
-      type: string
-      enum:
-      - AllocationOrderUpdateNotification
-      - All
-    subscriptionChannel:
-      description: Codifies the method in which the Firm communicates with the Party.
-      type: string
-      enum:
-      - WEBHOOK
-      - EMAIL
-      - IN-APP-COMMERCE-CENTER
-      - SMS
-    jwtDetails:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      type: object
-      properties:
-        clientSecret:
-          description: A confidential string that will be used to sign the JWT Token in case of tokenEndpointAuthorizationType client_secret_jwt.
-          type: string
-        jwtHeaderFields:
-          description: Hashmap object with key value pairs that will be used as header part of JWT token
-          type: object
-          additionalProperties:
-            type: string
-        jwtRequestBody:
-          description: Hashmap object with key value pairs that will be used as body part of JWT token
-          type: object
-          additionalProperties:
-            type: string
-        jwtRequestParameters:
-          description: Define the JWT request parameters and values you expect to receive as part of authenticating in to your servers for webhook delivery.
-          type: object
-          additionalProperties:
-            type: string
-    qrCodeStatusNotificationType:
-      description: Codifies the subscription type to QR Status notifications. Possible values are QRCodeCreated, QRCodeExpired, QRCodePaid, QRCodeSettlementProcessing, QRCodeCancelled, All
-      type: string
-      enum:
-      - QRCodeCreated
-      - QRCodeExpired
-      - QRCodePaid
-      - QRCodeSettlementProcessing
-      - QRCodeCancelled
-      - All
-    secretKey:
-      description: (***DEPRECATED***) This is the endpoint's confidential text used for generating signatures.  This is only returned at creation.
-      type: string
-    consumerAccountUpdateType:
-      description: Codifies the categories of messages the firm uses to communicate with the biometric merchant regarding consumer account update.
-      type: string
-      enum:
-      - InfoUpdateSuccess
-      - CardUpdateSuccess
-      - AccountClosedByConsumerSuccess
-      - AccountClosedSuccess
-      - ProfileFreeze
-      - ProfileUnFreeze
-      - InfoUpdateFailure
-      - All
-    accountUpdateNotificationType:
-      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding consumer account update.
-      type: string
-      enum:
-      - AccountCreated
-      - AccountClosed
-      - AccountOverdrawn
-      - RecipientAccountValidation
-      - AccountLinkSuccess
-      - AccountLinkException
-      - AccountUpdaterStatus
-      - MicroDepositInitiated
-      - MicroDepositSent
-      - MicroDepositVerificationFailed
-      - MicroDepositVerified
-      - MicroDepositReadyToValidate
-      - RecipientUpdated
-      - All
-    taxNotificationType:
-      description: Codifies the subscription type to Tax notifications. Possible values are BackupWithholdingPending, BackupWithholdingPendingTwo, BackupWithholdingPrevented, BackupWithholdingPreventedTwo, BackupWithholdingStarted, BackupWithholdingStartedTwo, BackupWithholdingStopped, BackupWithholdingStoppedTwo, All
-      type: string
-      enum:
-      - BackupWithholdingPending
-      - BackupWithholdingPendingTwo
-      - BackupWithholdingPrevented
-      - BackupWithholdingPreventedTwo
-      - BackupWithholdingStarted
-      - BackupWithholdingStartedTwo
-      - BackupWithholdingStopped
-      - BackupWithholdingStoppedTwo
-      - All
-    orbitalOperationsNotificationType:
-      description: Get notifications about migrated Orbital merchant activity.
-      type: string
-      enum:
-      - BulkFileStatus
-    balanceMonitoringNotificationType:
-      description: Codifies the categories of messages the firm uses to communicate with the merchant regarding consumer account balance monitoring.
-      type: string
-      enum:
-      - DirectDebitInitiated
-      - DirectDebitRetry
-      - DirectDebitReturn
-      - All
-    directDebitAccountNotificationTypeCode:
-      description: Information regarding Direct Debit Account updates. Sample values are "DirectDebitAccountUpdateSuccess", "DirectDebitAccountUpdateFailure", "DirectDebitAccountUpdatePending".
-      type: string
-      enum:
-      - DirectDebitAccountUpdateSuccess
-      - DirectDebitAccountUpdateFailure
-      - DirectDebitAccountUpdatePending
-      - All
-    allocationOrderSettlementNotificationTypeCode:
-      description: Defines the  allocation order settlement notification sub types.  Possible values are "PspSettlementTransferUpdate", "DistributionTransferUpdate", "PlatformSettlementTransferUpdate", "All"
-      type: string
-      enum:
-      - PspSettlementTransferUpdate
-      - DistributionTransferUpdate
-      - PlatformSettlementTransferUpdate
-      - All
-    systemNotificationType:
-      description: Codifies the subscription type to system notifications
-      type: string
-      enum:
-      - MessageAlert
-      - All
   securitySchemes:
     BearerAuth:
       type: http

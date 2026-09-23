@@ -24,7 +24,7 @@ tags:
 paths:
   /report-types:
     get:
-      summary: Get a list of available report types.
+      summary: Get a list of available report types
       operationId: v1ListReportTypes
       tags:
       - Report Types
@@ -74,7 +74,7 @@ paths:
                 $ref: '#/components/schemas/messages'
   /report-types/{report-type-id}:
     get:
-      summary: Get details for a specific report type.
+      summary: Get details for a specific report type
       operationId: v1ListReportTypesByReportTypeId
       tags:
       - Report Types
@@ -131,47 +131,6 @@ paths:
                 $ref: '#/components/schemas/messages'
 components:
   schemas:
-    errorMessage:
-      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
-      type: string
-    responseMessage:
-      description: Long explanation of the response message.
-      type: string
-      readOnly: true
-      example: Request Accepted
-    responseCode:
-      description: Short explanation of the response code.
-      type: string
-      readOnly: true
-      minLength: 2
-      maxLength: 50
-      example: ACCEPTED
-    reportTypes:
-      description: An array containing Report Types.
-      type: object
-      required:
-      - reportTypes
-      properties:
-        reportTypes:
-          type: array
-          minItems: 0
-          description: Array of report type
-          items:
-            $ref: '#/components/schemas/reportType'
-    validationMessage:
-      description: Object containing information about transaction validation
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/errorMessage'
-        entity:
-          description: Information about the entity that experienced an error.
-          type: string
     reportAttributeName:
       description: The name of the attribute in the report.
       type: string
@@ -212,6 +171,74 @@ components:
         paymentMethodGroup:
           description: Codifies the category of payment method used for reporting purpose such as local payment method, global payment method.
           type: string
+    reportTypeId:
+      description: Uniquely identifies the type of report being requested.
+      type: string
+    reportTypeFields:
+      description: An array containing Report Type Fields.
+      type: object
+      required:
+      - reportTypeFields
+      properties:
+        reportTypeFields:
+          type: array
+          minItems: 0
+          description: Report Type Field Array
+          items:
+            $ref: '#/components/schemas/defaultReportField'
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
+      type: string
+    reportTypes:
+      description: An array containing Report Types.
+      type: object
+      required:
+      - reportTypes
+      properties:
+        reportTypes:
+          type: array
+          minItems: 0
+          description: Array of report type
+          items:
+            $ref: '#/components/schemas/reportType'
+    defaultReportField:
+      description: Report Configuration Request
+      type: object
+      required:
+      - reportAttributeName
+      - businessDefinitionText
+      - defaultIncludeIndicator
+      properties:
+        reportAttributeName:
+          $ref: '#/components/schemas/reportAttributeName'
+        businessDefinitionText:
+          description: Indicates clear and concise description of the data elements used in the reports
+          type: string
+        defaultIncludeIndicator:
+          description: Indicates the BOOLEAN value to signifiy if the attribute is included in the report. TRUE indicates that the attribute is included by default.
+          type: boolean
+        attributeCategories:
+          description: Defines the category of the attribute. Samples values are Card Present, Tax, MRPS, IBAN, 3DS.
+          type: string
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in transaction validation
+          items:
+            $ref: '#/components/schemas/validationMessage'
     adfsError:
       description: Object containing information in the file
       type: object
@@ -235,9 +262,11 @@ components:
     code:
       description: Short informative code about the error.
       type: string
-    reportTypeId:
-      description: Uniquely identifies the type of report being requested.
+    responseMessage:
+      description: Long explanation of the response message.
       type: string
+      readOnly: true
+      example: Request Accepted
     responseStatus:
       description: Request result status.
       type: string
@@ -246,56 +275,27 @@ components:
       enum:
       - SUCCESS
       - ERROR
-    messages:
-      description: A list of errors and warnings.
+    validationMessage:
+      description: Object containing information about transaction validation
       type: object
       required:
-      - responseStatus
-      - responseCode
+      - code
+      - message
       properties:
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        validationErrors:
-          type: array
-          minItems: 0
-          description: Information about errors occurred in transaction validation
-          items:
-            $ref: '#/components/schemas/validationMessage'
-    defaultReportField:
-      description: Report Configuration Request
-      type: object
-      required:
-      - reportAttributeName
-      - businessDefinitionText
-      - defaultIncludeIndicator
-      properties:
-        reportAttributeName:
-          $ref: '#/components/schemas/reportAttributeName'
-        businessDefinitionText:
-          description: Indicates clear and concise description of the data elements used in the reports
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
           type: string
-        defaultIncludeIndicator:
-          description: Indicates the BOOLEAN value to signifiy if the attribute is included in the report. TRUE indicates that the attribute is included by default.
-          type: boolean
-        attributeCategories:
-          description: Defines the category of the attribute. Samples values are Card Present, Tax, MRPS, IBAN, 3DS.
-          type: string
-    reportTypeFields:
-      description: An array containing Report Type Fields.
-      type: object
-      required:
-      - reportTypeFields
-      properties:
-        reportTypeFields:
-          type: array
-          minItems: 0
-          description: Report Type Field Array
-          items:
-            $ref: '#/components/schemas/defaultReportField'
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
   securitySchemes:
     BearerAuth:
       type: http

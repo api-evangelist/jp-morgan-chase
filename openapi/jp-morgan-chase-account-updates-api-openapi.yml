@@ -21,7 +21,7 @@ tags:
 paths:
   /account-updates:
     post:
-      summary: Query Account Updater service.
+      summary: Query Account Updater service
       tags:
       - Account Updates
       description: Request an update to an account. Check for updated account information.
@@ -514,9 +514,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/messages'
+      operationId: postAccountUpdates
+      x-operation-id-source: derived
   /account-updates/{account-identifier}:
     get:
-      summary: Get information about an account update.
+      summary: Get information about an account update
       tags:
       - Account Updates
       description: Get information about an account update.
@@ -634,72 +636,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/messages'
+      operationId: getAccountUpdatesByAccountIdentifier
+      x-operation-id-source: derived
 components:
   schemas:
-    accountInformation:
-      description: Object that contains card account details, including card number, expiration date, and account number type.
-      type: object
-      properties:
-        cardNumber:
-          description: Card or SafeTech token account number (13-19 digits). Used for identifying the payment instrument.
-          type: string
-          example: '4012888888881881'
-        expiry:
-          $ref: '#/components/schemas/expiry'
-        accountNumberType:
-          $ref: '#/components/schemas/accountNumberType'
-    merchantRecordIdentifier:
-      description: Merchant-supplied record identifier preferably in UUID format. Used to correlate API requests with internal records.
-      type: string
-      example: 45becd4d-b0d9-4904-9958-49aba52f1280
-    validationMessage:
-      description: Object containing information about transaction validation.
-      type: object
-      properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/message'
-        entity:
-          description: The name of the entity that experienced an error, such as a component or service involved in the request.
-          type: string
-          example: Request Validator
-    accountUpdaterResult:
-      description: Object that contains the result of the account update process, including old and new account information,payment network response, and outcome messages.
-      type: object
-      properties:
-        oldAccountInformation:
-          $ref: '#/components/schemas/oldAccountInformation'
-        newAccountInformation:
-          $ref: '#/components/schemas/newAccountInformation'
-        networkResponse:
-          $ref: '#/components/schemas/networkResponse'
-        reasonMessage:
-          description: The account update response message that is independent of payment network. Allowed values are defined by the Account Updater service.
-          type: string
-          example: NEW_ACCOUNT_AND_EXPIRY
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        expectedRecordUpdateTimestamp:
-          description: Expected timestamp (ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)) for when the record will be updated. Useful for scheduling and tracking updates.
-          type: string
-          format: date-time
-          example: '2024-10-30T14:30:00.000Z'
-    expiry:
-      description: Object that contains the card expiration date, including month and year.
-      type: object
-      required:
-      - month
-      - year
-      properties:
-        month:
-          $ref: '#/components/schemas/month'
-        year:
-          $ref: '#/components/schemas/year'
-    requestId:
-      description: Unique identifier of the API request designated by the merchant. Must be a valid UUID.
-      type: string
-      example: 98c21399-a3f6-41ce-881a-9c5aeb586932
+    year:
+      description: Card expiration year (four-digit integer, for example, 2026). Indicates when the card expires.
+      type: integer
+      format: int32
+      minimum: 2018
+      maximum: 2999
+      example: 2020
     requestStatus:
       description: Registration state of the card for the submitted request (REGISTERED, UNREGISTERED, etc.). Reflects current enrollment status.
       type: string
@@ -709,6 +656,20 @@ components:
       - UNREGISTERED
       - REGISTRATION_FAILED
       - REGISTRATION_PENDING
+    oldAccountInformation:
+      description: Object that contains the card account information submitted in the request, including card number, expiration date, and account number type.
+      type: object
+      properties:
+        cardNumber:
+          description: Card or SafeTech token account number (13-19 digits). Represents the original payment instrument submitted in the request.
+          type: string
+          example: '4012888888881881'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        cardTypeName:
+          $ref: '#/components/schemas/cardTypeName'
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
     messages:
       description: A list of errors and warnings.
       type: object
@@ -728,173 +689,6 @@ components:
           description: Array that contains information about errors encountered during transaction validation. Each object includes error code, message, and entity details.
           items:
             $ref: '#/components/schemas/validationMessage'
-    responseId:
-      description: Unique response identifier (UUID). Used to track and reference API responses.
-      type: string
-      example: fe663508-8040-4880-bfc6-1212932837bc
-    resultsMessage:
-      description: Object that contains the result details of the account update process, including old and new account information, network response codes, and outcome messages.
-      type: object
-      properties:
-        oldAccountInformation:
-          $ref: '#/components/schemas/oldAccountInformation'
-        newAccountInformation:
-          $ref: '#/components/schemas/newAccountInformation'
-        networkResponse:
-          description: The response code returned by the payment network for the account update.
-          type: string
-          deprecated: true
-        reason:
-          description: The textual description of the account update outcome as provided by the response code.
-          type: string
-          deprecated: true
-        reasonMessage:
-          description: Outcome message describing the result of the account updater process. Refer to Account Updater service documentation for allowed values.
-          type: string
-          example: NEW_ACCOUNT_AND_EXPIRY
-        responseMessage:
-          description: Detailed explanation of the account update response. Provides context for the outcome of the request.
-          type: string
-        expectedRecordUpdateTimestamp:
-          description: Expected timestamp (ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)) for when the record will be updated. Useful for scheduling and tracking updates.
-          type: string
-          format: date-time
-          example: '2024-10-30T14:30:00.000Z'
-        networkResponseCode:
-          description: The response code returned by the payment network for the account update.
-          type: string
-    newAccountInformation:
-      description: Object that contains updated card account information when available, including card number, expiration date, account number type, and payment method change status.
-      type: object
-      properties:
-        cardNumber:
-          description: Updated card or SafeTech token account number (13-19 digits). Represents the new payment instrument after update.
-          type: string
-          example: '4012888888881881'
-        expiry:
-          $ref: '#/components/schemas/expiry'
-        cardTypeName:
-          $ref: '#/components/schemas/cardTypeName'
-        paymentMethodChanged:
-          description: Boolean flag indicating if the payment method for the consumer account has changed (true = changed, false = unchanged).
-          type: boolean
-        accountNumberType:
-          $ref: '#/components/schemas/accountNumberType'
-    networkResponse:
-      description: Object that contains account update response information from the payment network, including response codes and messages.
-      type: object
-      properties:
-        networkReasonMessage:
-          description: The account update description returned from payment networks.
-          type: string
-          deprecated: true
-        networkResponseCode:
-          description: The response code returned by the payment network for the account update. Allowed values are defined by the payment network.
-          type: string
-    responseCode:
-      description: The response code representing the outcome of the request. Allowed values are defined by the application.
-      type: string
-      readOnly: true
-      minLength: 2
-      maxLength: 50
-      example: ACCEPTED
-    cardTypeName:
-      description: Payment method label used to identify the card brand or payment network, for example, Visa, Mastercard, Discover.
-      type: string
-    accountUpdateRequest:
-      description: Request updated information for an account. Information is delivered via the notification interface.
-      type: object
-      properties:
-        accountInformation:
-          $ref: '#/components/schemas/accountInformation'
-        cardAccountAction:
-          $ref: '#/components/schemas/cardAccountAction'
-        subMerchantId:
-          $ref: '#/components/schemas/subMerchantId'
-        merchantRecordIdentifier:
-          $ref: '#/components/schemas/merchantRecordIdentifier'
-        bypassBrandCheckIndicator:
-          description: Boolean flag indicating whether the check for updates on additional card brands is bypassed. When set to "true", no verification is performed on these additional brands to determine their readiness for updates.
-          type: boolean
-    code:
-      description: The error code returned when an exception is encountered by the system or a connected component. Allowed values are defined by the application.
-      type: string
-      example: '1001'
-    year:
-      description: Card expiration year (four-digit integer, for example, 2026). Indicates when the card expires.
-      type: integer
-      format: int32
-      minimum: 2018
-      maximum: 2999
-      example: 2020
-    responseStatus:
-      description: The result status of the request. Allowed values are "SUCCESS" and "ERROR".
-      type: string
-      readOnly: true
-      example: SUCCESS
-      enum:
-      - SUCCESS
-      - ERROR
-    message:
-      description: The detailed message describing the error encountered.
-      type: string
-      example: A required field is empty.
-    responseMessage:
-      description: Detailed explanation of the account update response. Provides context for the outcome of the request.
-      type: string
-      readOnly: true
-      example: Request Accepted
-    cardAccountAction:
-      description: Action to register or unregister the account number for automated updates (requires notification service enrollment).
-      type: string
-      example: REGISTER
-      enum:
-      - REGISTER
-      - UNREGISTER
-    accountUpdateResponse:
-      description: Information on update request. Pending indicates that request is being processed. Delivered indicates that a response has been sent to the callback URL provided in the request.
-      type: object
-      required:
-      - requestCreateTimestamp
-      - responseId
-      - requestId
-      - response
-      properties:
-        requestCreateTimestamp:
-          description: The date and time when the request is created, in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).
-          type: string
-          format: date-time
-          example: '2024-10-30T14:30:00.000Z'
-        responseId:
-          $ref: '#/components/schemas/responseId'
-        requestId:
-          $ref: '#/components/schemas/requestId'
-        requestStatus:
-          $ref: '#/components/schemas/requestStatus'
-        response:
-          description: Status of the request (SUCCESS or ERROR). Indicates whether the operation was completed successfully.
-          type: string
-          enum:
-          - SUCCESS
-          - ERROR
-          example: SUCCESS
-        accountUpdaterResult:
-          $ref: '#/components/schemas/accountUpdaterResult'
-        merchantRecordIdentifier:
-          $ref: '#/components/schemas/merchantRecordIdentifier'
-        cardAccountAction:
-          $ref: '#/components/schemas/cardAccountAction'
-        subMerchantId:
-          $ref: '#/components/schemas/subMerchantId'
-        bypassBrandCheckIndicator:
-          description: Boolean flag indicating whether the check for updates on additional card brands is bypassed. When set to "true", no verification is performed on these additional brands to determine their readiness for updates.
-          type: boolean
-    accountNumberType:
-      description: Type of payment method for the account number, for example, PAN, SAFETECH_TOKEN. Determines processing method.
-      type: string
-      enum:
-      - PAN
-      - SAFETECH_TOKEN
     accountGetUpdateResponse:
       description: Information about an account.
       type: object
@@ -938,25 +732,36 @@ components:
           type: boolean
         cardAccountAction:
           $ref: '#/components/schemas/cardAccountAction'
-    subMerchantId:
-      description: Sub-merchant entity identifier (up to 12 numeric digits). Used for transaction processing and reporting at the lowest account hierarchy.
+    code:
+      description: The error code returned when an exception is encountered by the system or a connected component. Allowed values are defined by the application.
       type: string
-      maxLength: 12
-      example: '991234567890'
-    oldAccountInformation:
-      description: Object that contains the card account information submitted in the request, including card number, expiration date, and account number type.
+      example: '1001'
+    accountUpdaterResult:
+      description: Object that contains the result of the account update process, including old and new account information,payment network response, and outcome messages.
       type: object
       properties:
-        cardNumber:
-          description: Card or SafeTech token account number (13-19 digits). Represents the original payment instrument submitted in the request.
+        oldAccountInformation:
+          $ref: '#/components/schemas/oldAccountInformation'
+        newAccountInformation:
+          $ref: '#/components/schemas/newAccountInformation'
+        networkResponse:
+          $ref: '#/components/schemas/networkResponse'
+        reasonMessage:
+          description: The account update response message that is independent of payment network. Allowed values are defined by the Account Updater service.
           type: string
-          example: '4012888888881881'
-        expiry:
-          $ref: '#/components/schemas/expiry'
-        cardTypeName:
-          $ref: '#/components/schemas/cardTypeName'
-        accountNumberType:
-          $ref: '#/components/schemas/accountNumberType'
+          example: NEW_ACCOUNT_AND_EXPIRY
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        expectedRecordUpdateTimestamp:
+          description: Expected timestamp (ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)) for when the record will be updated. Useful for scheduling and tracking updates.
+          type: string
+          format: date-time
+          example: '2024-10-30T14:30:00.000Z'
+    responseMessage:
+      description: Detailed explanation of the account update response. Provides context for the outcome of the request.
+      type: string
+      readOnly: true
+      example: Request Accepted
     month:
       description: Card expiration month (integer 1-12). Indicates when the card expires.
       type: integer
@@ -964,6 +769,205 @@ components:
       minimum: 1
       maximum: 12
       example: 5
+    responseCode:
+      description: The response code representing the outcome of the request. Allowed values are defined by the application.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    expiry:
+      description: Object that contains the card expiration date, including month and year.
+      type: object
+      required:
+      - month
+      - year
+      properties:
+        month:
+          $ref: '#/components/schemas/month'
+        year:
+          $ref: '#/components/schemas/year'
+    cardTypeName:
+      description: Payment method label used to identify the card brand or payment network, for example, Visa, Mastercard, Discover.
+      type: string
+    responseId:
+      description: Unique response identifier (UUID). Used to track and reference API responses.
+      type: string
+      example: fe663508-8040-4880-bfc6-1212932837bc
+    message:
+      description: The detailed message describing the error encountered.
+      type: string
+      example: A required field is empty.
+    accountUpdateRequest:
+      description: Request updated information for an account. Information is delivered via the notification interface.
+      type: object
+      properties:
+        accountInformation:
+          $ref: '#/components/schemas/accountInformation'
+        cardAccountAction:
+          $ref: '#/components/schemas/cardAccountAction'
+        subMerchantId:
+          $ref: '#/components/schemas/subMerchantId'
+        merchantRecordIdentifier:
+          $ref: '#/components/schemas/merchantRecordIdentifier'
+        bypassBrandCheckIndicator:
+          description: Boolean flag indicating whether the check for updates on additional card brands is bypassed. When set to "true", no verification is performed on these additional brands to determine their readiness for updates.
+          type: boolean
+    subMerchantId:
+      description: Sub-merchant entity identifier (up to 12 numeric digits). Used for transaction processing and reporting at the lowest account hierarchy.
+      type: string
+      maxLength: 12
+      example: '991234567890'
+    merchantRecordIdentifier:
+      description: Merchant-supplied record identifier preferably in UUID format. Used to correlate API requests with internal records.
+      type: string
+      example: 45becd4d-b0d9-4904-9958-49aba52f1280
+    networkResponse:
+      description: Object that contains account update response information from the payment network, including response codes and messages.
+      type: object
+      properties:
+        networkReasonMessage:
+          description: The account update description returned from payment networks.
+          type: string
+          deprecated: true
+        networkResponseCode:
+          description: The response code returned by the payment network for the account update. Allowed values are defined by the payment network.
+          type: string
+    accountNumberType:
+      description: Type of payment method for the account number, for example, PAN, SAFETECH_TOKEN. Determines processing method.
+      type: string
+      enum:
+      - PAN
+      - SAFETECH_TOKEN
+    newAccountInformation:
+      description: Object that contains updated card account information when available, including card number, expiration date, account number type, and payment method change status.
+      type: object
+      properties:
+        cardNumber:
+          description: Updated card or SafeTech token account number (13-19 digits). Represents the new payment instrument after update.
+          type: string
+          example: '4012888888881881'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        cardTypeName:
+          $ref: '#/components/schemas/cardTypeName'
+        paymentMethodChanged:
+          description: Boolean flag indicating if the payment method for the consumer account has changed (true = changed, false = unchanged).
+          type: boolean
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
+    accountUpdateResponse:
+      description: Information on update request. Pending indicates that request is being processed. Delivered indicates that a response has been sent to the callback URL provided in the request.
+      type: object
+      required:
+      - requestCreateTimestamp
+      - responseId
+      - requestId
+      - response
+      properties:
+        requestCreateTimestamp:
+          description: The date and time when the request is created, in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).
+          type: string
+          format: date-time
+          example: '2024-10-30T14:30:00.000Z'
+        responseId:
+          $ref: '#/components/schemas/responseId'
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        requestStatus:
+          $ref: '#/components/schemas/requestStatus'
+        response:
+          description: Status of the request (SUCCESS or ERROR). Indicates whether the operation was completed successfully.
+          type: string
+          enum:
+          - SUCCESS
+          - ERROR
+          example: SUCCESS
+        accountUpdaterResult:
+          $ref: '#/components/schemas/accountUpdaterResult'
+        merchantRecordIdentifier:
+          $ref: '#/components/schemas/merchantRecordIdentifier'
+        cardAccountAction:
+          $ref: '#/components/schemas/cardAccountAction'
+        subMerchantId:
+          $ref: '#/components/schemas/subMerchantId'
+        bypassBrandCheckIndicator:
+          description: Boolean flag indicating whether the check for updates on additional card brands is bypassed. When set to "true", no verification is performed on these additional brands to determine their readiness for updates.
+          type: boolean
+    requestId:
+      description: Unique identifier of the API request designated by the merchant. Must be a valid UUID.
+      type: string
+      example: 98c21399-a3f6-41ce-881a-9c5aeb586932
+    cardAccountAction:
+      description: Action to register or unregister the account number for automated updates (requires notification service enrollment).
+      type: string
+      example: REGISTER
+      enum:
+      - REGISTER
+      - UNREGISTER
+    responseStatus:
+      description: The result status of the request. Allowed values are "SUCCESS" and "ERROR".
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    accountInformation:
+      description: Object that contains card account details, including card number, expiration date, and account number type.
+      type: object
+      properties:
+        cardNumber:
+          description: Card or SafeTech token account number (13-19 digits). Used for identifying the payment instrument.
+          type: string
+          example: '4012888888881881'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        accountNumberType:
+          $ref: '#/components/schemas/accountNumberType'
+    validationMessage:
+      description: Object containing information about transaction validation.
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          description: The name of the entity that experienced an error, such as a component or service involved in the request.
+          type: string
+          example: Request Validator
+    resultsMessage:
+      description: Object that contains the result details of the account update process, including old and new account information, network response codes, and outcome messages.
+      type: object
+      properties:
+        oldAccountInformation:
+          $ref: '#/components/schemas/oldAccountInformation'
+        newAccountInformation:
+          $ref: '#/components/schemas/newAccountInformation'
+        networkResponse:
+          description: The response code returned by the payment network for the account update.
+          type: string
+          deprecated: true
+        reason:
+          description: The textual description of the account update outcome as provided by the response code.
+          type: string
+          deprecated: true
+        reasonMessage:
+          description: Outcome message describing the result of the account updater process. Refer to Account Updater service documentation for allowed values.
+          type: string
+          example: NEW_ACCOUNT_AND_EXPIRY
+        responseMessage:
+          description: Detailed explanation of the account update response. Provides context for the outcome of the request.
+          type: string
+        expectedRecordUpdateTimestamp:
+          description: Expected timestamp (ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)) for when the record will be updated. Useful for scheduling and tracking updates.
+          type: string
+          format: date-time
+          example: '2024-10-30T14:30:00.000Z'
+        networkResponseCode:
+          description: The response code returned by the payment network for the account update.
+          type: string
   securitySchemes:
     BearerAuth:
       type: http

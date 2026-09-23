@@ -1,7 +1,9 @@
 ---
 title: 'JPMorgan Chase leads banking sector in AI adoption: report'
 url: https://www.ciodive.com/news/jpmorgan-chase-capital-one-ai-adoption-leaders-evident/730208/
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"JP Morgan Chase" press release artificial intelligence'
 position: 5
 source: serpapi-google

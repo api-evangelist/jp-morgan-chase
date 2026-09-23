@@ -112,6 +112,71 @@ paths:
           $ref: '#/components/responses/503'
 components:
   schemas:
+    StandardCodeContext:
+      type: object
+      required:
+      - code
+      - message
+      - type
+      properties:
+        type:
+          title: CategoryType
+          type: string
+          description: "Category of the error code such as Business  21000 Invalid Access Token \n|Category Type | Description\n|--------------|-----------------\n|Business 21000 | Invalid Request, Client ID {ClientIdName} not valid\n|Server 22002 | Error connecting to Account Product Service for Client Id {ClientIdName}, account Id {accountHashId} for retrieving account details"
+          minLength: 2
+          maxLength: 16
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+    PaymentError:
+      type: object
+      x-tags:
+      - common-error-model
+      - common-components
+      title: Error
+      description: Common Error Model
+      properties:
+        title:
+          type: string
+          title: Short humanly-readable title of the error.
+          minLength: 1
+          maxLength: 100
+        httpStatus:
+          type: integer
+          default: 400
+          title: HTTP Status Code
+        traceId:
+          type: string
+          title: JPMC Assigned traced identifier
+        requestId:
+          type: string
+          title: The 'client originated' requestId
+        context:
+          type: array
+          title: Provides additional context and detail on the validation errors
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 1
+          maxItems: 100
+      required:
+      - title
+      readOnly: true
+    ActorType:
+      title: FDX API Actor Type
+      description: 'This parameter is optional. The API only supports BATCH operations. default: BATCH'
+      type: string
+      default: BATCH
+      enum:
+      - BATCH
+      - USER
     AccountContact:
       title: Account Contact entity
       description: Contact information for the account
@@ -123,6 +188,22 @@ components:
             $ref: '#/components/schemas/Customer'
           minItems: 0
           description: Owners of the account
+    BusinessCustomer:
+      title: Business Customer entity
+      description: Customers that are commercial in nature are affiliated with a business entity
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of business customer
+          example: AKOMEAH TEXTILES
+    AdditionalContext:
+      type: array
+      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
+      items:
+        $ref: '#/components/schemas/StandardCodeContext'
+      minItems: 1
+      maxItems: 5
     ErrorContext:
       x-tags:
       - common-error-model
@@ -162,52 +243,6 @@ components:
         additionalContext:
           $ref: '#/components/schemas/AdditionalContext'
       description: Error Context
-    Identifier:
-      title: Identifier
-      description: Value for a unique identifier
-      type: string
-      maxLength: 256
-      example: 5ff6a4b6fd9f4607c0a7ca0f037c62018693f940836d69b31d664f2257f4c623
-    AdditionalContext:
-      type: array
-      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
-      items:
-        $ref: '#/components/schemas/StandardCodeContext'
-      minItems: 1
-      maxItems: 5
-    StandardCodeContext:
-      type: object
-      required:
-      - code
-      - message
-      - type
-      properties:
-        type:
-          title: CategoryType
-          type: string
-          description: "Category of the error code such as Business  21000 Invalid Access Token \n|Category Type | Description\n|--------------|-----------------\n|Business 21000 | Invalid Request, Client ID {ClientIdName} not valid\n|Server 22002 | Error connecting to Account Product Service for Client Id {ClientIdName}, account Id {accountHashId} for retrieving account details"
-          minLength: 2
-          maxLength: 16
-        code:
-          type: string
-          description: Short code that identifies the error - publicly cataloged and documented
-          minLength: 2
-          maxLength: 10
-          pattern: ^[a-zA-Z0-9]+$
-        message:
-          type: string
-          description: Human readable textual description of the error
-          minLength: 1
-          maxLength: 99
-    BusinessOrConsumer:
-      title: Business or Consumer Type
-      description: Indicator if parent entity is a consumer or business
-      type: string
-      x-fdx-csdf-account-categories:
-      - ANY
-      enum:
-      - BUSINESS
-      - CONSUMER
     Customer:
       type: object
       properties:
@@ -233,31 +268,23 @@ components:
           description: Type of entity. One of BUSINESS or CONSUMER
         businessCustomer:
           $ref: '#/components/schemas/BusinessCustomer'
-    ActorType:
-      title: FDX API Actor Type
-      description: 'This parameter is optional. The API only supports BATCH operations. default: BATCH'
+    Identifier:
+      title: Identifier
+      description: Value for a unique identifier
       type: string
-      default: BATCH
-      enum:
-      - BATCH
-      - USER
-    Error:
-      title: Error
-      description: An error entity which can be used at the API level for error responses or at the account level to indicate a problem specific to a particular account
+      maxLength: 256
+      example: 5ff6a4b6fd9f4607c0a7ca0f037c62018693f940836d69b31d664f2257f4c623
+    TelephoneNumber:
+      title: Telephone Number
+      description: Standard for international phone numbers
       type: object
       properties:
-        code:
+        number:
           type: string
-          description: Long term persistent identifier which can be used to trace error condition back to log information
-          example: '601'
-        message:
-          type: string
-          description: End user displayable information which might help the customer diagnose an error
-          example: Customer not found
-        debugMessage:
-          type: string
-          description: Message used to debug the root cause of the error. Contents should not be used in consumer's business logic. Can change at any time and should only be used for consumer to communicate with the data provider about an issue. Provider can include an error GUID in message for their use.
-          example: 11005:Invalid Customer - Customer Not Found for Client ID A_JPMC_CB_777_SIT_114355
+          maxLength: 15
+          pattern: \d+
+          description: Telephone subscriber number defined by ITU-T recommendation E.164
+          example: '1234567890'
     Address:
       title: Address
       description: U.S. domestic address or a foreign address with country other than 'US'
@@ -302,39 +329,32 @@ components:
           - type: string
             description: Country code
             example: US
-    PaymentError:
-      type: object
-      x-tags:
-      - common-error-model
-      - common-components
+    Error:
       title: Error
-      description: Common Error Model
+      description: An error entity which can be used at the API level for error responses or at the account level to indicate a problem specific to a particular account
+      type: object
       properties:
-        title:
+        code:
           type: string
-          title: Short humanly-readable title of the error.
-          minLength: 1
-          maxLength: 100
-        httpStatus:
-          type: integer
-          default: 400
-          title: HTTP Status Code
-        traceId:
+          description: Long term persistent identifier which can be used to trace error condition back to log information
+          example: '601'
+        message:
           type: string
-          title: JPMC Assigned traced identifier
-        requestId:
+          description: End user displayable information which might help the customer diagnose an error
+          example: Customer not found
+        debugMessage:
           type: string
-          title: The 'client originated' requestId
-        context:
-          type: array
-          title: Provides additional context and detail on the validation errors
-          items:
-            $ref: '#/components/schemas/ErrorContext'
-          minItems: 1
-          maxItems: 100
-      required:
-      - title
-      readOnly: true
+          description: Message used to debug the root cause of the error. Contents should not be used in consumer's business logic. Can change at any time and should only be used for consumer to communicate with the data provider about an issue. Provider can include an error GUID in message for their use.
+          example: 11005:Invalid Customer - Customer Not Found for Client ID A_JPMC_CB_777_SIT_114355
+    BusinessOrConsumer:
+      title: Business or Consumer Type
+      description: Indicator if parent entity is a consumer or business
+      type: string
+      x-fdx-csdf-account-categories:
+      - ANY
+      enum:
+      - BUSINESS
+      - CONSUMER
     Iso3166CountryCode:
       title: ISO 3166 Country Code
       description: ISO 3166-1 alpha-2 codes as of April 5, 2023, from officially assigned Country Codes on [ISO Online Browsing Platform](https://www.iso.org/obp/ui/). Change log is at [ISO 3166 Maintenance Agency](https://www.iso.org/fr/committee/48750.html?t=3V3rukDb61p05Wd6ojyTRvE0S3Yg_fZgUjrLjHWcd9-mDmTKHOGjbX3nEJ3SqHar&view=documents#section-isodocuments-top)
@@ -588,46 +608,7 @@ components:
       - ZA
       - ZM
       - ZW
-    TelephoneNumber:
-      title: Telephone Number
-      description: Standard for international phone numbers
-      type: object
-      properties:
-        number:
-          type: string
-          maxLength: 15
-          pattern: \d+
-          description: Telephone subscriber number defined by ITU-T recommendation E.164
-          example: '1234567890'
-    BusinessCustomer:
-      title: Business Customer entity
-      description: Customers that are commercial in nature are affiliated with a business entity
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of business customer
-          example: AKOMEAH TEXTILES
   parameters:
-    FapiInteractionIdHeader:
-      name: x-fapi-interaction-id
-      in: header
-      description: Unique identifier for this interaction as an IETF RFC 4122 UUID. Used across all FDX API requests and responses. This parameter is required.
-      schema:
-        type: string
-      required: true
-      examples:
-        Scenario-1:
-          summary: Sample FAPI Interaction Id
-          value: c770aef3-6784-41f7-8e0e-ff5f97bddb3a
-    FdxApiDataProviderIdHeader:
-      name: FDX-API-Data-Provider-Id
-      in: header
-      description: ID for the financial institution responding to the request
-      schema:
-        $ref: '#/components/schemas/Identifier'
-        description: If the FDX API service is provided by a service bureau which uses the same end point for multiple institutions, the FDX API client MUST provide a header that identifies the desired financial institution. This corresponds to a data_provider_id in the registry. This header MAY be omitted if identifying a data provider is not required by the API host
-      required: false
     FdxApiActorTypeHeader:
       name: Fdx-Api-Actor-Type
       in: header
@@ -638,14 +619,6 @@ components:
         Scenario-1:
           summary: Sample Actor Type
           value: BATCH
-    FdxApiClientPublicKeyHeader:
-      name: FDX-API-Client-Public-Key
-      in: header
-      description: Public key for data provider to encrypt sensitive response data
-      schema:
-        type: string
-        description: A public key value (created using RSA or Elliptic Curve) to use to encrypt the value that's returned in accountNumber or other sensitive response properties
-      required: false
     AccountIdPath:
       name: accountId
       in: path
@@ -657,6 +630,17 @@ components:
         Scenario-1:
           summary: Sample Account Identifier
           value: c5e38f3375cb5f9225ab4dbf05ddcb9ed3faf2d29ebe0d4de47cbd7eb5e9594f
+    FapiInteractionIdHeader:
+      name: x-fapi-interaction-id
+      in: header
+      description: Unique identifier for this interaction as an IETF RFC 4122 UUID. Used across all FDX API requests and responses. This parameter is required.
+      schema:
+        type: string
+      required: true
+      examples:
+        Scenario-1:
+          summary: Sample FAPI Interaction Id
+          value: c770aef3-6784-41f7-8e0e-ff5f97bddb3a
     FdxApiDataRecipientIdHeader:
       name: FDX-API-Data-Recipient-Id
       in: header
@@ -665,9 +649,25 @@ components:
         $ref: '#/components/schemas/Identifier'
         description: "If the FDX API service is being called by a Data Access Platform which supports multiple data recipients, the FDX API client must provide a header that identifies the calling data recipient. This header may be omitted if identifying a Data Recipient is not required by the Data Provider. Data Provider will specify what the header value must correspond to\n  * `client_id` if client is registered in the Data Provider's registry, and/or\n  * `FDX-Registry-Id` if client is registered with FDX (not with DP), and/or\n  * `App Name` if Data Provider uses neither client_id nor FDX_Registry-Id"
       required: false
+    FdxApiClientPublicKeyHeader:
+      name: FDX-API-Client-Public-Key
+      in: header
+      description: Public key for data provider to encrypt sensitive response data
+      schema:
+        type: string
+        description: A public key value (created using RSA or Elliptic Curve) to use to encrypt the value that's returned in accountNumber or other sensitive response properties
+      required: false
+    FdxApiDataProviderIdHeader:
+      name: FDX-API-Data-Provider-Id
+      in: header
+      description: ID for the financial institution responding to the request
+      schema:
+        $ref: '#/components/schemas/Identifier'
+        description: If the FDX API service is provided by a service bureau which uses the same end point for multiple institutions, the FDX API client MUST provide a header that identifies the desired financial institution. This corresponds to a data_provider_id in the registry. This header MAY be omitted if identifying a data provider is not required by the API host
+      required: false
   responses:
-    '500':
-      description: 'Internal Server Error
+    '503':
+      description: 'Service Unavailable
 
 
         **List of Error codes and Usage explanations.**
@@ -676,7 +676,9 @@ components:
 
         | --------------  |---------------------------------------------------------------------------------------------|
 
-        | 503             | Bad Response,GET / 503 operation response content type ''text/html'' does not exist           |'
+        | 500             | Internal server error,11002:Internal Server Error for Client ID                             |
+
+        | 503             | System unavailable, GET / 503 operation response content type ''text/html'' does not exist    |'
       headers:
         x-fapi-interaction-id:
           $ref: '#/components/parameters/FapiInteractionIdHeader'
@@ -685,10 +687,10 @@ components:
           schema:
             $ref: '#/components/schemas/PaymentError'
           examples:
-            BadResponse:
+            SystemUnavailable:
               value:
-                title: Bad Response
-                httpStatus: 500
+                title: System Unavailable
+                httpStatus: 503
                 traceId: 123e4567-e89b-12d3-a456-426614174000
                 context:
                 - message: GET / 503 operation response content type 'text/html' does not exist
@@ -718,8 +720,8 @@ components:
                 traceId: 123e4567-e89b-12d3-a456-426614174000
                 context:
                 - message: GET / 503 operation response content type 'text/html' does not exist
-    '503':
-      description: 'Service Unavailable
+    '500':
+      description: 'Internal Server Error
 
 
         **List of Error codes and Usage explanations.**
@@ -728,9 +730,7 @@ components:
 
         | --------------  |---------------------------------------------------------------------------------------------|
 
-        | 500             | Internal server error,11002:Internal Server Error for Client ID                             |
-
-        | 503             | System unavailable, GET / 503 operation response content type ''text/html'' does not exist    |'
+        | 503             | Bad Response,GET / 503 operation response content type ''text/html'' does not exist           |'
       headers:
         x-fapi-interaction-id:
           $ref: '#/components/parameters/FapiInteractionIdHeader'
@@ -739,10 +739,10 @@ components:
           schema:
             $ref: '#/components/schemas/PaymentError'
           examples:
-            SystemUnavailable:
+            BadResponse:
               value:
-                title: System Unavailable
-                httpStatus: 503
+                title: Bad Response
+                httpStatus: 500
                 traceId: 123e4567-e89b-12d3-a456-426614174000
                 context:
                 - message: GET / 503 operation response content type 'text/html' does not exist

@@ -42,6 +42,123 @@ paths:
       - Connectivity
 components:
   schemas:
+    Field:
+      title: Field
+      type: object
+      properties:
+        additionalInfo:
+          description: A serialized JSON containing additional information that could be useful.
+          type: string
+        checkbox:
+          description: Display boolean value as checkbox.
+          type: boolean
+        description:
+          description: A short description of what the field is used for.
+          type: string
+        group:
+          description: Identifies which fields should be gathered in the group.
+          type: string
+        helpText:
+          description: Text displayed next to the input field.
+          type: string
+        hint:
+          description: Gray text in the input view (Similar to a placeholder).
+          type: string
+        immutable:
+          description: Controls whether or not the field values entered are immutable.
+          type: boolean
+        masked:
+          description: Controls whether or not the field should be shown masked, like a password field.
+          type: boolean
+        maxLength:
+          description: Integer value of the maximum accepted characters of input.
+          type: integer
+          format: int32
+        minLength:
+          description: Integer value of the minimum accepted characters of input.
+          type: integer
+          format: int32
+        name:
+          description: The name of the input field.
+          type: string
+        numeric:
+          description: Controls whether or not the field should only accept numeric values.
+          type: boolean
+        oneOf:
+          description: Identifies if only one field within group should be filled.
+          type: boolean
+        optional:
+          description: Controls whether or not the field should be optional.
+          type: boolean
+        pattern:
+          description: A regex pattern that can be evaluated on the input.
+          type: string
+        patternError:
+          description: An error message that can be displayed if the provided pattern does not validate.
+          type: string
+        selectOptions:
+          description: A list of options where the user should select one.
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/SelectOption'
+        sensitive:
+          description: Controls whether or not the field should be sensitive.
+          type: boolean
+        style:
+          description: Information about style of 2FA screen.
+          type: string
+        type:
+          description: Stores information about field type.
+          type: string
+        value:
+          type: string
+    ProviderLogin:
+      type: object
+      title: ProviderLogin
+      properties:
+        status:
+          description: 'Indicates the health status of the provider. Use this
+
+            information for user experience purposes (e.g. displaying a list
+
+            of providers to the end user, and whether the provider''s service
+
+            is working as expected).'
+          type: string
+          enum:
+          - HEALTHY
+          - DEGRADED
+          - PLANNED_MAINTENANCE
+          - DOWN
+          readOnly: true
+    FinancialService:
+      type: object
+      title: FinancialService
+      required:
+      - segment
+      - shortName
+      properties:
+        segment:
+          description: Indicates which segment the financial service belongs to.
+          type: string
+          enum:
+          - BUSINESS
+          - PERSONAL
+          readOnly: true
+          example: PERSONAL
+        shortName:
+          description: Short name of the financial service.
+          type: string
+          readOnly: true
+          example: Personal Banking
+    HealthStatusValue:
+      title: HealthStatusValue
+      type: object
+      properties:
+        providerLogin:
+          $ref: '#/components/schemas/ProviderLogin'
     Provider:
       title: Provider
       description: The provider model represents financial institutions with established connectivity with us.  It specifies accesses to the financial institution, metadata about the financialinstitution, and what financial information can be accessed.
@@ -289,117 +406,6 @@ components:
           - OTHER
           readOnly: true
           example: BANK
-    HealthStatusValue:
-      title: HealthStatusValue
-      type: object
-      properties:
-        providerLogin:
-          $ref: '#/components/schemas/ProviderLogin'
-    FinancialService:
-      type: object
-      title: FinancialService
-      required:
-      - segment
-      - shortName
-      properties:
-        segment:
-          description: Indicates which segment the financial service belongs to.
-          type: string
-          enum:
-          - BUSINESS
-          - PERSONAL
-          readOnly: true
-          example: PERSONAL
-        shortName:
-          description: Short name of the financial service.
-          type: string
-          readOnly: true
-          example: Personal Banking
-    Field:
-      title: Field
-      type: object
-      properties:
-        additionalInfo:
-          description: A serialized JSON containing additional information that could be useful.
-          type: string
-        checkbox:
-          description: Display boolean value as checkbox.
-          type: boolean
-        description:
-          description: A short description of what the field is used for.
-          type: string
-        group:
-          description: Identifies which fields should be gathered in the group.
-          type: string
-        helpText:
-          description: Text displayed next to the input field.
-          type: string
-        hint:
-          description: Gray text in the input view (Similar to a placeholder).
-          type: string
-        immutable:
-          description: Controls whether or not the field values entered are immutable.
-          type: boolean
-        masked:
-          description: Controls whether or not the field should be shown masked, like a password field.
-          type: boolean
-        maxLength:
-          description: Integer value of the maximum accepted characters of input.
-          type: integer
-          format: int32
-        minLength:
-          description: Integer value of the minimum accepted characters of input.
-          type: integer
-          format: int32
-        name:
-          description: The name of the input field.
-          type: string
-        numeric:
-          description: Controls whether or not the field should only accept numeric values.
-          type: boolean
-        oneOf:
-          description: Identifies if only one field within group should be filled.
-          type: boolean
-        optional:
-          description: Controls whether or not the field should be optional.
-          type: boolean
-        pattern:
-          description: A regex pattern that can be evaluated on the input.
-          type: string
-        patternError:
-          description: An error message that can be displayed if the provided pattern does not validate.
-          type: string
-        selectOptions:
-          description: A list of options where the user should select one.
-          type: array
-          minItems: 0
-          maxItems: 100
-          items:
-            $ref: '#/components/schemas/SelectOption'
-        sensitive:
-          description: Controls whether or not the field should be sensitive.
-          type: boolean
-        style:
-          description: Information about style of 2FA screen.
-          type: string
-        type:
-          description: Stores information about field type.
-          type: string
-        value:
-          type: string
-    SelectOption:
-      title: SelectOption
-      type: object
-      properties:
-        iconUrl:
-          description: A URL the client can optionally use to show an icon to represent the option.
-          type: string
-        text:
-          description: The human-readable description of this option to display to the user.
-          type: string
-        value:
-          description: The machine-readable value to send if the user picks this option.
-          type: string
     Providers:
       title: Providers
       description: A representation of a collection of providers.
@@ -437,25 +443,19 @@ components:
       minLength: 2
       maxLength: 2
       pattern: ^[A-Z]{2}$
-    ProviderLogin:
+    SelectOption:
+      title: SelectOption
       type: object
-      title: ProviderLogin
       properties:
-        status:
-          description: 'Indicates the health status of the provider. Use this
-
-            information for user experience purposes (e.g. displaying a list
-
-            of providers to the end user, and whether the provider''s service
-
-            is working as expected).'
+        iconUrl:
+          description: A URL the client can optionally use to show an icon to represent the option.
           type: string
-          enum:
-          - HEALTHY
-          - DEGRADED
-          - PLANNED_MAINTENANCE
-          - DOWN
-          readOnly: true
+        text:
+          description: The human-readable description of this option to display to the user.
+          type: string
+        value:
+          description: The machine-readable value to send if the user picks this option.
+          type: string
   examples:
     ProviderListGB:
       value:

@@ -2,7 +2,19 @@ openapi: 3.2.0
 info:
   title: Pay By Bank PIS Refunds API
   version: 1.1.4
-  description: "## Pay By Bank v1 - PIS API\n\n---\n\n> J.P. Morgan as a registered Third Party Provider (**TPP**) of Open Banking services,\n> offers a seamless integration platform for Pay by Bank such that:\n> - clients can initiate payments (serving as a Payment Initiation Service Provider, or **PISP**) \n>"
+  description: '## Pay By Bank v1 - PIS API
+
+
+    ---
+
+
+    > J.P. Morgan as a registered Third Party Provider (**TPP**) of Open Banking services,
+
+    > offers a seamless integration platform for Pay by Bank such that:
+
+    > - clients can initiate payments (serving as a Payment Initiation Service Provider, or **PISP**)
+
+    >'
   contact:
     name: JPMorgan Chase & Co. API Support
     email: imsd.security.operations@jpmorgan.com
@@ -134,39 +146,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/Errors'
 components:
-  parameters:
-    RefundId:
-      in: path
-      name: refundId
-      description: A unique refund identifier in UUID (version 4) format.
-      schema:
-        type: string
-        minLength: 0
-        maxLength: 36
-      required: true
-      example: 45f452df-f84a-4fc1-acee-d024f5fede98
   schemas:
-    StatusUpdatedAt:
-      type: string
-      format: dateTime
-      description: The last updated date and time of the refund status
-      example: '2022-05-31T14:00:57.751Z'
-    RefundsRequest:
+    ErrorDetailsType:
       type: object
-      required:
-      - paymentIdentifiers
-      - amount
-      - reason
-      - mode
       properties:
-        paymentIdentifiers:
-          $ref: '#/components/schemas/PaymentIdentifiers'
-        amount:
-          $ref: '#/components/schemas/Amount'
-        reason:
-          $ref: '#/components/schemas/Reason'
-        mode:
-          $ref: '#/components/schemas/Mode'
+        errorCode:
+          type: string
+          example: GCA-001
+        errorDescription:
+          type: string
+          example: Client is not eligible for the API Service.
+    Mode:
+      description: Captures the speed of refund settlement
+      type: string
+      enum:
+      - INSTANT
+      - NORMAL
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            errorDetails:
+              type: array
+              items:
+                $ref: '#/components/schemas/ErrorDetailsType'
+              minItems: 0
     RefundsResponse:
       type: object
       description: The refunds response object from the API provided the request was accepted successfully.
@@ -207,18 +213,6 @@ components:
               $ref: '#/components/schemas/Mode'
             statusUpdatedAt:
               $ref: '#/components/schemas/StatusUpdatedAt'
-    ErrorDetailsInit:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          example: '1009'
-        errorDescription:
-          type: string
-          example: RefundId provided in the URI is invalid
-        ruleDefinition:
-          type: string
-          example: Invalid Id provided
     ErrorsInit:
       type: object
       description: Contains error response
@@ -232,6 +226,33 @@ components:
               items:
                 $ref: '#/components/schemas/ErrorDetailsInit'
               minItems: 0
+    StatusUpdatedAt:
+      type: string
+      format: dateTime
+      description: The last updated date and time of the refund status
+      example: '2022-05-31T14:00:57.751Z'
+    PaymentIdentifiers:
+      type: object
+      description: the payment identifier provided in the original payment request
+      properties:
+        endToEndId:
+          description: The EndtoEndId provided in the original payment initiation request
+          type: string
+          example: '123123123'
+        paymentId:
+          description: The PaymentId received in the original payment initiation response
+          type: string
+          example: '1401642'
+      minProperties: 1
+      additionalProperties: false
+    Reason:
+      description: Reason for the refund request
+      type: string
+      enum:
+      - DUPLICATE
+      - WITHDRAWAL
+      - REFUND
+      - PARTIAL_REFUND
     Amount:
       description: Contains amount details
       type: object
@@ -250,54 +271,45 @@ components:
       required:
       - amount
       - currency
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: object
-          properties:
-            errorDetails:
-              type: array
-              items:
-                $ref: '#/components/schemas/ErrorDetailsType'
-              minItems: 0
-    Reason:
-      description: Reason for the refund request
-      type: string
-      enum:
-      - DUPLICATE
-      - WITHDRAWAL
-      - REFUND
-      - PARTIAL_REFUND
-    ErrorDetailsType:
+    ErrorDetailsInit:
       type: object
       properties:
         errorCode:
           type: string
-          example: GCA-001
+          example: '1009'
         errorDescription:
           type: string
-          example: Client is not eligible for the API Service.
-    Mode:
-      description: Captures the speed of refund settlement
-      type: string
-      enum:
-      - INSTANT
-      - NORMAL
-    PaymentIdentifiers:
+          example: RefundId provided in the URI is invalid
+        ruleDefinition:
+          type: string
+          example: Invalid Id provided
+    RefundsRequest:
       type: object
-      description: the payment identifier provided in the original payment request
+      required:
+      - paymentIdentifiers
+      - amount
+      - reason
+      - mode
       properties:
-        endToEndId:
-          description: The EndtoEndId provided in the original payment initiation request
-          type: string
-          example: '123123123'
-        paymentId:
-          description: The PaymentId received in the original payment initiation response
-          type: string
-          example: '1401642'
-      minProperties: 1
-      additionalProperties: false
+        paymentIdentifiers:
+          $ref: '#/components/schemas/PaymentIdentifiers'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        reason:
+          $ref: '#/components/schemas/Reason'
+        mode:
+          $ref: '#/components/schemas/Mode'
+  parameters:
+    RefundId:
+      in: path
+      name: refundId
+      description: A unique refund identifier in UUID (version 4) format.
+      schema:
+        type: string
+        minLength: 0
+        maxLength: 36
+      required: true
+      example: 45f452df-f84a-4fc1-acee-d024f5fede98
 x-jpmc-securityDefinitions:
   JPMC-OAuth2: {}
 x-jpmc-security: {}

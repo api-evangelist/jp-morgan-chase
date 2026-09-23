@@ -117,88 +117,87 @@ paths:
         '503':
           $ref: '#/components/responses/503V2'
 components:
-  examples:
-    AddDebitsRestrictionRequest:
-      summary: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
-      description: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        restrictionType: DEBITS
-    AddDirectDebitRestrictionResponse:
-      summary: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      description: Response for adding a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionType: DIRECT_DEBIT
-    AddDirectDebitRestrictionRequest:
-      summary: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      description: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      value:
-        restrictionType: DIRECT_DEBIT
-    AddDebitCreditRestrictionResponse:
-      summary: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      description: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionType: DEBIT_CREDIT
-    AddCreditsRestrictionResponse:
-      summary: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
-      description: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionType: CREDITS
-    AddDebitsRestrictionResponse:
-      summary: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
-      description: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionType: DEBITS
-    RemoveDebitCreditRestrictionResponse:
-      summary: Remove a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      description: Response for removing a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-    RemoveCreditsRestrictionResponse:
-      summary: Remove a CREDITS restriction on a TRANSACTION_ACCOUNT
-      description: Response for removing a CREDITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-    RemoveDebitsRestrictionResponse:
-      summary: Remove a DEBITS restriction on a TRANSACTION_ACCOUNT
-      description: Response for removing a DEBITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-    AddDebitCreditRestrictionRequest:
-      summary: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      description: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      value:
-        restrictionType: DEBIT_CREDIT
-    RemoveDirectDebitRestrictionResponse:
-      summary: Remove a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      description: Response for removing a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-    AddCreditsRestrictionRequest:
-      summary: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
-      description: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        restrictionType: CREDITS
+  responses:
+    503V2:
+      description: Service Unavailable
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Service Unavailable
+            httpStatus: 503
+    500V2:
+      description: Internal Server Error
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Internal Server Error
+            httpStatus: 500
+    404V2:
+      description: Not Found
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Not Found
+            httpStatus: 404
+    401V2:
+      description: Unauthorized
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Unauthorized Request
+            httpStatus: 401
+    400V2:
+      description: Bad Request
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Bad Request
+            httpStatus: 400
+    403V2:
+      description: Forbidden
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Forbidden
+            httpStatus: 403
   schemas:
+    RemoveAccountRestrictionResponseV2:
+      type: object
+      required:
+      - restrictionId
+      properties:
+        restrictionId:
+          $ref: '#/components/schemas/RestrictionId'
     RestrictionType:
       type: string
       example: DIRECT_DEBIT
@@ -218,58 +217,6 @@ components:
         | `DIRECT_DEBIT` | Restricts direct debit transactions |
 
         '
-    ApiErrorReasonV2:
-      type: object
-      description: Schema representing detailed reasons for an API error, including code, location, and message.
-      required:
-      - message
-      properties:
-        code:
-          type: string
-          example: '11000'
-          description: Short code that identifies the error - publicly cataloged and documented
-          minLength: 0
-          maxLength: 5
-        location:
-          type: string
-          enum:
-          - BODY
-          - QUERY
-          - PATH
-          - HEADER
-          example: BODY
-          description: Part of the request which is responsible for the reason
-        field:
-          type: string
-          description: The location of the property or parameter in error
-          minLength: 0
-          maxLength: 512
-        message:
-          type: string
-          example: Client with ID 0031234567 does not exist.
-          description: Message describing the reason. This message can typically be displayed to your platform's users, except in cases specified otherwise
-          minLength: 0
-          maxLength: 2048
-    RemoveAccountRestrictionResponseV2:
-      type: object
-      required:
-      - restrictionId
-      properties:
-        restrictionId:
-          $ref: '#/components/schemas/RestrictionId'
-    RestrictionId:
-      type: string
-      minLength: 1
-      maxLength: 36
-      description: Unique identifier for the restriction
-      example: 4c89fa2f-f452-4ca3-86cf-851362370357
-    AddAccountRestrictionRequestV2:
-      type: object
-      required:
-      - restrictionType
-      properties:
-        restrictionType:
-          $ref: '#/components/schemas/RestrictionType'
     ApiErrorV2:
       type: object
       description: Schema representing a version 2 API error, including title, HTTP status, and additional context.
@@ -316,6 +263,51 @@ components:
           $ref: '#/components/schemas/RestrictionId'
         restrictionType:
           $ref: '#/components/schemas/RestrictionType'
+    RestrictionId:
+      type: string
+      minLength: 1
+      maxLength: 36
+      description: Unique identifier for the restriction
+      example: 4c89fa2f-f452-4ca3-86cf-851362370357
+    AddAccountRestrictionRequestV2:
+      type: object
+      required:
+      - restrictionType
+      properties:
+        restrictionType:
+          $ref: '#/components/schemas/RestrictionType'
+    ApiErrorReasonV2:
+      type: object
+      description: Schema representing detailed reasons for an API error, including code, location, and message.
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          example: '11000'
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 0
+          maxLength: 5
+        location:
+          type: string
+          enum:
+          - BODY
+          - QUERY
+          - PATH
+          - HEADER
+          example: BODY
+          description: Part of the request which is responsible for the reason
+        field:
+          type: string
+          description: The location of the property or parameter in error
+          minLength: 0
+          maxLength: 512
+        message:
+          type: string
+          example: Client with ID 0031234567 does not exist.
+          description: Message describing the reason. This message can typically be displayed to your platform's users, except in cases specified otherwise
+          minLength: 0
+          maxLength: 2048
   parameters:
     configurationIdInHeader:
       name: configuration-id
@@ -353,79 +345,87 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/RestrictionId'
-  responses:
-    503V2:
-      description: Service Unavailable
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Service Unavailable
-            httpStatus: 503
-    400V2:
-      description: Bad Request
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Bad Request
-            httpStatus: 400
-    404V2:
-      description: Not Found
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Not Found
-            httpStatus: 404
-    500V2:
-      description: Internal Server Error
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Internal Server Error
-            httpStatus: 500
-    401V2:
-      description: Unauthorized
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Unauthorized Request
-            httpStatus: 401
-    403V2:
-      description: Forbidden
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Forbidden
-            httpStatus: 403
+  examples:
+    RemoveDirectDebitRestrictionResponse:
+      summary: Remove a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      description: Response for removing a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+    AddDebitCreditRestrictionResponse:
+      summary: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      description: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionType: DEBIT_CREDIT
+    AddDirectDebitRestrictionRequest:
+      summary: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      description: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      value:
+        restrictionType: DIRECT_DEBIT
+    AddDirectDebitRestrictionResponse:
+      summary: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      description: Response for adding a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionType: DIRECT_DEBIT
+    AddCreditsRestrictionResponse:
+      summary: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
+      description: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionType: CREDITS
+    AddDebitsRestrictionRequest:
+      summary: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
+      description: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        restrictionType: DEBITS
+    RemoveDebitCreditRestrictionResponse:
+      summary: Remove a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      description: Response for removing a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+    AddDebitsRestrictionResponse:
+      summary: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
+      description: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionType: DEBITS
+    RemoveDebitsRestrictionResponse:
+      summary: Remove a DEBITS restriction on a TRANSACTION_ACCOUNT
+      description: Response for removing a DEBITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+    AddCreditsRestrictionRequest:
+      summary: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
+      description: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        restrictionType: CREDITS
+    RemoveCreditsRestrictionResponse:
+      summary: Remove a CREDITS restriction on a TRANSACTION_ACCOUNT
+      description: Response for removing a CREDITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+    AddDebitCreditRestrictionRequest:
+      summary: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      description: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      value:
+        restrictionType: DEBIT_CREDIT
   headers:
     requestId:
       description: Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided
