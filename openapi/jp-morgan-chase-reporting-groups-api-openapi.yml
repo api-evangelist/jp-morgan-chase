@@ -299,6 +299,41 @@ paths:
                 $ref: '#/components/schemas/messages'
 components:
   schemas:
+    next:
+      description: Indicates the reference for the next page for paginated response. Use the value of next to fetch the next batch of report configs. If the lastPage = TRUE; then the next attribute value is not populated.
+      type: string
+    updateReportingGroup:
+      description: Report group update information
+      type: object
+      required:
+      - reportingGroupType
+      properties:
+        reportingGroupType:
+          description: The category of the reporting group. Allowed values are RGPE, RGTD, RGFTI, RGBU, RGCO, RGH.
+          type: string
+        reportingGroupName:
+          description: The name of the reporting group.
+          type: string
+        reportingGroupDescription:
+          description: The textual description of the reporting group.
+          type: string
+        reportingGroupStatus:
+          description: The current status of the reporting group. Allowed values are active, inactive.
+          type: string
+        childEntityInfo:
+          type: array
+          minItems: 0
+          description: List of child entities.
+          items:
+            $ref: '#/components/schemas/childEntity'
+    code:
+      description: Short informative code about the error.
+      type: string
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
     childEntity:
       description: Child Entity Information
       type: object
@@ -312,41 +347,20 @@ components:
           description: List of child entities for the reporting group.
           items:
             type: string
-    errorMessage:
-      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
-      type: string
-    reportingGroup:
-      description: Reporting Group Information
+    validationMessage:
+      description: Object containing information about transaction validation
       type: object
       required:
-      - reportingGroupName
-      - reportingGroupDescription
-      - childEntityInfo
+      - code
+      - message
       properties:
-        reportingGroupId:
-          description: Unique identifier of a reporting group.
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
           type: string
-          readOnly: true
-        reportingGroupName:
-          description: The name of the reporting group.
-          type: string
-        reportingGroupType:
-          description: The category of the reporting group. Allowed values are RGPE, RGTD, RGFTI, RGBU, RGCO, RGH.
-          type: string
-          readOnly: true
-        reportingGroupDescription:
-          description: The textual description of the reporting group.
-          type: string
-        childEntityInfo:
-          type: array
-          minItems: 0
-          description: List of child entities.
-          items:
-            $ref: '#/components/schemas/childEntity'
-        reportingGroupStatus:
-          description: The current status of the reporting group. Allowed values are active, inactive
-          type: string
-          readOnly: true
     reportingGroupResponse:
       description: Reporting Group Response
       type: object
@@ -365,6 +379,14 @@ components:
             $ref: '#/components/schemas/reportingGroup'
         lastPage:
           $ref: '#/components/schemas/lastPage'
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
     messages:
       description: A list of errors and warnings.
       type: object
@@ -404,67 +426,31 @@ components:
           description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
           type: string
           example: the signature could not be verified
-    code:
-      description: Short informative code about the error.
-      type: string
     lastPage:
       description: Indicates the BOOLEAN value to signify whether or not the response is the final page of results.
       type: boolean
       example: true
-    responseMessage:
-      description: Long explanation of the response message.
-      type: string
-      readOnly: true
-      example: Request Accepted
-    responseStatus:
-      description: Request result status.
-      type: string
-      readOnly: true
-      example: SUCCESS
-      enum:
-      - SUCCESS
-      - ERROR
-    validationMessage:
-      description: Object containing information about transaction validation
+    reportingGroup:
+      description: Reporting Group Information
       type: object
       required:
-      - code
-      - message
+      - reportingGroupName
+      - reportingGroupDescription
+      - childEntityInfo
       properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/errorMessage'
-        entity:
-          description: Information about the entity that experienced an error.
+        reportingGroupId:
+          description: Unique identifier of a reporting group.
           type: string
-    responseCode:
-      description: Short explanation of the response code.
-      type: string
-      readOnly: true
-      minLength: 2
-      maxLength: 50
-      example: ACCEPTED
-    next:
-      description: Indicates the reference for the next page for paginated response. Use the value of next to fetch the next batch of report configs. If the lastPage = TRUE; then the next attribute value is not populated.
-      type: string
-    updateReportingGroup:
-      description: Report group update information
-      type: object
-      required:
-      - reportingGroupType
-      properties:
-        reportingGroupType:
-          description: The category of the reporting group. Allowed values are RGPE, RGTD, RGFTI, RGBU, RGCO, RGH.
-          type: string
+          readOnly: true
         reportingGroupName:
           description: The name of the reporting group.
           type: string
+        reportingGroupType:
+          description: The category of the reporting group. Allowed values are RGPE, RGTD, RGFTI, RGBU, RGCO, RGH.
+          type: string
+          readOnly: true
         reportingGroupDescription:
           description: The textual description of the reporting group.
-          type: string
-        reportingGroupStatus:
-          description: The current status of the reporting group. Allowed values are active, inactive.
           type: string
         childEntityInfo:
           type: array
@@ -472,6 +458,20 @@ components:
           description: List of child entities.
           items:
             $ref: '#/components/schemas/childEntity'
+        reportingGroupStatus:
+          description: The current status of the reporting group. Allowed values are active, inactive
+          type: string
+          readOnly: true
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
+      type: string
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
   securitySchemes:
     BearerAuth:
       type: http

@@ -29,7 +29,7 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/jp-morgan-chase.png
 tags:
 - Banking
-- Financial-Services
+- Financial Services
 - Payments
 - Treasury
 - Fortune 100
@@ -39,6 +39,7 @@ tags_raw:
 - Payments
 - Treasury
 - Fortune 100
+- Financial-Services
 created: '2026-03-24'
 modified: '2026-07-28'
 specificationVersion: '0.23'

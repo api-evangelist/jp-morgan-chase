@@ -201,104 +201,25 @@ paths:
         '503':
           $ref: '#/components/responses/503'
 components:
-  responses:
-    '409':
-      description: Conflict - Concurrent request detected
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Conflict
-            httpStatus: 409
-            context:
-            - message: Concurrent request detected for clientId [3000005555]. Please try again later.
-    '503':
-      description: Service Unavailable - API Processing Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Service Unavailable
-            httpStatus: 503
-            context:
-            - message: Service unavailable.
-    '422':
-      description: Request could not be processed due to semantic errors. Check error response.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Unprocessable Entity
-            httpStatus: 422
-            context:
-            - message: Unable to perform Client Verification for clientId [3000005555] due to its Status.
-    '404':
-      description: No data found for the criteria specified
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Not Found
-            httpStatus: 404
-            context:
-            - message: Party with ID [2000000555] not found.
-    '500':
-      description: Internal Server Error - Generic Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Internal Server Error
-            httpStatus: 500
-            context:
-            - message: Something went wrong. Please try again later.
-    '400':
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Invalid Data
-            httpStatus: 400
-            context:
-            - code: '10104'
-              message: Client with ID [3000005555] does not exist.
-              location: BODY
-              field: clientId
-    '401':
-      description: Unauthenticated
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Unauthorized
-            httpStatus: 401
-            context:
-            - message: Provided token does not follow required JWT format. It may also be missing mandatory parts
-    '403':
-      description: Forbidden - Unauthorized Access
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Forbidden
-            httpStatus: 403
-            context:
-            - message: Platform is not authorized to access client.
   schemas:
-    ClientId:
-      description: A client's unique ID
-      example: '9000000333'
-      type: string
-      maxLength: 10
+    DocumentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        documentType:
+          $ref: '#/components/schemas/DocumentTypeSmbdo'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentMetadataSmbdo'
+          minItems: 0
+          maxItems: 50
+      required:
+      - id
+      - documentType
+      - metadata
     DocumentMetadataSmbdo:
       type: object
       properties:
@@ -307,17 +228,6 @@ components:
         value:
           type: string
           example: 73bd1c1d-6635-43ff-a8e5-b252926bdd9e
-    DocumentMetadataKeyEnum:
-      type: string
-      enum:
-      - DOCUMENT_REQUEST_ID
-      - PARTY_ID
-      - FILE_EXTENSION
-      - COUNTRY
-      - STATUS
-      - UPLOAD_TIME
-      - UPLOADED_FILE_NAME
-      example: DOCUMENT_REQUEST_ID
     schemas-ApiError:
       description: An API error.
       type: object
@@ -346,6 +256,42 @@ components:
           description: Provides additional context and detail on the errors
           minItems: 0
           maxItems: 100
+    ClientId:
+      description: A client's unique ID
+      example: '9000000333'
+      type: string
+      maxLength: 10
+    PageMetaData:
+      description: Page metadata.
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          example: 0
+          description: 'Page number.
+
+            '
+          minimum: 0
+          maximum: 2147483647
+        limit:
+          type: integer
+          format: int32
+          example: 25
+          description: 'Number of records per page.
+
+            '
+          minimum: 1
+          maximum: 25
+        total:
+          type: integer
+          format: int64
+          example: 340
+          description: 'Total number of items.
+
+            '
+          minimum: 0
+          maximum: 9999999999
     DocumentTypeSmbdo:
       type: string
       description: Supported document types
@@ -400,6 +346,28 @@ components:
       - TRUST_AGREEMENT
       - TRUST_DEED
       - UTILITY_BILL
+    DocumentMetadataKeyEnum:
+      type: string
+      enum:
+      - DOCUMENT_REQUEST_ID
+      - PARTY_ID
+      - FILE_EXTENSION
+      - COUNTRY
+      - STATUS
+      - UPLOAD_TIME
+      - UPLOADED_FILE_NAME
+      example: DOCUMENT_REQUEST_ID
+    ListDocumentsResponse:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/PageMetaData'
+        documentDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          minItems: 0
+          maxItems: 100
     ApiErrorContext:
       description: Context of the API error.
       type: object
@@ -426,95 +394,7 @@ components:
           type: string
           example: The server can not find the requested resource.
           description: Message describing the reason.
-    PageMetaData:
-      description: Page metadata.
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-          example: 0
-          description: 'Page number.
-
-            '
-          minimum: 0
-          maximum: 2147483647
-        limit:
-          type: integer
-          format: int32
-          example: 25
-          description: 'Number of records per page.
-
-            '
-          minimum: 1
-          maximum: 25
-        total:
-          type: integer
-          format: int64
-          example: 340
-          description: 'Total number of items.
-
-            '
-          minimum: 0
-          maximum: 9999999999
-    ListDocumentsResponse:
-      type: object
-      properties:
-        metadata:
-          $ref: '#/components/schemas/PageMetaData'
-        documentDetails:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentResponse'
-          minItems: 0
-          maxItems: 100
-    DocumentResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        documentType:
-          $ref: '#/components/schemas/DocumentTypeSmbdo'
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentMetadataSmbdo'
-          minItems: 0
-          maxItems: 50
-      required:
-      - id
-      - documentType
-      - metadata
   parameters:
-    PartyIdQuery:
-      name: partyId
-      in: query
-      description: Unique Party identifier.
-      required: false
-      example: '2000000555'
-      schema:
-        type: string
-        maxLength: 10
-    ClientIdQuery:
-      name: clientId
-      in: query
-      description: Unique Client identifier.
-      required: false
-      example: '3000000001'
-      schema:
-        $ref: '#/components/schemas/ClientId'
-    PageNumber:
-      name: page
-      in: query
-      description: Page number.
-      required: false
-      schema:
-        type: integer
-        format: int32
-        default: 0
-        minimum: 0
-        maximum: 2147483647
     IdempotencyKey:
       name: Idempotency-Key
       in: header
@@ -531,15 +411,6 @@ components:
         minLength: 1
         maxLength: 36
         example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
-    TokenInHeader:
-      name: token
-      in: header
-      description: JWT Client token
-      required: false
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 8192
     PageSize:
       name: limit
       in: query
@@ -551,21 +422,136 @@ components:
         minimum: 1
         maximum: 25
         default: 25
+    PartyIdQuery:
+      name: partyId
+      in: query
+      description: Unique Party identifier.
+      required: false
+      example: '2000000555'
+      schema:
+        type: string
+        maxLength: 10
+    PageNumber:
+      name: page
+      in: query
+      description: Page number.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 0
+        minimum: 0
+        maximum: 2147483647
+    TokenInHeader:
+      name: token
+      in: header
+      description: JWT Client token
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 8192
+    ClientIdQuery:
+      name: clientId
+      in: query
+      description: Unique Client identifier.
+      required: false
+      example: '3000000001'
+      schema:
+        $ref: '#/components/schemas/ClientId'
+  responses:
+    '503':
+      description: Service Unavailable - API Processing Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Service Unavailable
+            httpStatus: 503
+            context:
+            - message: Service unavailable.
+    '409':
+      description: Conflict - Concurrent request detected
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Conflict
+            httpStatus: 409
+            context:
+            - message: Concurrent request detected for clientId [3000005555]. Please try again later.
+    '404':
+      description: No data found for the criteria specified
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Not Found
+            httpStatus: 404
+            context:
+            - message: Party with ID [2000000555] not found.
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Invalid Data
+            httpStatus: 400
+            context:
+            - code: '10104'
+              message: Client with ID [3000005555] does not exist.
+              location: BODY
+              field: clientId
+    '401':
+      description: Unauthenticated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Unauthorized
+            httpStatus: 401
+            context:
+            - message: Provided token does not follow required JWT format. It may also be missing mandatory parts
+    '403':
+      description: Forbidden - Unauthorized Access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Forbidden
+            httpStatus: 403
+            context:
+            - message: Platform is not authorized to access client.
+    '500':
+      description: Internal Server Error - Generic Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Internal Server Error
+            httpStatus: 500
+            context:
+            - message: Something went wrong. Please try again later.
+    '422':
+      description: Request could not be processed due to semantic errors. Check error response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Unprocessable Entity
+            httpStatus: 422
+            context:
+            - message: Unable to perform Client Verification for clientId [3000005555] due to its Status.
   examples:
-    ListDocumentsResponse:
-      summary: List of document details
-      description: A list of document details
-      value:
-        metadata:
-          page: 0
-          limit: 25
-          total: 1
-        documentDetails:
-        - id: 62d29548-f55a-458e-b9bb-ed32a6a05a1b
-          documentType: TERMS_CONDITIONS
-          metadata:
-          - key: DOCUMENT_REQUEST_ID
-            value: '3000001'
     DocumentsResponse:
       summary: Document details for given document upload
       description: Document details for document that was uploaded
@@ -583,6 +569,20 @@ components:
           value: '50000'
         - key: UPLOAD_TIME
           value: '2024-04-01T21:14:38.474Z'
+    ListDocumentsResponse:
+      summary: List of document details
+      description: A list of document details
+      value:
+        metadata:
+          page: 0
+          limit: 25
+          total: 1
+        documentDetails:
+        - id: 62d29548-f55a-458e-b9bb-ed32a6a05a1b
+          documentType: TERMS_CONDITIONS
+          metadata:
+          - key: DOCUMENT_REQUEST_ID
+            value: '3000001'
   securitySchemes:
     BearerAuth:
       type: http

@@ -120,81 +120,6 @@ components:
         $ref: '#/components/schemas/StandardCodeContext'
       minItems: 1
       maxItems: 5
-    StandardCodeContext:
-      title: Standard Code Context
-      description: Standard Code Context for error codes
-      type: object
-      required:
-      - code
-      - message
-      - type
-      properties:
-        type:
-          title: CategoryType
-          type: string
-          description: 'Category of the error code such as ISO or a Clearing Code (NACHA, BACS etc)
-
-
-            | Category Type | Description |
-
-            |---------------|-----------------|
-
-            | **ISO20022** | ISO Codes based on an ISO standard e.g. ISO20022 |
-
-            | **CLEARING_NACHA** | Clearing codes |
-
-            | **EXTERNAL** | External code sets |
-
-            '
-          minLength: 2
-          maxLength: 16
-        code:
-          type: string
-          description: Short code that identifies the error - publicly cataloged and documented
-          minLength: 2
-          maxLength: 10
-          pattern: ^[a-zA-Z0-9]+$
-        message:
-          type: string
-          description: Human readable textual description of the error
-          minLength: 1
-          maxLength: 99
-    HealthStatus:
-      type: object
-      title: HealthStatus
-      description: Health check response indicating the status of the service and its readiness.
-      properties:
-        status:
-          type: string
-          description: Overall health status of the service.
-          enum:
-          - UP
-          - DOWN
-          example: UP
-        isReady:
-          type: boolean
-          description: Indicates whether the service is ready to accept requests.
-          example: true
-        version:
-          type: string
-          description: The current version of the service.
-          example: 2.1.0
-          minLength: 1
-          maxLength: 50
-        applicationName:
-          type: string
-          description: The name of the application.
-          example: Example App
-          minLength: 1
-          maxLength: 200
-        statusUpdatedAt:
-          type: string
-          format: date-time
-          description: The date and time when the health status was last updated.
-          example: '2025-09-25T12:00:00Z'
-      required:
-      - status
-      - isReady
     Error:
       type: object
       x-tags:
@@ -275,13 +200,81 @@ components:
         additionalContext:
           $ref: '#/components/schemas/AdditionalContext'
       description: Error Context
-    HealthStatus_2:
-      title: Healthstatus
-      type: string
-      enum:
-      - UP
-      - DOWN
-      description: Health status enumeration
+    StandardCodeContext:
+      title: Standard Code Context
+      description: Standard Code Context for error codes
+      type: object
+      required:
+      - code
+      - message
+      - type
+      properties:
+        type:
+          title: CategoryType
+          type: string
+          description: 'Category of the error code such as ISO or a Clearing Code (NACHA, BACS etc)
+
+
+            | Category Type | Description |
+
+            |---------------|-----------------|
+
+            | **ISO20022** | ISO Codes based on an ISO standard e.g. ISO20022 |
+
+            | **CLEARING_NACHA** | Clearing codes |
+
+            | **EXTERNAL** | External code sets |
+
+            '
+          minLength: 2
+          maxLength: 16
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 2
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+    HealthStatus:
+      type: object
+      title: HealthStatus
+      description: Health check response indicating the status of the service and its readiness.
+      properties:
+        status:
+          type: string
+          description: Overall health status of the service.
+          enum:
+          - UP
+          - DOWN
+          example: UP
+        isReady:
+          type: boolean
+          description: Indicates whether the service is ready to accept requests.
+          example: true
+        version:
+          type: string
+          description: The current version of the service.
+          example: 2.1.0
+          minLength: 1
+          maxLength: 50
+        applicationName:
+          type: string
+          description: The name of the application.
+          example: Example App
+          minLength: 1
+          maxLength: 200
+        statusUpdatedAt:
+          type: string
+          format: date-time
+          description: The date and time when the health status was last updated.
+          example: '2025-09-25T12:00:00Z'
+      required:
+      - status
+      - isReady
     LocationType:
       type: string
       enum:
@@ -408,6 +401,13 @@ components:
         field: notificationId
         location: BODY
         message: Required field missing - ensure the path, body and headers matches the specification
+    HealthStatus_2:
+      title: Healthstatus
+      type: string
+      enum:
+      - UP
+      - DOWN
+      description: Health status enumeration
   securitySchemes:
     BearerAuth:
       type: http

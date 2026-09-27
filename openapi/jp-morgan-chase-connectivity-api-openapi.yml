@@ -42,6 +42,12 @@ paths:
       - Connectivity
 components:
   schemas:
+    HealthStatusValue:
+      title: HealthStatusValue
+      type: object
+      properties:
+        providerLogin:
+          $ref: '#/components/schemas/ProviderLogin'
     Field:
       title: Field
       type: object
@@ -114,25 +120,32 @@ components:
           type: string
         value:
           type: string
-    ProviderLogin:
+    ImageUrls:
+      title: ImageUrls
+      description: Image urls of the provider
       type: object
-      title: ProviderLogin
       properties:
-        status:
-          description: 'Indicates the health status of the provider. Use this
-
-            information for user experience purposes (e.g. displaying a list
-
-            of providers to the end user, and whether the provider''s service
-
-            is working as expected).'
+        banner:
+          description: A image url for the banner.
           type: string
-          enum:
-          - HEALTHY
-          - DEGRADED
-          - PLANNED_MAINTENANCE
-          - DOWN
-          readOnly: true
+          example: https://www.jpmorgan.com/content/dam/jpmorgan/images/logos/jpm-logo-brown-062322.svg
+        icon:
+          description: A image url for the icon.
+          type: string
+          example: https://www.jpmorgan.com/content/dam/jpmorgan/images/logos/jpm-logo-brown-062322.svg
+    SelectOption:
+      title: SelectOption
+      type: object
+      properties:
+        iconUrl:
+          description: A URL the client can optionally use to show an icon to represent the option.
+          type: string
+        text:
+          description: The human-readable description of this option to display to the user.
+          type: string
+        value:
+          description: The machine-readable value to send if the user picks this option.
+          type: string
     FinancialService:
       type: object
       title: FinancialService
@@ -153,12 +166,6 @@ components:
           type: string
           readOnly: true
           example: Personal Banking
-    HealthStatusValue:
-      title: HealthStatusValue
-      type: object
-      properties:
-        providerLogin:
-          $ref: '#/components/schemas/ProviderLogin'
     Provider:
       title: Provider
       description: The provider model represents financial institutions with established connectivity with us.  It specifies accesses to the financial institution, metadata about the financialinstitution, and what financial information can be accessed.
@@ -406,6 +413,35 @@ components:
           - OTHER
           readOnly: true
           example: BANK
+    Market:
+      title: Market
+      type: string
+      description: 'ISO 3166-1 alpha-2 country code for the market where the payment is initiated.
+
+
+        - **Market Coverage**: `DE`, `ES`, `GB`, `IT`'
+      minLength: 2
+      maxLength: 2
+      pattern: ^[A-Z]{2}$
+    ProviderLogin:
+      type: object
+      title: ProviderLogin
+      properties:
+        status:
+          description: 'Indicates the health status of the provider. Use this
+
+            information for user experience purposes (e.g. displaying a list
+
+            of providers to the end user, and whether the provider''s service
+
+            is working as expected).'
+          type: string
+          enum:
+          - HEALTHY
+          - DEGRADED
+          - PLANNED_MAINTENANCE
+          - DOWN
+          readOnly: true
     Providers:
       title: Providers
       description: A representation of a collection of providers.
@@ -420,81 +456,7 @@ components:
             $ref: '#/components/schemas/Provider'
           minItems: 0
           maxItems: 1000
-    ImageUrls:
-      title: ImageUrls
-      description: Image urls of the provider
-      type: object
-      properties:
-        banner:
-          description: A image url for the banner.
-          type: string
-          example: https://www.jpmorgan.com/content/dam/jpmorgan/images/logos/jpm-logo-brown-062322.svg
-        icon:
-          description: A image url for the icon.
-          type: string
-          example: https://www.jpmorgan.com/content/dam/jpmorgan/images/logos/jpm-logo-brown-062322.svg
-    Market:
-      title: Market
-      type: string
-      description: 'ISO 3166-1 alpha-2 country code for the market where the payment is initiated.
-
-
-        - **Market Coverage**: `DE`, `ES`, `GB`, `IT`'
-      minLength: 2
-      maxLength: 2
-      pattern: ^[A-Z]{2}$
-    SelectOption:
-      title: SelectOption
-      type: object
-      properties:
-        iconUrl:
-          description: A URL the client can optionally use to show an icon to represent the option.
-          type: string
-        text:
-          description: The human-readable description of this option to display to the user.
-          type: string
-        value:
-          description: The machine-readable value to send if the user picks this option.
-          type: string
   examples:
-    ProviderListGB:
-      value:
-        providers:
-        - accessType: OPEN_BANKING
-          authenticationUserType: BUSINESS
-          authenticationFlow: REDIRECT
-          capabilities:
-          - CREDIT_CARDS
-          - CHECKING_ACCOUNTS
-          - SAVINGS_ACCOUNTS
-          - IDENTITY_DATA
-          - TRANSFERS
-          pisCapabilities:
-          - FASTER_PAYMENTS
-          credentialsType: THIRD_PARTY_APP
-          currency: GBP
-          displayName: HSBC Kinetic
-          fields: []
-          financialInstitutionId: a2f21124a09643ac97943e48dc3ee8cf
-          financialInstitutionName: HSBC Kinetic
-          groupDisplayName: HSBC
-          images:
-            icon: https://www.jpmorgan.com/content/dam/jpmorgan/images/logos/jpm-logo-brown-062322.svg
-          market: GB
-          multiFactor: false
-          name: uk-hsbc-kinetic-ob
-          passwordHelpText: ''
-          popular: false
-          status: ENABLED
-          transactional: true
-          type: BANK
-          financialServices:
-          - segment: BUSINESS
-            shortName: HSBC Kinetic Online
-          hasAuthenticationOptions: false
-          healthStatus:
-            providerLogin:
-              status: HEALTHY
     ProviderListSE:
       value:
         providers:
@@ -537,6 +499,44 @@ components:
           status: ENABLED
           transactional: false
           type: BANK
+    ProviderListGB:
+      value:
+        providers:
+        - accessType: OPEN_BANKING
+          authenticationUserType: BUSINESS
+          authenticationFlow: REDIRECT
+          capabilities:
+          - CREDIT_CARDS
+          - CHECKING_ACCOUNTS
+          - SAVINGS_ACCOUNTS
+          - IDENTITY_DATA
+          - TRANSFERS
+          pisCapabilities:
+          - FASTER_PAYMENTS
+          credentialsType: THIRD_PARTY_APP
+          currency: GBP
+          displayName: HSBC Kinetic
+          fields: []
+          financialInstitutionId: a2f21124a09643ac97943e48dc3ee8cf
+          financialInstitutionName: HSBC Kinetic
+          groupDisplayName: HSBC
+          images:
+            icon: https://www.jpmorgan.com/content/dam/jpmorgan/images/logos/jpm-logo-brown-062322.svg
+          market: GB
+          multiFactor: false
+          name: uk-hsbc-kinetic-ob
+          passwordHelpText: ''
+          popular: false
+          status: ENABLED
+          transactional: true
+          type: BANK
+          financialServices:
+          - segment: BUSINESS
+            shortName: HSBC Kinetic Online
+          hasAuthenticationOptions: false
+          healthStatus:
+            providerLogin:
+              status: HEALTHY
     ProviderListDE:
       value:
         providers:

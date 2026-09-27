@@ -407,86 +407,47 @@ paths:
           $ref: '#/components/responses/503V2'
 components:
   schemas:
-    cryptogramDetail:
-      description: Cryptogram Detail Information
+    cardArt:
+      description: Card art information of a payment card.
       type: object
       properties:
-        tokenAuthenticationValue:
-          description: Cryptogram provided by the wallet provider when authenticated with token
+        name:
+          description: The name of card art that is used to build virtual replication of actual physical card art.
           type: string
-        authenticationValue:
-          description: Cryptogram provided by the wallet provider when 3DS is used
+        type:
+          description: The category of card art that is used to build virtual replication of actual physical card art.
           type: string
-        applicationTransactionCounter:
-          description: Enumerates the attempts an authorization request was presented for a single cardholder interaction.
-          type: integer
-        cryptogramInformationData:
-          description: Cryptogram Information
+        url:
+          description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving for the card art that is used to build virtual replication of physical card.
           type: string
-        deviceManufacturerId:
-          description: Device Manufacturer Id
-          type: string
-        paymentDataType:
-          description: Payment Data Type Code
-          type: string
-        messageId:
-          description: A random generated value for each Google wallet payload
-          type: string
-        gatewayMerchantId:
-          description: Identifies a merchant account maintained by an external party and is used as a reference identifier during transaction processing.
-          type: string
-        electronicCommerceIndicator:
-          description: Describes the Electronic Commerce Indicator used in cardholder authentication on a network token
-          type: string
-        cryptogramExpirationTimestamp:
-          description: Designates the hour, minute, and second in a specific day used to determine when the cryptogram message no longer valid
-          type: string
-        tokenProvisioningVerificationValue:
-          description: Contains Paze wallet authentication value received from payments networks for card on file or network token provisioning transactions. Also knows as dynamic EVC- Enrollment verification value for certain networks.
-          type: string
-        tokenProvisioningVerificationExpirationTimestamp:
-          description: Designates the hour, minute, and second in a specific day used to determine when the Token provisioning Verification value is  no longer valid.
-          type: string
-    walletResponse:
-      description: Wallet response object
-      type: object
-      properties:
-        requestId:
-          description: A uniquely generated identifier for a request which the consuming resource uses to recognize subsequent retries of the same request.
-          type: string
-        walletTransactionId:
-          $ref: '#/components/schemas/walletTransactionId'
-        messages:
-          $ref: '#/components/schemas/messages'
-        accountHolder:
-          $ref: '#/components/schemas/accountHolder'
-        cryptogramDetail:
-          $ref: '#/components/schemas/cryptogramDetail'
-        multiTokenAuthenticationResponses:
-          type: array
-          minItems: 0
-          description: List of Multi Token Authentication Responses
-          items:
-            $ref: '#/components/schemas/multiTokenAuthenticationResponse'
-    messages:
-      description: A list of errors and warnings
-      type: object
-      properties:
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        validationErrors:
-          type: array
-          minItems: 0
-          description: validationErrors
-          items:
-            $ref: '#/components/schemas/validationMessage'
     code:
       description: Codifies a raised exception encountered by an internal or external system, sub-system, interface, job, module, system component with which the web service application interfaces.  In this instance it refers to the error raised when reporting job failed.
       type: string
+    address:
+      description: Address Information
+      type: object
+      properties:
+        addressType:
+          description: Codifies the classification given to the various addresses captured for a party, such as Doing Business As Address, Legal Entity Address, and Tax Address.
+          type: string
+        line1:
+          description: Line 1 of the address
+          type: string
+        line2:
+          description: Line 2 of the address
+          type: string
+        city:
+          description: Name of the city
+          type: string
+        state:
+          description: Name of the state
+          type: string
+        postalCode:
+          description: Zip code for the address
+          type: string
+        countryCode:
+          description: Country code for the address, valid values are based on ISO standards.
+          type: string
     consumerInfo:
       description: Consumer Information
       type: object
@@ -527,48 +488,19 @@ components:
         walletMerchantTokenReferenceId:
           description: 'Identifies uniquely a token provisioning request assigned by token service/vault and provided to Issuer and Wallet Provider. This can be used as a reference to the token number that is assigned for an account when provisioning completes. Example: DNITHE461927644624368716'
           type: string
-    multiTokenAuthenticationResponse:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      type: object
-      properties:
-        externalMerchantId:
-          description: The sub-merchant identifier provided to wallet provider by the merchant.
-          type: string
-        walletServiceProviderCryptogram:
-          description: Cryptogram provided by the wallet provider when authenticated with token
-          type: string
-        transactionAmount:
-          description: Payment network-generated cryptogram for the submerchant.
-          type: integer
-          format: int64
-    responseMessage:
-      description: Long explanation of the response code
+    message:
+      description: Provides textual description of a problem that has occurred and is preventing the system from completing a task. Messages can be a confirmation, warning or notification, and can trigger the system to apply a customized default value or override to a field, record or file, halt or postpone processing, skip or reject the entry generating the problem. Messages can be displayed on-screen in the user interface or in reporting.
       type: string
-    responseCode:
-      description: Short explanation of the response code
-      type: string
-    cardArt:
-      description: Card art information of a payment card.
+    validationMessage:
+      description: Object containing information in the file
       type: object
       properties:
-        name:
-          description: The name of card art that is used to build virtual replication of actual physical card art.
-          type: string
-        type:
-          description: The category of card art that is used to build virtual replication of actual physical card art.
-          type: string
-        url:
-          description: A reference to a web resource on the internet specifying its location on a computer network and a mechanism for retrieving for the card art that is used to build virtual replication of physical card.
-          type: string
-    expiry:
-      description: Expiration for the account number
-      type: object
-      properties:
-        monthNumber:
-          description: Identifies a unique occurrence of the month within a calendar year (e.g., 1 = January, 2 = February, 12 = December).
-          type: string
-        yearNumber:
-          description: Identifies the century and year portion of a date. (e.g., 2014, 2015)
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          description: The moniker given to the module or program where the error generated.
           type: string
     cardMetadata:
       description: Card Metadata information
@@ -580,37 +512,27 @@ components:
         accountSuffixNumber:
           description: Identifies a sequential number for an account when it is transferred. The Account Suffix Number is incremented and a new record is created within the Account Reference Number when the customer reports the card lost / stolen or when fraud is suspected on the account. This new record contains the fraudulent or potentially fraudulent balance. The 00 suffix is always the non-fraudulent account record.
           type: string
-    message:
-      description: Provides textual description of a problem that has occurred and is preventing the system from completing a task. Messages can be a confirmation, warning or notification, and can trigger the system to apply a customized default value or override to a field, record or file, halt or postpone processing, skip or reject the entry generating the problem. Messages can be displayed on-screen in the user interface or in reporting.
-      type: string
-    walletTransactionId:
-      description: Value provided by the wallet provider.
-      type: string
-    address:
-      description: Address Information
+    walletResponse:
+      description: Wallet response object
       type: object
       properties:
-        addressType:
-          description: Codifies the classification given to the various addresses captured for a party, such as Doing Business As Address, Legal Entity Address, and Tax Address.
+        requestId:
+          description: A uniquely generated identifier for a request which the consuming resource uses to recognize subsequent retries of the same request.
           type: string
-        line1:
-          description: Line 1 of the address
-          type: string
-        line2:
-          description: Line 2 of the address
-          type: string
-        city:
-          description: Name of the city
-          type: string
-        state:
-          description: Name of the state
-          type: string
-        postalCode:
-          description: Zip code for the address
-          type: string
-        countryCode:
-          description: Country code for the address, valid values are based on ISO standards.
-          type: string
+        walletTransactionId:
+          $ref: '#/components/schemas/walletTransactionId'
+        messages:
+          $ref: '#/components/schemas/messages'
+        accountHolder:
+          $ref: '#/components/schemas/accountHolder'
+        cryptogramDetail:
+          $ref: '#/components/schemas/cryptogramDetail'
+        multiTokenAuthenticationResponses:
+          type: array
+          minItems: 0
+          description: List of Multi Token Authentication Responses
+          items:
+            $ref: '#/components/schemas/multiTokenAuthenticationResponse'
     walletRequest:
       description: Wallet request object
       type: object
@@ -648,20 +570,49 @@ components:
         accountNumberMaskingIndicator:
           description: Optional parameter that allows the integrator to specify whether the API response should include a masked version of the account number. When set to true, the API will return the account number in a format that obscures sensitive information, based on the preference setup at the merchant level. Merchants can choose how the masked PAN (Primary Account Number) is displayed, such as showing the first six and last four digits or only the last four digits. This feature is designed to enhance security by ensuring that full account numbers are not exposed in the API response, while still providing enough information for identification and verification purposes.
           type: boolean
-    responseStatus:
-      description: 'Status for the request. Valid Values: ERROR,SUCCESS, DENIED'
-      type: string
-    validationMessage:
-      description: Object containing information in the file
+    cryptogramDetail:
+      description: Cryptogram Detail Information
       type: object
       properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/message'
-        entity:
-          description: The moniker given to the module or program where the error generated.
+        tokenAuthenticationValue:
+          description: Cryptogram provided by the wallet provider when authenticated with token
           type: string
+        authenticationValue:
+          description: Cryptogram provided by the wallet provider when 3DS is used
+          type: string
+        applicationTransactionCounter:
+          description: Enumerates the attempts an authorization request was presented for a single cardholder interaction.
+          type: integer
+        cryptogramInformationData:
+          description: Cryptogram Information
+          type: string
+        deviceManufacturerId:
+          description: Device Manufacturer Id
+          type: string
+        paymentDataType:
+          description: Payment Data Type Code
+          type: string
+        messageId:
+          description: A random generated value for each Google wallet payload
+          type: string
+        gatewayMerchantId:
+          description: Identifies a merchant account maintained by an external party and is used as a reference identifier during transaction processing.
+          type: string
+        electronicCommerceIndicator:
+          description: Describes the Electronic Commerce Indicator used in cardholder authentication on a network token
+          type: string
+        cryptogramExpirationTimestamp:
+          description: Designates the hour, minute, and second in a specific day used to determine when the cryptogram message no longer valid
+          type: string
+        tokenProvisioningVerificationValue:
+          description: Contains Paze wallet authentication value received from payments networks for card on file or network token provisioning transactions. Also knows as dynamic EVC- Enrollment verification value for certain networks.
+          type: string
+        tokenProvisioningVerificationExpirationTimestamp:
+          description: Designates the hour, minute, and second in a specific day used to determine when the Token provisioning Verification value is  no longer valid.
+          type: string
+    responseMessage:
+      description: Long explanation of the response code
+      type: string
     accountHolder:
       description: Card owner properties
       type: object
@@ -693,6 +644,96 @@ components:
           $ref: '#/components/schemas/consumerInfo'
         walletCardData:
           $ref: '#/components/schemas/walletCardData'
+    responseStatus:
+      description: 'Status for the request. Valid Values: ERROR,SUCCESS, DENIED'
+      type: string
+    messages:
+      description: A list of errors and warnings
+      type: object
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: validationErrors
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    walletTransactionId:
+      description: Value provided by the wallet provider.
+      type: string
+    expiry:
+      description: Expiration for the account number
+      type: object
+      properties:
+        monthNumber:
+          description: Identifies a unique occurrence of the month within a calendar year (e.g., 1 = January, 2 = February, 12 = December).
+          type: string
+        yearNumber:
+          description: Identifies the century and year portion of a date. (e.g., 2014, 2015)
+          type: string
+    multiTokenAuthenticationResponse:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      properties:
+        externalMerchantId:
+          description: The sub-merchant identifier provided to wallet provider by the merchant.
+          type: string
+        walletServiceProviderCryptogram:
+          description: Cryptogram provided by the wallet provider when authenticated with token
+          type: string
+        transactionAmount:
+          description: Payment network-generated cryptogram for the submerchant.
+          type: integer
+          format: int64
+    responseCode:
+      description: Short explanation of the response code
+      type: string
+    TransactionGetResponseV2FxInformation:
+      description: Foreign exchange information for cross-border transactions.
+      type: object
+      properties:
+        rateId:
+          type: string
+          description: Unique identifier for the foreign exchange rate
+          example: R1C8E57DF6964F981D6DDB5EEf78D8
+        contractId:
+          type: string
+          description: Unique identifier for the foreign exchange contract
+          example: '917490357'
+        exchangeRate:
+          type: string
+          description: The exchange rate applied to the transaction
+          example: '1.44'
+        clientSpread:
+          type: string
+          description: The rate at which you charge for an FX transfer. You must express this as a decimal figure. For example, if you take a commission of 10%, the spread is expressed as 0.1
+          example: '0.5'
+    PostTransactionRequestV2:
+      type: object
+      required:
+      - currency
+      - transactionReferenceId
+      allOf:
+      - $ref: '#/components/schemas/PostTransactionRequestBase'
+    CountryCode:
+      type: string
+      enum:
+      - US
+      description: Two letter country code based on ISO 3166 standard
+      example: US
+    AccountType:
+      type: string
+      enum:
+      - CHECKING
+      - IBAN
+      - SAVINGS
+      description: Type of bank account.
+      example: CHECKING
     PaymentTypeResponse:
       description: 'The transaction type indicates the nature of the transaction. Valid values are:
 
@@ -735,258 +776,6 @@ components:
       - CARD
       - FEE
       example: ACH
-    AccountType:
-      type: string
-      enum:
-      - CHECKING
-      - IBAN
-      - SAVINGS
-      description: Type of bank account.
-      example: CHECKING
-    TransactionStatus:
-      description: "The current status of the transaction as it is processed:\n * `PENDING` - The transaction is still being processed.\n * `CANCELED` - The transaction has been canceled.\n * `COMPLETED` - The transaction has been completed.\n * `COMPLETED_WITH_EXCEPTIONS` - The transaction has completed, but not all of the requested criteria has been fulfilled.\n * `REJECTED` - The transaction has been rejected and will not be completed.\n * `RETURNED` - The payment rail failed to deliver funds to the recipient, so the payment was returned to the originator. \n * `UNDEFINED` - The status of this transaction cannot be found.\n"
-      type: string
-      enum:
-      - PENDING
-      - CANCELED
-      - COMPLETED
-      - COMPLETED_WITH_EXCEPTIONS
-      - COMPLETED_NOT_IN_TARGET_WALLET
-      - REJECTED
-      - RETURNED
-      - PARTIALLY_COMPLETED
-      - UNDEFINED
-      example: PENDING
-    PaymentType:
-      description: 'The type of transaction being initiated. Valid values are:
-
-
-        | Value | Description |
-
-        |-------|-------------|
-
-        | `RTP` | Realtime Transactions |
-
-        | `ACH` | ACH Transactions |
-
-        | `WIRE` | Wire Transactions |
-
-        | `TRANSFER` | Transactions internal to JPMorgan |
-
-        | `CARD` | Push to Card Transactions |
-
-        '
-      type: string
-      enum:
-      - RTP
-      - WIRE
-      - ACH
-      - TRANSFER
-      - CARD
-      example: ACH
-    TransactionRecipientDetailsV2:
-      description: Payment recipient, either recipient or recipient id must be provided for Payouts
-      type: object
-      anyOf:
-      - type: object
-        required:
-        - account
-      properties:
-        partyDetails:
-          $ref: '#/components/schemas/RecipientPartyDetails'
-        account:
-          $ref: '#/components/schemas/RecipientAccount'
-        recipientType:
-          $ref: '#/components/schemas/RecipientType'
-    PostTransactionV2FxInformation:
-      description: Foreign exchange information for cross-border transactions.
-      type: object
-      properties:
-        rateId:
-          type: string
-          description: Unique identifier for the foreign exchange rate
-          example: R1C8E57DF6964F981D6DDB5EEf78D8
-        clientSpread:
-          type: string
-          description: The rate at which you charge for an FX transfer. You must express this as a decimal figure. For example, if you take a commission of 10%, the spread is expressed as 0.1
-          example: '0.5'
-        purposeCode:
-          type: string
-          description: The code relating to the purpose of the payment. This is often required by countries into which money is being paid.
-          example: P0102
-    RoutingNumber:
-      type: string
-      minLength: 1
-      maxLength: 13
-      pattern: ^[A-Za-z0-9]([A-Za-z0-9\-]{0,11})[A-Za-z0-9]$
-      description: Routing number corresponding to the routing code type
-      example: '021000021'
-    AccountNumber:
-      type: string
-      pattern: ^[A-Z0-9]{1,35}$
-      description: Demand Deposit Account number or International Account Number (IBAN).
-      example: '021000021'
-    PostTransactionRequestBase:
-      type: object
-      required:
-      - currency
-      - transactionReferenceId
-      - amount
-      properties:
-        transactionReferenceId:
-          description: A unique reference ID that you must generate and provide for each transaction.
-          type: string
-          pattern: '[_0-9A-Za-z]+'
-          minLength: 1
-          maxLength: 35
-          example: Inv-Pay-1234
-        type:
-          $ref: '#/components/schemas/PaymentType'
-        debtorAccountId:
-          description: ID of the account to make the payment from.
-          type: string
-          minLength: 1
-          maxLength: 35
-          pattern: ^(.|\s)*\S(.|\s)*$
-          example: dc2eda9084bf40b7a1d8baa8c5e0ea0ax
-        creditorAccountId:
-          description: ID of the account to make the payment to.
-          type: string
-          minLength: 1
-          maxLength: 35
-          pattern: ^(.|\s)*\S(.|\s)*$
-          example: dc2eda9084bf40b7a1d8baa8c5e0ea0ax
-        amount:
-          description: The amount that is moved out or into your account in the currency specified
-          type: number
-          minimum: 0.01
-          example: 100
-        currency:
-          description: This denotes the currency of the payment in ISO 4217 Alpha-3 Currency Code format
-          type: string
-          enum:
-          - USD
-          example: USD
-        targetCurrency:
-          $ref: '#/components/schemas/TargetCurrency'
-        targetAmount:
-          description: This is the transaction value in currency (referred by `targetCurrency`) which needs to be credited to the creditor
-          type: number
-          minimum: 0.01
-          example: 100
-        recipientId:
-          description: The resource Id of the recipient to be used in this transaction.  Must have been pre-registered via the /recipient API
-          type: string
-          example: a8eb71c9-7bbb-41f2-8d9e-b0f5
-        localInstrumentCode:
-          description: 'Each ACH payment uses a Standard Entry class code (SEC) to indicate account type and authorization method used. <br>
-
-            Defaults to PPD for consumer, `CCD` for business, and `WEB` for direct debits ACH if no mandate method is specified. <br>
-
-            See documentation for further details <br>
-
-
-            | LocalInstrumentCode | Meaning                                                                |
-
-            |---------------------|------------------------------------------------------------------------|
-
-            | * `CCD`                 | Urgent Payment Net Settlement Corporate Credit or Debit (CCD)          |
-
-            | * `PPD`                  | Pre-arranged Payments or Deposit Transfer(PPD)                         |
-
-            | * `TEL`                  | TELEPHONE Initiated Entry - Used for authorizing payment via telephone |
-
-            | * `WEB`                  | WEB Initiated Entry - Used for authorizing payment over the internet   |
-
-            '
-          type: string
-          example: PPD
-        memo:
-          description: Transaction information that states its purpose for easier tracking
-          type: string
-          pattern: ^(.|\s)*\S(.|\s)*$
-          maxLength: 140
-          example: Invoice 1234
-        fxInformation:
-          $ref: '#/components/schemas/PostTransactionV2FxInformation'
-        recipient:
-          $ref: '#/components/schemas/TransactionRecipientDetailsV2'
-    RoutingCodeType:
-      type: string
-      enum:
-      - USABA
-      description: Type of routing code.
-      example: USABA
-    FeeType:
-      description: The type of the fee transaction. Use this to differentiate between the fee transactions that were charged and those that were reversed.<br> * `CHARGE` - the fee that was incurred as a result of a transaction.<br> * `REVERSAL` - the fee was incurred and then voided on a transaction.
-      enum:
-      - CHARGE
-      - REVERSAL
-      type: string
-      example: CHARGE
-    PostTransactionRequestV2:
-      type: object
-      required:
-      - currency
-      - transactionReferenceId
-      allOf:
-      - $ref: '#/components/schemas/PostTransactionRequestBase'
-    TransactionRequestResponseBase:
-      type: object
-      properties:
-        id:
-          description: The resource Id of your transaction to use when looking up details of this transaction.
-          type: string
-          example: '123434534'
-        transactionReferenceId:
-          description: Transaction reference ID provided by client
-          type: string
-          example: inv-pay-1234
-        status:
-          $ref: '#/components/schemas/TransactionStatus'
-        type:
-          $ref: '#/components/schemas/PaymentTypeResponse'
-        debtorAccountId:
-          description: The Id of the on-us account that the transaction amount will be/has been debited from.
-          type: string
-          example: dc2eda9084bf40b7a1d8baa8c5e0ea0ax
-        creditorAccountId:
-          description: The Id of the on-us account that the transaction amount will be/has been credited to.
-          type: string
-          example: dc2eda9084bf40b7a1d8baa8c5e0ea0ax
-        amount:
-          description: The value of the transaction
-          type: number
-          example: 100
-        currency:
-          description: The currency of the transaction
-          type: string
-          example: USD
-        localInstrumentCode:
-          description: The code that was used when creating the transaction..
-          type: string
-          example: PPD
-        createdAt:
-          description: The date and time the transaction was created.
-          type: string
-          format: date-time
-          example: '2023-02-22T15:05:46.952Z'
-        targetCurrency:
-          $ref: '#/components/schemas/TargetCurrency'
-        targetAmount:
-          description: This is the transaction value in currency (referred by `targetCurrency`) which is credited to the creditor
-          type: number
-          example: 100
-        recipientId:
-          description: The resource Id of the recipient that was used in this transaction.  Further details of the recipient can be found via the /recipient API
-          type: string
-          example: a8eb71c9-7bbb-41f2-8d9e-b0f5
-        memo:
-          description: Transaction information that states its purpose for easier tracking
-          type: string
-          example: Invoice 1234
-        fxInformation:
-          $ref: '#/components/schemas/PostTransactionV2FxInformation'
     ApiErrorV2:
       type: object
       description: Schema representing a version 2 API error, including title, HTTP status, and additional context.
@@ -1023,7 +812,176 @@ components:
           description: Provides additional context and detail on the validation errors
           minItems: 0
           maxItems: 100
-    TransactionGetResponseV2FxInformation:
+    RecipientAccount:
+      type: object
+      required:
+      - number
+      - countryCode
+      description: Bank account details of the recipient.
+      properties:
+        number:
+          $ref: '#/components/schemas/AccountNumber'
+        type:
+          $ref: '#/components/schemas/AccountType'
+        routingInformation:
+          type: array
+          description: Routing information.
+          items:
+            $ref: '#/components/schemas/RoutingInformation'
+          minItems: 1
+          maxItems: 3
+        currencyCode:
+          $ref: '#/components/schemas/CurrencyCode'
+        countryCode:
+          $ref: '#/components/schemas/CountryCode'
+    TransactionStatus:
+      description: "The current status of the transaction as it is processed:\n * `PENDING` - The transaction is still being processed.\n * `CANCELED` - The transaction has been canceled.\n * `COMPLETED` - The transaction has been completed.\n * `COMPLETED_WITH_EXCEPTIONS` - The transaction has completed, but not all of the requested criteria has been fulfilled.\n * `REJECTED` - The transaction has been rejected and will not be completed.\n * `RETURNED` - The payment rail failed to deliver funds to the recipient, so the payment was returned to the originator. \n * `UNDEFINED` - The status of this transaction cannot be found.\n"
+      type: string
+      enum:
+      - PENDING
+      - CANCELED
+      - COMPLETED
+      - COMPLETED_WITH_EXCEPTIONS
+      - COMPLETED_NOT_IN_TARGET_WALLET
+      - REJECTED
+      - RETURNED
+      - PARTIALLY_COMPLETED
+      - UNDEFINED
+      example: PENDING
+    PartyType:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - ORGANIZATION
+      example: INDIVIDUAL
+    RecipientIdentity:
+      type: object
+      required:
+      - idType
+      - idValue
+      properties:
+        idType:
+          type: string
+          enum:
+          - USCC
+          - ORGANIZATION_ID
+          - NATIONAL_ID
+          - TAX_ID
+          - SSN
+          description: Type of identification
+          example: USCC
+        idValue:
+          minLength: 1
+          maxLength: 255
+          type: string
+          description: Identification value
+          example: 91310000717860841G
+    RoutingInformation:
+      type: object
+      required:
+      - routingNumber
+      - transactionType
+      - routingCodeType
+      properties:
+        routingNumber:
+          $ref: '#/components/schemas/RoutingNumber'
+        transactionType:
+          $ref: '#/components/schemas/RoutingInformationTransactionType'
+        routingCodeType:
+          $ref: '#/components/schemas/RoutingCodeType'
+    RecipientAddress:
+      description: Address details for the recipient. Mandatory for payments using the RTP payment type.
+      type: object
+      required:
+      - addressLine1
+      - city
+      - countryCode
+      properties:
+        addressType:
+          type: string
+          example: Principal place of business
+          description: Type of address e.g. 'Primary Residence' | 'Principal place of business'.
+        addressLine1:
+          type: string
+          minLength: 1
+          maxLength: 34
+          pattern: ^(.|\s)*\S(.|\s)*$
+          example: 90 Bedford Street
+          description: First line of address; required and must not be a PO Box.
+        addressLine2:
+          type: string
+          minLength: 0
+          maxLength: 34
+          example: Apt 2E
+          description: Second line of address; not required.
+        addressLine3:
+          type: string
+          minLength: 0
+          maxLength: 34
+          description: Third line of address; not required.
+        buildingNumber:
+          type: string
+          minLength: 0
+          maxLength: 16
+          description: Building name or number if address is in a building
+        city:
+          type: string
+          minLength: 1
+          maxLength: 34
+          pattern: ^(.|\s)*\S(.|\s)*$
+          example: New York
+          description: Address city.
+        state:
+          type: string
+          maxLength: 30
+          example: NY
+          description: State code in alpha-2 format. State is mandatory for countries like United States.
+        postalCode:
+          type: string
+          maxLength: 10
+          example: '10014'
+          description: Postal/ZIP code.
+        countryCode:
+          $ref: '#/components/schemas/CountryCode'
+    ApiErrorReasonV2:
+      type: object
+      description: Schema representing detailed reasons for an API error, including code, location, and message.
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          example: '11000'
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 0
+          maxLength: 5
+        location:
+          type: string
+          enum:
+          - BODY
+          - QUERY
+          - PATH
+          - HEADER
+          example: BODY
+          description: Part of the request which is responsible for the reason
+        field:
+          type: string
+          description: The location of the property or parameter in error
+          minLength: 0
+          maxLength: 512
+        message:
+          type: string
+          example: Client with ID 0031234567 does not exist.
+          description: Message describing the reason. This message can typically be displayed to your platform's users, except in cases specified otherwise
+          minLength: 0
+          maxLength: 2048
+    RoutingCodeType:
+      type: string
+      enum:
+      - USABA
+      description: Type of routing code.
+      example: USABA
+    PostTransactionV2FxInformation:
       description: Foreign exchange information for cross-border transactions.
       type: object
       properties:
@@ -1031,18 +989,201 @@ components:
           type: string
           description: Unique identifier for the foreign exchange rate
           example: R1C8E57DF6964F981D6DDB5EEf78D8
-        contractId:
-          type: string
-          description: Unique identifier for the foreign exchange contract
-          example: '917490357'
-        exchangeRate:
-          type: string
-          description: The exchange rate applied to the transaction
-          example: '1.44'
         clientSpread:
           type: string
           description: The rate at which you charge for an FX transfer. You must express this as a decimal figure. For example, if you take a commission of 10%, the spread is expressed as 0.1
           example: '0.5'
+        purposeCode:
+          type: string
+          description: The code relating to the purpose of the payment. This is often required by countries into which money is being paid.
+          example: P0102
+    RecipientPartyDetails:
+      type: object
+      required:
+      - type
+      properties:
+        address:
+          $ref: '#/components/schemas/RecipientAddress'
+        type:
+          $ref: '#/components/schemas/PartyType'
+        firstName:
+          type: string
+          maxLength: 70
+          pattern: ^(.|\s)*\S(.|\s)*$
+          description: 'Recipient''s first name. Mandatory for recipient type INDIVIDUAL.
+
+            '
+          example: Monica
+        lastName:
+          type: string
+          maxLength: 70
+          pattern: ^(.|\s)*\S(.|\s)*$
+          description: 'Recipient''s last name. Mandatory for recipient type INDIVIDUAL.
+
+            '
+          example: Gellar
+        businessName:
+          type: string
+          maxLength: 140
+          pattern: ^(.|\s)*\S(.|\s)*$
+          description: 'Recipient company name. Mandatory for recipient type ORGANIZATION.
+
+            '
+          example: Central Park Getaways
+        alternativeName:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 140
+          pattern: ^(.|\s)*\S(.|\s)*$
+          description: 'Recipient optional alternative name
+
+            '
+          example: Central Park
+        contacts:
+          type: array
+          description: Contact details for the recipient.
+          items:
+            $ref: '#/components/schemas/RecipientContact'
+          minItems: 0
+        identities:
+          type: array
+          description: Identity details for the recipient.
+          items:
+            $ref: '#/components/schemas/RecipientIdentity'
+          minItems: 0
+    TransactionGetResponse:
+      allOf:
+      - $ref: '#/components/schemas/TransactionGetResponseBase'
+      type: object
+      properties:
+        feeType:
+          $ref: '#/components/schemas/FeeType'
+        error:
+          $ref: '#/components/schemas/ApiErrorV2'
+    FeeType:
+      description: The type of the fee transaction. Use this to differentiate between the fee transactions that were charged and those that were reversed.<br> * `CHARGE` - the fee that was incurred as a result of a transaction.<br> * `REVERSAL` - the fee was incurred and then voided on a transaction.
+      enum:
+      - CHARGE
+      - REVERSAL
+      type: string
+      example: CHARGE
+    OriginatingTransactionType:
+      description: The transaction type of the originating transaction that incurred a 'FEE' or 'RETURN' transaction. This is only available for transactions of type 'FEE' or 'RETURN'. * ACH_PAYOUT - the original transaction was a payout made by ACH payment route. * RTP_PAYOUT - the original transaction was a payout made by ACH payment route. * WIRE_PAYOUT - the original transaction was a payout made by WIRE payment route. * DEBIT_CARD_REQUEST - the original transaction was a debit card request. * FEE - the original transaction was a fee that was reversed.
+      type: string
+      enum:
+      - ACH_PAYOUT
+      - RTP_PAYOUT
+      - WIRE_PAYOUT
+      - DEBIT_CARD_REQUEST
+      - FEE
+      example: ACH_PAYOUT
+    RoutingNumber:
+      type: string
+      minLength: 1
+      maxLength: 13
+      pattern: ^[A-Za-z0-9]([A-Za-z0-9\-]{0,11})[A-Za-z0-9]$
+      description: Routing number corresponding to the routing code type
+      example: '021000021'
+    CurrencyCode:
+      type: string
+      enum:
+      - USD
+      description: Three letter currency code based on ISO 4217 standard
+      example: USD
+    RecipientType:
+      type: string
+      enum:
+      - RECIPIENT
+      - LINKED_ACCOUNT
+      - SETTLEMENT_ACCOUNT
+      example: RECIPIENT
+    TransactionGetResponseV2:
+      type: object
+      required:
+      - id
+      - currency
+      - paymentDate
+      - type
+      - status
+      - createdAt
+      allOf:
+      - $ref: '#/components/schemas/TransactionGetResponse'
+      - type: object
+        properties:
+          type:
+            $ref: '#/components/schemas/PaymentTypeResponse'
+          originatingTransactionType:
+            $ref: '#/components/schemas/OriginatingTransactionType'
+          ledgerBalance:
+            description: The ledger balance shows the total of all settled transactions at the time the request is made. Transactions which are in a pending state and transactions of type hold are excluded from this balance. The ledger balance is updated only when a transaction is settled.
+            type: number
+            example: 10000
+          postingVersion:
+            description: A measure of how many times an account has been updated by a new transaction. The posting version is incremented by 1 whenever there's a an event on the account. It can be used to track the order in which transactions have occurred, so you can present the user with the most recent transactions first.
+            type: integer
+            example: 1
+    TransactionRecipientDetailsV2:
+      description: Payment recipient, either recipient or recipient id must be provided for Payouts
+      type: object
+      anyOf:
+      - type: object
+        required:
+        - account
+      properties:
+        partyDetails:
+          $ref: '#/components/schemas/RecipientPartyDetails'
+        account:
+          $ref: '#/components/schemas/RecipientAccount'
+        recipientType:
+          $ref: '#/components/schemas/RecipientType'
+    RoutingInformationTransactionType:
+      type: string
+      enum:
+      - ACH
+      - RTP
+      - WIRE
+      description: Type of transaction.
+      example: RTP
+    TargetCurrency:
+      type: string
+      enum:
+      - AED
+      - AUD
+      - BGN
+      - BRL
+      - CAD
+      - CHF
+      - CNY
+      - CZK
+      - DKK
+      - EUR
+      - GBP
+      - HKD
+      - HUF
+      - ILS
+      - INR
+      - ISK
+      - JPY
+      - KES
+      - KRW
+      - MXN
+      - MYR
+      - NOK
+      - NZD
+      - PEN
+      - PHP
+      - PLN
+      - RON
+      - SEK
+      - SGD
+      - TWD
+      - USD
+      - VND
+      - ZAR
+      description: The creditor account / recipient currency for a foreign exchange transaction
+      example: CAD
     TransactionGetResponseBase:
       type: object
       required:
@@ -1151,144 +1292,118 @@ components:
           $ref: '#/components/schemas/TransactionGetResponseV2FxInformation'
         status:
           $ref: '#/components/schemas/TransactionStatus'
-    RecipientType:
-      type: string
-      enum:
-      - RECIPIENT
-      - LINKED_ACCOUNT
-      - SETTLEMENT_ACCOUNT
-      example: RECIPIENT
-    CountryCode:
-      type: string
-      enum:
-      - US
-      description: Two letter country code based on ISO 3166 standard
-      example: US
-    TransactionGetResponse:
-      allOf:
-      - $ref: '#/components/schemas/TransactionGetResponseBase'
-      type: object
-      properties:
-        feeType:
-          $ref: '#/components/schemas/FeeType'
-        error:
-          $ref: '#/components/schemas/ApiErrorV2'
-    RoutingInformation:
+    PostTransactionRequestBase:
       type: object
       required:
-      - routingNumber
-      - transactionType
-      - routingCodeType
+      - currency
+      - transactionReferenceId
+      - amount
       properties:
-        routingNumber:
-          $ref: '#/components/schemas/RoutingNumber'
-        transactionType:
-          $ref: '#/components/schemas/RoutingInformationTransactionType'
-        routingCodeType:
-          $ref: '#/components/schemas/RoutingCodeType'
-    RecipientPartyDetails:
-      type: object
-      required:
-      - type
-      properties:
-        address:
-          $ref: '#/components/schemas/RecipientAddress'
-        type:
-          $ref: '#/components/schemas/PartyType'
-        firstName:
+        transactionReferenceId:
+          description: A unique reference ID that you must generate and provide for each transaction.
           type: string
-          maxLength: 70
-          pattern: ^(.|\s)*\S(.|\s)*$
-          description: 'Recipient''s first name. Mandatory for recipient type INDIVIDUAL.
-
-            '
-          example: Monica
-        lastName:
-          type: string
-          maxLength: 70
-          pattern: ^(.|\s)*\S(.|\s)*$
-          description: 'Recipient''s last name. Mandatory for recipient type INDIVIDUAL.
-
-            '
-          example: Gellar
-        businessName:
-          type: string
-          maxLength: 140
-          pattern: ^(.|\s)*\S(.|\s)*$
-          description: 'Recipient company name. Mandatory for recipient type ORGANIZATION.
-
-            '
-          example: Central Park Getaways
-        alternativeName:
-          type:
-          - string
-          - 'null'
+          pattern: '[_0-9A-Za-z]+'
           minLength: 1
-          maxLength: 140
+          maxLength: 35
+          example: Inv-Pay-1234
+        type:
+          $ref: '#/components/schemas/PaymentType'
+        debtorAccountId:
+          description: ID of the account to make the payment from.
+          type: string
+          minLength: 1
+          maxLength: 35
           pattern: ^(.|\s)*\S(.|\s)*$
-          description: 'Recipient optional alternative name
-
-            '
-          example: Central Park
-        contacts:
-          type: array
-          description: Contact details for the recipient.
-          items:
-            $ref: '#/components/schemas/RecipientContact'
-          minItems: 0
-        identities:
-          type: array
-          description: Identity details for the recipient.
-          items:
-            $ref: '#/components/schemas/RecipientIdentity'
-          minItems: 0
-    RecipientIdentity:
-      type: object
-      required:
-      - idType
-      - idValue
-      properties:
-        idType:
+          example: dc2eda9084bf40b7a1d8baa8c5e0ea0ax
+        creditorAccountId:
+          description: ID of the account to make the payment to.
+          type: string
+          minLength: 1
+          maxLength: 35
+          pattern: ^(.|\s)*\S(.|\s)*$
+          example: dc2eda9084bf40b7a1d8baa8c5e0ea0ax
+        amount:
+          description: The amount that is moved out or into your account in the currency specified
+          type: number
+          minimum: 0.01
+          example: 100
+        currency:
+          description: This denotes the currency of the payment in ISO 4217 Alpha-3 Currency Code format
           type: string
           enum:
-          - USCC
-          - ORGANIZATION_ID
-          - NATIONAL_ID
-          - TAX_ID
-          - SSN
-          description: Type of identification
-          example: USCC
-        idValue:
-          minLength: 1
-          maxLength: 255
+          - USD
+          example: USD
+        targetCurrency:
+          $ref: '#/components/schemas/TargetCurrency'
+        targetAmount:
+          description: This is the transaction value in currency (referred by `targetCurrency`) which needs to be credited to the creditor
+          type: number
+          minimum: 0.01
+          example: 100
+        recipientId:
+          description: The resource Id of the recipient to be used in this transaction.  Must have been pre-registered via the /recipient API
           type: string
-          description: Identification value
-          example: 91310000717860841G
-    TransactionGetResponseV2:
-      type: object
-      required:
-      - id
-      - currency
-      - paymentDate
-      - type
-      - status
-      - createdAt
-      allOf:
-      - $ref: '#/components/schemas/TransactionGetResponse'
-      - type: object
-        properties:
-          type:
-            $ref: '#/components/schemas/PaymentTypeResponse'
-          originatingTransactionType:
-            $ref: '#/components/schemas/OriginatingTransactionType'
-          ledgerBalance:
-            description: The ledger balance shows the total of all settled transactions at the time the request is made. Transactions which are in a pending state and transactions of type hold are excluded from this balance. The ledger balance is updated only when a transaction is settled.
-            type: number
-            example: 10000
-          postingVersion:
-            description: A measure of how many times an account has been updated by a new transaction. The posting version is incremented by 1 whenever there's a an event on the account. It can be used to track the order in which transactions have occurred, so you can present the user with the most recent transactions first.
-            type: integer
-            example: 1
+          example: a8eb71c9-7bbb-41f2-8d9e-b0f5
+        localInstrumentCode:
+          description: 'Each ACH payment uses a Standard Entry class code (SEC) to indicate account type and authorization method used. <br>
+
+            Defaults to PPD for consumer, `CCD` for business, and `WEB` for direct debits ACH if no mandate method is specified. <br>
+
+            See documentation for further details <br>
+
+
+            | LocalInstrumentCode | Meaning                                                                |
+
+            |---------------------|------------------------------------------------------------------------|
+
+            | * `CCD`                 | Urgent Payment Net Settlement Corporate Credit or Debit (CCD)          |
+
+            | * `PPD`                  | Pre-arranged Payments or Deposit Transfer(PPD)                         |
+
+            | * `TEL`                  | TELEPHONE Initiated Entry - Used for authorizing payment via telephone |
+
+            | * `WEB`                  | WEB Initiated Entry - Used for authorizing payment over the internet   |
+
+            '
+          type: string
+          example: PPD
+        memo:
+          description: Transaction information that states its purpose for easier tracking
+          type: string
+          pattern: ^(.|\s)*\S(.|\s)*$
+          maxLength: 140
+          example: Invoice 1234
+        fxInformation:
+          $ref: '#/components/schemas/PostTransactionV2FxInformation'
+        recipient:
+          $ref: '#/components/schemas/TransactionRecipientDetailsV2'
+    PaymentType:
+      description: 'The type of transaction being initiated. Valid values are:
+
+
+        | Value | Description |
+
+        |-------|-------------|
+
+        | `RTP` | Realtime Transactions |
+
+        | `ACH` | ACH Transactions |
+
+        | `WIRE` | Wire Transactions |
+
+        | `TRANSFER` | Transactions internal to JPMorgan |
+
+        | `CARD` | Push to Card Transactions |
+
+        '
+      type: string
+      enum:
+      - RTP
+      - WIRE
+      - ACH
+      - TRANSFER
+      - CARD
+      example: ACH
     TransactionResponseV2:
       type: object
       required:
@@ -1321,150 +1436,6 @@ components:
             type: string
             format: date
             example: '2025-07-21'
-    RecipientAddress:
-      description: Address details for the recipient. Mandatory for payments using the RTP payment type.
-      type: object
-      required:
-      - addressLine1
-      - city
-      - countryCode
-      properties:
-        addressType:
-          type: string
-          example: Principal place of business
-          description: Type of address e.g. 'Primary Residence' | 'Principal place of business'.
-        addressLine1:
-          type: string
-          minLength: 1
-          maxLength: 34
-          pattern: ^(.|\s)*\S(.|\s)*$
-          example: 90 Bedford Street
-          description: First line of address; required and must not be a PO Box.
-        addressLine2:
-          type: string
-          minLength: 0
-          maxLength: 34
-          example: Apt 2E
-          description: Second line of address; not required.
-        addressLine3:
-          type: string
-          minLength: 0
-          maxLength: 34
-          description: Third line of address; not required.
-        buildingNumber:
-          type: string
-          minLength: 0
-          maxLength: 16
-          description: Building name or number if address is in a building
-        city:
-          type: string
-          minLength: 1
-          maxLength: 34
-          pattern: ^(.|\s)*\S(.|\s)*$
-          example: New York
-          description: Address city.
-        state:
-          type: string
-          maxLength: 30
-          example: NY
-          description: State code in alpha-2 format. State is mandatory for countries like United States.
-        postalCode:
-          type: string
-          maxLength: 10
-          example: '10014'
-          description: Postal/ZIP code.
-        countryCode:
-          $ref: '#/components/schemas/CountryCode'
-    RecipientAccount:
-      type: object
-      required:
-      - number
-      - countryCode
-      description: Bank account details of the recipient.
-      properties:
-        number:
-          $ref: '#/components/schemas/AccountNumber'
-        type:
-          $ref: '#/components/schemas/AccountType'
-        routingInformation:
-          type: array
-          description: Routing information.
-          items:
-            $ref: '#/components/schemas/RoutingInformation'
-          minItems: 1
-          maxItems: 3
-        currencyCode:
-          $ref: '#/components/schemas/CurrencyCode'
-        countryCode:
-          $ref: '#/components/schemas/CountryCode'
-    TargetCurrency:
-      type: string
-      enum:
-      - AED
-      - AUD
-      - BGN
-      - BRL
-      - CAD
-      - CHF
-      - CNY
-      - CZK
-      - DKK
-      - EUR
-      - GBP
-      - HKD
-      - HUF
-      - ILS
-      - INR
-      - ISK
-      - JPY
-      - KES
-      - KRW
-      - MXN
-      - MYR
-      - NOK
-      - NZD
-      - PEN
-      - PHP
-      - PLN
-      - RON
-      - SEK
-      - SGD
-      - TWD
-      - USD
-      - VND
-      - ZAR
-      description: The creditor account / recipient currency for a foreign exchange transaction
-      example: CAD
-    PartyType:
-      type: string
-      enum:
-      - INDIVIDUAL
-      - ORGANIZATION
-      example: INDIVIDUAL
-    OriginatingTransactionType:
-      description: The transaction type of the originating transaction that incurred a 'FEE' or 'RETURN' transaction. This is only available for transactions of type 'FEE' or 'RETURN'. * ACH_PAYOUT - the original transaction was a payout made by ACH payment route. * RTP_PAYOUT - the original transaction was a payout made by ACH payment route. * WIRE_PAYOUT - the original transaction was a payout made by WIRE payment route. * DEBIT_CARD_REQUEST - the original transaction was a debit card request. * FEE - the original transaction was a fee that was reversed.
-      type: string
-      enum:
-      - ACH_PAYOUT
-      - RTP_PAYOUT
-      - WIRE_PAYOUT
-      - DEBIT_CARD_REQUEST
-      - FEE
-      example: ACH_PAYOUT
-    RoutingInformationTransactionType:
-      type: string
-      enum:
-      - ACH
-      - RTP
-      - WIRE
-      description: Type of transaction.
-      example: RTP
-    CurrencyCode:
-      type: string
-      enum:
-      - USD
-      description: Three letter currency code based on ISO 4217 standard
-      example: USD
     RecipientContact:
       type: object
       required:
@@ -1495,142 +1466,68 @@ components:
           pattern: ^(.|\s)*\S(.|\s)*$
           description: "Contact information corresponding to contactType: \nPHONE - E.164-compliant telephone number (excluding country code).\nEMAIL - Email address (addr-spec in Section 3.4 of RFC 5322).\nWEBSITE - URL starting with http:// or https://.\n"
           example: '6316215110'
-    ApiErrorReasonV2:
+    AccountNumber:
+      type: string
+      pattern: ^[A-Z0-9]{1,35}$
+      description: Demand Deposit Account number or International Account Number (IBAN).
+      example: '021000021'
+    TransactionRequestResponseBase:
       type: object
-      description: Schema representing detailed reasons for an API error, including code, location, and message.
-      required:
-      - message
       properties:
-        code:
+        id:
+          description: The resource Id of your transaction to use when looking up details of this transaction.
           type: string
-          example: '11000'
-          description: Short code that identifies the error - publicly cataloged and documented
-          minLength: 0
-          maxLength: 5
-        location:
+          example: '123434534'
+        transactionReferenceId:
+          description: Transaction reference ID provided by client
           type: string
-          enum:
-          - BODY
-          - QUERY
-          - PATH
-          - HEADER
-          example: BODY
-          description: Part of the request which is responsible for the reason
-        field:
+          example: inv-pay-1234
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+        type:
+          $ref: '#/components/schemas/PaymentTypeResponse'
+        debtorAccountId:
+          description: The Id of the on-us account that the transaction amount will be/has been debited from.
           type: string
-          description: The location of the property or parameter in error
-          minLength: 0
-          maxLength: 512
-        message:
+          example: dc2eda9084bf40b7a1d8baa8c5e0ea0ax
+        creditorAccountId:
+          description: The Id of the on-us account that the transaction amount will be/has been credited to.
           type: string
-          example: Client with ID 0031234567 does not exist.
-          description: Message describing the reason. This message can typically be displayed to your platform's users, except in cases specified otherwise
-          minLength: 0
-          maxLength: 2048
-  responses:
-    503V2:
-      description: Service Unavailable
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Service Unavailable
-            httpStatus: 503
-    500V2:
-      description: Internal Server Error
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Internal Server Error
-            httpStatus: 500
-    404V2:
-      description: Not Found
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Not Found
-            httpStatus: 404
-    401V2:
-      description: Unauthorized
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Unauthorized Request
-            httpStatus: 401
-    400V2:
-      description: Bad Request
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Bad Request
-            httpStatus: 400
-    403V2:
-      description: Forbidden
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Forbidden
-            httpStatus: 403
+          example: dc2eda9084bf40b7a1d8baa8c5e0ea0ax
+        amount:
+          description: The value of the transaction
+          type: number
+          example: 100
+        currency:
+          description: The currency of the transaction
+          type: string
+          example: USD
+        localInstrumentCode:
+          description: The code that was used when creating the transaction..
+          type: string
+          example: PPD
+        createdAt:
+          description: The date and time the transaction was created.
+          type: string
+          format: date-time
+          example: '2023-02-22T15:05:46.952Z'
+        targetCurrency:
+          $ref: '#/components/schemas/TargetCurrency'
+        targetAmount:
+          description: This is the transaction value in currency (referred by `targetCurrency`) which is credited to the creditor
+          type: number
+          example: 100
+        recipientId:
+          description: The resource Id of the recipient that was used in this transaction.  Further details of the recipient can be found via the /recipient API
+          type: string
+          example: a8eb71c9-7bbb-41f2-8d9e-b0f5
+        memo:
+          description: Transaction information that states its purpose for easier tracking
+          type: string
+          example: Invoice 1234
+        fxInformation:
+          $ref: '#/components/schemas/PostTransactionV2FxInformation'
   examples:
-    CreateTransactionPayoutWIRERes:
-      summary: Create Transaction - WIRE Payout
-      description: Create Transaction - WIRE PayOut
-      value:
-        id: m6p8kqkk5hjne4
-        status: PENDING
-        transactionReferenceId: iIbqZdlNuuogLaBo
-        amount: 3100
-        currency: USD
-        type: WIRE
-        paymentDate: '2023-10-31'
-        recipientId: 616d93a1-ce53-4c71-b03b-02a11396db39
-        createdAt: '2023-09-26T15:55:49.560Z'
-        debtorAccountId: d3371713f14e423f82065c9486ebe15b
-        memo: Memo for Transaction for 1000010400
-    CreateTransactionPayoutRTPRes:
-      summary: Create Transaction - RTP Payout
-      description: Create Transaction - RTP PayOut
-      value:
-        id: m6p8kqkk5hjne4
-        status: PENDING
-        transactionReferenceId: 5wQN9wSJl4rugac4
-        amount: 3100
-        currency: USD
-        type: RTP
-        paymentDate: '2023-10-31'
-        recipientId: 616d93a1-ce53-4c71-b03b-02a11396db39
-        createdAt: '2023-09-26T15:55:49.560Z'
-        debtorAccountId: d3371713f14e423f82065c9486ebe15b
-        memo: Memo for Transaction for 1000010400
     CreateTransactionPayoutACHRes:
       summary: Create Transaction - ACH Payout
       description: Create Transaction - ACH PayOut
@@ -1647,6 +1544,21 @@ components:
         debtorAccountId: d3371713f14e423f82065c9486ebe15b
         memo: Memo for Transaction for 1000010400
         localInstrumentCode: PPD
+    CreateTransactionPayoutRTPRes:
+      summary: Create Transaction - RTP Payout
+      description: Create Transaction - RTP PayOut
+      value:
+        id: m6p8kqkk5hjne4
+        status: PENDING
+        transactionReferenceId: 5wQN9wSJl4rugac4
+        amount: 3100
+        currency: USD
+        type: RTP
+        paymentDate: '2023-10-31'
+        recipientId: 616d93a1-ce53-4c71-b03b-02a11396db39
+        createdAt: '2023-09-26T15:55:49.560Z'
+        debtorAccountId: d3371713f14e423f82065c9486ebe15b
+        memo: Memo for Transaction for 1000010400
     CreateTransactionFxACHRes:
       summary: Create Fx Transaction - ACH Payout
       description: Create Fx Transaction - ACH Payout
@@ -1710,6 +1622,21 @@ components:
         createdAt: '2023-09-26T15:55:49.560Z'
         memo: Memo for Transaction for 1000010400
         localInstrumentCode: PPD
+    CreateTransactionPayoutWIRERes:
+      summary: Create Transaction - WIRE Payout
+      description: Create Transaction - WIRE PayOut
+      value:
+        id: m6p8kqkk5hjne4
+        status: PENDING
+        transactionReferenceId: iIbqZdlNuuogLaBo
+        amount: 3100
+        currency: USD
+        type: WIRE
+        paymentDate: '2023-10-31'
+        recipientId: 616d93a1-ce53-4c71-b03b-02a11396db39
+        createdAt: '2023-09-26T15:55:49.560Z'
+        debtorAccountId: d3371713f14e423f82065c9486ebe15b
+        memo: Memo for Transaction for 1000010400
     CreateTransactionPayOutBookRes:
       summary: Create Transaction - Payout Book
       description: Create Transaction - Payout Book
@@ -1731,6 +1658,79 @@ components:
       schema:
         type: string
       example: efeacff8-fd2c-4f54-a12e-2a8f90d4d325
+  responses:
+    403V2:
+      description: Forbidden
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Forbidden
+            httpStatus: 403
+    503V2:
+      description: Service Unavailable
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Service Unavailable
+            httpStatus: 503
+    404V2:
+      description: Not Found
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Not Found
+            httpStatus: 404
+    400V2:
+      description: Bad Request
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Bad Request
+            httpStatus: 400
+    401V2:
+      description: Unauthorized
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Unauthorized Request
+            httpStatus: 401
+    500V2:
+      description: Internal Server Error
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Internal Server Error
+            httpStatus: 500
   parameters:
     token:
       name: token

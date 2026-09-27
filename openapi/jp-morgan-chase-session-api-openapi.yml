@@ -106,18 +106,98 @@ paths:
         '503':
           $ref: '#/components/responses/503'
 components:
+  examples:
+    SessionResponse:
+      summary: Create Session
+      description: Create session response.
+      value:
+        id: '9000005555'
+        type: EMBEDDED_UI
+        target:
+          id: '3000000001'
+          type: CLIENT
+        url: https://url.jpmorgan.com/t/17465629080405AI41
+        token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aXJ0dWFsY2FyZF9xYTAxX
+    CreateSessionRequest:
+      summary: Create Session Request
+      description: Create session.
+      value:
+        type: EMBEDDED_UI
+        target:
+          id: '3000000001'
+          type: CLIENT
+    ListSessionResponse:
+      summary: List of sessions
+      description: Retrieve list of sessions.
+      value:
+        metadata:
+          page: 0
+          limit: 25
+          total: 2
+        sessions:
+        - id: '9000005555'
+          type: EMBEDDED_UI
+          target:
+            id: '3000000001'
+            type: CLIENT
+          url: https://url.jpmorgan.com/t/17465629080405AI41
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aXJ0dWFsY2FyZF9xYTAxX
+        - id: '9000005556'
+          type: EMBEDDED_UI
+          target:
+            id: '3000000001'
+            type: CLIENT
+          url: https://url.jpmorgan.com/t/22465629080405AI41
+          token: eyJfgGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aXJ0dWFsY2FyZF9xrtDFG
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: 'Client generated unique idempotency key used in recognizing consecutive retries of the same request
+
+        **Usage of V4 UUIDs is recommended.**'
+      required: false
+      schema:
+        title: Idempotency Key
+        description: 'A unique string that enables the API support idempotency by safely retrying requests without accidentally
+
+          performing the same operation twice.'
+        type: string
+        minLength: 1
+        maxLength: 36
+        example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+    PageSize:
+      name: limit
+      in: query
+      description: Number of records per page.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 25
+        default: 25
+    PageNumber:
+      name: page
+      in: query
+      description: Page number.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 0
+        minimum: 0
+        maximum: 2147483647
+    TokenInHeader:
+      name: token
+      in: header
+      description: JWT Client token
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 8192
   responses:
-    '409':
-      description: Conflict - Concurrent request detected
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Conflict
-            httpStatus: 409
-            context:
-            - message: Concurrent request detected for clientId [3000005555]. Please try again later.
     '503':
       description: Service Unavailable - API Processing Error
       content:
@@ -129,17 +209,17 @@ components:
             httpStatus: 503
             context:
             - message: Service unavailable.
-    '422':
-      description: Request could not be processed due to semantic errors. Check error response.
+    '409':
+      description: Conflict - Concurrent request detected
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/schemas-ApiError'
           example:
-            title: Unprocessable Entity
-            httpStatus: 422
+            title: Conflict
+            httpStatus: 409
             context:
-            - message: Unable to perform Client Verification for clientId [3000005555] due to its Status.
+            - message: Concurrent request detected for clientId [3000005555]. Please try again later.
     '404':
       description: No data found for the criteria specified
       content:
@@ -151,17 +231,6 @@ components:
             httpStatus: 404
             context:
             - message: Party with ID [2000000555] not found.
-    '500':
-      description: Internal Server Error - Generic Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Internal Server Error
-            httpStatus: 500
-            context:
-            - message: Something went wrong. Please try again later.
     '400':
       description: Bad Request
       content:
@@ -198,15 +267,29 @@ components:
             httpStatus: 403
             context:
             - message: Platform is not authorized to access client.
+    '422':
+      description: Request could not be processed due to semantic errors. Check error response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Unprocessable Entity
+            httpStatus: 422
+            context:
+            - message: Unable to perform Client Verification for clientId [3000005555] due to its Status.
+    '500':
+      description: Internal Server Error - Generic Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Internal Server Error
+            httpStatus: 500
+            context:
+            - message: Something went wrong. Please try again later.
   schemas:
-    SessionId:
-      type: string
-      maxLength: 10
-      example: '9000005555'
-      pattern: ^[0-9]*$
-      description: 'ID to uniquely identify the session
-
-        '
     SessionTargetType:
       description: 'Client or party type.
 
@@ -243,32 +326,6 @@ components:
           description: Provides additional context and detail on the errors
           minItems: 0
           maxItems: 100
-    SessionResponse:
-      description: List of sessions.
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/SessionId'
-        type:
-          $ref: '#/components/schemas/SessionsType'
-        target:
-          $ref: '#/components/schemas/SessionTarget'
-        url:
-          type: string
-          description: The URL to redirect to for the embedded UI session transfer.
-        token:
-          type: string
-          description: The token to be used for the session transfer.
-    CreateSessionRequest:
-      type: object
-      required:
-      - type
-      - target
-      properties:
-        type:
-          $ref: '#/components/schemas/SessionsType'
-        target:
-          $ref: '#/components/schemas/SessionTarget'
     SessionTargetId:
       type: string
       maxLength: 10
@@ -277,10 +334,6 @@ components:
       description: 'The ID of the client or party.
 
         '
-    SessionsType:
-      type: string
-      enum:
-      - EMBEDDED_UI
     ListSessionResponse:
       type: object
       properties:
@@ -291,42 +344,6 @@ components:
           minItems: 0
           items:
             $ref: '#/components/schemas/SessionResponse'
-    SessionTarget:
-      type: object
-      required:
-      - id
-      - type
-      properties:
-        id:
-          $ref: '#/components/schemas/SessionTargetId'
-        type:
-          $ref: '#/components/schemas/SessionTargetType'
-    ApiErrorContext:
-      description: Context of the API error.
-      type: object
-      required:
-      - message
-      properties:
-        code:
-          type: string
-          description: Short code that identifies the error - publicly cataloged and documented
-          example: '11000'
-        location:
-          type: string
-          enum:
-          - BODY
-          - QUERY
-          - PATH
-          - HEADER
-          example: BODY
-          description: Part of the request which is responsible for the reason
-        field:
-          type: string
-          description: The location of the property or parameter in error
-        message:
-          type: string
-          example: The server can not find the requested resource.
-          description: Message describing the reason.
     PageMetaData:
       description: Page metadata.
       type: object
@@ -358,97 +375,80 @@ components:
             '
           minimum: 0
           maximum: 9999999999
-  examples:
-    ListSessionResponse:
-      summary: List of sessions
-      description: Retrieve list of sessions.
-      value:
-        metadata:
-          page: 0
-          limit: 25
-          total: 2
-        sessions:
-        - id: '9000005555'
-          type: EMBEDDED_UI
-          target:
-            id: '3000000001'
-            type: CLIENT
-          url: https://url.jpmorgan.com/t/17465629080405AI41
-          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aXJ0dWFsY2FyZF9xYTAxX
-        - id: '9000005556'
-          type: EMBEDDED_UI
-          target:
-            id: '3000000001'
-            type: CLIENT
-          url: https://url.jpmorgan.com/t/22465629080405AI41
-          token: eyJfgGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aXJ0dWFsY2FyZF9xrtDFG
+    SessionsType:
+      type: string
+      enum:
+      - EMBEDDED_UI
     SessionResponse:
-      summary: Create Session
-      description: Create session response.
-      value:
-        id: '9000005555'
-        type: EMBEDDED_UI
+      description: List of sessions.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/SessionId'
+        type:
+          $ref: '#/components/schemas/SessionsType'
         target:
-          id: '3000000001'
-          type: CLIENT
-        url: https://url.jpmorgan.com/t/17465629080405AI41
-        token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aXJ0dWFsY2FyZF9xYTAxX
+          $ref: '#/components/schemas/SessionTarget'
+        url:
+          type: string
+          description: The URL to redirect to for the embedded UI session transfer.
+        token:
+          type: string
+          description: The token to be used for the session transfer.
     CreateSessionRequest:
-      summary: Create Session Request
-      description: Create session.
-      value:
-        type: EMBEDDED_UI
+      type: object
+      required:
+      - type
+      - target
+      properties:
+        type:
+          $ref: '#/components/schemas/SessionsType'
         target:
-          id: '3000000001'
-          type: CLIENT
-  parameters:
-    PageNumber:
-      name: page
-      in: query
-      description: Page number.
-      required: false
-      schema:
-        type: integer
-        format: int32
-        default: 0
-        minimum: 0
-        maximum: 2147483647
-    IdempotencyKey:
-      name: Idempotency-Key
-      in: header
-      description: 'Client generated unique idempotency key used in recognizing consecutive retries of the same request
+          $ref: '#/components/schemas/SessionTarget'
+    ApiErrorContext:
+      description: Context of the API error.
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          example: '11000'
+        location:
+          type: string
+          enum:
+          - BODY
+          - QUERY
+          - PATH
+          - HEADER
+          example: BODY
+          description: Part of the request which is responsible for the reason
+        field:
+          type: string
+          description: The location of the property or parameter in error
+        message:
+          type: string
+          example: The server can not find the requested resource.
+          description: Message describing the reason.
+    SessionTarget:
+      type: object
+      required:
+      - id
+      - type
+      properties:
+        id:
+          $ref: '#/components/schemas/SessionTargetId'
+        type:
+          $ref: '#/components/schemas/SessionTargetType'
+    SessionId:
+      type: string
+      maxLength: 10
+      example: '9000005555'
+      pattern: ^[0-9]*$
+      description: 'ID to uniquely identify the session
 
-        **Usage of V4 UUIDs is recommended.**'
-      required: false
-      schema:
-        title: Idempotency Key
-        description: 'A unique string that enables the API support idempotency by safely retrying requests without accidentally
-
-          performing the same operation twice.'
-        type: string
-        minLength: 1
-        maxLength: 36
-        example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
-    TokenInHeader:
-      name: token
-      in: header
-      description: JWT Client token
-      required: false
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 8192
-    PageSize:
-      name: limit
-      in: query
-      description: Number of records per page.
-      required: false
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 25
-        default: 25
+        '
   securitySchemes:
     BearerAuth:
       type: http

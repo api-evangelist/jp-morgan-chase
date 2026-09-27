@@ -107,12 +107,36 @@ paths:
                 $ref: '#/components/schemas/messages'
 components:
   schemas:
-    errorMessage:
-      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
+    code:
+      description: Short informative code about the error.
       type: string
-    fileContent:
-      description: Provide texual information about the values stored in a file
+    responseMessage:
+      description: Long explanation of the response message.
       type: string
+      readOnly: true
+      example: Request Accepted
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
     messages:
       description: A list of errors and warnings.
       type: object
@@ -152,36 +176,12 @@ components:
           description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
           type: string
           example: the signature could not be verified
-    code:
-      description: Short informative code about the error.
+    fileContent:
+      description: Provide texual information about the values stored in a file
       type: string
-    responseStatus:
-      description: Request result status.
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
       type: string
-      readOnly: true
-      example: SUCCESS
-      enum:
-      - SUCCESS
-      - ERROR
-    responseMessage:
-      description: Long explanation of the response message.
-      type: string
-      readOnly: true
-      example: Request Accepted
-    validationMessage:
-      description: Object containing information about transaction validation
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/errorMessage'
-        entity:
-          description: Information about the entity that experienced an error.
-          type: string
     responseCode:
       description: Short explanation of the response code.
       type: string
