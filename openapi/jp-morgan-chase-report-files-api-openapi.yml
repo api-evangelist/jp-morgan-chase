@@ -107,28 +107,14 @@ paths:
                 $ref: '#/components/schemas/messages'
 components:
   schemas:
-    code:
-      description: Short informative code about the error.
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
       type: string
     responseMessage:
       description: Long explanation of the response message.
       type: string
       readOnly: true
       example: Request Accepted
-    validationMessage:
-      description: Object containing information about transaction validation
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/errorMessage'
-        entity:
-          description: Information about the entity that experienced an error.
-          type: string
     responseStatus:
       description: Request result status.
       type: string
@@ -137,6 +123,16 @@ components:
       enum:
       - SUCCESS
       - ERROR
+    code:
+      description: Short informative code about the error.
+      type: string
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
     messages:
       description: A list of errors and warnings.
       type: object
@@ -156,6 +152,20 @@ components:
           description: Information about errors occurred in transaction validation
           items:
             $ref: '#/components/schemas/validationMessage'
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
     adfsError:
       description: Object containing information in the file
       type: object
@@ -179,16 +189,6 @@ components:
     fileContent:
       description: Provide texual information about the values stored in a file
       type: string
-    errorMessage:
-      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
-      type: string
-    responseCode:
-      description: Short explanation of the response code.
-      type: string
-      readOnly: true
-      minLength: 2
-      maxLength: 50
-      example: ACCEPTED
   securitySchemes:
     BearerAuth:
       type: http

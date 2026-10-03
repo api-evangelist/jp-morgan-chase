@@ -147,34 +147,32 @@ paths:
                 $ref: '#/components/schemas/Errors'
 components:
   schemas:
-    RefundsRequest:
+    StatusUpdatedAt:
+      type: string
+      format: dateTime
+      description: The last updated date and time of the refund status
+      example: '2022-05-31T14:00:57.751Z'
+    ErrorsInit:
       type: object
-      required:
-      - paymentIdentifiers
-      - amount
-      - reason
-      - mode
+      description: Contains error response
       properties:
-        paymentIdentifiers:
-          $ref: '#/components/schemas/PaymentIdentifiers'
-        amount:
-          $ref: '#/components/schemas/Amount'
-        reason:
-          $ref: '#/components/schemas/Reason'
-        mode:
-          $ref: '#/components/schemas/Mode'
-    ErrorDetailsInit:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          example: '1009'
-        errorDescription:
-          type: string
-          example: RefundId provided in the URI is invalid
-        ruleDefinition:
-          type: string
-          example: Invalid Id provided
+        errors:
+          description: Contains error payload
+          type: object
+          properties:
+            errorDetails:
+              type: array
+              items:
+                $ref: '#/components/schemas/ErrorDetailsInit'
+              minItems: 0
+    Reason:
+      description: Reason for the refund request
+      type: string
+      enum:
+      - DUPLICATE
+      - WITHDRAWAL
+      - REFUND
+      - PARTIAL_REFUND
     RefundsResponse:
       type: object
       description: The refunds response object from the API provided the request was accepted successfully.
@@ -233,11 +231,12 @@ components:
       required:
       - amount
       - currency
-    StatusUpdatedAt:
+    Mode:
+      description: Captures the speed of refund settlement
       type: string
-      format: dateTime
-      description: The last updated date and time of the refund status
-      example: '2022-05-31T14:00:57.751Z'
+      enum:
+      - INSTANT
+      - NORMAL
     ErrorDetailsType:
       type: object
       properties:
@@ -247,20 +246,34 @@ components:
         errorDescription:
           type: string
           example: Client is not eligible for the API Service.
-    Mode:
-      description: Captures the speed of refund settlement
-      type: string
-      enum:
-      - INSTANT
-      - NORMAL
-    Reason:
-      description: Reason for the refund request
-      type: string
-      enum:
-      - DUPLICATE
-      - WITHDRAWAL
-      - REFUND
-      - PARTIAL_REFUND
+    ErrorDetailsInit:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          example: '1009'
+        errorDescription:
+          type: string
+          example: RefundId provided in the URI is invalid
+        ruleDefinition:
+          type: string
+          example: Invalid Id provided
+    RefundsRequest:
+      type: object
+      required:
+      - paymentIdentifiers
+      - amount
+      - reason
+      - mode
+      properties:
+        paymentIdentifiers:
+          $ref: '#/components/schemas/PaymentIdentifiers'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        reason:
+          $ref: '#/components/schemas/Reason'
+        mode:
+          $ref: '#/components/schemas/Mode'
     Errors:
       type: object
       properties:
@@ -271,19 +284,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/ErrorDetailsType'
-              minItems: 0
-    ErrorsInit:
-      type: object
-      description: Contains error response
-      properties:
-        errors:
-          description: Contains error payload
-          type: object
-          properties:
-            errorDetails:
-              type: array
-              items:
-                $ref: '#/components/schemas/ErrorDetailsInit'
               minItems: 0
     PaymentIdentifiers:
       type: object

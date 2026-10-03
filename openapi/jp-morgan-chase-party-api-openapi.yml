@@ -293,648 +293,7 @@ paths:
         '503':
           $ref: '#/components/responses/503'
 components:
-  examples:
-    PartyListResponseForNetworkScreeningIndividuals:
-      summary: List of related parties
-      description: A list of related parties.
-      value:
-        metadata:
-          page: 0
-          limit: 25
-          total: 1
-        parties:
-        - id: '2000000556'
-          createdAt: '2022-11-18T12:28:11.232Z'
-          country: GB
-          parentPartyId: '2000000555'
-          partyType: INDIVIDUAL
-          profileStatus: APPROVED
-          roles:
-          - CONTROLLER
-    CreateIndividualPartyForNetworkScreening:
-      summary: Individual Party
-      description: Individual Party
-      value:
-        parentPartyId: '2000000111'
-        partyType: INDIVIDUAL
-        profileStatus: NEW
-        roles:
-        - CONTROLLER
-        active: true
-        individualDetails:
-          countryOfResidence: GB
-          firstName: Eric
-          lastName: Foreman
-          birthDate: '1973-07-20'
-          jobTitle: Other
-          jobTitleDescription: CEO
-          natureOfOwnership: Direct
-          soleOwner: true
-          addresses:
-          - addressType: RESIDENTIAL_ADDRESS
-            addressLines:
-            - 1 Upper Littleton
-            - Apt 2E
-            city: Winford
-            state: BST
-            postalCode: BS18 8HF
-            country: GB
-          individualIds:
-          - idType: NATIONAL_ID
-            value: '444331111'
-            issuer: GB
-    UpdateOrganizationPartyPayfacCAForNetworkScreening:
-      summary: Update organization party in CA for network screening
-      description: Updates organization party in CA for network screening
-      value:
-        organizationDetails:
-          organizationName: Foreman Medical Corporation
-          dbaName: FM Corp
-          associatedCountries:
-          - CA
-          - US
-          websiteAvailable: false
-          mcc: '5410'
-        email: foremanmedical@example.com
-    CreateOrganizationPartyForNetworkScreening:
-      summary: Organization Party
-      description: Organization Party
-      value:
-        partyType: ORGANIZATION
-        profileStatus: APPROVED
-        roles:
-        - CLIENT
-        email: monica@cpgetaways.com
-        externalId: TCU1234
-        active: true
-        organizationDetails:
-          organizationName: Central Park Getaways
-          organizationType: SOLE_PROPRIETORSHIP
-          organizationDescription: Relax, unwind and experience the comforting charm of our apartment while exploring New York
-          countryOfFormation: US
-          yearOfFormation: '2023'
-          dbaName: CP Getaways
-          industryCategory: Accommodation and Food Services
-          industryType: All Other Traveler Accommodation
-          entitiesInOwnership: false
-          addresses:
-          - addressType: BUSINESS_ADDRESS
-            addressLines:
-            - 90 Bedford Street
-            - Apt 2E
-            city: New York
-            state: NY
-            postalCode: '10014'
-            country: US
-          phone:
-            phoneType: BUSINESS_PHONE
-            phoneNumber: '6316215110'
-            countryCode: US
-          organizationIds:
-          - idType: EIN
-            value: '000000001'
-            issuer: US
-          websiteAvailable: false
-    CreateOrganizationPartyCAForNetworkScreening:
-      summary: Organization Party for CA
-      description: Organization Party for CA
-      value:
-        partyType: ORGANIZATION
-        profileStatus: APPROVED
-        roles:
-        - CLIENT
-        email: contact@ppthospital.gmail.com
-        externalId: TCU1234
-        active: true
-        organizationDetails:
-          countryOfFormation: CA
-          yearOfFormation: '1984'
-          organizationType: LIMITED_LIABILITY_PARTNERSHIP
-          organizationName: Princeton Plainsboro Teaching Hospital
-          dbaName: PPT Hospital
-          organizationDescription: Teaching the latest medical best practices.
-          industry:
-            code: '423450'
-            codeType: NAICS
-          organizationIds:
-          - idType: BUSINESS_NUMBER
-            value: '865103741'
-            issuer: CA
-          - idType: BUSINESS_REGISTRATION_NUMBER
-            value: '101803575124114'
-            issuer: CA
-          addresses:
-          - addressType: BUSINESS_ADDRESS
-            addressLines:
-            - 218 Medical Way
-            city: Princeton
-            state: BC
-            country: CA
-            postalCode: 1N1 N1N
-          phone:
-            phoneType: BUSINESS_PHONE
-            phoneNumber: '5553331234'
-            countryCode: '+1'
-          website: https://ppthospital.com
-    PartyListResponseForNetworkScreening:
-      summary: List of root parties
-      description: A list of root parties.
-      value:
-        metadata:
-          page: 0
-          limit: 25
-          total: 2
-        parties:
-        - id: '2000000557'
-          createdAt: '2022-11-18T14:28:11.232Z'
-          country: GB
-          externalId: '394800000000556'
-          name: Monica Gellar
-          partyType: ORGANIZATION
-          profileStatus: DECLINED
-          roles:
-          - CLIENT
-        - id: '2000000555'
-          createdAt: '2022-11-18T12:28:11.232Z'
-          country: GB
-          externalId: '394800000000555'
-          name: Foreman Medical Corporation
-          partyType: ORGANIZATION
-          profileStatus: APPROVED
-          roles:
-          - CLIENT
-    CreateOrganizationPartyPayfacForNetworkScreening:
-      summary: Organization Party for Payfac
-      description: Organization Party for Payfac
-      value:
-        partyType: ORGANIZATION
-        profileStatus: NEW
-        roles:
-        - CLIENT
-        email: foremanmedical@example.com
-        externalId: '394800000000555'
-        active: true
-        organizationDetails:
-          organizationType: C_CORPORATION
-          organizationName: Foreman Medical Corporation
-          organizationDescription: Purveyor of heirloom medical and dental instruments.
-          dbaName: FM Corp
-          mcc: '5047'
-          secondaryMccList:
-          - '5065'
-          countryOfFormation: GB
-          associatedCountries:
-          - US
-          - GB
-          website: https://foremanmedical.com
-          websiteAvailable: true
-          yearOfFormation: '2004'
-          addresses:
-          - addressType: BUSINESS_ADDRESS
-            addressLines:
-            - 82 Alexander Road
-            city: CREWE
-            state: SCT
-            postalCode: CW181NE
-            country: GB
-          phone:
-            phoneType: BUSINESS_PHONE
-            phoneNumber: '2077221234'
-            countryCode: '+44'
-          organizationIds:
-          - idType: BUSINESS_REGISTRATION_ID
-            value: '100100122'
-            issuer: GB
-        networkRegistration:
-          settlementPaymentMethods:
-          - VISA
-          - DISCOVER
-          - AMEX_OPT_BLUE
-          visaDebitAcceptance: DEBIT_ACCEPTED_ALL
-          currencyCode: GBP
-          transactionDeviceType: HOST_BASED_POS_DEVICE
-          serviceEstablishmentStatus: D_CANCELLED
-          serviceEstablishmentStatusUpdateDate: '2024-01-25'
-          discoverDebtRepayment: true
-          amexOptBlueMarketing: true
-          jcbAccepted: true
-          amexSellerId: '123'
-          discoverMerchantId: '123'
-    UpdateOrganizationPartyPayfacForNetworkScreening:
-      summary: Update organization party for network screening
-      description: Updates organization party for network screening
-      value:
-        organizationDetails:
-          organizationName: Foreman Medical Corporation
-          dbaName: FM Corp
-          associatedCountries:
-          - GB
-          - US
-          websiteAvailable: false
-          mcc: '5410'
-        email: foremanmedical@example.com
-    IndividualPartyResponseForNetworkScreening:
-      summary: Individual party
-      description: Individual party
-      value:
-        id: '2000000556'
-        createdAt: '2022-11-18T12:28:11.232Z'
-        parentPartyId: '2000000555'
-        partyType: INDIVIDUAL
-        profileStatus: NEW
-        roles:
-        - CONTROLLER
-        active: true
-        individualDetails:
-          firstName: Eric
-          lastName: Foreman
-          birthDate: '1973-07-20'
-          countryOfResidence: GB
-          jobTitle: Other
-          jobTitleDescription: CEO
-          addresses:
-          - addressType: RESIDENTIAL_ADDRESS
-            addressLines:
-            - 1 Upper Littleton
-            - Apt 2E
-            city: Winford
-            state: BST
-            postalCode: BS18 8HF
-            country: GB
-          individualIds:
-          - idType: NATIONAL_ID
-            issuer: GB
-            value: '100101122'
-    CreateIndividualPartyCAForNetworkScreening:
-      summary: Individual Party
-      description: Individual Party
-      value:
-        parentPartyId: '2000000555'
-        partyType: INDIVIDUAL
-        profileStatus: NEW
-        roles:
-        - CONTROLLER
-        active: true
-        individualDetails:
-          countryOfResidence: CA
-          firstName: Eric
-          lastName: Foreman
-          birthDate: '1973-07-20'
-          jobTitle: Other
-          jobTitleDescription: CEO
-          natureOfOwnership: Direct
-          soleOwner: true
-          addresses:
-          - addressType: RESIDENTIAL_ADDRESS
-            addressLines:
-            - 123 Tulameen St
-            - Unit 600
-            city: Victoria City
-            state: BC
-            postalCode: 1N1 N1N
-            country: CA
-          individualIds:
-          - idType: SOCIAL_INSURANCE_NUMBER
-            value: '333222444'
-            issuer: CA
-    CreateOrganizationPartyPayfacCAForNetworkScreening:
-      summary: Organization Party for Payfac CA use case
-      description: Organization Party for Payfac CA use case
-      value:
-        partyType: ORGANIZATION
-        profileStatus: NEW
-        roles:
-        - CLIENT
-        email: foremanmedical@example.com
-        externalId: '394800000000555'
-        organizationDetails:
-          organizationType: C_CORPORATION
-          organizationName: Foreman Medical Corporation
-          organizationDescription: Purveyor of heirloom medical and dental instruments.
-          dbaName: FM Corp
-          mcc: '5047'
-          secondaryMccList:
-          - '5065'
-          countryOfFormation: CA
-          associatedCountries:
-          - US
-          - CA
-          website: https://foremanmedical.com
-          websiteAvailable: true
-          yearOfFormation: '2004'
-          addresses:
-          - addressType: BUSINESS_ADDRESS
-            addressLines:
-            - 218 Medical Way
-            city: Victoria City
-            state: BC
-            postalCode: 1N1 N1N
-            country: CA
-          phone:
-            phoneType: BUSINESS_PHONE
-            phoneNumber: '5553331234'
-            countryCode: '+1'
-          organizationIds:
-          - idType: BUSINESS_NUMBER
-            value: '865103741'
-            issuer: CA
-          - idType: BUSINESS_REGISTRATION_NUMBER
-            value: '101803575124114'
-            issuer: CA
-        networkRegistration:
-          settlementPaymentMethods:
-          - VISA
-          - DISCOVER
-          - AMEX_OPT_BLUE
-          visaDebitAcceptance: DEBIT_ACCEPTED_ALL
-          currencyCode: CAD
-          transactionDeviceType: HOST_BASED_POS_DEVICE
-          serviceEstablishmentStatus: D_CANCELLED
-          serviceEstablishmentStatusUpdateDate: '2024-01-25'
-          discoverDebtRepayment: true
-          amexOptBlueMarketing: true
-          jcbAccepted: true
-          amexSellerId: '123'
-          discoverMerchantId: '123'
-    OrganizationPartyResponseForNetworkScreening:
-      summary: Organization party
-      description: Organization party
-      value:
-        id: '2000000555'
-        createdAt: '2022-11-18T12:28:11.232Z'
-        partyType: ORGANIZATION
-        profileStatus: NEW
-        externalId: '394800000000555'
-        email: foremanmedical@example.com
-        roles:
-        - CLIENT
-        active: true
-        organizationDetails:
-          organizationType: C_CORPORATION
-          organizationName: Foreman Medical Corporation
-          organizationDescription: Purveyor of heirloom medical and dental instruments.
-          dbaName: FM Corp
-          countryOfFormation: GB
-          associatedCountries:
-          - US
-          - GB
-          mcc: '5047'
-          secondaryMccList:
-          - '5065'
-          websiteAvailable: true
-          website: https://foremanmedical.com
-          yearOfFormation: '2004'
-          addresses:
-          - addressType: BUSINESS_ADDRESS
-            addressLines:
-            - 82 Alexander Road
-            city: Crewe
-            state: SCT
-            postalCode: CW181NE
-            country: GB
-          phone:
-            phoneType: BUSINESS_PHONE
-            phoneNumber: '2077221234'
-            countryCode: '+44'
-          organizationIds:
-          - idType: BUSINESS_REGISTRATION_ID
-            value: '100100122'
-            issuer: GB
-        networkRegistration:
-          settlementPaymentMethods:
-          - VISA
-          - AMEX_OPT_BLUE
-          - DISCOVER
-          visaDebitAcceptance: DEBIT_ACCEPTED_ALL
-          currencyCode: GBP
-          transactionDeviceType: HOST_BASED_POS_DEVICE
-          serviceEstablishmentStatus: R_REINSTATED
-          serviceEstablishmentStatusUpdateDate: '2023-01-20'
-          discoverDebtRepayment: true
-          amexOptBlueMarketing: true
-          jcbAccepted: true
-          amexSellerId: '123'
-          discoverMerchantId: '123'
-    UpdateOrganizationPartyCA:
-      summary: Update organization party for CA
-      description: Updates organization party for CA
-      value:
-        email: contact2@ppthospital.gmail.com
-        organizationDetails:
-          organizationName: Princeton Plainsboro Teaching Hospital
-          organizationType: LIMITED_LIABILITY_PARTNERSHIP
-    UpdateIndividualPartyUS:
-      summary: Update individual party
-      description: Updates individual party
-      value:
-        email: monica@cpgetaways.gmail.com
-        individualDetails:
-          firstName: Monica
-          lastName: Gellar
-          individualIds:
-          - idType: SSN
-            issuer: US
-            value: '100010003'
-    UpdateOrganizationPartyUS:
-      summary: Update organization party
-      description: Updates organization party
-      value:
-        email: monicagellar@cpgetaways.gmail.com
-        organizationDetails:
-          organizationName: Central Park Getaways
-          organizationType: SOLE_PROPRIETORSHIP
-    UpdateIndividualPartyCA:
-      summary: Update individual party for CA
-      description: Updates individual party for CA
-      value:
-        email: ericforeman@ppthospital.gmail.com
-        individualDetails:
-          firstName: Eric
-          lastName: Foreman
-          individualIds:
-          - idType: SOCIAL_INSURANCE_NUMBER
-            issuer: CA
-            value: '777888111'
   schemas:
-    OrganizationType:
-      type: string
-      description: 'This field specifies the legal structure or classification of the organization and identifies whether the entity is a Corporation, Sole Proprietorship, Non-Profit, or Government Body. Note: The values `PARTNERSHIP` and `PUBLICLY_TRADED_COMPANY` are deprecated and should not be used.
-
-        '
-      enum:
-      - LIMITED_LIABILITY_PARTNERSHIP
-      - LIMITED_PARTNERSHIP
-      - GENERAL_PARTNERSHIP
-      - LIMITED_LIABILITY_COMPANY
-      - C_CORPORATION
-      - S_CORPORATION
-      - PARTNERSHIP
-      - PUBLICLY_TRADED_COMPANY
-      - NON_PROFIT_CORPORATION
-      - GOVERNMENT_ENTITY
-      - SOLE_PROPRIETORSHIP
-      - UNINCORPORATED_ASSOCIATION
-    AmexOptBlueServiceEstablishmentNumber:
-      description: 'Unique identifier assigned to a merchant/business that participates in the American Express OptBlue program
-
-        '
-      type: string
-    AccessList:
-      deprecated: true
-      description: List of user access descriptors.
-      type: array
-      items:
-        type: string
-      minItems: 0
-      maxItems: 10
-    CountryCodeIsoAlpha2:
-      type: string
-      example: US
-      description: Country code in ISO alpha-2 format.
-      minLength: 2
-      maxLength: 2
-    MerchantCategoryCode:
-      type: string
-      description: The merchant category code describing the merchant's industry.
-      minLength: 4
-      maxLength: 4
-      example: '5411'
-    MiddleName:
-      type: string
-      minLength: 1
-      maxLength: 30
-      example: More
-      description: 'Middle name of the individual in case of party type being an individual. The format is enforced with the pattern `^[a-zA-Z0-9\(\)_\/\&\+\%\@\#\;\,\.\:\ \-\'']*$`.
-
-        '
-    EntitiesInOwnership:
-      description: 'Entities in ownership means that one or more businesses own part of the business connected to the client.
-
-        '
-      type: boolean
-    AmexOptBlueMarketing:
-      type: boolean
-      description: 'Indicates whether the merchant has opted-in to American Express OptBlue marketing. - `true` – All Marketing (Merchant has not opted out of receiving marketing) - `false` – No Marketing (Merchant has opted out of receiving marketing)
-
-        '
-    AmexSellerId:
-      description: 'The ID that identifies the merchant account when processing with American Express OptBlue.
-
-        '
-      type: string
-    VisaDebitAcceptance:
-      type: string
-      description: The type of Visa debit card acceptance. Required when VISA is selected.
-      enum:
-      - DEBIT_NOT_ACCEPTED
-      - DEBIT_ACCEPTED_CARD_PRESENT
-      - DEBIT_ACCEPTED_CARD_NOT_PRESENT
-      - DEBIT_ACCEPTED_ALL
-      x-enum-varnames:
-      - DEBIT_NOT_ACCEPTED
-      - DEBIT_ACCEPTED_CARD_PRESENT
-      - DEBIT_ACCEPTED_CARD_NOT_PRESENT
-      - DEBIT_ACCEPTED_ALL
-    Active:
-      type: boolean
-      description: Whether the party is active or not. False if inactive.
-      example: true
-    PhoneSmbdo:
-      type: object
-      required:
-      - countryCode
-      - phoneNumber
-      properties:
-        phoneType:
-          type: string
-          enum:
-          - BUSINESS_PHONE
-          - MOBILE_PHONE
-          - ALTERNATE_PHONE
-        countryCode:
-          description: 'The phone number dialing code prefix for the country. The `+` symbol is optional, maximum 3 digits (e.g. `+852`).
-
-            '
-          type: string
-          example: '+1'
-          minLength: 1
-          maxLength: 4
-        phoneNumber:
-          description: The phone number value.
-          type: string
-          example: '7785462944'
-          minLength: 7
-          maxLength: 14
-      description: Phone number information of the party.
-    NameSuffix:
-      type: string
-      minLength: 1
-      maxLength: 5
-      description: The name suffix used by the party
-    OrganizationDetailsRequired:
-      allOf:
-      - $ref: '#/components/schemas/OrganizationDetails'
-      required:
-      - organizationName
-      - organizationType
-    PubliclyTraded:
-      title: Public Trading
-      description: 'Provide details for stock exchange and ticker symbol if your organization is a publicly traded company.
-
-        If your organization is a subsidiary use these fields to provide details of the parent organization. If
-
-        your organization is listed on multiple stock exchanges provide the highest priority listing by order:
-
-        - "XNYS" for the New York Stock Exchange or "XNAS" for NASDAQ.
-
-        - One of the exchanges listed in [Publicly Traded Companies](https://developer.payments.jpmorgan.com/docs/commerce/optimization-protection/capabilities/digital-onboarding/how-to/publicly-traded-companies)
-
-        - Other
-
-        '
-      type: object
-      properties:
-        tickerSymbol:
-          description: The official ticker symbol assigned to the organization for the provided "stockExchange" field. This typically consists of 3 to 6 uppercase letters.
-          type: string
-          minLength: 1
-          maxLength: 10
-          pattern: ^[A-Z0-9]*$
-        stockExchange:
-          description: 'Supported options are "XNYS", "XNAS", one of the symbols listed on [Publicly Traded Companies](https://developer.payments.jpmorgan.com/docs/commerce/optimization-protection/capabilities/digital-onboarding/how-to/publicly-traded-companies) or "Other". The stock exchange symbol used by the organization which is registered with the provided "tickerSymbol". This field is case-sensitive.
-
-            '
-          type: string
-          minLength: 1
-          maxLength: 10
-          pattern: ^[A-Za-z]*$
-        stockExchangeName:
-          description: 'If "stockExchange" is "Other", use this field to provide the name of the stock exchange.
-
-            '
-          type: string
-          minLength: 1
-          maxLength: 100
-          pattern: ^.*$
-      required:
-      - tickerSymbol
-      - stockExchange
-    WebsiteAvailable:
-      description: Whether the party has a website. False if opted out.
-      type: boolean
-      deprecated: true
-    ValidationStatus:
-      type: string
-      description: 'Status of a party validation. Missing fields result in `NEEDS_INFO`.
-
-        '
-      enum:
-      - NOT_STARTED
-      - IN_PROGRESS
-      - NOT_VALIDATED
-      - NEEDS_INFO
-      - NEEDS_REVIEW
-      - VALIDATED
     NetworkRegistration:
       description: Network registration configuration.
       type: object
@@ -978,176 +337,6 @@ components:
           $ref: '#/components/schemas/DiscoverMerchantId'
         amexOptBlueServiceEstablishmentNumber:
           $ref: '#/components/schemas/AmexOptBlueServiceEstablishmentNumber'
-    OrganizationIndustry:
-      type: object
-      properties:
-        codeType:
-          type: string
-          enum:
-          - NAICS
-        code:
-          type: string
-          example: '111140'
-          description: Value of the industry code such as a 9 digit NAICS code
-          minLength: 1
-          maxLength: 24
-    Website:
-      type: string
-      description: Name/URL of the website
-      minLength: 1
-      maxLength: 500
-      example: https://example.com
-    IndividualDetailsRequired:
-      allOf:
-      - $ref: '#/components/schemas/IndividualDetails'
-      required:
-      - firstName
-      - lastName
-    DefaultLanguagePreferenceEnum:
-      description: 'The default language preference of the party''s user. It defines the initial language of user communications during client onboarding. Any changes to the user''s language preference after the verifications process begins are not reflected in this field.
-
-        '
-      type: string
-      minLength: 5
-      maxLength: 5
-      enum:
-      - en-US
-      - fr-CA
-    CreatePartyRequest:
-      type: object
-      properties:
-        access:
-          $ref: '#/components/schemas/AccessList'
-        email:
-          $ref: '#/components/schemas/Email'
-        externalId:
-          $ref: '#/components/schemas/ExternalId'
-        parentPartyId:
-          $ref: '#/components/schemas/ParentPartyId'
-        parentExternalId:
-          $ref: '#/components/schemas/ExternalId'
-        partyType:
-          $ref: '#/components/schemas/PartyType'
-        preferences:
-          description: The preferences of the party.
-          type: object
-          properties:
-            defaultLanguage:
-              $ref: '#/components/schemas/DefaultLanguagePreferenceEnum'
-        roles:
-          $ref: '#/components/schemas/PartyRoleList'
-        individualDetails:
-          $ref: '#/components/schemas/IndividualDetailsRequired'
-        organizationDetails:
-          $ref: '#/components/schemas/OrganizationDetailsRequired'
-        networkRegistration:
-          $ref: '#/components/schemas/NetworkRegistration'
-      required:
-      - partyType
-      - roles
-    PartyId:
-      type: string
-      maxLength: 10
-      example: '2000005555'
-      pattern: ^[0-9]{10}$
-      description: 'Organization/Individual party id, that uniquely identifies the party.
-
-        '
-    SocialMediaList:
-      description: The entity's social media profiles.
-      deprecated: true
-      type: array
-      items:
-        $ref: '#/components/schemas/SocialMedia'
-      minItems: 0
-      maxItems: 3
-    SocialMedia:
-      type: object
-      properties:
-        profilePlatform:
-          description: 'The platform of the social media profile.
-
-            | Platform | Description |
-
-            | -- | -- |
-
-            | FACEBOOK | Facebook, the social media profile at facebook.com. |
-
-            | INSTAGRAM | Instagram, the social media profile at instagram.com. |
-
-            | X | X (formerly known as Twitter), the social media profile at x.com. |
-
-            '
-          type: string
-          enum:
-          - FACEBOOK
-          - INSTAGRAM
-          - X
-        username:
-          description: The social media username. This field should contain only alphanumeric characters and underscores.
-          example: john_doe123
-          type: string
-          maxLength: 50
-          minLength: 1
-      required:
-      - profilePlatform
-      - username
-    SoleOwner:
-      type: boolean
-    PartyRoleList:
-      description: 'A list of party roles.
-
-        - `CLIENT`: A party that is the business entity. Only one party under a client may have this role. No other role can be specified alongside `CLIENT`.
-
-        - `CONTROLLER`: Individuals with significant responsibility to control, manage, or direct a legal entity customer, including an executive officer or senior manager or any other individual who regularly performs similar functions.
-
-        - `BENEFICIAL_OWNER`: Individual who either directly or indirectly holds ultimate ownership (>=25%) of the equity interest of the customer through all intermediary ownership layers.
-
-        - `DIRECTOR`: Key senior officers who, for corporations, are generally the CEO, CFO, COO, Chairman, President, or anyone performing a similar function. For privately held companies, these controllers are generally the senior management team.
-
-        - `PRIMARY_CONTACT`: The primary contact of the business entity.
-
-        - `DECISION_MAKER`: Deprecated.
-
-        - `AUTHORIZED_USER`: Individuals empowered to perform operational tasks, make decisions, and interact with the entity''s systems on behalf of the organization.
-
-        '
-      type: array
-      items:
-        $ref: '#/components/schemas/Role'
-      minItems: 0
-      maxItems: 10
-    NatureOfOwnership:
-      type: string
-      example: Direct
-      description: 'Nature of ownership. Allowed values are: `Direct`, `Indirect`.
-
-        '
-    ExternalId:
-      type: string
-      minLength: 1
-      maxLength: 50
-      description: ID in external system.
-    OrganizationName:
-      type: string
-      example: Feltz Printing Service
-      description: 'The organization''s legal name. It is the official name of the person or entity that owns a company. Must be the name used on the legal party''s government forms and business paperwork
-
-        '
-      minLength: 1
-      maxLength: 500
-    ListPartyResponse:
-      description: A page of party summaries
-      type: object
-      properties:
-        metadata:
-          $ref: '#/components/schemas/PageMetaData'
-        parties:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartySummaryResponse'
-          minItems: 0
-          maxItems: 100
     FirstName:
       type: string
       minLength: 1
@@ -1156,62 +345,16 @@ components:
       description: 'First name of the individual in case of party type being an individual like Owners, Controllers and Decision Makers. The format is enforced with the pattern `''^[a-zA-Z0-9\(\)_\/\&\+\%\@\#\;\,\.\:\ \-\'']*$''`.
 
         '
-    IndividualIdentity:
-      description: An individual's identification. For Merchant_Services product in Canada, individual party ID is optional.
-      type: object
-      required:
-      - idType
-      - value
-      - issuer
-      properties:
-        description:
-          deprecated: true
-          description: Description of the ID.
-          type: string
-          minLength: 1
-          maxLength: 255
-        expiryDate:
-          type: string
-          format: date
-          deprecated: true
-        idType:
-          type: string
-          example: SSN
-          enum:
-          - SSN
-          - ITIN
-          - NATIONAL_ID
-          - DRIVERS_LICENSE
-          - PASSPORT
-          - SOCIAL_INSURANCE_NUMBER
-          - OTHER_GOVERNMENT_ID
-          description: '`idType` denotes the type of taxpayer identification number (e.g. Social Security Number or Individual Taxpayer Identification Number). A Social Security Number or Individual Taxpayer Identification Number is accepted for an owner or controller individual. Decision makers do not require any tax identifier.
-
-            '
-        issuer:
-          type: string
-          example: US
-          description: Identification issuer country code e.g. US
-          minLength: 2
-          maxLength: 2
-        value:
-          type: string
-          pattern: ^[A-Za-z0-9\-\/\.\s\+&]*$
-          example: '100010001'
-          description: Please enter a valid Government ID value. SSN/EIN/ITIN must be of 9 digits for US. The length for other Government ID values >= 1 characters<= 20 characters
-          minLength: 1
-          maxLength: 20
-    DiscoverDebtRepayment:
-      description: 'Indicates if the merchant will be accepting Discover cards as a part of Discover''s consumer debt repayment program.
+    SoleOwner:
+      type: boolean
+    MiddleName:
+      type: string
+      minLength: 1
+      maxLength: 30
+      example: More
+      description: 'Middle name of the individual in case of party type being an individual. The format is enforced with the pattern `^[a-zA-Z0-9\(\)_\/\&\+\%\@\#\;\,\.\:\ \-\'']*$`.
 
         '
-      type: boolean
-    YearOfFormation:
-      description: Year of company formation.
-      type: string
-      pattern: \d{4}
-      minLength: 4
-      maxLength: 4
     TransactionDeviceType:
       type: string
       description: 'The mechanism used to provide details at the merchant''s terminal for transactions.  Required when DISCOVER is selected.
@@ -1223,32 +366,27 @@ components:
       - SOFTWARE_POS_DEVICE
       - ALL_OTHER_POS_DEVICES
       - UNKNOWN
-    ApiErrorContext:
-      description: Context of the API error.
-      type: object
-      required:
-      - message
-      properties:
-        code:
-          type: string
-          description: Short code that identifies the error - publicly cataloged and documented
-          example: '11000'
-        location:
-          type: string
-          enum:
-          - BODY
-          - QUERY
-          - PATH
-          - HEADER
-          example: BODY
-          description: Part of the request which is responsible for the reason
-        field:
-          type: string
-          description: The location of the property or parameter in error
-        message:
-          type: string
-          example: The server can not find the requested resource.
-          description: Message describing the reason.
+    ExternalId:
+      type: string
+      minLength: 1
+      maxLength: 50
+      description: ID in external system.
+    PartyType:
+      type: string
+      description: The party type
+      enum:
+      - INDIVIDUAL
+      - ORGANIZATION
+    DefaultLanguagePreferenceEnum:
+      description: 'The default language preference of the party''s user. It defines the initial language of user communications during client onboarding. Any changes to the user''s language preference after the verifications process begins are not reflected in this field.
+
+        '
+      type: string
+      minLength: 5
+      maxLength: 5
+      enum:
+      - en-US
+      - fr-CA
     OrganizationIdentityDto:
       type: object
       description: The tax ID of the organization.
@@ -1287,157 +425,104 @@ components:
       - idType
       - value
       - issuer
-    AddressDto:
-      description: An address.
+    ListPartyResponse:
+      description: A page of party summaries
       type: object
-      required:
-      - addressLines
-      - city
-      - country
-      - postalCode
       properties:
-        addressType:
-          type: string
-          enum:
-          - LEGAL_ADDRESS
-          - MAILING_ADDRESS
-          - BUSINESS_ADDRESS
-          - RESIDENTIAL_ADDRESS
-          example: BUSINESS_ADDRESS
-          description: Type of address. Organizations must use `LEGAL_ADDRESS` or `BUSINESS_ADDRESS`.
-        addressLines:
-          description: 'The address lines. Post-office boxes (PO Box), private mail boxes (PMB), virtual office and registered agent addresses are not allowed. The address has to be the be principal place of business. Each line has a maximum of 60 characters. The line format is enforced with the pattern `^[a-zA-Z0-9\(\)\-\/\.\,\&_\''\ \#]*$`.
-
-            '
+        metadata:
+          $ref: '#/components/schemas/PageMetaData'
+        parties:
           type: array
-          minItems: 1
-          maxItems: 5
           items:
-            type: string
-            description: 'Address line items. The format is enforced with the pattern `^[a-zA-Z0-9\(\)\-\/\.\,\&_\''\ \#]*$`.
+            $ref: '#/components/schemas/PartySummaryResponse'
+          minItems: 0
+          maxItems: 100
+    OrganizationName:
+      type: string
+      example: Feltz Printing Service
+      description: 'The organization''s legal name. It is the official name of the person or entity that owns a company. Must be the name used on the legal party''s government forms and business paperwork
 
-              '
-            minLength: 1
-            maxLength: 60
-          example:
-          - 689 Main St
-          - Opposite St. Andrews Church
-          - Mini York
-        city:
-          type: string
-          maxLength: 40
-          example: Anchorage
-          description: City has a maximum of 40 characters. City would serve as County in countries where applicable.
-        state:
-          type: string
-          minLength: 1
-          maxLength: 3
-          example: AZ
-          description: 'The 2-3 character length state code should be provided in alpha-2 format, adhering to [ISO-3166-2](https://www.iso.org/obp/ui/#search/code/). State is mandatory in the US. In Great Britain, for example, the City of London would be LND. State would serve as Province in countries where applicable.
-
-            '
-        postalCode:
-          type: string
-          minLength: 1
-          maxLength: 10
-          example: '99501'
-          description: Postal/ZIP code.
-        country:
-          type: string
-          example: US
-          description: Country code in alpha-2 format.
-          minLength: 2
-          maxLength: 2
-    ValidationResponse:
-      description: List of validation info.
-      type: array
-      items:
-        type: object
-        properties:
-          validationStatus:
-            $ref: '#/components/schemas/ValidationStatus'
-          validationType:
-            $ref: '#/components/schemas/ValidationType'
-          comments:
-            type: string
-            description: Comments/basic response related to the workflow step of validation response.
-            deprecated: true
-          fields:
-            type: array
-            items:
-              $ref: '#/components/schemas/PartyField'
-            minItems: 0
-            maxItems: 100
-          identities:
-            type: array
-            deprecated: true
-            items:
-              type: string
-            minItems: 0
-            maxItems: 10
-          documentRequestIds:
-            type: array
-            items:
-              type: string
-              maxLength: 30
-              description: The id of the document request.
-            minItems: 0
-            maxItems: 10
-      minItems: 0
-      maxItems: 10
-    PartySummaryResponse:
-      title: Party Summary
-      description: Summary of party data in collection lookup.
+        '
+      minLength: 1
+      maxLength: 500
+    PartyResponse:
       type: object
       properties:
-        country:
-          $ref: '#/components/schemas/CountryCodeIsoAlpha2'
+        access:
+          $ref: '#/components/schemas/AccessList'
+        id:
+          $ref: '#/components/schemas/PartyId'
         createdAt:
           type: string
           format: date-time
           example: '2017-07-21T17:32:28.000Z'
+        email:
+          $ref: '#/components/schemas/Email'
         externalId:
           $ref: '#/components/schemas/ExternalId'
-        id:
-          $ref: '#/components/schemas/PartyId'
-        parentPartyId:
-          $ref: '#/components/schemas/ParentPartyId'
         partyType:
           $ref: '#/components/schemas/PartyType'
+        parentPartyId:
+          $ref: '#/components/schemas/ParentPartyId'
+        parentExternalId:
+          $ref: '#/components/schemas/ExternalId'
+        preferences:
+          description: The preferences of the party.
+          type: object
+          properties:
+            defaultLanguage:
+              $ref: '#/components/schemas/DefaultLanguagePreferenceEnum'
         profileStatus:
           $ref: '#/components/schemas/ProfileStatus'
-        name:
-          $ref: '#/components/schemas/Name'
         roles:
           $ref: '#/components/schemas/PartyRoleList'
         status:
           $ref: '#/components/schemas/PartyStatus'
         active:
           $ref: '#/components/schemas/Active'
-    Name:
+        validationResponse:
+          $ref: '#/components/schemas/ValidationResponse'
+        individualDetails:
+          $ref: '#/components/schemas/IndividualDetails'
+        organizationDetails:
+          $ref: '#/components/schemas/OrganizationDetails'
+        networkRegistration:
+          $ref: '#/components/schemas/NetworkRegistration'
+    IndividualDetailsRequired:
+      allOf:
+      - $ref: '#/components/schemas/IndividualDetails'
+      required:
+      - firstName
+      - lastName
+    PartyId:
       type: string
-      minLength: 1
-      maxLength: 500
-      description: The name of the party. A party can be an individual or an organization.
-    ParentPartyId:
-      type: string
-      minLength: 10
       maxLength: 10
-      description: 'The parent party ID.
+      example: '2000005555'
+      pattern: ^[0-9]{10}$
+      description: 'Organization/Individual party id, that uniquely identifies the party.
 
         '
-    JcbAccepted:
-      description: 'Indicates if the merchant will accept JCB cards. Required American Express OptBlue is selected in Australia, New Zealand, or Canada.
-
-        '
-      type: boolean
-    DbaName:
-      description: 'An alternate name that the business is doing business under. Provide this if your business is registered with an alias. The format is enforced with the pattern `^[a-zA-Z0-9\(\)_\/\&\+\%\@\#\;\,\.\:\ \-\'']*$`.
-
-        '
-      type: string
-      minLength: 1
-      maxLength: 100
+    UpdatePartyRequest:
+      type: object
+      properties:
+        access:
+          $ref: '#/components/schemas/AccessList'
+        email:
+          $ref: '#/components/schemas/Email'
+        externalId:
+          $ref: '#/components/schemas/ExternalId'
+        roles:
+          $ref: '#/components/schemas/PartyRoleList'
+        status:
+          $ref: '#/components/schemas/PartyStatus'
+        active:
+          $ref: '#/components/schemas/Active'
+        individualDetails:
+          $ref: '#/components/schemas/IndividualDetails'
+        organizationDetails:
+          $ref: '#/components/schemas/OrganizationDetails'
+        networkRegistration:
+          $ref: '#/components/schemas/NetworkRegistration'
     OrganizationDetails:
       description: Details of an organization.
       type: object
@@ -1509,62 +594,163 @@ components:
             '
         publiclyTraded:
           $ref: '#/components/schemas/PubliclyTraded'
-    PartyField:
-      description: A party field. It refers to either a missing field or a field that needs to be updated.
+    OrganizationType:
+      type: string
+      description: 'This field specifies the legal structure or classification of the organization and identifies whether the entity is a Corporation, Sole Proprietorship, Non-Profit, or Government Body. Note: The values `PARTNERSHIP` and `PUBLICLY_TRADED_COMPANY` are deprecated and should not be used.
+
+        '
+      enum:
+      - LIMITED_LIABILITY_PARTNERSHIP
+      - LIMITED_PARTNERSHIP
+      - GENERAL_PARTNERSHIP
+      - LIMITED_LIABILITY_COMPANY
+      - C_CORPORATION
+      - S_CORPORATION
+      - PARTNERSHIP
+      - PUBLICLY_TRADED_COMPANY
+      - NON_PROFIT_CORPORATION
+      - GOVERNMENT_ENTITY
+      - SOLE_PROPRIETORSHIP
+      - UNINCORPORATED_ASSOCIATION
+    IndividualIdentity:
+      description: An individual's identification. For Merchant_Services product in Canada, individual party ID is optional.
+      type: object
+      required:
+      - idType
+      - value
+      - issuer
+      properties:
+        description:
+          deprecated: true
+          description: Description of the ID.
+          type: string
+          minLength: 1
+          maxLength: 255
+        expiryDate:
+          type: string
+          format: date
+          deprecated: true
+        idType:
+          type: string
+          example: SSN
+          enum:
+          - SSN
+          - ITIN
+          - NATIONAL_ID
+          - DRIVERS_LICENSE
+          - PASSPORT
+          - SOCIAL_INSURANCE_NUMBER
+          - OTHER_GOVERNMENT_ID
+          description: '`idType` denotes the type of taxpayer identification number (e.g. Social Security Number or Individual Taxpayer Identification Number). A Social Security Number or Individual Taxpayer Identification Number is accepted for an owner or controller individual. Decision makers do not require any tax identifier.
+
+            '
+        issuer:
+          type: string
+          example: US
+          description: Identification issuer country code e.g. US
+          minLength: 2
+          maxLength: 2
+        value:
+          type: string
+          pattern: ^[A-Za-z0-9\-\/\.\s\+&]*$
+          example: '100010001'
+          description: Please enter a valid Government ID value. SSN/EIN/ITIN must be of 9 digits for US. The length for other Government ID values >= 1 characters<= 20 characters
+          minLength: 1
+          maxLength: 20
+    SettlementPaymentMethods:
+      type: string
+      description: The method of payment used in network registration.
+      enum:
+      - VISA
+      - AMEX_OPT_BLUE
+      - DISCOVER
+    OrganizationIndustry:
       type: object
       properties:
-        name:
+        codeType:
           type: string
-          description: Name of the field.
-          example: addresses
-        type:
+          enum:
+          - NAICS
+        code:
           type: string
-          description: Type of the field.
-          example: address
-        displayName:
+          example: '111140'
+          description: Value of the industry code such as a 9 digit NAICS code
+          minLength: 1
+          maxLength: 24
+    AddressDto:
+      description: An address.
+      type: object
+      required:
+      - addressLines
+      - city
+      - country
+      - postalCode
+      properties:
+        addressType:
           type: string
-          description: Display name of the field.
-    DiscoverMerchantId:
-      description: 'The ID that identifies the merchant account when processing with Discover.
+          enum:
+          - LEGAL_ADDRESS
+          - MAILING_ADDRESS
+          - BUSINESS_ADDRESS
+          - RESIDENTIAL_ADDRESS
+          example: BUSINESS_ADDRESS
+          description: Type of address. Organizations must use `LEGAL_ADDRESS` or `BUSINESS_ADDRESS`.
+        addressLines:
+          description: 'The address lines. Post-office boxes (PO Box), private mail boxes (PMB), virtual office and registered agent addresses are not allowed. The address has to be the be principal place of business. Each line has a maximum of 60 characters. The line format is enforced with the pattern `^[a-zA-Z0-9\(\)\-\/\.\,\&_\''\ \#]*$`.
+
+            '
+          type: array
+          minItems: 1
+          maxItems: 5
+          items:
+            type: string
+            description: 'Address line items. The format is enforced with the pattern `^[a-zA-Z0-9\(\)\-\/\.\,\&_\''\ \#]*$`.
+
+              '
+            minLength: 1
+            maxLength: 60
+          example:
+          - 689 Main St
+          - Opposite St. Andrews Church
+          - Mini York
+        city:
+          type: string
+          maxLength: 40
+          example: Anchorage
+          description: City has a maximum of 40 characters. City would serve as County in countries where applicable.
+        state:
+          type: string
+          minLength: 1
+          maxLength: 3
+          example: AZ
+          description: 'The 2-3 character length state code should be provided in alpha-2 format, adhering to [ISO-3166-2](https://www.iso.org/obp/ui/#search/code/). State is mandatory in the US. In Great Britain, for example, the City of London would be LND. State would serve as Province in countries where applicable.
+
+            '
+        postalCode:
+          type: string
+          minLength: 1
+          maxLength: 10
+          example: '99501'
+          description: Postal/ZIP code.
+        country:
+          type: string
+          example: US
+          description: Country code in alpha-2 format.
+          minLength: 2
+          maxLength: 2
+    DbaName:
+      description: 'An alternate name that the business is doing business under. Provide this if your business is registered with an alias. The format is enforced with the pattern `^[a-zA-Z0-9\(\)_\/\&\+\%\@\#\;\,\.\:\ \-\'']*$`.
 
         '
       type: string
-    Role:
+      minLength: 1
+      maxLength: 100
+    NatureOfOwnership:
       type: string
-      description: 'The party''s role.
-
-        - `CLIENT`: A party that is the business entity. Only one party under a client may have this role. No other role can be specified alongside `CLIENT`.
-
-        - `CONTROLLER`: Individuals with significant responsibility to control, manage, or direct a legal entity customer, including an executive officer or senior manager or any other individual who regularly performs similar functions.
-
-        - `BENEFICIAL_OWNER`: Individual who either directly or indirectly holds ultimate ownership (>=25%) of the equity interest of the customer through all intermediary ownership layers.
-
-        - `DIRECTOR`: Key senior officers who, for corporations, are generally the CEO, CFO, COO, Chairman, President, or anyone performing a similar function. For privately held companies, these controllers are generally the senior management team.
-
-        - `PRIMARY_CONTACT`: The primary contact of the business entity.
-
-        - `DECISION_MAKER`: Deprecated.
-
-        - `AUTHORIZED_USER`: Individuals empowered to perform operational tasks, make decisions, and interact with the entity''s systems on behalf of the organization.
+      example: Direct
+      description: 'Nature of ownership. Allowed values are: `Direct`, `Indirect`.
 
         '
-      enum:
-      - AUTHORIZED_USER
-      - BENEFICIAL_OWNER
-      - CLIENT
-      - CONTROLLER
-      - DECISION_MAKER
-      - PRIMARY_CONTACT
-      - DIRECTOR
-    ServiceEstablishmentStatus:
-      type: string
-      description: 'The American Express status code for the merchant if they are terminated or reinstated. The payment provider must provide this if the merchant was previously terminated and AMEX_OPT_BLUE is a selected method of payment.
-
-        '
-      enum:
-      - D_CANCELLED
-      - N_CANCELLED
-      - R_REINSTATED
     PageMetaData:
       description: Page metadata.
       type: object
@@ -1596,116 +782,12 @@ components:
             '
           minimum: 0
           maximum: 9999999999
-    OrganizationIndustryCategory:
-      type: string
-      example: Accommodation and Food Services
-      description: 'The industry category of the business connected to the client. For example, `Accommodation and Food Services`. You can use the [Industry Descriptor Reference](https://developer.payments.jpmorgan.com/docs/embedded-finance-solutions/embedded-payments/capabilities/onboard-a-client/how-to/industry-descriptor-reference) to get a list of acceptable values.
-
-        '
-      minLength: 0
-    BirthDate:
-      type: string
-      format: date
-      example: '1983-02-08'
-      description: 'The date of birth (yyyy-MM-dd) of the individual in case of party type being an individual.
-
-        '
-    OrganizationIndustryType:
-      type: string
-      example: Bed And Breakfast Inns
-      description: 'The industry type of the business connected to the client. You can use the [Industry Descriptor Reference](https://developer.payments.jpmorgan.com/docs/embedded-finance-solutions/embedded-payments/capabilities/onboard-a-client/how-to/industry-descriptor-reference) to get a list of acceptable values.
-
-        '
-      minLength: 0
-    PartyResponse:
-      type: object
-      properties:
-        access:
-          $ref: '#/components/schemas/AccessList'
-        id:
-          $ref: '#/components/schemas/PartyId'
-        createdAt:
-          type: string
-          format: date-time
-          example: '2017-07-21T17:32:28.000Z'
-        email:
-          $ref: '#/components/schemas/Email'
-        externalId:
-          $ref: '#/components/schemas/ExternalId'
-        partyType:
-          $ref: '#/components/schemas/PartyType'
-        parentPartyId:
-          $ref: '#/components/schemas/ParentPartyId'
-        parentExternalId:
-          $ref: '#/components/schemas/ExternalId'
-        preferences:
-          description: The preferences of the party.
-          type: object
-          properties:
-            defaultLanguage:
-              $ref: '#/components/schemas/DefaultLanguagePreferenceEnum'
-        profileStatus:
-          $ref: '#/components/schemas/ProfileStatus'
-        roles:
-          $ref: '#/components/schemas/PartyRoleList'
-        status:
-          $ref: '#/components/schemas/PartyStatus'
-        active:
-          $ref: '#/components/schemas/Active'
-        validationResponse:
-          $ref: '#/components/schemas/ValidationResponse'
-        individualDetails:
-          $ref: '#/components/schemas/IndividualDetails'
-        organizationDetails:
-          $ref: '#/components/schemas/OrganizationDetails'
-        networkRegistration:
-          $ref: '#/components/schemas/NetworkRegistration'
-    SocialMediaUrl:
-      description: Social media profile URL.
-      type: string
-      maxLength: 100
-      minLength: 1
-      pattern: ^[A-Za-z0-9-_:.,;!?~*'()/=+&%@#]+$
-      example: https://instagram.com/ericforemanmedical95
-    IndividualJobTitle:
-      type: string
-      example: CEO
-      description: 'Job title in the case of party type being an `INDIVIDUAL`. Job title is a required field for controllers, beneficial owners, and decision makers. Allowed values are: `CEO`, `CFO`, `COO`, `President`, `Chairman`, `Senior Branch Manager`, `Other`.
-
-        '
-      minLength: 1
-      maxLength: 40
-    NetworkRegistrationCurrencyCode:
-      description: 'The merchant''s preferred currency for transactions. Required when AMEX_OPT_BLUE is selected.
-
-        '
+    PartyStatus:
+      deprecated: true
       type: string
       enum:
-      - GBP
-      - USD
-      - CAD
-      - EUR
-    UpdatePartyRequest:
-      type: object
-      properties:
-        access:
-          $ref: '#/components/schemas/AccessList'
-        email:
-          $ref: '#/components/schemas/Email'
-        externalId:
-          $ref: '#/components/schemas/ExternalId'
-        roles:
-          $ref: '#/components/schemas/PartyRoleList'
-        status:
-          $ref: '#/components/schemas/PartyStatus'
-        active:
-          $ref: '#/components/schemas/Active'
-        individualDetails:
-          $ref: '#/components/schemas/IndividualDetails'
-        organizationDetails:
-          $ref: '#/components/schemas/OrganizationDetails'
-        networkRegistration:
-          $ref: '#/components/schemas/NetworkRegistration'
+      - ACTIVE
+      - INACTIVE
     ValidationType:
       description: 'The type of validation process.
 
@@ -1722,12 +804,223 @@ components:
       enum:
       - ENTITY_VALIDATION
       - LIVENESS_CHECK
-    PartyType:
+    CountryCodeIsoAlpha2:
       type: string
-      description: The party type
+      example: US
+      description: Country code in ISO alpha-2 format.
+      minLength: 2
+      maxLength: 2
+    PartyField:
+      description: A party field. It refers to either a missing field or a field that needs to be updated.
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the field.
+          example: addresses
+        type:
+          type: string
+          description: Type of the field.
+          example: address
+        displayName:
+          type: string
+          description: Display name of the field.
+    OrganizationDetailsRequired:
+      allOf:
+      - $ref: '#/components/schemas/OrganizationDetails'
+      required:
+      - organizationName
+      - organizationType
+    JcbAccepted:
+      description: 'Indicates if the merchant will accept JCB cards. Required American Express OptBlue is selected in Australia, New Zealand, or Canada.
+
+        '
+      type: boolean
+    DiscoverDebtRepayment:
+      description: 'Indicates if the merchant will be accepting Discover cards as a part of Discover''s consumer debt repayment program.
+
+        '
+      type: boolean
+    PartyRoleList:
+      description: 'A list of party roles.
+
+        - `CLIENT`: A party that is the business entity. Only one party under a client may have this role. No other role can be specified alongside `CLIENT`.
+
+        - `CONTROLLER`: Individuals with significant responsibility to control, manage, or direct a legal entity customer, including an executive officer or senior manager or any other individual who regularly performs similar functions.
+
+        - `BENEFICIAL_OWNER`: Individual who either directly or indirectly holds ultimate ownership (>=25%) of the equity interest of the customer through all intermediary ownership layers.
+
+        - `DIRECTOR`: Key senior officers who, for corporations, are generally the CEO, CFO, COO, Chairman, President, or anyone performing a similar function. For privately held companies, these controllers are generally the senior management team.
+
+        - `PRIMARY_CONTACT`: The primary contact of the business entity.
+
+        - `DECISION_MAKER`: Deprecated.
+
+        - `AUTHORIZED_USER`: Individuals empowered to perform operational tasks, make decisions, and interact with the entity''s systems on behalf of the organization.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/Role'
+      minItems: 0
+      maxItems: 10
+    EntitiesInOwnership:
+      description: 'Entities in ownership means that one or more businesses own part of the business connected to the client.
+
+        '
+      type: boolean
+    Email:
+      type: string
+      example: client@company.com
+      description: 'Email of the party. The email is validated against the [RFC 2822](https://datatracker.ietf.org/doc/html/rfc2822) format, which is 64 characters (local part) + 1 character (`@` symbol) + 255 characters (domain part), e.g.: "local@domain.com".
+
+        '
+      minLength: 0
+      maxLength: 320
+    PartySummaryResponse:
+      title: Party Summary
+      description: Summary of party data in collection lookup.
+      type: object
+      properties:
+        country:
+          $ref: '#/components/schemas/CountryCodeIsoAlpha2'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28.000Z'
+        externalId:
+          $ref: '#/components/schemas/ExternalId'
+        id:
+          $ref: '#/components/schemas/PartyId'
+        parentPartyId:
+          $ref: '#/components/schemas/ParentPartyId'
+        partyType:
+          $ref: '#/components/schemas/PartyType'
+        profileStatus:
+          $ref: '#/components/schemas/ProfileStatus'
+        name:
+          $ref: '#/components/schemas/Name'
+        roles:
+          $ref: '#/components/schemas/PartyRoleList'
+        status:
+          $ref: '#/components/schemas/PartyStatus'
+        active:
+          $ref: '#/components/schemas/Active'
+    AmexOptBlueMarketing:
+      type: boolean
+      description: 'Indicates whether the merchant has opted-in to American Express OptBlue marketing. - `true` – All Marketing (Merchant has not opted out of receiving marketing) - `false` – No Marketing (Merchant has opted out of receiving marketing)
+
+        '
+    ApiErrorContext:
+      description: Context of the API error.
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: Short code that identifies the error - publicly cataloged and documented
+          example: '11000'
+        location:
+          type: string
+          enum:
+          - BODY
+          - QUERY
+          - PATH
+          - HEADER
+          example: BODY
+          description: Part of the request which is responsible for the reason
+        field:
+          type: string
+          description: The location of the property or parameter in error
+        message:
+          type: string
+          example: The server can not find the requested resource.
+          description: Message describing the reason.
+    BirthDate:
+      type: string
+      format: date
+      example: '1983-02-08'
+      description: 'The date of birth (yyyy-MM-dd) of the individual in case of party type being an individual.
+
+        '
+    IndividualJobTitleDescription:
+      type: string
+      example: Acting CEO
+      minLength: 0
+      maxLength: 50
+      description: 'If `jobTitle` is Other, then job title description is required.
+
+        '
+    AccessList:
+      deprecated: true
+      description: List of user access descriptors.
+      type: array
+      items:
+        type: string
+      minItems: 0
+      maxItems: 10
+    OrganizationIndustryType:
+      type: string
+      example: Bed And Breakfast Inns
+      description: 'The industry type of the business connected to the client. You can use the [Industry Descriptor Reference](https://developer.payments.jpmorgan.com/docs/embedded-finance-solutions/embedded-payments/capabilities/onboard-a-client/how-to/industry-descriptor-reference) to get a list of acceptable values.
+
+        '
+      minLength: 0
+    ValidationStatus:
+      type: string
+      description: 'Status of a party validation. Missing fields result in `NEEDS_INFO`.
+
+        '
       enum:
-      - INDIVIDUAL
-      - ORGANIZATION
+      - NOT_STARTED
+      - IN_PROGRESS
+      - NOT_VALIDATED
+      - NEEDS_INFO
+      - NEEDS_REVIEW
+      - VALIDATED
+    PubliclyTraded:
+      title: Public Trading
+      description: 'Provide details for stock exchange and ticker symbol if your organization is a publicly traded company.
+
+        If your organization is a subsidiary use these fields to provide details of the parent organization. If
+
+        your organization is listed on multiple stock exchanges provide the highest priority listing by order:
+
+        - "XNYS" for the New York Stock Exchange or "XNAS" for NASDAQ.
+
+        - One of the exchanges listed in [Publicly Traded Companies](https://developer.payments.jpmorgan.com/docs/commerce/optimization-protection/capabilities/digital-onboarding/how-to/publicly-traded-companies)
+
+        - Other
+
+        '
+      type: object
+      properties:
+        tickerSymbol:
+          description: The official ticker symbol assigned to the organization for the provided "stockExchange" field. This typically consists of 3 to 6 uppercase letters.
+          type: string
+          minLength: 1
+          maxLength: 10
+          pattern: ^[A-Z0-9]*$
+        stockExchange:
+          description: 'Supported options are "XNYS", "XNAS", one of the symbols listed on [Publicly Traded Companies](https://developer.payments.jpmorgan.com/docs/commerce/optimization-protection/capabilities/digital-onboarding/how-to/publicly-traded-companies) or "Other". The stock exchange symbol used by the organization which is registered with the provided "tickerSymbol". This field is case-sensitive.
+
+            '
+          type: string
+          minLength: 1
+          maxLength: 10
+          pattern: ^[A-Za-z]*$
+        stockExchangeName:
+          description: 'If "stockExchange" is "Other", use this field to provide the name of the stock exchange.
+
+            '
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: ^.*$
+      required:
+      - tickerSymbol
+      - stockExchange
     schemas-ApiError:
       description: An API error.
       type: object
@@ -1756,27 +1049,97 @@ components:
           description: Provides additional context and detail on the errors
           minItems: 0
           maxItems: 100
-    Email:
+    Website:
       type: string
-      example: client@company.com
-      description: 'Email of the party. The email is validated against the [RFC 2822](https://datatracker.ietf.org/doc/html/rfc2822) format, which is 64 characters (local part) + 1 character (`@` symbol) + 255 characters (domain part), e.g.: "local@domain.com".
+      description: Name/URL of the website
+      minLength: 1
+      maxLength: 500
+      example: https://example.com
+    IndividualJobTitle:
+      type: string
+      example: CEO
+      description: 'Job title in the case of party type being an `INDIVIDUAL`. Job title is a required field for controllers, beneficial owners, and decision makers. Allowed values are: `CEO`, `CFO`, `COO`, `President`, `Chairman`, `Senior Branch Manager`, `Other`.
+
+        '
+      minLength: 1
+      maxLength: 40
+    DiscoverMerchantId:
+      description: 'The ID that identifies the merchant account when processing with Discover.
+
+        '
+      type: string
+    AmexOptBlueServiceEstablishmentNumber:
+      description: 'Unique identifier assigned to a merchant/business that participates in the American Express OptBlue program
+
+        '
+      type: string
+    OrganizationDescription:
+      type: string
+      example: Printing Service of New York
+      description: The organization's description.
+      minLength: 10
+      maxLength: 1000
+    MerchantCategoryCode:
+      type: string
+      description: The merchant category code describing the merchant's industry.
+      minLength: 4
+      maxLength: 4
+      example: '5411'
+    SocialMediaUrl:
+      description: Social media profile URL.
+      type: string
+      maxLength: 100
+      minLength: 1
+      pattern: ^[A-Za-z0-9-_:.,;!?~*'()/=+&%@#]+$
+      example: https://instagram.com/ericforemanmedical95
+    ValidationResponse:
+      description: List of validation info.
+      type: array
+      items:
+        type: object
+        properties:
+          validationStatus:
+            $ref: '#/components/schemas/ValidationStatus'
+          validationType:
+            $ref: '#/components/schemas/ValidationType'
+          comments:
+            type: string
+            description: Comments/basic response related to the workflow step of validation response.
+            deprecated: true
+          fields:
+            type: array
+            items:
+              $ref: '#/components/schemas/PartyField'
+            minItems: 0
+            maxItems: 100
+          identities:
+            type: array
+            deprecated: true
+            items:
+              type: string
+            minItems: 0
+            maxItems: 10
+          documentRequestIds:
+            type: array
+            items:
+              type: string
+              maxLength: 30
+              description: The id of the document request.
+            minItems: 0
+            maxItems: 10
+      minItems: 0
+      maxItems: 10
+    OrganizationIndustryCategory:
+      type: string
+      example: Accommodation and Food Services
+      description: 'The industry category of the business connected to the client. For example, `Accommodation and Food Services`. You can use the [Industry Descriptor Reference](https://developer.payments.jpmorgan.com/docs/embedded-finance-solutions/embedded-payments/capabilities/onboard-a-client/how-to/industry-descriptor-reference) to get a list of acceptable values.
 
         '
       minLength: 0
-      maxLength: 320
-    SettlementPaymentMethods:
-      type: string
-      description: The method of payment used in network registration.
-      enum:
-      - VISA
-      - AMEX_OPT_BLUE
-      - DISCOVER
-    PartyStatus:
+    WebsiteAvailable:
+      description: Whether the party has a website. False if opted out.
+      type: boolean
       deprecated: true
-      type: string
-      enum:
-      - ACTIVE
-      - INACTIVE
     LastName:
       type: string
       minLength: 1
@@ -1785,30 +1148,130 @@ components:
       description: 'Last name of the individual in case of party type being an individual like Owners, Controllers and Decision Makers. The format is enforced with the pattern `^[a-zA-Z0-9\(\)_\/\&\+\%\@\#\;\,\.\:\ \-\'']*$`.
 
         '
-    OrganizationDescription:
-      type: string
-      example: Printing Service of New York
-      description: The organization's description.
-      minLength: 10
-      maxLength: 1000
-    ProfileStatus:
-      type: string
-      enum:
-      - NEW
-      - REVIEW_IN_PROGRESS
-      - INFORMATION_REQUESTED
-      - APPROVED
-      - DECLINED
-      - SUSPENDED
-      - TERMINATED
-    IndividualJobTitleDescription:
-      type: string
-      example: Acting CEO
-      minLength: 0
-      maxLength: 50
-      description: 'If `jobTitle` is Other, then job title description is required.
+    SocialMediaList:
+      description: The entity's social media profiles.
+      deprecated: true
+      type: array
+      items:
+        $ref: '#/components/schemas/SocialMedia'
+      minItems: 0
+      maxItems: 3
+    NetworkRegistrationCurrencyCode:
+      description: 'The merchant''s preferred currency for transactions. Required when AMEX_OPT_BLUE is selected.
 
         '
+      type: string
+      enum:
+      - GBP
+      - USD
+      - CAD
+      - EUR
+    ParentPartyId:
+      type: string
+      minLength: 10
+      maxLength: 10
+      description: 'The parent party ID.
+
+        '
+    SocialMedia:
+      type: object
+      properties:
+        profilePlatform:
+          description: 'The platform of the social media profile.
+
+            | Platform | Description |
+
+            | -- | -- |
+
+            | FACEBOOK | Facebook, the social media profile at facebook.com. |
+
+            | INSTAGRAM | Instagram, the social media profile at instagram.com. |
+
+            | X | X (formerly known as Twitter), the social media profile at x.com. |
+
+            '
+          type: string
+          enum:
+          - FACEBOOK
+          - INSTAGRAM
+          - X
+        username:
+          description: The social media username. This field should contain only alphanumeric characters and underscores.
+          example: john_doe123
+          type: string
+          maxLength: 50
+          minLength: 1
+      required:
+      - profilePlatform
+      - username
+    PhoneSmbdo:
+      type: object
+      required:
+      - countryCode
+      - phoneNumber
+      properties:
+        phoneType:
+          type: string
+          enum:
+          - BUSINESS_PHONE
+          - MOBILE_PHONE
+          - ALTERNATE_PHONE
+        countryCode:
+          description: 'The phone number dialing code prefix for the country. The `+` symbol is optional, maximum 3 digits (e.g. `+852`).
+
+            '
+          type: string
+          example: '+1'
+          minLength: 1
+          maxLength: 4
+        phoneNumber:
+          description: The phone number value.
+          type: string
+          example: '7785462944'
+          minLength: 7
+          maxLength: 14
+      description: Phone number information of the party.
+    Name:
+      type: string
+      minLength: 1
+      maxLength: 500
+      description: The name of the party. A party can be an individual or an organization.
+    Role:
+      type: string
+      description: 'The party''s role.
+
+        - `CLIENT`: A party that is the business entity. Only one party under a client may have this role. No other role can be specified alongside `CLIENT`.
+
+        - `CONTROLLER`: Individuals with significant responsibility to control, manage, or direct a legal entity customer, including an executive officer or senior manager or any other individual who regularly performs similar functions.
+
+        - `BENEFICIAL_OWNER`: Individual who either directly or indirectly holds ultimate ownership (>=25%) of the equity interest of the customer through all intermediary ownership layers.
+
+        - `DIRECTOR`: Key senior officers who, for corporations, are generally the CEO, CFO, COO, Chairman, President, or anyone performing a similar function. For privately held companies, these controllers are generally the senior management team.
+
+        - `PRIMARY_CONTACT`: The primary contact of the business entity.
+
+        - `DECISION_MAKER`: Deprecated.
+
+        - `AUTHORIZED_USER`: Individuals empowered to perform operational tasks, make decisions, and interact with the entity''s systems on behalf of the organization.
+
+        '
+      enum:
+      - AUTHORIZED_USER
+      - BENEFICIAL_OWNER
+      - CLIENT
+      - CONTROLLER
+      - DECISION_MAKER
+      - PRIMARY_CONTACT
+      - DIRECTOR
+    NameSuffix:
+      type: string
+      minLength: 1
+      maxLength: 5
+      description: The name suffix used by the party
+    Active:
+      type: boolean
+      description: Whether the party is active or not. False if inactive.
+      example: true
     IndividualDetails:
       description: Details of an individual.
       type: object
@@ -1853,71 +1316,96 @@ components:
         soleOwner:
           $ref: '#/components/schemas/SoleOwner'
           deprecated: true
-  parameters:
-    PageSize:
-      name: limit
-      in: query
-      description: Number of records per page.
-      required: false
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 25
-        default: 25
-    TokenInHeader:
-      name: token
-      in: header
-      description: JWT Client token
-      required: false
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 8192
-    PageNumber:
-      name: page
-      in: query
-      description: Page number.
-      required: false
-      schema:
-        type: integer
-        format: int32
-        default: 0
-        minimum: 0
-        maximum: 2147483647
-    ParentPartyIdInQuery:
-      name: parentPartyId
-      in: query
-      description: Unique party identifier.
-      example: '2000000555'
-      required: false
-      schema:
-        $ref: '#/components/schemas/PartyId'
-    IdempotencyKey:
-      name: Idempotency-Key
-      in: header
-      description: 'Client generated unique idempotency key used in recognizing consecutive retries of the same request
+    YearOfFormation:
+      description: Year of company formation.
+      type: string
+      pattern: \d{4}
+      minLength: 4
+      maxLength: 4
+    CreatePartyRequest:
+      type: object
+      properties:
+        access:
+          $ref: '#/components/schemas/AccessList'
+        email:
+          $ref: '#/components/schemas/Email'
+        externalId:
+          $ref: '#/components/schemas/ExternalId'
+        parentPartyId:
+          $ref: '#/components/schemas/ParentPartyId'
+        parentExternalId:
+          $ref: '#/components/schemas/ExternalId'
+        partyType:
+          $ref: '#/components/schemas/PartyType'
+        preferences:
+          description: The preferences of the party.
+          type: object
+          properties:
+            defaultLanguage:
+              $ref: '#/components/schemas/DefaultLanguagePreferenceEnum'
+        roles:
+          $ref: '#/components/schemas/PartyRoleList'
+        individualDetails:
+          $ref: '#/components/schemas/IndividualDetailsRequired'
+        organizationDetails:
+          $ref: '#/components/schemas/OrganizationDetailsRequired'
+        networkRegistration:
+          $ref: '#/components/schemas/NetworkRegistration'
+      required:
+      - partyType
+      - roles
+    ServiceEstablishmentStatus:
+      type: string
+      description: 'The American Express status code for the merchant if they are terminated or reinstated. The payment provider must provide this if the merchant was previously terminated and AMEX_OPT_BLUE is a selected method of payment.
 
-        **Usage of V4 UUIDs is recommended.**'
-      required: false
-      schema:
-        title: Idempotency Key
-        description: 'A unique string that enables the API support idempotency by safely retrying requests without accidentally
+        '
+      enum:
+      - D_CANCELLED
+      - N_CANCELLED
+      - R_REINSTATED
+    ProfileStatus:
+      type: string
+      enum:
+      - NEW
+      - REVIEW_IN_PROGRESS
+      - INFORMATION_REQUESTED
+      - APPROVED
+      - DECLINED
+      - SUSPENDED
+      - TERMINATED
+    AmexSellerId:
+      description: 'The ID that identifies the merchant account when processing with American Express OptBlue.
 
-          performing the same operation twice.'
-        type: string
-        minLength: 1
-        maxLength: 36
-        example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
-    PartyIdInPath:
-      name: partyId
-      in: path
-      description: Unique party identifier.
-      example: '2000000555'
-      required: true
-      schema:
-        $ref: '#/components/schemas/PartyId'
+        '
+      type: string
+    VisaDebitAcceptance:
+      type: string
+      description: The type of Visa debit card acceptance. Required when VISA is selected.
+      enum:
+      - DEBIT_NOT_ACCEPTED
+      - DEBIT_ACCEPTED_CARD_PRESENT
+      - DEBIT_ACCEPTED_CARD_NOT_PRESENT
+      - DEBIT_ACCEPTED_ALL
+      x-enum-varnames:
+      - DEBIT_NOT_ACCEPTED
+      - DEBIT_ACCEPTED_CARD_PRESENT
+      - DEBIT_ACCEPTED_CARD_NOT_PRESENT
+      - DEBIT_ACCEPTED_ALL
   responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Invalid Data
+            httpStatus: 400
+            context:
+            - code: '10104'
+              message: Client with ID [3000005555] does not exist.
+              location: BODY
+              field: clientId
     '202':
       description: Request was accepted
       content:
@@ -1936,31 +1424,6 @@ components:
               summary: Request Accepted
               value:
                 acceptedAt: '2024-07-21T17:32:28.000Z'
-    '400':
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Invalid Data
-            httpStatus: 400
-            context:
-            - code: '10104'
-              message: Client with ID [3000005555] does not exist.
-              location: BODY
-              field: clientId
-    '422':
-      description: Request could not be processed due to semantic errors. Check error response.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Unprocessable Entity
-            httpStatus: 422
-            context:
-            - message: Unable to perform Client Verification for clientId [3000005555] due to its Status.
     '500':
       description: Internal Server Error - Generic Error
       content:
@@ -1972,6 +1435,17 @@ components:
             httpStatus: 500
             context:
             - message: Something went wrong. Please try again later.
+    '503':
+      description: Service Unavailable - API Processing Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Service Unavailable
+            httpStatus: 503
+            context:
+            - message: Service unavailable.
     '409':
       description: Conflict - Concurrent request detected
       content:
@@ -1994,17 +1468,6 @@ components:
             httpStatus: 404
             context:
             - message: Party with ID [2000000555] not found.
-    '503':
-      description: Service Unavailable - API Processing Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Service Unavailable
-            httpStatus: 503
-            context:
-            - message: Service unavailable.
     '401':
       description: Unauthenticated
       content:
@@ -2027,6 +1490,543 @@ components:
             httpStatus: 403
             context:
             - message: Platform is not authorized to access client.
+    '422':
+      description: Request could not be processed due to semantic errors. Check error response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Unprocessable Entity
+            httpStatus: 422
+            context:
+            - message: Unable to perform Client Verification for clientId [3000005555] due to its Status.
+  parameters:
+    ParentPartyIdInQuery:
+      name: parentPartyId
+      in: query
+      description: Unique party identifier.
+      example: '2000000555'
+      required: false
+      schema:
+        $ref: '#/components/schemas/PartyId'
+    PartyIdInPath:
+      name: partyId
+      in: path
+      description: Unique party identifier.
+      example: '2000000555'
+      required: true
+      schema:
+        $ref: '#/components/schemas/PartyId'
+    PageSize:
+      name: limit
+      in: query
+      description: Number of records per page.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 25
+        default: 25
+    PageNumber:
+      name: page
+      in: query
+      description: Page number.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 0
+        minimum: 0
+        maximum: 2147483647
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: 'Client generated unique idempotency key used in recognizing consecutive retries of the same request
+
+        **Usage of V4 UUIDs is recommended.**'
+      required: false
+      schema:
+        title: Idempotency Key
+        description: 'A unique string that enables the API support idempotency by safely retrying requests without accidentally
+
+          performing the same operation twice.'
+        type: string
+        minLength: 1
+        maxLength: 36
+        example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+    TokenInHeader:
+      name: token
+      in: header
+      description: JWT Client token
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 8192
+  examples:
+    PartyListResponseForNetworkScreening:
+      summary: List of root parties
+      description: A list of root parties.
+      value:
+        metadata:
+          page: 0
+          limit: 25
+          total: 2
+        parties:
+        - id: '2000000557'
+          createdAt: '2022-11-18T14:28:11.232Z'
+          country: GB
+          externalId: '394800000000556'
+          name: Monica Gellar
+          partyType: ORGANIZATION
+          profileStatus: DECLINED
+          roles:
+          - CLIENT
+        - id: '2000000555'
+          createdAt: '2022-11-18T12:28:11.232Z'
+          country: GB
+          externalId: '394800000000555'
+          name: Foreman Medical Corporation
+          partyType: ORGANIZATION
+          profileStatus: APPROVED
+          roles:
+          - CLIENT
+    CreateOrganizationPartyPayfacCAForNetworkScreening:
+      summary: Organization Party for Payfac CA use case
+      description: Organization Party for Payfac CA use case
+      value:
+        partyType: ORGANIZATION
+        profileStatus: NEW
+        roles:
+        - CLIENT
+        email: foremanmedical@example.com
+        externalId: '394800000000555'
+        organizationDetails:
+          organizationType: C_CORPORATION
+          organizationName: Foreman Medical Corporation
+          organizationDescription: Purveyor of heirloom medical and dental instruments.
+          dbaName: FM Corp
+          mcc: '5047'
+          secondaryMccList:
+          - '5065'
+          countryOfFormation: CA
+          associatedCountries:
+          - US
+          - CA
+          website: https://foremanmedical.com
+          websiteAvailable: true
+          yearOfFormation: '2004'
+          addresses:
+          - addressType: BUSINESS_ADDRESS
+            addressLines:
+            - 218 Medical Way
+            city: Victoria City
+            state: BC
+            postalCode: 1N1 N1N
+            country: CA
+          phone:
+            phoneType: BUSINESS_PHONE
+            phoneNumber: '5553331234'
+            countryCode: '+1'
+          organizationIds:
+          - idType: BUSINESS_NUMBER
+            value: '865103741'
+            issuer: CA
+          - idType: BUSINESS_REGISTRATION_NUMBER
+            value: '101803575124114'
+            issuer: CA
+        networkRegistration:
+          settlementPaymentMethods:
+          - VISA
+          - DISCOVER
+          - AMEX_OPT_BLUE
+          visaDebitAcceptance: DEBIT_ACCEPTED_ALL
+          currencyCode: CAD
+          transactionDeviceType: HOST_BASED_POS_DEVICE
+          serviceEstablishmentStatus: D_CANCELLED
+          serviceEstablishmentStatusUpdateDate: '2024-01-25'
+          discoverDebtRepayment: true
+          amexOptBlueMarketing: true
+          jcbAccepted: true
+          amexSellerId: '123'
+          discoverMerchantId: '123'
+    UpdateIndividualPartyUS:
+      summary: Update individual party
+      description: Updates individual party
+      value:
+        email: monica@cpgetaways.gmail.com
+        individualDetails:
+          firstName: Monica
+          lastName: Gellar
+          individualIds:
+          - idType: SSN
+            issuer: US
+            value: '100010003'
+    PartyListResponseForNetworkScreeningIndividuals:
+      summary: List of related parties
+      description: A list of related parties.
+      value:
+        metadata:
+          page: 0
+          limit: 25
+          total: 1
+        parties:
+        - id: '2000000556'
+          createdAt: '2022-11-18T12:28:11.232Z'
+          country: GB
+          parentPartyId: '2000000555'
+          partyType: INDIVIDUAL
+          profileStatus: APPROVED
+          roles:
+          - CONTROLLER
+    UpdateOrganizationPartyUS:
+      summary: Update organization party
+      description: Updates organization party
+      value:
+        email: monicagellar@cpgetaways.gmail.com
+        organizationDetails:
+          organizationName: Central Park Getaways
+          organizationType: SOLE_PROPRIETORSHIP
+    CreateIndividualPartyForNetworkScreening:
+      summary: Individual Party
+      description: Individual Party
+      value:
+        parentPartyId: '2000000111'
+        partyType: INDIVIDUAL
+        profileStatus: NEW
+        roles:
+        - CONTROLLER
+        active: true
+        individualDetails:
+          countryOfResidence: GB
+          firstName: Eric
+          lastName: Foreman
+          birthDate: '1973-07-20'
+          jobTitle: Other
+          jobTitleDescription: CEO
+          natureOfOwnership: Direct
+          soleOwner: true
+          addresses:
+          - addressType: RESIDENTIAL_ADDRESS
+            addressLines:
+            - 1 Upper Littleton
+            - Apt 2E
+            city: Winford
+            state: BST
+            postalCode: BS18 8HF
+            country: GB
+          individualIds:
+          - idType: NATIONAL_ID
+            value: '444331111'
+            issuer: GB
+    OrganizationPartyResponseForNetworkScreening:
+      summary: Organization party
+      description: Organization party
+      value:
+        id: '2000000555'
+        createdAt: '2022-11-18T12:28:11.232Z'
+        partyType: ORGANIZATION
+        profileStatus: NEW
+        externalId: '394800000000555'
+        email: foremanmedical@example.com
+        roles:
+        - CLIENT
+        active: true
+        organizationDetails:
+          organizationType: C_CORPORATION
+          organizationName: Foreman Medical Corporation
+          organizationDescription: Purveyor of heirloom medical and dental instruments.
+          dbaName: FM Corp
+          countryOfFormation: GB
+          associatedCountries:
+          - US
+          - GB
+          mcc: '5047'
+          secondaryMccList:
+          - '5065'
+          websiteAvailable: true
+          website: https://foremanmedical.com
+          yearOfFormation: '2004'
+          addresses:
+          - addressType: BUSINESS_ADDRESS
+            addressLines:
+            - 82 Alexander Road
+            city: Crewe
+            state: SCT
+            postalCode: CW181NE
+            country: GB
+          phone:
+            phoneType: BUSINESS_PHONE
+            phoneNumber: '2077221234'
+            countryCode: '+44'
+          organizationIds:
+          - idType: BUSINESS_REGISTRATION_ID
+            value: '100100122'
+            issuer: GB
+        networkRegistration:
+          settlementPaymentMethods:
+          - VISA
+          - AMEX_OPT_BLUE
+          - DISCOVER
+          visaDebitAcceptance: DEBIT_ACCEPTED_ALL
+          currencyCode: GBP
+          transactionDeviceType: HOST_BASED_POS_DEVICE
+          serviceEstablishmentStatus: R_REINSTATED
+          serviceEstablishmentStatusUpdateDate: '2023-01-20'
+          discoverDebtRepayment: true
+          amexOptBlueMarketing: true
+          jcbAccepted: true
+          amexSellerId: '123'
+          discoverMerchantId: '123'
+    CreateOrganizationPartyPayfacForNetworkScreening:
+      summary: Organization Party for Payfac
+      description: Organization Party for Payfac
+      value:
+        partyType: ORGANIZATION
+        profileStatus: NEW
+        roles:
+        - CLIENT
+        email: foremanmedical@example.com
+        externalId: '394800000000555'
+        active: true
+        organizationDetails:
+          organizationType: C_CORPORATION
+          organizationName: Foreman Medical Corporation
+          organizationDescription: Purveyor of heirloom medical and dental instruments.
+          dbaName: FM Corp
+          mcc: '5047'
+          secondaryMccList:
+          - '5065'
+          countryOfFormation: GB
+          associatedCountries:
+          - US
+          - GB
+          website: https://foremanmedical.com
+          websiteAvailable: true
+          yearOfFormation: '2004'
+          addresses:
+          - addressType: BUSINESS_ADDRESS
+            addressLines:
+            - 82 Alexander Road
+            city: CREWE
+            state: SCT
+            postalCode: CW181NE
+            country: GB
+          phone:
+            phoneType: BUSINESS_PHONE
+            phoneNumber: '2077221234'
+            countryCode: '+44'
+          organizationIds:
+          - idType: BUSINESS_REGISTRATION_ID
+            value: '100100122'
+            issuer: GB
+        networkRegistration:
+          settlementPaymentMethods:
+          - VISA
+          - DISCOVER
+          - AMEX_OPT_BLUE
+          visaDebitAcceptance: DEBIT_ACCEPTED_ALL
+          currencyCode: GBP
+          transactionDeviceType: HOST_BASED_POS_DEVICE
+          serviceEstablishmentStatus: D_CANCELLED
+          serviceEstablishmentStatusUpdateDate: '2024-01-25'
+          discoverDebtRepayment: true
+          amexOptBlueMarketing: true
+          jcbAccepted: true
+          amexSellerId: '123'
+          discoverMerchantId: '123'
+    UpdateOrganizationPartyPayfacForNetworkScreening:
+      summary: Update organization party for network screening
+      description: Updates organization party for network screening
+      value:
+        organizationDetails:
+          organizationName: Foreman Medical Corporation
+          dbaName: FM Corp
+          associatedCountries:
+          - GB
+          - US
+          websiteAvailable: false
+          mcc: '5410'
+        email: foremanmedical@example.com
+    CreateIndividualPartyCAForNetworkScreening:
+      summary: Individual Party
+      description: Individual Party
+      value:
+        parentPartyId: '2000000555'
+        partyType: INDIVIDUAL
+        profileStatus: NEW
+        roles:
+        - CONTROLLER
+        active: true
+        individualDetails:
+          countryOfResidence: CA
+          firstName: Eric
+          lastName: Foreman
+          birthDate: '1973-07-20'
+          jobTitle: Other
+          jobTitleDescription: CEO
+          natureOfOwnership: Direct
+          soleOwner: true
+          addresses:
+          - addressType: RESIDENTIAL_ADDRESS
+            addressLines:
+            - 123 Tulameen St
+            - Unit 600
+            city: Victoria City
+            state: BC
+            postalCode: 1N1 N1N
+            country: CA
+          individualIds:
+          - idType: SOCIAL_INSURANCE_NUMBER
+            value: '333222444'
+            issuer: CA
+    UpdateOrganizationPartyCA:
+      summary: Update organization party for CA
+      description: Updates organization party for CA
+      value:
+        email: contact2@ppthospital.gmail.com
+        organizationDetails:
+          organizationName: Princeton Plainsboro Teaching Hospital
+          organizationType: LIMITED_LIABILITY_PARTNERSHIP
+    IndividualPartyResponseForNetworkScreening:
+      summary: Individual party
+      description: Individual party
+      value:
+        id: '2000000556'
+        createdAt: '2022-11-18T12:28:11.232Z'
+        parentPartyId: '2000000555'
+        partyType: INDIVIDUAL
+        profileStatus: NEW
+        roles:
+        - CONTROLLER
+        active: true
+        individualDetails:
+          firstName: Eric
+          lastName: Foreman
+          birthDate: '1973-07-20'
+          countryOfResidence: GB
+          jobTitle: Other
+          jobTitleDescription: CEO
+          addresses:
+          - addressType: RESIDENTIAL_ADDRESS
+            addressLines:
+            - 1 Upper Littleton
+            - Apt 2E
+            city: Winford
+            state: BST
+            postalCode: BS18 8HF
+            country: GB
+          individualIds:
+          - idType: NATIONAL_ID
+            issuer: GB
+            value: '100101122'
+    CreateOrganizationPartyCAForNetworkScreening:
+      summary: Organization Party for CA
+      description: Organization Party for CA
+      value:
+        partyType: ORGANIZATION
+        profileStatus: APPROVED
+        roles:
+        - CLIENT
+        email: contact@ppthospital.gmail.com
+        externalId: TCU1234
+        active: true
+        organizationDetails:
+          countryOfFormation: CA
+          yearOfFormation: '1984'
+          organizationType: LIMITED_LIABILITY_PARTNERSHIP
+          organizationName: Princeton Plainsboro Teaching Hospital
+          dbaName: PPT Hospital
+          organizationDescription: Teaching the latest medical best practices.
+          industry:
+            code: '423450'
+            codeType: NAICS
+          organizationIds:
+          - idType: BUSINESS_NUMBER
+            value: '865103741'
+            issuer: CA
+          - idType: BUSINESS_REGISTRATION_NUMBER
+            value: '101803575124114'
+            issuer: CA
+          addresses:
+          - addressType: BUSINESS_ADDRESS
+            addressLines:
+            - 218 Medical Way
+            city: Princeton
+            state: BC
+            country: CA
+            postalCode: 1N1 N1N
+          phone:
+            phoneType: BUSINESS_PHONE
+            phoneNumber: '5553331234'
+            countryCode: '+1'
+          website: https://ppthospital.com
+    CreateOrganizationPartyForNetworkScreening:
+      summary: Organization Party
+      description: Organization Party
+      value:
+        partyType: ORGANIZATION
+        profileStatus: APPROVED
+        roles:
+        - CLIENT
+        email: monica@cpgetaways.com
+        externalId: TCU1234
+        active: true
+        organizationDetails:
+          organizationName: Central Park Getaways
+          organizationType: SOLE_PROPRIETORSHIP
+          organizationDescription: Relax, unwind and experience the comforting charm of our apartment while exploring New York
+          countryOfFormation: US
+          yearOfFormation: '2023'
+          dbaName: CP Getaways
+          industryCategory: Accommodation and Food Services
+          industryType: All Other Traveler Accommodation
+          entitiesInOwnership: false
+          addresses:
+          - addressType: BUSINESS_ADDRESS
+            addressLines:
+            - 90 Bedford Street
+            - Apt 2E
+            city: New York
+            state: NY
+            postalCode: '10014'
+            country: US
+          phone:
+            phoneType: BUSINESS_PHONE
+            phoneNumber: '6316215110'
+            countryCode: US
+          organizationIds:
+          - idType: EIN
+            value: '000000001'
+            issuer: US
+          websiteAvailable: false
+    UpdateOrganizationPartyPayfacCAForNetworkScreening:
+      summary: Update organization party in CA for network screening
+      description: Updates organization party in CA for network screening
+      value:
+        organizationDetails:
+          organizationName: Foreman Medical Corporation
+          dbaName: FM Corp
+          associatedCountries:
+          - CA
+          - US
+          websiteAvailable: false
+          mcc: '5410'
+        email: foremanmedical@example.com
+    UpdateIndividualPartyCA:
+      summary: Update individual party for CA
+      description: Updates individual party for CA
+      value:
+        email: ericforeman@ppthospital.gmail.com
+        individualDetails:
+          firstName: Eric
+          lastName: Foreman
+          individualIds:
+          - idType: SOCIAL_INSURANCE_NUMBER
+            issuer: CA
+            value: '777888111'
   securitySchemes:
     BearerAuth:
       type: http

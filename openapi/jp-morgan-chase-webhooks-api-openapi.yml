@@ -286,726 +286,38 @@ webhooks:
           description: Your server returns this code if it accepts the callback
 components:
   schemas:
-    RestrictionTypeV2:
-      type: string
-      example: DIRECT_DEBIT
-      description: The type of restriction to apply to the account, Can be 'DEBITS', 'CREDITS', 'DEBIT_CREDIT', 'DIRECT_DEBIT' or 'HOLD'
-    ListWebhookResponse:
+    ApiErrorReasonV2:
       type: object
+      description: Schema representing detailed reasons for an API error, including code, location, and message.
       required:
-      - metadata
-      - items
+      - message
       properties:
-        metadata:
-          $ref: '#/components/schemas/PageMetaData'
-        items:
-          type: array
-          description: List of webhooks you have created.
-          items:
-            $ref: '#/components/schemas/WebhookResponse'
-          minItems: 0
-          maxItems: 256
-    AccountCallbackEvent:
-      title: Account Callback Event
-      allOf:
-      - $ref: '#/components/schemas/WebhookCallbackEventBase'
-      - type: object
-        required:
-        - resourceType
-        - resourceObject
-        properties:
-          resourceType:
-            type: string
-            default: ACCOUNTS
-          resourceObject:
-            $ref: '#/components/schemas/AccountCallbackResource'
-      example:
-        summary: Account Created callback event
-        description: This is an example of an account created event to be sent to a c1 client
-        value:
-          eventId: '13897'
-          eventType: ACCOUNT_CREATED
-          resourceType: ACCOUNTS
-          resource: '{"id":"6925f3ceaf364353a381499c8626ae0c","clientId":"1000020694","label":"Taxes2371","state":"OPEN","category":"LIMITED_DDA","createdAt":"2024-10-09T10:47:06.167963Z","paymentRoutingInformation":{"accountNumber":"12345678","country":"US","routingInformation":[{"routingCodeType":"ABA","routingNumber":"280000240"}]}}'
-          resourceObject:
-            resourceType: ACCOUNTS
-            id: 6925f3ceaf364353a381499c8626ae0c
-            clientId: '1000020694'
-            label: Taxes2371
-            state: OPEN
-            category: LIMITED_DDA
-            createdAt: '2024-10-09T10:47:06.167963Z'
-            paymentRoutingInformation:
-              accountNumber: '12345678'
-              country: US
-              routingInformation:
-              - routingCodeType: ABA
-                routingNumber: '280000240'
-    RestrictionsCallbackResource:
-      type: object
-      properties:
-        id:
-          description: Account identifier
+        code:
           type: string
-          example: 1947f5a1a6ec44b48dda074ef4cb6fd5
-        clientId:
-          description: A client's unique ID
-          type: string
-          example: '1000010400'
-        requestId:
-          description: Identifier for the request. This identifier is specific to this particular request.
-          type: string
-          example: efeacff8-fd2c-4f54-a12e-2a8f90d4d325
-          maxLength: 36
-          minLength: 1
-        restrictionId:
-          description: Unique identifier for the restriction
-          type: string
-          example: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionReason:
-          $ref: '#/components/schemas/RestrictionReasonV2'
-        restrictionType:
-          $ref: '#/components/schemas/RestrictionTypeV2'
-        restrictionStatus:
-          $ref: '#/components/schemas/RestrictionStatusV2'
-        holdAmount:
-          $ref: '#/components/schemas/HoldAmount'
-        effectiveFrom:
-          $ref: '#/components/schemas/Timestamp'
-        effectiveUntil:
-          $ref: '#/components/schemas/Timestamp'
-    ApiErrorV2:
-      type: object
-      description: Schema representing a version 2 API error, including title, HTTP status, and additional context.
-      required:
-      - title
-      properties:
-        title:
-          type: string
-          description: Short humanly-readable title of the error
-          example: BAD_REQUEST
-          minLength: 1
-          maxLength: 512
-        httpStatus:
-          type: integer
-          description: HTTP status code
-          minimum: 100
-          maximum: 599
-          format: int32
-          example: 400
-        traceId:
-          type: string
-          description: Internal assigned traced identifier
+          example: '11000'
+          description: Short code that identifies the error - publicly cataloged and documented
           minLength: 0
-          maxLength: 512
-        requestId:
-          type: string
-          description: Client provided request identifier
-          minLength: 0
-          maxLength: 512
-        context:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorReasonV2'
-          description: Provides additional context and detail on the validation errors
-          minItems: 0
-          maxItems: 100
-    RecipientAccount:
-      type: object
-      required:
-      - number
-      - countryCode
-      description: Bank account details of the recipient.
-      properties:
-        number:
-          $ref: '#/components/schemas/AccountNumber'
-        type:
-          $ref: '#/components/schemas/AccountType'
-        routingInformation:
-          type: array
-          description: Routing information.
-          items:
-            $ref: '#/components/schemas/RoutingInformation'
-          minItems: 1
-          maxItems: 3
-        currencyCode:
-          $ref: '#/components/schemas/CurrencyCode'
-        countryCode:
-          $ref: '#/components/schemas/CountryCode'
-    TransactionCounterPartyExternalAccountV3:
-      title: External Account
-      description: The external account of the counterparty
-      type: object
-      required:
-      - type
-      - externalAccount
-      properties:
-        type:
-          description: The type of the counterparty account
-          type: string
-          minLength: 1
-        externalAccount:
-          $ref: '#/components/schemas/TransactionCounterPartyExternalAccountDetailsV3'
-    RoutingInformation:
-      type: object
-      required:
-      - routingNumber
-      - transactionType
-      - routingCodeType
-      properties:
-        routingNumber:
-          $ref: '#/components/schemas/RoutingNumber'
-        transactionType:
-          $ref: '#/components/schemas/RoutingInformationTransactionType'
-        routingCodeType:
-          $ref: '#/components/schemas/RoutingCodeType'
-    TransactionCounterPartyCardAccountDetailsV3:
-      description: The card details of the counterparty account.
-      type: object
-      properties:
-        name:
-          description: The name of the counterparty card holder.
-          type: string
-          minLength: 1
-          example: M GELLAR
-        number:
-          description: The number of the counterparty card holder.
-          type: string
-          minLength: 1
-          example: '4137110019999999'
-        expiryDate:
-          description: The expiry date of the counterparty card holder.
-          type: string
-          minLength: 1
-          example: '2207'
-    WebhookRequest:
-      description: Create a webhook
-      type: object
-      required:
-      - subscriptions
-      properties:
-        securityPreferences:
-          $ref: '#/components/schemas/SecurityPreferences'
-        subscriptions:
-          description: List of subscription items called subscription details
-          type: array
-          items:
-            $ref: '#/components/schemas/Subscription'
-          minItems: 0
-          maxItems: 100
-        callbackURL:
-          type: string
-          description: The URL to which the webhook will send the event notifications
-          example: https://your-server.com/webhook
-          format: uri
-    PartyCallbackResource:
-      type: object
-      properties:
-        id:
-          description: A party's unique ID
-          type: string
-          example: '1000010400'
-        acquirerMerchantId:
-          description: Acquirer's External Merchant Id
-          type: string
-          example: '2000000111'
-        profileStatus:
-          description: The client's status.
+          maxLength: 5
+        location:
           type: string
           enum:
-          - APPROVED
-          - DECLINED
-          - INFORMATION_REQUESTED
-          - NEW
-          - REVIEW_IN_PROGRESS
-          - SUSPENDED
-          - TERMINATED
-          example: APPROVED
-    TransactionCounterPartyCardAccountV3:
-      title: Card Account
-      description: The card account of the counterparty
-      type: object
-      required:
-      - type
-      - card
-      properties:
-        type:
-          description: The type of the counterparty account
+          - BODY
+          - QUERY
+          - PATH
+          - HEADER
+          example: BODY
+          description: Part of the request which is responsible for the reason
+        field:
           type: string
-          minLength: 1
-          default: CARD
-        card:
-          $ref: '#/components/schemas/TransactionCounterPartyCardAccountDetailsV3'
-    RecipientsCallbackResource:
-      type: object
-      properties:
-        id:
-          description: A unique recipient ID
-          type: string
-          example: 334dc63b-3f53-45e7-878b-bdf70c5a875a
-        clientId:
-          description: A client's unique ID
-          type: string
-          example: '1000010400'
-        type:
-          $ref: '#/components/schemas/RecipientType'
-        status:
-          $ref: '#/components/schemas/RecipientStatus'
-        account:
-          $ref: '#/components/schemas/RecipientAccount'
-        updatedAt:
-          description: The date and time the recipient was last updated
-          type: string
-          format: date-time
-          example: 2023-02-22T16:05:46.952+0000
-        validationExpiresAt:
-          description: The date and time when the micro-deposit validation is going to expire.
-          type: string
-          format: date-time
-          example: '2024-09-20T15:33:13.448689Z'
-        daysUntilExpiry:
-          description: The number of days remaining until a expiration date.
-          type: integer
-          example: 15
-        description:
-          description: The Description of the updated status.
-          type: string
-          example: Linked Account activated
-    AuthorizationDetails:
-      type: object
-      description: This object holds additional authorization details to apply when sending webhook notifications.
-      properties:
-        clientSecret:
-          type: string
-          description: A confidential string known only to the application and the authorization server.
-          example: a1b2c3d4e5f6g7h8i9j0
-        clientId:
-          type: string
-          description: A public identifier for the application using Auth for authenticating the client.
-          example: '1234567890'
-        tokenEndpoint:
-          type: string
-          description: A reference to a web resource on the internet that specifies the location and mechanism for the identity provider to fetch.
-          example: https://example.com/token
-          format: uri
-    RoutingNumber:
-      type: string
-      minLength: 1
-      maxLength: 13
-      pattern: ^[A-Za-z0-9]([A-Za-z0-9\-]{0,11})[A-Za-z0-9]$
-      description: Routing number corresponding to the routing code type
-      example: '021000021'
-    ApiError:
-      type: object
-      required:
-      - title
-      - httpStatus
-      - error
-      properties:
-        title:
-          type: string
-          minLength: 1
-          maxLength: 512
-          description: Short humanly-readable title of the error
-          example: BAD REQUEST
-        httpStatus:
-          type: integer
-          minimum: 100
-          maximum: 599
-          format: int32
-          description: HTTP status code
-          example: 422
-        traceId:
-          type: string
+          description: The location of the property or parameter in error
           minLength: 0
           maxLength: 512
-          description: Internal assigned traced identifier
-        requestId:
+        message:
           type: string
+          example: Client with ID 0031234567 does not exist.
+          description: Message describing the reason. This message can typically be displayed to your platform's users, except in cases specified otherwise
           minLength: 0
-          maxLength: 512
-          description: Client provided request identifier
-        context:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorReasonV2'
-          description: Provides additional context and detail on the validation errors
-          minItems: 0
-          maxItems: 100
-    RoutingInformationTransactionType:
-      type: string
-      enum:
-      - ACH
-      - RTP
-      - WIRE
-      description: Type of transaction.
-      example: RTP
-    RemittanceCallbackEvent:
-      title: Remittance Callback Event
-      allOf:
-      - $ref: '#/components/schemas/WebhookCallbackEventBase'
-      - type: object
-        required:
-        - resourceType
-        - resourceObject
-        properties:
-          resourceType:
-            type: string
-            default: REMITTANCE
-          resourceObject:
-            $ref: '#/components/schemas/RemittanceCallbackResource'
-    TransactionCounterPartyAccountV3:
-      description: The account details of the counterparty.
-      oneOf:
-      - $ref: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
-      - $ref: '#/components/schemas/TransactionCounterPartyRegisteredAccountV3'
-      - $ref: '#/components/schemas/TransactionCounterPartyCardAccountV3'
-      discriminator:
-        propertyName: type
-        mapping:
-          CHECKING: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
-          SAVINGS: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
-          IBAN: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
-          REGISTERED_ACCOUNT: '#/components/schemas/TransactionCounterPartyRegisteredAccountV3'
-          CARD: '#/components/schemas/TransactionCounterPartyCardAccountV3'
-          NOT_APPLICABLE: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
-    TransactionCounterPartyIdentityDetailsV3:
-      description: Identity details for the counterparty.
-      type: object
-      properties:
-        idType:
-          type: string
-          enum:
-          - USCC
-          - ORGANIZATION_ID
-          - NATIONAL_ID
-          - TAX_ID
-          - SSN
-          description: Type of identification.
-          minLength: 1
-          example: TAX_ID
-        idValue:
-          type: string
-          description: Identification value.
-          example: '12345678901'
-    TransactionCounterPartyContactDetailsV3:
-      description: Contact details of the counterparty.
-      type: object
-      properties:
-        alternateName:
-          description: The alternate name of the counterparty.
-          type: string
-          example: Monica Downey
-        phoneNumber:
-          description: The phone number of the counterparty.
-          type: string
-          example: '+1234567890'
-        emailAddress:
-          description: The email address of the counterparty.
-          type: string
-          example: example@email.com
-        website:
-          description: The website of the counterparty.
-          type: string
-          example: https://www.example.com
-    SecurityPreferences:
-      type: object
-      description: Parent Object which holds information on security preferences for sending Webhook Notifications.
-      properties:
-        authorizationDetails:
-          $ref: '#/components/schemas/AuthorizationDetails'
-        headerFields:
-          description: Arbitrary key/value pairs that will be echoed back to the webhook subscribers as headers in the HTTP webhook callback.
-          type: object
-          additionalProperties:
-            type: string
-    RecipientStatus:
-      description: Callback event type needs to send to notsub for correct status.
-      type: string
-      enum:
-      - ACTIVE
-      - INACTIVE
-      - MICRODEPOSITS_INITIATED
-      - READY_FOR_VALIDATION
-      - REJECTED
-      - PENDING
-      example: ACTIVE
-    PaymentTypeResponseV3:
-      description: The transaction type indicates the nature of the transaction. Certain types cannot be initiated through the API and, as a result, are excluded from the transaction request type field. API and, as a result, are excluded from the transaction request type field.
-      type: string
-      enum:
-      - RTP
-      - WIRE
-      - ACH
-      - TRANSFER
-      - REVERSAL
-      - RETURN
-      - OTHER
-      - CARD
-      - FEE
-      - MISCELLANEOUS_CREDIT
-      - MISCELLANEOUS_DEBIT
-      example: ACH
-    SigningKey:
-      type: object
-      description: This returns the public key details used to decrypt the webhooks payload
-      properties:
-        publicKeyIdentifier:
-          type: string
-          description: Identifier for Public Key
-          example: 9d1f7465fa364f02bfffca49e6b0f158
-        publicKeyText:
-          type: string
-          description: public key that will be used to sign the webhook notification payloads, you will need to store these three and fetch once the public key expires and rotate the keys
-          example: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEY67BAtge8eY0yCyrhMONiCzHOtU2qbUkZE3I0whslqC5xpz/wArMGGjPxIDkHrLVCT4rFfxVDclydOySiCtOEw==
-        publicKeyExpirationDate:
-          type: string
-          description: Expiration date of the public key indicating the need for rotation
-          format: date-time
-          example: '2026-01-22T09:40:30.616Z'
-    DocumentCallbackEvent:
-      title: Document Callback Event
-      allOf:
-      - $ref: '#/components/schemas/WebhookCallbackEventBase'
-      - type: object
-        required:
-        - resourceType
-        - resourceObject
-        properties:
-          resourceType:
-            type: string
-            default: DOCUMENTS
-          resourceObject:
-            $ref: '#/components/schemas/DocumentCallbackResource'
-      example:
-        summary: Document generated callback event
-        description: This is an example of event to be sent on document generation
-        value:
-          eventId: '12345'
-          eventType: DOCUMENT_GENERATED
-          resourceType: DOCUMENTS
-          resourceObject:
-            documentId: 17bgc55243d24e589c1eca6b72325890
-            documentType: ACCOUNT_CONFIRMATION_LETTER
-            parameters:
-              accountId: 6925f3ceaf364353a381499c8626ae0c
-    RestrictionStatusV2:
-      type: string
-      example: ACTIVE
-      description: Status of the restriction. Can be 'ACTIVE' or 'INACTIVE'
-    AccountCallbackResource:
-      type: object
-      properties:
-        id:
-          description: Account identifier
-          type: string
-          example: 1947f5a1a6ec44b48dda074ef4cb6fd5
-        clientId:
-          description: A client's unique ID
-          type: string
-          example: '1000010400'
-        label:
-          description: Account label
-          type: string
-          example: MAIN
-        state:
-          $ref: '#/components/schemas/AccountStateForNotification'
-        category:
-          $ref: '#/components/schemas/AccountTypeForNotification'
-        closureReason:
-          type: string
-          description: Reason for account closure
-          example: ELECTIVE
-        createdAt:
-          description: The date and time the account was created
-          type: string
-          format: date-time
-          example: '2023-08-20T15:33:13.448689Z'
-        paymentRoutingInformation:
-          $ref: '#/components/schemas/PaymentRoutingInformation'
-        overdraftStatus:
-          $ref: '#/components/schemas/OverdraftStatus'
-        restrictions:
-          $ref: '#/components/schemas/Restrictions'
-    RoutingInformationItem:
-      type: object
-      required:
-      - routingCodeType
-      - routingNumber
-      properties:
-        routingCodeType:
-          type: string
-          description: Routing codes supported. Can be `ABA`
-          example: ABA
-        routingNumber:
-          type: string
-          description: Routing number
-          example: '280000240'
-        transactionType:
-          type: string
-          description: Transactions that the routing number is used for. Can be `ACH`
-    EventTypeEnum:
-      type: string
-      enum:
-      - ACCOUNT_CLOSED
-      - ACCOUNT_CREATED
-      - ACCOUNT_FAILED
-      - ACCOUNT_OVERDRAWN
-      - ACCOUNT_RESTRICTION
-      - ACCOUNT_UPDATED
-      - ALLOCATION_ORDER_INSTRUCTION_NOTIFICATION
-      - ALLOCATION_ORDER_SETTLEMENT_NOTIFICATION
-      - CLIENT_ADD_INFO_FAILED
-      - CLIENT_ADD_INFO_REQUESTED
-      - CLIENT_ADD_INFO_VERIFIED
-      - CLIENT_OFFBOARDING_COMPLETED
-      - CLIENT_OFFBOARDING_INITIATED
-      - CLIENT_ONBOARDING
-      - CLIENT_ONBOARDING_COMPLETED
-      - DOCUMENT_GENERATED
-      - DOCUMENT_FAILED
-      - DOCUMENT_REQUESTED
-      - PARTY_NETWORK_SCREENING
-      - RECIPIENT_ACCOUNT_VALIDATION
-      - RECIPIENT_UPDATED
-      - REMITTANCE_STATUS
-      - TRANSACTION_CHANGE_REQUESTED
-      - TRANSACTION_COMPLETED
-      - TRANSACTION_FAILED
-      - THRESHOLD_LIMIT
-      - COUNTERPARTYENTITY
-      - PAYABLE
-      - PAYMENT
-      - INVOICE
-      - EXTERNALACCOUNT
-      - COUNTERPARTYUSER
-      description: The event types to be notified of.
-      example: ACCOUNT_CREATED
-    WebhookCallbackEvent:
-      oneOf:
-      - $ref: '#/components/schemas/TransactionCallbackEvent'
-      - $ref: '#/components/schemas/ClientCallbackEvent'
-      - $ref: '#/components/schemas/PartyCallbackEvent'
-      - $ref: '#/components/schemas/RemittanceCallbackEvent'
-      - $ref: '#/components/schemas/AccountCallbackEvent'
-      - $ref: '#/components/schemas/RecipientsCallbackEvent'
-      - $ref: '#/components/schemas/RestrictionsCallbackEvent'
-      - $ref: '#/components/schemas/DocumentCallbackEvent'
-      discriminator:
-        propertyName: resourceType
-        mapping:
-          TRANSACTIONS: '#/components/schemas/TransactionCallbackEvent'
-          CLIENTS: '#/components/schemas/ClientCallbackEvent'
-          PARTIES: '#/components/schemas/PartyCallbackEvent'
-          REMITTANCE: '#/components/schemas/RemittanceCallbackEvent'
-          ACCOUNTS: '#/components/schemas/AccountCallbackEvent'
-          RECIPIENTS: '#/components/schemas/RecipientsCallbackEvent'
-          RESTRICTIONS: '#/components/schemas/RestrictionsCallbackEvent'
-          DOCUMENTS: '#/components/schemas/DocumentCallbackEvent'
-    RestrictionType:
-      type: string
-      description: Restriction type
-      enum:
-      - CREDITS
-      - DEBITS
-      - DEBIT_CREDIT
-      - DIRECT_DEBIT
-      - HOLD
-    RestrictionReason:
-      type: string
-      description: Reason for the restriction
-      enum:
-      - CLIENT_REQUESTED
-      - COURT_ORDER
-      - FDIC
-      - OTHER_RESTRICTION
-      - PROBATE
-    TransactionCounterPartyDetailsV3:
-      description: The party details of the counterparty.
-      type: object
-      properties:
-        type:
-          description: The type of the counterparty.
-          type: string
-          example: INDIVIDUAL
-        name:
-          description: The name of the counterparty (individual or organization).
-          type: string
-          example: John Doe
-        address:
-          $ref: '#/components/schemas/TransactionCounterPartyAddressDetailsV3'
-        identities:
-          type: array
-          description: The Identity details for the counterparty.
-          items:
-            $ref: '#/components/schemas/TransactionCounterPartyIdentityDetailsV3'
-          minItems: 0
-        contacts:
-          $ref: '#/components/schemas/TransactionCounterPartyContactDetailsV3'
-    HoldAmount:
-      description: Amount to hold
-      type: string
-      example: '50000.56'
-    TransactionCallbackEvent:
-      title: Transaction Callback Event
-      allOf:
-      - $ref: '#/components/schemas/WebhookCallbackEventBase'
-      - type: object
-        required:
-        - resourceType
-        - resourceObject
-        properties:
-          resourceType:
-            type: string
-            default: TRANSACTIONS
-          resourceObject:
-            $ref: '#/components/schemas/TransactionCallbackResource'
-    ClientCallbackEvent:
-      title: Client Callback Event
-      allOf:
-      - $ref: '#/components/schemas/WebhookCallbackEventBase'
-      - type: object
-        required:
-        - resourceType
-        - resourceObject
-        properties:
-          resourceType:
-            type: string
-            default: CLIENTS
-          resourceObject:
-            $ref: '#/components/schemas/ClientCallbackResource'
-    CountryCode:
-      type: string
-      enum:
-      - US
-      description: Two letter country code based on ISO 3166 standard
-      example: US
-    AccountType:
-      type: string
-      enum:
-      - CHECKING
-      - IBAN
-      - SAVINGS
-      description: Type of bank account.
-      example: CHECKING
-    RestrictionStatus:
-      type: string
-      description: Status of the restriction
-      enum:
-      - ACTIVE
-      - INACTIVE
-    RoutingInformationV3:
-      description: Routing information for the account.
-      type: object
-      properties:
-        routingNumber:
-          description: Routing number corresponding to the routing code type.
-          type: string
-          example: '541798298'
-        transactionType:
-          $ref: '#/components/schemas/RoutingInformationTransactionType'
-        routingCodeType:
-          $ref: '#/components/schemas/RoutingCodeType'
+          maxLength: 2048
     TransactionCallbackResource:
       type: object
       properties:
@@ -1126,186 +438,42 @@ components:
           $ref: '#/components/schemas/GetTransactionCounterPartyV3'
         creditor:
           $ref: '#/components/schemas/GetTransactionCounterPartyV3'
-    AccountTypeForNotification:
-      description: Category of the account
-      type: string
-      enum:
-      - CLIENT_DDA
-      - DDA
-      - LIMITED_DDA
-      - EMBEDDED_DDA
-      - MANAGEMENT
-      - PROCESSING
-    AggregateOverdrawn:
+    TransactionCounterPartyIdentityDetailsV3:
+      description: Identity details for the counterparty.
       type: object
       properties:
-        amount:
+        idType:
           type: string
-          description: Aggregated overdrawn amount
-          pattern: '[-.0-9]+'
-          example: '-1000'
-        percent:
-          type: string
-          pattern: ^\d+(\.\d+)?$
-          description: Aggregated overdrawn percentage
-          example: '80'
-        maxAmount:
-          type: string
-          description: Maximum overdrawn limit
-          pattern: '[-.0-9]+'
-          example: '-10000'
-        alertPercent:
-          type: string
-          pattern: ^\d+(\.\d+)?$
-          description: Denotes the alert percentage at which clients would be notified when aggregate overdraft breaches this limit
-          example: '80'
-        alertResetPercent:
-          type: string
-          pattern: ^\d+(\.\d+)?$
-          description: Denotes the alert percentage reset at which clients would stop getting alerted when aggregate overdraft is within this limit
-          example: '70'
-        restrictPercent:
-          type: string
-          pattern: ^\d+(\.\d+)?$
-          description: Denotes the restrict percentage at which clients transactions would be rejected when aggregate overdraft breaches this limit
-          example: '120'
-        restrictResetPercent:
-          type: string
-          pattern: ^\d+(\.\d+)?$
-          description: Denotes the restrict percentage reset at which clients transactions would stop being rejected when aggregate overdraft is within this limit
-          example: '110'
-    TransactionPaymentPurpose:
-      description: The purpose of the payment
-      type: object
-      properties:
-        code:
-          description: Purpose of the payment in coded form. Must be between 1 and 4 characters.
-          type: string
+          enum:
+          - USCC
+          - ORGANIZATION_ID
+          - NATIONAL_ID
+          - TAX_ID
+          - SSN
+          description: Type of identification.
           minLength: 1
-          maxLength: 4
-          example: CASH
-        customCode:
-          description: Purpose of the payment in proprietary form. Must be between 1 and 35 characters.
+          example: TAX_ID
+        idValue:
           type: string
-          minLength: 1
-          maxLength: 35
-          example: CASH INFLOW
-    Context:
+          description: Identification value.
+          example: '12345678901'
+    SigningKey:
       type: object
+      description: This returns the public key details used to decrypt the webhooks payload
       properties:
-        code:
+        publicKeyIdentifier:
           type: string
-          description: The notification of change code.
-        message:
+          description: Identifier for Public Key
+          example: 9d1f7465fa364f02bfffca49e6b0f158
+        publicKeyText:
           type: string
-          description: Description of incorrect fields to be fixed.
-        correctedValues:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/CorrectedValue'
-    OverdraftStatus:
-      type: object
-      description: Details related to the account overdraft status. This is only used when eventType is `ACCOUNT_OVERDRAWN`.
-      properties:
-        effectiveDate:
-          description: It denotes the date on which the ledger balance is applicable.
+          description: public key that will be used to sign the webhook notification payloads, you will need to store these three and fetch once the public key expires and rotate the keys
+          example: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEY67BAtge8eY0yCyrhMONiCzHOtU2qbUkZE3I0whslqC5xpz/wArMGGjPxIDkHrLVCT4rFfxVDclydOySiCtOEw==
+        publicKeyExpirationDate:
           type: string
-          format: date
-          example: '2022-12-31'
-        ledgerBalance:
-          type: string
-          description: The account balance. If the value is negative, then the account is overdrawn.
-          minLength: 1
-          maxLength: 40
-          pattern: ^[-+]?\d+(\.\d+)?$
-          example: '-100.0'
-        daysOverdrawn:
-          type: integer
-          description: Number of days the account has been overdrawn.
-          example: 60
-    RestrictionReasonV2:
-      type: string
-      example: CLIENT_REQUESTED
-      description: Reason for the restriction
-    PaymentRoutingInformation:
-      type: object
-      properties:
-        country:
-          $ref: '#/components/schemas/CountryCode'
-        routingInformation:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/RoutingInformationItem'
-    PageMetaData:
-      type: object
-      properties:
-        page:
-          type: integer
-          minimum: 0
-          format: int32
-          example: 1
-          description: 'Page Number.
-
-            '
-        limit:
-          type: integer
-          minimum: 0
-          format: int32
-          example: 30
-          description: 'Number of records per page.
-
-            '
-        total_items:
-          type: integer
-          minimum: 0
-          format: int32
-          example: 1
-          description: 'Total number of items.
-
-            '
-    CurrencyCode:
-      type: string
-      enum:
-      - USD
-      description: Three letter currency code based on ISO 4217 standard
-      example: USD
-    AccountStateForNotification:
-      description: State of the account. An account in a state of OPEN can be used for any enabled transactions. An account in `PENDING_CLOSE` can be used for all transactions supported in `OPEN` state but once in a `CLOSED` state the account can no longer be used for any transactions.
-      type: string
-      enum:
-      - OPEN
-      - PENDING_CLOSE
-      - CLOSED
-    Timestamp:
-      description: Date and time
-      type: string
-      format: date-time
-      example: '2024-09-20T15:33:13.448689Z'
-    ResourceObjectType:
-      type: string
-      enum:
-      - TRANSACTIONS
-      - CLIENTS
-      - PARTIES
-      - REMITTANCE
-      - ACCOUNTS
-      - RECIPIENTS
-      - DOCUMENTS
-    AccountNumber:
-      type: string
-      pattern: ^[A-Z0-9]{1,35}$
-      description: Demand Deposit Account number or International Account Number (IBAN).
-      example: '021000021'
-    Subscription:
-      type: object
-      description: The webhooks you are subscribed to. Each subscription contains events about which you are notified via HTTPS request to your pre-configured server URL.
-      required:
-      - eventType
-      properties:
-        eventType:
-          $ref: '#/components/schemas/EventTypeEnum'
+          description: Expiration date of the public key indicating the need for rotation
+          format: date-time
+          example: '2026-01-22T09:40:30.616Z'
     WebhookCallbackEventType:
       type: string
       description: Master list of all webhook callback event types. Resource-specific callback events override this with a narrowed enum.
@@ -1330,447 +498,14 @@ components:
       - TRANSACTION_COMPLETED
       - TRANSACTION_FAILED
       - THRESHOLD_LIMIT
-    TransactionCounterPartyRegisteredAccountDetailsV3:
-      description: The registered account details of the counterparty.
-      type: object
-      properties:
-        id:
-          description: The id of the counterparty account.
-          type: string
-          minLength: 1
-          example: d3371713f14e423f82065c9486ebe15b
-        name:
-          description: The display name of the registered account.
-          type: string
-          minLength: 1
-          example: Primary Checking
-        number:
-          description: Masked registered account number.
-          type: string
-          minLength: 1
-          example: '...4567'
-        ledgerBalance:
-          description: Ledger balance of the registered account after this transaction.
-          type: string
-          minLength: 1
-          example: '1000'
-        postingVersion:
-          description: Posting version of the registered account at the time of this transaction.
-          type: integer
-          example: 1
-    RecipientsCallbackEvent:
-      title: Recipients Callback Event
-      allOf:
-      - $ref: '#/components/schemas/WebhookCallbackEventBase'
-      - type: object
-        required:
-        - resourceType
-        - resourceObject
-        properties:
-          resourceType:
-            type: string
-            default: RECIPIENTS
-          resourceObject:
-            $ref: '#/components/schemas/RecipientsCallbackResource'
-    WebhookResponse:
-      type: object
-      required:
-      - id
-      - subscriptions
-      - status
-      - createdAt
-      - updatedAt
-      properties:
-        id:
-          type: string
-          example: 944803b0-f1c2-4b28-91ce-8985b1f317a7
-          description: The unique identifier of this webhook
-        signingKey:
-          $ref: '#/components/schemas/SigningKey'
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Subscription'
-          minItems: 0
-          maxItems: 100
-        callbackURL:
-          type: string
-          description: The URL to which the webhook will send the event notifications
-          example: https://your-server.com/webhook
-          format: uri
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - INACTIVE
-          example: ACTIVE
-          description: The status of this webhook.
-        createdAt:
-          description: The date and time the webhook was created
-          type: string
-          format: date-time
-          example: '2017-07-21T17:32:28Z'
-        updatedAt:
-          description: The date and time the webhook was updated
-          type: string
-          format: date-time
-          example: '2017-07-21T17:32:28Z'
-    WebhookCallbackEventBase:
-      type: object
-      required:
-      - eventId
-      - eventType
-      - resourceType
-      properties:
-        eventId:
-          type: string
-          description: Unique identifier of the event
-          example: '1863'
-        eventType:
-          $ref: '#/components/schemas/WebhookCallbackEventType'
-        resourceType:
-          $ref: '#/components/schemas/ResourceObjectType'
-        resource:
-          type: string
-          description: Json formatted string containing the notification details
-          example: '{"id": "UcMyVrUdXvZVhjUt","clientId": "0005191231","type": "ACH","debtorAccountId": "10de11e98255479dbf43fd77ff55aa51","recipientId": null,"amount": "0.1","currency": "USD","status": "REJECTED","transactionReferenceId": null,"paymentDate": "2023-11-23","ledgerBalance": "100.0"}'
-        error:
-          $ref: '#/components/schemas/ApiErrorV2'
-    TransactionCounterPartyAddressDetailsV3:
-      description: The address details of the counterparty.
-      type: object
-      required:
-      - city
-      - country
-      properties:
-        type:
-          description: The type of the counterparty address.
-          type: string
-          example: RESIDENTIAL_ADDRESS
-        buildingNumber:
-          description: Building name or number.
-          type: string
-          example: Apt 2E
-        streetName:
-          description: The street name of the counterparty address.
-          type: string
-          example: 90 Bedford Street
-        city:
-          description: Address city.
-          type: string
-          example: Springfield
-        country:
-          type: string
-          description: Two letter country code based on ISO 3166 standard, includes SEPA regions
-          example: US
-        countrySubDivision:
-          description: State or province code.
-          type: string
-          example: ND
-        postalCode:
-          description: Postal/ZIP code.
-          type: string
-          example: '58008'
-    ApiErrorReasonV2:
-      type: object
-      description: Schema representing detailed reasons for an API error, including code, location, and message.
-      required:
-      - message
-      properties:
-        code:
-          type: string
-          example: '11000'
-          description: Short code that identifies the error - publicly cataloged and documented
-          minLength: 0
-          maxLength: 5
-        location:
-          type: string
-          enum:
-          - BODY
-          - QUERY
-          - PATH
-          - HEADER
-          example: BODY
-          description: Part of the request which is responsible for the reason
-        field:
-          type: string
-          description: The location of the property or parameter in error
-          minLength: 0
-          maxLength: 512
-        message:
-          type: string
-          example: Client with ID 0031234567 does not exist.
-          description: Message describing the reason. This message can typically be displayed to your platform's users, except in cases specified otherwise
-          minLength: 0
-          maxLength: 2048
-    RoutingCodeType:
+    AccountType:
       type: string
       enum:
-      - USABA
-      description: Type of routing code.
-      example: USABA
-    PartyCallbackEvent:
-      title: Party Callback Event
-      allOf:
-      - $ref: '#/components/schemas/WebhookCallbackEventBase'
-      - type: object
-        required:
-        - resourceType
-        - resourceObject
-        properties:
-          resourceType:
-            type: string
-            default: PARTIES
-          resourceObject:
-            $ref: '#/components/schemas/PartyCallbackResource'
-    OriginatingTransactionV3:
-      type: object
-      description: Details of the originating transaction for fees, returns, or linked transactions.
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the originating transaction.
-          example: ff1b61523ea74c59b4ae606c6497cd52
-        type:
-          $ref: '#/components/schemas/PaymentTypeResponseV3'
-    Restrictions:
-      type: object
-      properties:
-        restrictionId:
-          description: Unique identifier for the restriction
-          type: string
-          example: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionReason:
-          $ref: '#/components/schemas/RestrictionReason'
-        restrictionStatus:
-          $ref: '#/components/schemas/RestrictionStatus'
-        restrictionType:
-          $ref: '#/components/schemas/RestrictionType'
-        holdAmount:
-          $ref: '#/components/schemas/HoldAmount'
-        effectiveFrom:
-          $ref: '#/components/schemas/Timestamp'
-        effectiveUntil:
-          $ref: '#/components/schemas/Timestamp'
-    ChangeDetails:
-      type: object
-      description: Details describing changes required to the recipient. This is only used when eventType is `TRANSACTION_CHANGE_REQUESTED`.
-      required:
-      - title
-      - context
-      properties:
-        title:
-          type: string
-          default: Clearing Notification of Change
-        context:
-          $ref: '#/components/schemas/Context'
-    RestrictionsCallbackEvent:
-      title: Restrictions Callback Event
-      allOf:
-      - $ref: '#/components/schemas/WebhookCallbackEventBase'
-      - type: object
-        required:
-        - resourceType
-        - resourceObject
-        properties:
-          resourceType:
-            type: string
-            default: RESTRICTIONS
-          resourceObject:
-            $ref: '#/components/schemas/RestrictionsCallbackResource'
-      example:
-        summary: Account Restriction Added callback event
-        description: This is an example of an account restriction added event to be sent to a client
-        value:
-          eventId: '12345'
-          eventType: ACCOUNT_RESTRICTION
-          subEventType: ADDED
-          resourceType: RESTRICTIONS
-          resource: '{"id":"17bgc55243d24e589c1eca6b72325890","requestId":"05742401-088f-41b5-9c73-32e5a502ccde","restrictionId":"befcda2d-b351-48d2-9e4d-e9ef0a07890d","restrictionReason":"CLIENT_REQUESTED","restrictionType":"DEBITS"}'
-          resourceObject:
-            id: 17bgc55243d24e589c1eca6b72325890
-            requestId: 05742401-088f-41b5-9c73-32e5a502ccde
-            restrictionId: befcda2d-b351-48d2-9e4d-e9ef0a07890d
-            restrictionReason: CLIENT_REQUESTED
-            restrictionType: DEBITS
-    RemittanceCallbackResource:
-      type: object
-      properties:
-        statusType:
-          type: string
-          enum:
-          - INITIAL_STATUS
-          - TRANSACTION_STATUS_REPORT
-        traceId:
-          type: string
-          description: L0 response id
-          example: 4b5a17ed-fa7e-426c-87ab-591b5ef86a0a
-        transactionType:
-          type: string
-          description: to identify the transaction flow type
-          example: LRS_CARD_TOPUP
-        tsrGeneratedDateTime:
-          type: string
-        remittanceStatus:
-          type: array
-          items:
-            $ref: '#/components/schemas/StatusDetails'
-          minItems: 1
-    ClientCallbackResource:
-      type: object
-      properties:
-        id:
-          description: A client's unique ID
-          type: string
-          example: '1000010400'
-        status:
-          description: The client's status.
-          type: string
-          enum:
-          - APPROVED
-          - DECLINED
-          - INFORMATION_REQUESTED
-          - NEW
-          - REVIEW_IN_PROGRESS
-          - SUSPENDED
-          - TERMINATED
-          example: APPROVED
-        hasOutstandingInformation:
-          description: '`true` if the client has outstanding items, otherwise `false`.'
-          type: boolean
-        customerIdentityStatus:
-          description: The status of the customer identification process.
-          type: string
-          enum:
-          - APPROVED
-          - INFORMATION_REQUESTED
-          - NOT_STARTED
-          - REVIEW_IN_PROGRESS
-        effectiveDate:
-          description: It denotes the date(YYYY-MM-DD) on which the threshold limit is applicable.
-          type: string
-          format: date
-          pattern: ^\d{4}-\d{2}-\d{2}$
-          example: '2022-12-31'
-        limitType:
-          type: string
-          enum:
-          - AGGREGATE_OVERDRAWN
-        aggregateOverdrawn:
-          $ref: '#/components/schemas/AggregateOverdrawn'
-    TransactionCounterPartyRegisteredAccountV3:
-      title: Registered Account
-      description: The registered account of the counterparty
-      type: object
-      required:
-      - type
-      - registeredAccount
-      properties:
-        type:
-          description: The type of the counterparty account
-          type: string
-          minLength: 1
-          default: REGISTERED_ACCOUNT
-        registeredAccount:
-          $ref: '#/components/schemas/TransactionCounterPartyRegisteredAccountDetailsV3'
-    RecipientType:
-      type: string
-      enum:
-      - RECIPIENT
-      - LINKED_ACCOUNT
-      - SETTLEMENT_ACCOUNT
-      example: RECIPIENT
-    GetTransactionCounterPartyV3:
-      type: object
-      properties:
-        id:
-          description: The id of the counterparty.
-          type: string
-          example: 8f4e2b3c-1d5a-4c3b-9f0a-123456789abc
-        clientId:
-          description: The client identifier associated with the counterparty.
-          type: string
-          example: '0030000131'
-        type:
-          description: The type of the counterparty.
-          type: string
-          example: RECIPIENT
-        partyDetails:
-          $ref: '#/components/schemas/TransactionCounterPartyDetailsV3'
-        account:
-          $ref: '#/components/schemas/TransactionCounterPartyAccountV3'
-    TransactionCounterPartyExternalAccountDetailsV3:
-      description: The external account details of the counterparty.
-      type: object
-      properties:
-        number:
-          description: The number of the counterparty account.
-          type: string
-          minLength: 1
-          example: 021009052
-        bankName:
-          description: The bank name of the counterparty external account.
-          type: string
-          minLength: 1
-          example: Bank of America
-        branchCode:
-          description: The branch code of the counterparty external account.
-          type: string
-          minLength: 1
-          example: '123456789'
-        routingInformation:
-          type: array
-          description: Routing information details of the counterparty external account.
-          items:
-            $ref: '#/components/schemas/RoutingInformationV3'
-          minItems: 0
-        currency:
-          description: The currency of the counterparty external account in ISO 4217 Alpha-3 Currency Code format.
-          type: string
-          minLength: 1
-          maxLength: 3
-          example: USD
-        country:
-          description: The country of the counterparty external account. Two letter country code based on ISO 3166 standard
-          type: string
-          minLength: 1
-          example: US
-    DocumentCallbackResource:
-      type: object
-      properties:
-        documentId:
-          description: Document identifier
-          type: string
-          example: efeacff8-fd2c-4f54-a12e-2a8f90d4d325
-          maxLength: 36
-          minLength: 1
-        documentType:
-          description: Type of document
-          type: string
-          enum:
-          - ACCOUNT_CONFIRMATION_LETTER
-        parameters:
-          type: object
-          description: Parameters used to generate the document
-          properties:
-            accountId:
-              description: Account identifier
-              type: string
-              example: 1947f5a1a6ec44b48dda074ef4cb6fd5
-    CorrectedValue:
-      type: object
-      required:
-      - field
-      - value
-      properties:
-        field:
-          type: string
-          description: The field to be fixed
-          example: ACCTNUM
-        value:
-          type: string
-          description: The correct value for this field
-          example: '1271271448'
+      - CHECKING
+      - IBAN
+      - SAVINGS
+      description: Type of bank account.
+      example: CHECKING
     StatusDetails:
       type: object
       description: StatusDetails
@@ -1820,6 +555,60 @@ components:
           description: reasons
           minItems: 0
           maxItems: 100
+    ListWebhookResponse:
+      type: object
+      required:
+      - metadata
+      - items
+      properties:
+        metadata:
+          $ref: '#/components/schemas/PageMetaData'
+        items:
+          type: array
+          description: List of webhooks you have created.
+          items:
+            $ref: '#/components/schemas/WebhookResponse'
+          minItems: 0
+          maxItems: 256
+    PaymentTypeResponseV3:
+      description: The transaction type indicates the nature of the transaction. Certain types cannot be initiated through the API and, as a result, are excluded from the transaction request type field. API and, as a result, are excluded from the transaction request type field.
+      type: string
+      enum:
+      - RTP
+      - WIRE
+      - ACH
+      - TRANSFER
+      - REVERSAL
+      - RETURN
+      - OTHER
+      - CARD
+      - FEE
+      - MISCELLANEOUS_CREDIT
+      - MISCELLANEOUS_DEBIT
+      example: ACH
+    RemittanceCallbackResource:
+      type: object
+      properties:
+        statusType:
+          type: string
+          enum:
+          - INITIAL_STATUS
+          - TRANSACTION_STATUS_REPORT
+        traceId:
+          type: string
+          description: L0 response id
+          example: 4b5a17ed-fa7e-426c-87ab-591b5ef86a0a
+        transactionType:
+          type: string
+          description: to identify the transaction flow type
+          example: LRS_CARD_TOPUP
+        tsrGeneratedDateTime:
+          type: string
+        remittanceStatus:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusDetails'
+          minItems: 1
     WebhookUpdateRequest:
       description: Update a webhook - add, remove subscriptions or change the status of your webhook
       type: object
@@ -1845,62 +634,1303 @@ components:
           enum:
           - ACTIVE
           - INACTIVE
-  parameters:
-    pageSize:
-      name: limit
-      in: query
-      description: Number of records per page.
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 25
-        default: 25
-        format: int32
-      required: false
-    pageNo:
-      name: page
-      in: query
-      description: Page Number
-      schema:
-        type: integer
-        default: 0
-        minimum: 0
-        maximum: 1000000
-        format: int32
-      required: false
+    RecipientsCallbackEvent:
+      title: Recipients Callback Event
+      allOf:
+      - $ref: '#/components/schemas/WebhookCallbackEventBase'
+      - type: object
+        required:
+        - resourceType
+        - resourceObject
+        properties:
+          resourceType:
+            type: string
+            default: RECIPIENTS
+          resourceObject:
+            $ref: '#/components/schemas/RecipientsCallbackResource'
+    PartyCallbackResource:
+      type: object
+      properties:
+        id:
+          description: A party's unique ID
+          type: string
+          example: '1000010400'
+        acquirerMerchantId:
+          description: Acquirer's External Merchant Id
+          type: string
+          example: '2000000111'
+        profileStatus:
+          description: The client's status.
+          type: string
+          enum:
+          - APPROVED
+          - DECLINED
+          - INFORMATION_REQUESTED
+          - NEW
+          - REVIEW_IN_PROGRESS
+          - SUSPENDED
+          - TERMINATED
+          example: APPROVED
+    RestrictionReasonV2:
+      type: string
+      example: CLIENT_REQUESTED
+      description: Reason for the restriction
+    CountryCode:
+      type: string
+      enum:
+      - US
+      description: Two letter country code based on ISO 3166 standard
+      example: US
+    SecurityPreferences:
+      type: object
+      description: Parent Object which holds information on security preferences for sending Webhook Notifications.
+      properties:
+        authorizationDetails:
+          $ref: '#/components/schemas/AuthorizationDetails'
+        headerFields:
+          description: Arbitrary key/value pairs that will be echoed back to the webhook subscribers as headers in the HTTP webhook callback.
+          type: object
+          additionalProperties:
+            type: string
+    PartyCallbackEvent:
+      title: Party Callback Event
+      allOf:
+      - $ref: '#/components/schemas/WebhookCallbackEventBase'
+      - type: object
+        required:
+        - resourceType
+        - resourceObject
+        properties:
+          resourceType:
+            type: string
+            default: PARTIES
+          resourceObject:
+            $ref: '#/components/schemas/PartyCallbackResource'
+    AccountStateForNotification:
+      description: State of the account. An account in a state of OPEN can be used for any enabled transactions. An account in `PENDING_CLOSE` can be used for all transactions supported in `OPEN` state but once in a `CLOSED` state the account can no longer be used for any transactions.
+      type: string
+      enum:
+      - OPEN
+      - PENDING_CLOSE
+      - CLOSED
+    WebhookResponse:
+      type: object
+      required:
+      - id
+      - subscriptions
+      - status
+      - createdAt
+      - updatedAt
+      properties:
+        id:
+          type: string
+          example: 944803b0-f1c2-4b28-91ce-8985b1f317a7
+          description: The unique identifier of this webhook
+        signingKey:
+          $ref: '#/components/schemas/SigningKey'
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+          minItems: 0
+          maxItems: 100
+        callbackURL:
+          type: string
+          description: The URL to which the webhook will send the event notifications
+          example: https://your-server.com/webhook
+          format: uri
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          example: ACTIVE
+          description: The status of this webhook.
+        createdAt:
+          description: The date and time the webhook was created
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+        updatedAt:
+          description: The date and time the webhook was updated
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+    RestrictionsCallbackResource:
+      type: object
+      properties:
+        id:
+          description: Account identifier
+          type: string
+          example: 1947f5a1a6ec44b48dda074ef4cb6fd5
+        clientId:
+          description: A client's unique ID
+          type: string
+          example: '1000010400'
+        requestId:
+          description: Identifier for the request. This identifier is specific to this particular request.
+          type: string
+          example: efeacff8-fd2c-4f54-a12e-2a8f90d4d325
+          maxLength: 36
+          minLength: 1
+        restrictionId:
+          description: Unique identifier for the restriction
+          type: string
+          example: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionReason:
+          $ref: '#/components/schemas/RestrictionReasonV2'
+        restrictionType:
+          $ref: '#/components/schemas/RestrictionTypeV2'
+        restrictionStatus:
+          $ref: '#/components/schemas/RestrictionStatusV2'
+        holdAmount:
+          $ref: '#/components/schemas/HoldAmount'
+        effectiveFrom:
+          $ref: '#/components/schemas/Timestamp'
+        effectiveUntil:
+          $ref: '#/components/schemas/Timestamp'
+    ClientCallbackEvent:
+      title: Client Callback Event
+      allOf:
+      - $ref: '#/components/schemas/WebhookCallbackEventBase'
+      - type: object
+        required:
+        - resourceType
+        - resourceObject
+        properties:
+          resourceType:
+            type: string
+            default: CLIENTS
+          resourceObject:
+            $ref: '#/components/schemas/ClientCallbackResource'
+    RestrictionReason:
+      type: string
+      description: Reason for the restriction
+      enum:
+      - CLIENT_REQUESTED
+      - COURT_ORDER
+      - FDIC
+      - OTHER_RESTRICTION
+      - PROBATE
+    RecipientType:
+      type: string
+      enum:
+      - RECIPIENT
+      - LINKED_ACCOUNT
+      - SETTLEMENT_ACCOUNT
+      example: RECIPIENT
+    TransactionCounterPartyCardAccountDetailsV3:
+      description: The card details of the counterparty account.
+      type: object
+      properties:
+        name:
+          description: The name of the counterparty card holder.
+          type: string
+          minLength: 1
+          example: M GELLAR
+        number:
+          description: The number of the counterparty card holder.
+          type: string
+          minLength: 1
+          example: '4137110019999999'
+        expiryDate:
+          description: The expiry date of the counterparty card holder.
+          type: string
+          minLength: 1
+          example: '2207'
+    Timestamp:
+      description: Date and time
+      type: string
+      format: date-time
+      example: '2024-09-20T15:33:13.448689Z'
+    RoutingInformationItem:
+      type: object
+      required:
+      - routingCodeType
+      - routingNumber
+      properties:
+        routingCodeType:
+          type: string
+          description: Routing codes supported. Can be `ABA`
+          example: ABA
+        routingNumber:
+          type: string
+          description: Routing number
+          example: '280000240'
+        transactionType:
+          type: string
+          description: Transactions that the routing number is used for. Can be `ACH`
+    OverdraftStatus:
+      type: object
+      description: Details related to the account overdraft status. This is only used when eventType is `ACCOUNT_OVERDRAWN`.
+      properties:
+        effectiveDate:
+          description: It denotes the date on which the ledger balance is applicable.
+          type: string
+          format: date
+          example: '2022-12-31'
+        ledgerBalance:
+          type: string
+          description: The account balance. If the value is negative, then the account is overdrawn.
+          minLength: 1
+          maxLength: 40
+          pattern: ^[-+]?\d+(\.\d+)?$
+          example: '-100.0'
+        daysOverdrawn:
+          type: integer
+          description: Number of days the account has been overdrawn.
+          example: 60
+    AccountCallbackResource:
+      type: object
+      properties:
+        id:
+          description: Account identifier
+          type: string
+          example: 1947f5a1a6ec44b48dda074ef4cb6fd5
+        clientId:
+          description: A client's unique ID
+          type: string
+          example: '1000010400'
+        label:
+          description: Account label
+          type: string
+          example: MAIN
+        state:
+          $ref: '#/components/schemas/AccountStateForNotification'
+        category:
+          $ref: '#/components/schemas/AccountTypeForNotification'
+        closureReason:
+          type: string
+          description: Reason for account closure
+          example: ELECTIVE
+        createdAt:
+          description: The date and time the account was created
+          type: string
+          format: date-time
+          example: '2023-08-20T15:33:13.448689Z'
+        paymentRoutingInformation:
+          $ref: '#/components/schemas/PaymentRoutingInformation'
+        overdraftStatus:
+          $ref: '#/components/schemas/OverdraftStatus'
+        restrictions:
+          $ref: '#/components/schemas/Restrictions'
+    RestrictionTypeV2:
+      type: string
+      example: DIRECT_DEBIT
+      description: The type of restriction to apply to the account, Can be 'DEBITS', 'CREDITS', 'DEBIT_CREDIT', 'DIRECT_DEBIT' or 'HOLD'
+    Context:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The notification of change code.
+        message:
+          type: string
+          description: Description of incorrect fields to be fixed.
+        correctedValues:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/CorrectedValue'
+    TransactionPaymentPurpose:
+      description: The purpose of the payment
+      type: object
+      properties:
+        code:
+          description: Purpose of the payment in coded form. Must be between 1 and 4 characters.
+          type: string
+          minLength: 1
+          maxLength: 4
+          example: CASH
+        customCode:
+          description: Purpose of the payment in proprietary form. Must be between 1 and 35 characters.
+          type: string
+          minLength: 1
+          maxLength: 35
+          example: CASH INFLOW
+    PageMetaData:
+      type: object
+      properties:
+        page:
+          type: integer
+          minimum: 0
+          format: int32
+          example: 1
+          description: 'Page Number.
+
+            '
+        limit:
+          type: integer
+          minimum: 0
+          format: int32
+          example: 30
+          description: 'Number of records per page.
+
+            '
+        total_items:
+          type: integer
+          minimum: 0
+          format: int32
+          example: 1
+          description: 'Total number of items.
+
+            '
+    CurrencyCode:
+      type: string
+      enum:
+      - USD
+      description: Three letter currency code based on ISO 4217 standard
+      example: USD
+    ChangeDetails:
+      type: object
+      description: Details describing changes required to the recipient. This is only used when eventType is `TRANSACTION_CHANGE_REQUESTED`.
+      required:
+      - title
+      - context
+      properties:
+        title:
+          type: string
+          default: Clearing Notification of Change
+        context:
+          $ref: '#/components/schemas/Context'
+    Restrictions:
+      type: object
+      properties:
+        restrictionId:
+          description: Unique identifier for the restriction
+          type: string
+          example: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionReason:
+          $ref: '#/components/schemas/RestrictionReason'
+        restrictionStatus:
+          $ref: '#/components/schemas/RestrictionStatus'
+        restrictionType:
+          $ref: '#/components/schemas/RestrictionType'
+        holdAmount:
+          $ref: '#/components/schemas/HoldAmount'
+        effectiveFrom:
+          $ref: '#/components/schemas/Timestamp'
+        effectiveUntil:
+          $ref: '#/components/schemas/Timestamp'
+    HoldAmount:
+      description: Amount to hold
+      type: string
+      example: '50000.56'
+    AccountTypeForNotification:
+      description: Category of the account
+      type: string
+      enum:
+      - CLIENT_DDA
+      - DDA
+      - LIMITED_DDA
+      - EMBEDDED_DDA
+      - MANAGEMENT
+      - PROCESSING
+    RestrictionStatusV2:
+      type: string
+      example: ACTIVE
+      description: Status of the restriction. Can be 'ACTIVE' or 'INACTIVE'
+    RemittanceCallbackEvent:
+      title: Remittance Callback Event
+      allOf:
+      - $ref: '#/components/schemas/WebhookCallbackEventBase'
+      - type: object
+        required:
+        - resourceType
+        - resourceObject
+        properties:
+          resourceType:
+            type: string
+            default: REMITTANCE
+          resourceObject:
+            $ref: '#/components/schemas/RemittanceCallbackResource'
+    RoutingInformationTransactionType:
+      type: string
+      enum:
+      - ACH
+      - RTP
+      - WIRE
+      description: Type of transaction.
+      example: RTP
+    TransactionCounterPartyRegisteredAccountDetailsV3:
+      description: The registered account details of the counterparty.
+      type: object
+      properties:
+        id:
+          description: The id of the counterparty account.
+          type: string
+          minLength: 1
+          example: d3371713f14e423f82065c9486ebe15b
+        name:
+          description: The display name of the registered account.
+          type: string
+          minLength: 1
+          example: Primary Checking
+        number:
+          description: Masked registered account number.
+          type: string
+          minLength: 1
+          example: '...4567'
+        ledgerBalance:
+          description: Ledger balance of the registered account after this transaction.
+          type: string
+          minLength: 1
+          example: '1000'
+        postingVersion:
+          description: Posting version of the registered account at the time of this transaction.
+          type: integer
+          example: 1
+    TransactionCounterPartyDetailsV3:
+      description: The party details of the counterparty.
+      type: object
+      properties:
+        type:
+          description: The type of the counterparty.
+          type: string
+          example: INDIVIDUAL
+        name:
+          description: The name of the counterparty (individual or organization).
+          type: string
+          example: John Doe
+        address:
+          $ref: '#/components/schemas/TransactionCounterPartyAddressDetailsV3'
+        identities:
+          type: array
+          description: The Identity details for the counterparty.
+          items:
+            $ref: '#/components/schemas/TransactionCounterPartyIdentityDetailsV3'
+          minItems: 0
+        contacts:
+          $ref: '#/components/schemas/TransactionCounterPartyContactDetailsV3'
+    EventTypeEnum:
+      type: string
+      enum:
+      - ACCOUNT_CLOSED
+      - ACCOUNT_CREATED
+      - ACCOUNT_FAILED
+      - ACCOUNT_OVERDRAWN
+      - ACCOUNT_RESTRICTION
+      - ACCOUNT_UPDATED
+      - ALLOCATION_ORDER_INSTRUCTION_NOTIFICATION
+      - ALLOCATION_ORDER_SETTLEMENT_NOTIFICATION
+      - CLIENT_ADD_INFO_FAILED
+      - CLIENT_ADD_INFO_REQUESTED
+      - CLIENT_ADD_INFO_VERIFIED
+      - CLIENT_OFFBOARDING_COMPLETED
+      - CLIENT_OFFBOARDING_INITIATED
+      - CLIENT_ONBOARDING
+      - CLIENT_ONBOARDING_COMPLETED
+      - DOCUMENT_GENERATED
+      - DOCUMENT_FAILED
+      - DOCUMENT_REQUESTED
+      - PARTY_NETWORK_SCREENING
+      - RECIPIENT_ACCOUNT_VALIDATION
+      - RECIPIENT_UPDATED
+      - REMITTANCE_STATUS
+      - TRANSACTION_CHANGE_REQUESTED
+      - TRANSACTION_COMPLETED
+      - TRANSACTION_FAILED
+      - THRESHOLD_LIMIT
+      - COUNTERPARTYENTITY
+      - PAYABLE
+      - PAYMENT
+      - INVOICE
+      - EXTERNALACCOUNT
+      - COUNTERPARTYUSER
+      description: The event types to be notified of.
+      example: ACCOUNT_CREATED
+    DocumentCallbackResource:
+      type: object
+      properties:
+        documentId:
+          description: Document identifier
+          type: string
+          example: efeacff8-fd2c-4f54-a12e-2a8f90d4d325
+          maxLength: 36
+          minLength: 1
+        documentType:
+          description: Type of document
+          type: string
+          enum:
+          - ACCOUNT_CONFIRMATION_LETTER
+        parameters:
+          type: object
+          description: Parameters used to generate the document
+          properties:
+            accountId:
+              description: Account identifier
+              type: string
+              example: 1947f5a1a6ec44b48dda074ef4cb6fd5
+    RecipientStatus:
+      description: Callback event type needs to send to notsub for correct status.
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - MICRODEPOSITS_INITIATED
+      - READY_FOR_VALIDATION
+      - REJECTED
+      - PENDING
+      example: ACTIVE
+    PaymentRoutingInformation:
+      type: object
+      properties:
+        country:
+          $ref: '#/components/schemas/CountryCode'
+        routingInformation:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/RoutingInformationItem'
+    ApiError:
+      type: object
+      required:
+      - title
+      - httpStatus
+      - error
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: Short humanly-readable title of the error
+          example: BAD REQUEST
+        httpStatus:
+          type: integer
+          minimum: 100
+          maximum: 599
+          format: int32
+          description: HTTP status code
+          example: 422
+        traceId:
+          type: string
+          minLength: 0
+          maxLength: 512
+          description: Internal assigned traced identifier
+        requestId:
+          type: string
+          minLength: 0
+          maxLength: 512
+          description: Client provided request identifier
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorReasonV2'
+          description: Provides additional context and detail on the validation errors
+          minItems: 0
+          maxItems: 100
+    ResourceObjectType:
+      type: string
+      enum:
+      - TRANSACTIONS
+      - CLIENTS
+      - PARTIES
+      - REMITTANCE
+      - ACCOUNTS
+      - RECIPIENTS
+      - DOCUMENTS
+    TransactionCounterPartyRegisteredAccountV3:
+      title: Registered Account
+      description: The registered account of the counterparty
+      type: object
+      required:
+      - type
+      - registeredAccount
+      properties:
+        type:
+          description: The type of the counterparty account
+          type: string
+          minLength: 1
+          default: REGISTERED_ACCOUNT
+        registeredAccount:
+          $ref: '#/components/schemas/TransactionCounterPartyRegisteredAccountDetailsV3'
+    WebhookCallbackEvent:
+      oneOf:
+      - $ref: '#/components/schemas/TransactionCallbackEvent'
+      - $ref: '#/components/schemas/ClientCallbackEvent'
+      - $ref: '#/components/schemas/PartyCallbackEvent'
+      - $ref: '#/components/schemas/RemittanceCallbackEvent'
+      - $ref: '#/components/schemas/AccountCallbackEvent'
+      - $ref: '#/components/schemas/RecipientsCallbackEvent'
+      - $ref: '#/components/schemas/RestrictionsCallbackEvent'
+      - $ref: '#/components/schemas/DocumentCallbackEvent'
+      discriminator:
+        propertyName: resourceType
+        mapping:
+          TRANSACTIONS: '#/components/schemas/TransactionCallbackEvent'
+          CLIENTS: '#/components/schemas/ClientCallbackEvent'
+          PARTIES: '#/components/schemas/PartyCallbackEvent'
+          REMITTANCE: '#/components/schemas/RemittanceCallbackEvent'
+          ACCOUNTS: '#/components/schemas/AccountCallbackEvent'
+          RECIPIENTS: '#/components/schemas/RecipientsCallbackEvent'
+          RESTRICTIONS: '#/components/schemas/RestrictionsCallbackEvent'
+          DOCUMENTS: '#/components/schemas/DocumentCallbackEvent'
+    TransactionCounterPartyExternalAccountV3:
+      title: External Account
+      description: The external account of the counterparty
+      type: object
+      required:
+      - type
+      - externalAccount
+      properties:
+        type:
+          description: The type of the counterparty account
+          type: string
+          minLength: 1
+        externalAccount:
+          $ref: '#/components/schemas/TransactionCounterPartyExternalAccountDetailsV3'
+    RoutingInformation:
+      type: object
+      required:
+      - routingNumber
+      - transactionType
+      - routingCodeType
+      properties:
+        routingNumber:
+          $ref: '#/components/schemas/RoutingNumber'
+        transactionType:
+          $ref: '#/components/schemas/RoutingInformationTransactionType'
+        routingCodeType:
+          $ref: '#/components/schemas/RoutingCodeType'
+    RestrictionStatus:
+      type: string
+      description: Status of the restriction
+      enum:
+      - ACTIVE
+      - INACTIVE
+    AuthorizationDetails:
+      type: object
+      description: This object holds additional authorization details to apply when sending webhook notifications.
+      properties:
+        clientSecret:
+          type: string
+          description: A confidential string known only to the application and the authorization server.
+          example: a1b2c3d4e5f6g7h8i9j0
+        clientId:
+          type: string
+          description: A public identifier for the application using Auth for authenticating the client.
+          example: '1234567890'
+        tokenEndpoint:
+          type: string
+          description: A reference to a web resource on the internet that specifies the location and mechanism for the identity provider to fetch.
+          example: https://example.com/token
+          format: uri
+    TransactionCounterPartyAccountV3:
+      description: The account details of the counterparty.
+      oneOf:
+      - $ref: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
+      - $ref: '#/components/schemas/TransactionCounterPartyRegisteredAccountV3'
+      - $ref: '#/components/schemas/TransactionCounterPartyCardAccountV3'
+      discriminator:
+        propertyName: type
+        mapping:
+          CHECKING: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
+          SAVINGS: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
+          IBAN: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
+          REGISTERED_ACCOUNT: '#/components/schemas/TransactionCounterPartyRegisteredAccountV3'
+          CARD: '#/components/schemas/TransactionCounterPartyCardAccountV3'
+          NOT_APPLICABLE: '#/components/schemas/TransactionCounterPartyExternalAccountV3'
+    RestrictionsCallbackEvent:
+      title: Restrictions Callback Event
+      allOf:
+      - $ref: '#/components/schemas/WebhookCallbackEventBase'
+      - type: object
+        required:
+        - resourceType
+        - resourceObject
+        properties:
+          resourceType:
+            type: string
+            default: RESTRICTIONS
+          resourceObject:
+            $ref: '#/components/schemas/RestrictionsCallbackResource'
+      example:
+        summary: Account Restriction Added callback event
+        description: This is an example of an account restriction added event to be sent to a client
+        value:
+          eventId: '12345'
+          eventType: ACCOUNT_RESTRICTION
+          subEventType: ADDED
+          resourceType: RESTRICTIONS
+          resource: '{"id":"17bgc55243d24e589c1eca6b72325890","requestId":"05742401-088f-41b5-9c73-32e5a502ccde","restrictionId":"befcda2d-b351-48d2-9e4d-e9ef0a07890d","restrictionReason":"CLIENT_REQUESTED","restrictionType":"DEBITS"}'
+          resourceObject:
+            id: 17bgc55243d24e589c1eca6b72325890
+            requestId: 05742401-088f-41b5-9c73-32e5a502ccde
+            restrictionId: befcda2d-b351-48d2-9e4d-e9ef0a07890d
+            restrictionReason: CLIENT_REQUESTED
+            restrictionType: DEBITS
+    WebhookCallbackEventBase:
+      type: object
+      required:
+      - eventId
+      - eventType
+      - resourceType
+      properties:
+        eventId:
+          type: string
+          description: Unique identifier of the event
+          example: '1863'
+        eventType:
+          $ref: '#/components/schemas/WebhookCallbackEventType'
+        resourceType:
+          $ref: '#/components/schemas/ResourceObjectType'
+        resource:
+          type: string
+          description: Json formatted string containing the notification details
+          example: '{"id": "UcMyVrUdXvZVhjUt","clientId": "0005191231","type": "ACH","debtorAccountId": "10de11e98255479dbf43fd77ff55aa51","recipientId": null,"amount": "0.1","currency": "USD","status": "REJECTED","transactionReferenceId": null,"paymentDate": "2023-11-23","ledgerBalance": "100.0"}'
+        error:
+          $ref: '#/components/schemas/ApiErrorV2'
+    OriginatingTransactionV3:
+      type: object
+      description: Details of the originating transaction for fees, returns, or linked transactions.
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the originating transaction.
+          example: ff1b61523ea74c59b4ae606c6497cd52
+        type:
+          $ref: '#/components/schemas/PaymentTypeResponseV3'
+    AccountCallbackEvent:
+      title: Account Callback Event
+      allOf:
+      - $ref: '#/components/schemas/WebhookCallbackEventBase'
+      - type: object
+        required:
+        - resourceType
+        - resourceObject
+        properties:
+          resourceType:
+            type: string
+            default: ACCOUNTS
+          resourceObject:
+            $ref: '#/components/schemas/AccountCallbackResource'
+      example:
+        summary: Account Created callback event
+        description: This is an example of an account created event to be sent to a c1 client
+        value:
+          eventId: '13897'
+          eventType: ACCOUNT_CREATED
+          resourceType: ACCOUNTS
+          resource: '{"id":"6925f3ceaf364353a381499c8626ae0c","clientId":"1000020694","label":"Taxes2371","state":"OPEN","category":"LIMITED_DDA","createdAt":"2024-10-09T10:47:06.167963Z","paymentRoutingInformation":{"accountNumber":"12345678","country":"US","routingInformation":[{"routingCodeType":"ABA","routingNumber":"280000240"}]}}'
+          resourceObject:
+            resourceType: ACCOUNTS
+            id: 6925f3ceaf364353a381499c8626ae0c
+            clientId: '1000020694'
+            label: Taxes2371
+            state: OPEN
+            category: LIMITED_DDA
+            createdAt: '2024-10-09T10:47:06.167963Z'
+            paymentRoutingInformation:
+              accountNumber: '12345678'
+              country: US
+              routingInformation:
+              - routingCodeType: ABA
+                routingNumber: '280000240'
+    ApiErrorV2:
+      type: object
+      description: Schema representing a version 2 API error, including title, HTTP status, and additional context.
+      required:
+      - title
+      properties:
+        title:
+          type: string
+          description: Short humanly-readable title of the error
+          example: BAD_REQUEST
+          minLength: 1
+          maxLength: 512
+        httpStatus:
+          type: integer
+          description: HTTP status code
+          minimum: 100
+          maximum: 599
+          format: int32
+          example: 400
+        traceId:
+          type: string
+          description: Internal assigned traced identifier
+          minLength: 0
+          maxLength: 512
+        requestId:
+          type: string
+          description: Client provided request identifier
+          minLength: 0
+          maxLength: 512
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorReasonV2'
+          description: Provides additional context and detail on the validation errors
+          minItems: 0
+          maxItems: 100
+    AggregateOverdrawn:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: Aggregated overdrawn amount
+          pattern: '[-.0-9]+'
+          example: '-1000'
+        percent:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          description: Aggregated overdrawn percentage
+          example: '80'
+        maxAmount:
+          type: string
+          description: Maximum overdrawn limit
+          pattern: '[-.0-9]+'
+          example: '-10000'
+        alertPercent:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          description: Denotes the alert percentage at which clients would be notified when aggregate overdraft breaches this limit
+          example: '80'
+        alertResetPercent:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          description: Denotes the alert percentage reset at which clients would stop getting alerted when aggregate overdraft is within this limit
+          example: '70'
+        restrictPercent:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          description: Denotes the restrict percentage at which clients transactions would be rejected when aggregate overdraft breaches this limit
+          example: '120'
+        restrictResetPercent:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          description: Denotes the restrict percentage reset at which clients transactions would stop being rejected when aggregate overdraft is within this limit
+          example: '110'
+    RoutingNumber:
+      type: string
+      minLength: 1
+      maxLength: 13
+      pattern: ^[A-Za-z0-9]([A-Za-z0-9\-]{0,11})[A-Za-z0-9]$
+      description: Routing number corresponding to the routing code type
+      example: '021000021'
+    TransactionCounterPartyAddressDetailsV3:
+      description: The address details of the counterparty.
+      type: object
+      required:
+      - city
+      - country
+      properties:
+        type:
+          description: The type of the counterparty address.
+          type: string
+          example: RESIDENTIAL_ADDRESS
+        buildingNumber:
+          description: Building name or number.
+          type: string
+          example: Apt 2E
+        streetName:
+          description: The street name of the counterparty address.
+          type: string
+          example: 90 Bedford Street
+        city:
+          description: Address city.
+          type: string
+          example: Springfield
+        country:
+          type: string
+          description: Two letter country code based on ISO 3166 standard, includes SEPA regions
+          example: US
+        countrySubDivision:
+          description: State or province code.
+          type: string
+          example: ND
+        postalCode:
+          description: Postal/ZIP code.
+          type: string
+          example: '58008'
+    RoutingInformationV3:
+      description: Routing information for the account.
+      type: object
+      properties:
+        routingNumber:
+          description: Routing number corresponding to the routing code type.
+          type: string
+          example: '541798298'
+        transactionType:
+          $ref: '#/components/schemas/RoutingInformationTransactionType'
+        routingCodeType:
+          $ref: '#/components/schemas/RoutingCodeType'
+    DocumentCallbackEvent:
+      title: Document Callback Event
+      allOf:
+      - $ref: '#/components/schemas/WebhookCallbackEventBase'
+      - type: object
+        required:
+        - resourceType
+        - resourceObject
+        properties:
+          resourceType:
+            type: string
+            default: DOCUMENTS
+          resourceObject:
+            $ref: '#/components/schemas/DocumentCallbackResource'
+      example:
+        summary: Document generated callback event
+        description: This is an example of event to be sent on document generation
+        value:
+          eventId: '12345'
+          eventType: DOCUMENT_GENERATED
+          resourceType: DOCUMENTS
+          resourceObject:
+            documentId: 17bgc55243d24e589c1eca6b72325890
+            documentType: ACCOUNT_CONFIRMATION_LETTER
+            parameters:
+              accountId: 6925f3ceaf364353a381499c8626ae0c
+    TransactionCounterPartyContactDetailsV3:
+      description: Contact details of the counterparty.
+      type: object
+      properties:
+        alternateName:
+          description: The alternate name of the counterparty.
+          type: string
+          example: Monica Downey
+        phoneNumber:
+          description: The phone number of the counterparty.
+          type: string
+          example: '+1234567890'
+        emailAddress:
+          description: The email address of the counterparty.
+          type: string
+          example: example@email.com
+        website:
+          description: The website of the counterparty.
+          type: string
+          example: https://www.example.com
+    TransactionCounterPartyCardAccountV3:
+      title: Card Account
+      description: The card account of the counterparty
+      type: object
+      required:
+      - type
+      - card
+      properties:
+        type:
+          description: The type of the counterparty account
+          type: string
+          minLength: 1
+          default: CARD
+        card:
+          $ref: '#/components/schemas/TransactionCounterPartyCardAccountDetailsV3'
+    RoutingCodeType:
+      type: string
+      enum:
+      - USABA
+      description: Type of routing code.
+      example: USABA
+    ClientCallbackResource:
+      type: object
+      properties:
+        id:
+          description: A client's unique ID
+          type: string
+          example: '1000010400'
+        status:
+          description: The client's status.
+          type: string
+          enum:
+          - APPROVED
+          - DECLINED
+          - INFORMATION_REQUESTED
+          - NEW
+          - REVIEW_IN_PROGRESS
+          - SUSPENDED
+          - TERMINATED
+          example: APPROVED
+        hasOutstandingInformation:
+          description: '`true` if the client has outstanding items, otherwise `false`.'
+          type: boolean
+        customerIdentityStatus:
+          description: The status of the customer identification process.
+          type: string
+          enum:
+          - APPROVED
+          - INFORMATION_REQUESTED
+          - NOT_STARTED
+          - REVIEW_IN_PROGRESS
+        effectiveDate:
+          description: It denotes the date(YYYY-MM-DD) on which the threshold limit is applicable.
+          type: string
+          format: date
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-12-31'
+        limitType:
+          type: string
+          enum:
+          - AGGREGATE_OVERDRAWN
+        aggregateOverdrawn:
+          $ref: '#/components/schemas/AggregateOverdrawn'
+    Subscription:
+      type: object
+      description: The webhooks you are subscribed to. Each subscription contains events about which you are notified via HTTPS request to your pre-configured server URL.
+      required:
+      - eventType
+      properties:
+        eventType:
+          $ref: '#/components/schemas/EventTypeEnum'
+    WebhookRequest:
+      description: Create a webhook
+      type: object
+      required:
+      - subscriptions
+      properties:
+        securityPreferences:
+          $ref: '#/components/schemas/SecurityPreferences'
+        subscriptions:
+          description: List of subscription items called subscription details
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+          minItems: 0
+          maxItems: 100
+        callbackURL:
+          type: string
+          description: The URL to which the webhook will send the event notifications
+          example: https://your-server.com/webhook
+          format: uri
+    GetTransactionCounterPartyV3:
+      type: object
+      properties:
+        id:
+          description: The id of the counterparty.
+          type: string
+          example: 8f4e2b3c-1d5a-4c3b-9f0a-123456789abc
+        clientId:
+          description: The client identifier associated with the counterparty.
+          type: string
+          example: '0030000131'
+        type:
+          description: The type of the counterparty.
+          type: string
+          example: RECIPIENT
+        partyDetails:
+          $ref: '#/components/schemas/TransactionCounterPartyDetailsV3'
+        account:
+          $ref: '#/components/schemas/TransactionCounterPartyAccountV3'
+    RestrictionType:
+      type: string
+      description: Restriction type
+      enum:
+      - CREDITS
+      - DEBITS
+      - DEBIT_CREDIT
+      - DIRECT_DEBIT
+      - HOLD
+    AccountNumber:
+      type: string
+      pattern: ^[A-Z0-9]{1,35}$
+      description: Demand Deposit Account number or International Account Number (IBAN).
+      example: '021000021'
+    TransactionCounterPartyExternalAccountDetailsV3:
+      description: The external account details of the counterparty.
+      type: object
+      properties:
+        number:
+          description: The number of the counterparty account.
+          type: string
+          minLength: 1
+          example: 021009052
+        bankName:
+          description: The bank name of the counterparty external account.
+          type: string
+          minLength: 1
+          example: Bank of America
+        branchCode:
+          description: The branch code of the counterparty external account.
+          type: string
+          minLength: 1
+          example: '123456789'
+        routingInformation:
+          type: array
+          description: Routing information details of the counterparty external account.
+          items:
+            $ref: '#/components/schemas/RoutingInformationV3'
+          minItems: 0
+        currency:
+          description: The currency of the counterparty external account in ISO 4217 Alpha-3 Currency Code format.
+          type: string
+          minLength: 1
+          maxLength: 3
+          example: USD
+        country:
+          description: The country of the counterparty external account. Two letter country code based on ISO 3166 standard
+          type: string
+          minLength: 1
+          example: US
+    RecipientAccount:
+      type: object
+      required:
+      - number
+      - countryCode
+      description: Bank account details of the recipient.
+      properties:
+        number:
+          $ref: '#/components/schemas/AccountNumber'
+        type:
+          $ref: '#/components/schemas/AccountType'
+        routingInformation:
+          type: array
+          description: Routing information.
+          items:
+            $ref: '#/components/schemas/RoutingInformation'
+          minItems: 1
+          maxItems: 3
+        currencyCode:
+          $ref: '#/components/schemas/CurrencyCode'
+        countryCode:
+          $ref: '#/components/schemas/CountryCode'
+    CorrectedValue:
+      type: object
+      required:
+      - field
+      - value
+      properties:
+        field:
+          type: string
+          description: The field to be fixed
+          example: ACCTNUM
+        value:
+          type: string
+          description: The correct value for this field
+          example: '1271271448'
+    RecipientsCallbackResource:
+      type: object
+      properties:
+        id:
+          description: A unique recipient ID
+          type: string
+          example: 334dc63b-3f53-45e7-878b-bdf70c5a875a
+        clientId:
+          description: A client's unique ID
+          type: string
+          example: '1000010400'
+        type:
+          $ref: '#/components/schemas/RecipientType'
+        status:
+          $ref: '#/components/schemas/RecipientStatus'
+        account:
+          $ref: '#/components/schemas/RecipientAccount'
+        updatedAt:
+          description: The date and time the recipient was last updated
+          type: string
+          format: date-time
+          example: 2023-02-22T16:05:46.952+0000
+        validationExpiresAt:
+          description: The date and time when the micro-deposit validation is going to expire.
+          type: string
+          format: date-time
+          example: '2024-09-20T15:33:13.448689Z'
+        daysUntilExpiry:
+          description: The number of days remaining until a expiration date.
+          type: integer
+          example: 15
+        description:
+          description: The Description of the updated status.
+          type: string
+          example: Linked Account activated
+    TransactionCallbackEvent:
+      title: Transaction Callback Event
+      allOf:
+      - $ref: '#/components/schemas/WebhookCallbackEventBase'
+      - type: object
+        required:
+        - resourceType
+        - resourceObject
+        properties:
+          resourceType:
+            type: string
+            default: TRANSACTIONS
+          resourceObject:
+            $ref: '#/components/schemas/TransactionCallbackResource'
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Bad Request
+              summary: Bad Request
+              value:
+                title: Bad Request
+                httpStatus: 400
+                error: BAD_REQUEST
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Internal Server Error
+              summary: Internal Server Error
+              value:
+                title: Internal Server Error
+                httpStatus: 500
+                error: INTERNAL_SERVER_ERROR
+    '503':
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Service Unavailable
+              summary: Service Unavailable
+              value:
+                title: Service Unavailable
+                httpStatus: 503
+                error: SERVICE_UNAVAILABLE
+    '404':
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Not Found
+              summary: Not Found
+              value:
+                title: Not Found
+                httpStatus: 404
+                error: NOT_FOUND
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Unauthorized
+              summary: Unauthorized
+              value:
+                title: Unauthorized Request
+                httpStatus: 401
+                error: UNAUTHORIZED
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Forbidden
+              summary: Forbidden
+              value:
+                title: Forbidden
+                httpStatus: 403
+                error: FORBIDDEN
   examples:
-    CreateAWebhookRes:
-      summary: Create a new webhook response
-      description: create a new webhook response
-      value:
-        id: 944803b0-f1c2-4b28-91ce-8985b1f317a7
-        subscriptions:
-        - eventType: TRANSACTION_COMPLETED
-        status: ACTIVE
-        createdAt: '2023-10-29T17:59:13.699Z'
-        updatedAt: '2023-10-29T17:59:13.699Z'
-    ChangeStatusOfAWebhookRes:
-      summary: Changing status of a webhook
-      description: Request to change the status of a webhook
-      value:
-        id: 944803b0-f1c2-4b28-91ce-8985b1f317a7
-        subscriptions:
-        - eventType: TRANSACTION_COMPLETED
-        - eventType: TRANSACTION_FAILED
-        status: INACTIVE
-        createdAt: '2023-10-19T01:25:44.219Z'
-        updatedAt: '2023-10-19T01:25:44.219Z'
-    AddSubscriptionsToAWebhookRes:
-      summary: Adding subscription(s) to a webhook
-      description: Request to add new subscription(s) to an existing webhook
-      value:
-        id: 944803b0-f1c2-4b28-91ce-8985b1f317a7
-        subscriptions:
-        - eventType: TRANSACTION_COMPLETED
-        - eventType: TRANSACTION_FAILED
-        status: ACTIVE
-        createdAt: '2023-10-19T01:25:44.219Z'
-        updatedAt: '2023-10-19T01:25:44.219Z'
     GetWebhookByIdRes:
       summary: Get a webhook by Id
       description: Get a webhook by Id
@@ -1944,6 +1974,27 @@ components:
           status: ACTIVE
           createdAt: '2023-10-29T18:18:01.714Z'
           updatedAt: '2023-10-29T18:18:01.714Z'
+    ChangeStatusOfAWebhookRes:
+      summary: Changing status of a webhook
+      description: Request to change the status of a webhook
+      value:
+        id: 944803b0-f1c2-4b28-91ce-8985b1f317a7
+        subscriptions:
+        - eventType: TRANSACTION_COMPLETED
+        - eventType: TRANSACTION_FAILED
+        status: INACTIVE
+        createdAt: '2023-10-19T01:25:44.219Z'
+        updatedAt: '2023-10-19T01:25:44.219Z'
+    CreateAWebhookRes:
+      summary: Create a new webhook response
+      description: create a new webhook response
+      value:
+        id: 944803b0-f1c2-4b28-91ce-8985b1f317a7
+        subscriptions:
+        - eventType: TRANSACTION_COMPLETED
+        status: ACTIVE
+        createdAt: '2023-10-29T17:59:13.699Z'
+        updatedAt: '2023-10-29T17:59:13.699Z'
     RemoveSubscriptionsFromAWebhookRes:
       summary: Removing subscription(s) from a webhook
       description: Request to remove subscription(s) from a webhook
@@ -1954,91 +2005,40 @@ components:
         status: ACTIVE
         createdAt: '2023-10-19T01:25:44.219Z'
         updatedAt: '2023-10-19T01:25:44.219Z'
-  responses:
-    '400':
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Bad Request
-              summary: Bad Request
-              value:
-                title: Bad Request
-                httpStatus: 400
-                error: BAD_REQUEST
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Internal Server Error
-              summary: Internal Server Error
-              value:
-                title: Internal Server Error
-                httpStatus: 500
-                error: INTERNAL_SERVER_ERROR
-    '404':
-      description: Service Unavailable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Not Found
-              summary: Not Found
-              value:
-                title: Not Found
-                httpStatus: 404
-                error: NOT_FOUND
-    '503':
-      description: Service Unavailable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Service Unavailable
-              summary: Service Unavailable
-              value:
-                title: Service Unavailable
-                httpStatus: 503
-                error: SERVICE_UNAVAILABLE
-    '401':
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Unauthorized
-              summary: Unauthorized
-              value:
-                title: Unauthorized Request
-                httpStatus: 401
-                error: UNAUTHORIZED
-    '403':
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Forbidden
-              summary: Forbidden
-              value:
-                title: Forbidden
-                httpStatus: 403
-                error: FORBIDDEN
+    AddSubscriptionsToAWebhookRes:
+      summary: Adding subscription(s) to a webhook
+      description: Request to add new subscription(s) to an existing webhook
+      value:
+        id: 944803b0-f1c2-4b28-91ce-8985b1f317a7
+        subscriptions:
+        - eventType: TRANSACTION_COMPLETED
+        - eventType: TRANSACTION_FAILED
+        status: ACTIVE
+        createdAt: '2023-10-19T01:25:44.219Z'
+        updatedAt: '2023-10-19T01:25:44.219Z'
+  parameters:
+    pageNo:
+      name: page
+      in: query
+      description: Page Number
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+        maximum: 1000000
+        format: int32
+      required: false
+    pageSize:
+      name: limit
+      in: query
+      description: Number of records per page.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 25
+        default: 25
+        format: int32
+      required: false
 x-jpmc-securityDefinitions:
   MutualTLS:
     type: x509
