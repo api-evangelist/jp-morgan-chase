@@ -1,24 +1,22 @@
-# Kin Score artifact — jp-morgan-chase — 2026-08-24T171257
+# Kin Score artifact — jp-morgan-chase — 2026-09-24T090406
 # The API Evangelist rating (https://github.com/api-evangelist/kin-score). Generated; do not edit.
 ---
 kin_score:
   slug: jp-morgan-chase
-  schema_version: 0.13.0
-  scored_at: '2026-08-24'
-  run_ts: 2026-08-24T171257
-  composite: 49.2
+  schema_version: 0.22.0
+  scored_at: '2026-09-24'
+  run_ts: 2026-09-24T090406
+  composite: 53.4
   band: developing
   facets:
-    discoverability: 81.5
-    contract_quality: 68.8
-    governance: 0.0
+    discoverability: 75.9
+    contract_quality: 74.9
+    contract_governance: 0.0
     operational_transparency: 42.1
     developer_ergonomics: 59.5
-    commercial_clarity: 36.8
-    contract_governance: 0.0
     access_clarity: 36.8
   agent_readiness:
-    score: 40.6
+    score: 43.8
     band: agent-native
     dimensions:
       spec_presence: true
@@ -30,7 +28,7 @@ kin_score:
       error_semantics: verified
       openapi_examples: verified
       rate_limit_signal: verified
-      event_surface_described: derived
+      event_surface_described: true
       agent_skills: false
       well_known_catalog: false
       consent_identity: false
@@ -48,7 +46,7 @@ kin_score:
     matched_via: tags
   provenance:
     contracts:
-      total: 26
+      total: 65
       derived: 0
-      coverage: 100.0
+      coverage: 0.0
       callable: 100.0
