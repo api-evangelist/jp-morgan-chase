@@ -117,6 +117,87 @@ paths:
         '503':
           $ref: '#/components/responses/503V2'
 components:
+  examples:
+    AddDebitCreditRestrictionResponse:
+      summary: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      description: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionType: DEBIT_CREDIT
+    AddDebitCreditRestrictionRequest:
+      summary: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      description: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      value:
+        restrictionType: DEBIT_CREDIT
+    RemoveDebitsRestrictionResponse:
+      summary: Remove a DEBITS restriction on a TRANSACTION_ACCOUNT
+      description: Response for removing a DEBITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+    AddCreditsRestrictionResponse:
+      summary: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
+      description: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionType: CREDITS
+    AddDirectDebitRestrictionRequest:
+      summary: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      description: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      value:
+        restrictionType: DIRECT_DEBIT
+    AddDebitsRestrictionResponse:
+      summary: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
+      description: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionType: DEBITS
+    RemoveDebitCreditRestrictionResponse:
+      summary: Remove a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      description: Response for removing a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+    RemoveCreditsRestrictionResponse:
+      summary: Remove a CREDITS restriction on a TRANSACTION_ACCOUNT
+      description: Response for removing a CREDITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+    AddCreditsRestrictionRequest:
+      summary: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
+      description: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        restrictionType: CREDITS
+    AddDirectDebitRestrictionResponse:
+      summary: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      description: Response for adding a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionType: DIRECT_DEBIT
+    AddDebitsRestrictionRequest:
+      summary: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
+      description: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
+      value:
+        restrictionType: DEBITS
+    RemoveDirectDebitRestrictionResponse:
+      summary: Remove a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      description: Response for removing a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
+      value:
+        id: 22f51825-9397-4eba-be5e-60ce37dbad97
+        requestId: c548d951-61ad-47eb-ad5e-13809617738d
+        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
   responses:
     404V2:
       description: Not Found
@@ -130,8 +211,8 @@ components:
           example:
             title: Not Found
             httpStatus: 404
-    403V2:
-      description: Forbidden
+    503V2:
+      description: Service Unavailable
       headers:
         request-id:
           $ref: '#/components/headers/requestId'
@@ -140,8 +221,8 @@ components:
           schema:
             $ref: '#/components/schemas/ApiErrorV2'
           example:
-            title: Forbidden
-            httpStatus: 403
+            title: Service Unavailable
+            httpStatus: 503
     500V2:
       description: Internal Server Error
       headers:
@@ -154,6 +235,18 @@ components:
           example:
             title: Internal Server Error
             httpStatus: 500
+    403V2:
+      description: Forbidden
+      headers:
+        request-id:
+          $ref: '#/components/headers/requestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorV2'
+          example:
+            title: Forbidden
+            httpStatus: 403
     400V2:
       description: Bad Request
       headers:
@@ -178,175 +271,14 @@ components:
           example:
             title: Unauthorized Request
             httpStatus: 401
-    503V2:
-      description: Service Unavailable
-      headers:
-        request-id:
-          $ref: '#/components/headers/requestId'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorV2'
-          example:
-            title: Service Unavailable
-            httpStatus: 503
-  examples:
-    AddDirectDebitRestrictionResponse:
-      summary: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      description: Response for adding a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionType: DIRECT_DEBIT
-    AddCreditsRestrictionRequest:
-      summary: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
-      description: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        restrictionType: CREDITS
-    RemoveDebitsRestrictionResponse:
-      summary: Remove a DEBITS restriction on a TRANSACTION_ACCOUNT
-      description: Response for removing a DEBITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-    AddDebitsRestrictionResponse:
-      summary: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
-      description: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionType: DEBITS
-    RemoveCreditsRestrictionResponse:
-      summary: Remove a CREDITS restriction on a TRANSACTION_ACCOUNT
-      description: Response for removing a CREDITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-    AddDebitsRestrictionRequest:
-      summary: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
-      description: Add a DEBITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        restrictionType: DEBITS
-    AddDebitCreditRestrictionResponse:
-      summary: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      description: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionType: DEBIT_CREDIT
-    RemoveDebitCreditRestrictionResponse:
-      summary: Remove a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      description: Response for removing a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-    AddDirectDebitRestrictionRequest:
-      summary: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      description: Add a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      value:
-        restrictionType: DIRECT_DEBIT
-    AddDebitCreditRestrictionRequest:
-      summary: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      description: Add a DEBIT_CREDIT restriction on a TRANSACTION_ACCOUNT
-      value:
-        restrictionType: DEBIT_CREDIT
-    AddCreditsRestrictionResponse:
-      summary: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
-      description: Add a CREDITS restriction on a TRANSACTION_ACCOUNT
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-        restrictionType: CREDITS
-    RemoveDirectDebitRestrictionResponse:
-      summary: Remove a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      description: Response for removing a DIRECT_DEBIT restriction on a LIMITED_DDA_PAYMENTS account
-      value:
-        id: 22f51825-9397-4eba-be5e-60ce37dbad97
-        requestId: c548d951-61ad-47eb-ad5e-13809617738d
-        restrictionId: 4c89fa2f-f452-4ca3-86cf-851362370357
-  headers:
-    requestId:
-      description: Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided
-      schema:
-        type: string
-      example: efeacff8-fd2c-4f54-a12e-2a8f90d4d325
-  parameters:
-    configurationIdInHeader:
-      name: configuration-id
-      in: header
-      description: Unique identifier for the program configuration used for the request.
-      required: false
-      example: 549ccb74-708d-4f6b-ab21-64054abd828d
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 36
-    requestIdInHeader:
-      name: request-id
-      in: header
-      description: Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided
-      required: false
-      example: efeacff8-fd2c-4f54-a12e-2a8f90d4d325
-      schema:
-        type: string
-        maxLength: 36
-        minLength: 1
-    accountIdInPath:
-      name: id
-      in: path
-      description: Unique account identifier
-      schema:
-        type: string
-        maxLength: 34
-      required: true
-      example: b316151f575e4c1e9f548f1b40aae462
-    restrictionIdInPath:
-      name: restrictionId
-      in: path
-      description: Unique identifier for the restriction
-      required: true
-      schema:
-        $ref: '#/components/schemas/RestrictionId'
   schemas:
-    ApiErrorReasonV2:
+    RemoveAccountRestrictionResponseV2:
       type: object
-      description: Schema representing detailed reasons for an API error, including code, location, and message.
       required:
-      - message
+      - restrictionId
       properties:
-        code:
-          type: string
-          example: '11000'
-          description: Short code that identifies the error - publicly cataloged and documented
-          minLength: 0
-          maxLength: 5
-        location:
-          type: string
-          enum:
-          - BODY
-          - QUERY
-          - PATH
-          - HEADER
-          example: BODY
-          description: Part of the request which is responsible for the reason
-        field:
-          type: string
-          description: The location of the property or parameter in error
-          minLength: 0
-          maxLength: 512
-        message:
-          type: string
-          example: Client with ID 0031234567 does not exist.
-          description: Message describing the reason. This message can typically be displayed to your platform's users, except in cases specified otherwise
-          minLength: 0
-          maxLength: 2048
+        restrictionId:
+          $ref: '#/components/schemas/RestrictionId'
     AddAccountRestrictionResponseV2:
       type: object
       required:
@@ -355,13 +287,6 @@ components:
       properties:
         restrictionId:
           $ref: '#/components/schemas/RestrictionId'
-        restrictionType:
-          $ref: '#/components/schemas/RestrictionType'
-    AddAccountRestrictionRequestV2:
-      type: object
-      required:
-      - restrictionType
-      properties:
         restrictionType:
           $ref: '#/components/schemas/RestrictionType'
     RestrictionType:
@@ -383,19 +308,13 @@ components:
         | `DIRECT_DEBIT` | Restricts direct debit transactions |
 
         '
-    RemoveAccountRestrictionResponseV2:
+    AddAccountRestrictionRequestV2:
       type: object
       required:
-      - restrictionId
+      - restrictionType
       properties:
-        restrictionId:
-          $ref: '#/components/schemas/RestrictionId'
-    RestrictionId:
-      type: string
-      minLength: 1
-      maxLength: 36
-      description: Unique identifier for the restriction
-      example: 4c89fa2f-f452-4ca3-86cf-851362370357
+        restrictionType:
+          $ref: '#/components/schemas/RestrictionType'
     ApiErrorV2:
       type: object
       description: Schema representing a version 2 API error, including title, HTTP status, and additional context.
@@ -432,6 +351,87 @@ components:
           description: Provides additional context and detail on the validation errors
           minItems: 0
           maxItems: 100
+    ApiErrorReasonV2:
+      type: object
+      description: Schema representing detailed reasons for an API error, including code, location, and message.
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          example: '11000'
+          description: Short code that identifies the error - publicly cataloged and documented
+          minLength: 0
+          maxLength: 5
+        location:
+          type: string
+          enum:
+          - BODY
+          - QUERY
+          - PATH
+          - HEADER
+          example: BODY
+          description: Part of the request which is responsible for the reason
+        field:
+          type: string
+          description: The location of the property or parameter in error
+          minLength: 0
+          maxLength: 512
+        message:
+          type: string
+          example: Client with ID 0031234567 does not exist.
+          description: Message describing the reason. This message can typically be displayed to your platform's users, except in cases specified otherwise
+          minLength: 0
+          maxLength: 2048
+    RestrictionId:
+      type: string
+      minLength: 1
+      maxLength: 36
+      description: Unique identifier for the restriction
+      example: 4c89fa2f-f452-4ca3-86cf-851362370357
+  parameters:
+    configurationIdInHeader:
+      name: configuration-id
+      in: header
+      description: Unique identifier for the program configuration used for the request.
+      required: false
+      example: 549ccb74-708d-4f6b-ab21-64054abd828d
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 36
+    accountIdInPath:
+      name: id
+      in: path
+      description: Unique account identifier
+      schema:
+        type: string
+        maxLength: 34
+      required: true
+      example: b316151f575e4c1e9f548f1b40aae462
+    restrictionIdInPath:
+      name: restrictionId
+      in: path
+      description: Unique identifier for the restriction
+      required: true
+      schema:
+        $ref: '#/components/schemas/RestrictionId'
+    requestIdInHeader:
+      name: request-id
+      in: header
+      description: Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided
+      required: false
+      example: efeacff8-fd2c-4f54-a12e-2a8f90d4d325
+      schema:
+        type: string
+        maxLength: 36
+        minLength: 1
+  headers:
+    requestId:
+      description: Unique identifier for the request. This identifier is specific to this particular request. If the same payload is sent in a new request, a new identifier needs to be provided
+      schema:
+        type: string
+      example: efeacff8-fd2c-4f54-a12e-2a8f90d4d325
 x-jpmc-securityDefinitions:
   MutualTLS:
     type: x509

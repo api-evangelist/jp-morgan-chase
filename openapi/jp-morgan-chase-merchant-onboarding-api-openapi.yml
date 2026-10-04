@@ -262,37 +262,67 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    businessProfile:
+    countryCode:
+      description: The telephone dialing prefix for a member country in the International Telecommunication Union (ITU) that is defined by the ITU-T E.164 standard. The code is a combination of one, two or three digits identifying a specific country, countries in an integrated numbering plan, or a specific geographic area.
+      type: string
+      minLength: 0
+      maxLength: 4
+      pattern: ^\+\d{1,3}$
+      title: CountryCode
+    merchantMetadataList:
+      title: MerchantMetadataList
+      type: array
+      minItems: 0
+      description: This is used for specifying an attribute used on a model for collection object that will contain one or more attributes
+      items:
+        $ref: '#/components/schemas/merchantMetadata'
+    locationAddressPatch:
       description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
       type: object
-      title: BusinessProfile
+      title: LocationAddressPatch
       properties:
-        digitalSales:
-          $ref: '#/components/schemas/digitalSales'
-        terminalSales:
-          $ref: '#/components/schemas/terminalSales'
-        businessDescription:
-          description: The detailed description of  an item or service offered for sale by the Merchant.
+        city:
+          description: A portion of a party's address which is the geographic area that is a municipality with legal power granted by a state/province charter.  In this context, it is the City Name of the merchant's postal address as it would appear on a mailing label.
           type: string
-          minLength: 0
-          maxLength: 100
-    merchantMetadata:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      type: object
-      title: MerchantMetaData
-      properties:
-        metadataAttributeName:
-          description: Specifies the label of the attribute associated with a data element when used in a key-value pair.
+          minLength: 1
+          maxLength: 34
+          pattern: ^(?=.*\S{1}).{1,34}$
+        countryCode:
+          description: 'A code that identifies the Country, a Geographic Area, that is recognized as an independent political unit in world affairs. Note: This data element is a child of the Country Code CDE and valid values are based on ISO standards.  In this context, it is the merchant''s mailing address country code as it would appear on an international mailing label.'
+          type: string
+          minLength: 1
+          maxLength: 3
+          pattern: ^[A-Z]{3}$
+        line1:
+          description: 'The portion of a party''s address that is the line of the unstructured (unparsed) geographic street address, containing any of the following: house number, street name, street direction, street type, dwelling type and number, post office box number, rural delivery route number, In Care Of.  In this context, this is the first line of a merchant''s postal address as it would appear on a mailing label.'
+          type: string
+          minLength: 1
+          maxLength: 60
+          pattern: ^(?=.*\S{1}).{1,60}$
+        line2:
+          description: 'The portion of a party''s address that is the line of the unstructured (unparsed) geographic street address, containing any of the following: house number, street name, street direction, street type, dwelling type and number, post office box number, rural delivery route number, In Care Of.  In this context, this is the second line of a merchant''s postal address as it would appear on a mailing label.'
           type: string
           minLength: 0
           maxLength: 60
-          pattern: ^[A-Za-z0-9\s]+$
-        metadataAttributeValueText:
-          description: Provides textual information about the value assigned to a data element when used in a key-value pair.
+          pattern: ^(?=.*\S{1}).{1,60}$
+        postalCode:
+          description: The portion of a party’s address that is the encoded representation of a geographic area to facilitate mail delivery services.  In this context, it is the merchant's postal code as it would appear on a mailing label.
+          type: string
+          minLength: 1
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9 -–]{1,10}$
+        state:
+          description: Classifies a geographic area that represents a first level, legal and political subdivision of a country; for example, Virginia, Bavaria.  In this context, it is the merchant's state or province code, as it would appear on a mailing label.
+          type: string
+          minLength: 2
+          maxLength: 3
+          pattern: ^[a-zA-Z]{2,3}$
+        line3:
+          description: 'The portion of a party''s address that is the line of the unstructured (unparsed) geographic street address, containing any of the following: house number, street name, street direction, street type, dwelling type and number, post office box number, rural delivery route number, In Care Of.  In this context, this is the second line of a merchant''s postal address as it would appear on a mailing label.'
           type: string
           minLength: 0
           maxLength: 60
-          pattern: ^[a-zA-Z0-9._\-#@ ]+$
+          pattern: ^(?=.*\S{1}).{1,60}$
     projectedSalesInfo:
       description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
       type: object
@@ -315,6 +345,40 @@ components:
           type: string
           maxLength: 3
           pattern: ^[A-Z]{3}$
+    accountAlias:
+      description: The alias chosen by the customer to identify the account.
+      type: string
+      pattern: ^[ -~ -ÿ]{1,25}$
+      minLength: 1
+      maxLength: 25
+      title: AccountAlias
+    digitalSales:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      title: DigitalSales
+      properties:
+        usage:
+          description: Indicates a merchant sells goods or services online and can process a payment transaction (card not present) over the internet between the cardholder and the merchant
+          type: boolean
+        website:
+          $ref: '#/components/schemas/website'
+    merchantMetadata:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      title: MerchantMetaData
+      properties:
+        metadataAttributeName:
+          description: Specifies the label of the attribute associated with a data element when used in a key-value pair.
+          type: string
+          minLength: 0
+          maxLength: 60
+          pattern: ^[A-Za-z0-9\s]+$
+        metadataAttributeValueText:
+          description: Provides textual information about the value assigned to a data element when used in a key-value pair.
+          type: string
+          minLength: 0
+          maxLength: 60
+          pattern: ^[a-zA-Z0-9._\-#@ ]+$
     clientId:
       description: A unique internal identifier created by the Firm's small medium business (SMB) unit for referencing a merchant.
       type: string
@@ -322,19 +386,24 @@ components:
       minLength: 10
       maxLength: 10
       title: ClientId
-    website:
-      description: Provides textual information about data for the protocol for specifying addresses on the Internet (Universal Resource Locator - URL) for the merchant's organization.
+    terminalSales:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      title: TerminalSales
+      properties:
+        usage:
+          description: Indicates the point of sale device is enabled to process payment transactions for the merchant with the Firm's payment transaction processing platform.
+          type: boolean
+        merchantManualKeyedTransactionsPercentage:
+          $ref: '#/components/schemas/merchantManualKeyedTransactionsPercentage'
+        deviceLanguageCode:
+          $ref: '#/components/schemas/deviceLanguageCode'
+    phoneNumber:
+      description: 'A locator whose value identifies the formatted numeric address for routing voice or data communications via telephony, to reach a party. NOTE: Telephone number formats may vary; this field can include domestic and international telephone numbers.  This is the telephone number of the person to contact within the merchant''s business.'
       type: string
-      minLength: 0
-      maxLength: 120
-      title: Website
-    pricingTemplate:
-      description: The alternate label for a pre-defined format for a pricing configuration.
-      type: string
-      pattern: ^[A-Za-z0-9!#$%&'()*+,./:;<=>?@$$$$ ^_`{|}~-]{0,50}$
-      minLength: 1
-      maxLength: 50
-      title: PricingTemplate
+      pattern: ^[0-9]{10,10}$
+      maxLength: 10
+      title: PhoneNumber
     payoutAccount:
       description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
       type: object
@@ -377,6 +446,13 @@ components:
           type: string
           maxLength: 3
           pattern: ^[A-Z]{3}$
+    accountName:
+      description: The alias name given to a Merchant Account, labeled as D.B.A., that is different from the legal name.
+      type: string
+      title: AccountName
+      pattern: ^[ -~ -ÿ]{1,40}$
+      minLength: 1
+      maxLength: 40
     Error:
       properties:
         title:
@@ -427,126 +503,61 @@ components:
         requestId: trace-123456
         title: Invaliddata
         traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
-    contactInfoPatch:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      type: object
-      title: ContactInfoPatch
-      properties:
-        email:
-          description: A mail system that allows a party to send and receive messages electronically. An email address is composed of a local part and a domain part. The local part is unique to the individual while the domain or host name must meet specific standards required by the host that administers the email service.
-          type: string
-          minLength: 6
-          maxLength: 60
-        phone:
-          description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-          type: object
-          title: phone
-          properties:
-            phoneNumber:
-              $ref: '#/components/schemas/phoneNumber'
-            countryCode:
-              $ref: '#/components/schemas/countryCode'
-    enterprisePlatformIdentifier:
-      description: A unique identifier representing the profile (configuration) for an external client or internal service of the Firm that facilitates how it interacts with the Firm's services such as onboarding, transaction processing, embedded banking, etc.
+    website:
+      description: Provides textual information about data for the protocol for specifying addresses on the Internet (Universal Resource Locator - URL) for the merchant's organization.
       type: string
-      title: EnterprisePlatformIdentifier
-      pattern: ^[0-9]*$
-      minLength: 10
-      maxLength: 10
-    locationAddressPatch:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      type: object
-      title: LocationAddressPatch
-      properties:
-        city:
-          description: A portion of a party's address which is the geographic area that is a municipality with legal power granted by a state/province charter.  In this context, it is the City Name of the merchant's postal address as it would appear on a mailing label.
-          type: string
-          minLength: 1
-          maxLength: 34
-          pattern: ^(?=.*\S{1}).{1,34}$
-        countryCode:
-          description: 'A code that identifies the Country, a Geographic Area, that is recognized as an independent political unit in world affairs. Note: This data element is a child of the Country Code CDE and valid values are based on ISO standards.  In this context, it is the merchant''s mailing address country code as it would appear on an international mailing label.'
-          type: string
-          minLength: 1
-          maxLength: 3
-          pattern: ^[A-Z]{3}$
-        line1:
-          description: 'The portion of a party''s address that is the line of the unstructured (unparsed) geographic street address, containing any of the following: house number, street name, street direction, street type, dwelling type and number, post office box number, rural delivery route number, In Care Of.  In this context, this is the first line of a merchant''s postal address as it would appear on a mailing label.'
-          type: string
-          minLength: 1
-          maxLength: 60
-          pattern: ^(?=.*\S{1}).{1,60}$
-        line2:
-          description: 'The portion of a party''s address that is the line of the unstructured (unparsed) geographic street address, containing any of the following: house number, street name, street direction, street type, dwelling type and number, post office box number, rural delivery route number, In Care Of.  In this context, this is the second line of a merchant''s postal address as it would appear on a mailing label.'
-          type: string
-          minLength: 0
-          maxLength: 60
-          pattern: ^(?=.*\S{1}).{1,60}$
-        postalCode:
-          description: The portion of a party’s address that is the encoded representation of a geographic area to facilitate mail delivery services.  In this context, it is the merchant's postal code as it would appear on a mailing label.
-          type: string
-          minLength: 1
-          maxLength: 10
-          pattern: ^[a-zA-Z0-9 -–]{1,10}$
-        state:
-          description: Classifies a geographic area that represents a first level, legal and political subdivision of a country; for example, Virginia, Bavaria.  In this context, it is the merchant's state or province code, as it would appear on a mailing label.
-          type: string
-          minLength: 2
-          maxLength: 3
-          pattern: ^[a-zA-Z]{2,3}$
-        line3:
-          description: 'The portion of a party''s address that is the line of the unstructured (unparsed) geographic street address, containing any of the following: house number, street name, street direction, street type, dwelling type and number, post office box number, rural delivery route number, In Care Of.  In this context, this is the second line of a merchant''s postal address as it would appear on a mailing label.'
-          type: string
-          minLength: 0
-          maxLength: 60
-          pattern: ^(?=.*\S{1}).{1,60}$
-    merchantOnboardingPatchRequest:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      type: object
-      title: MerchantOnboardingUpdate
-      properties:
-        onboardRequestStatus:
-          $ref: '#/components/schemas/onboardRequestStatus'
-        clientId:
-          $ref: '#/components/schemas/clientId'
-        accountName:
-          $ref: '#/components/schemas/accountName'
-        accountAlias:
-          $ref: '#/components/schemas/accountAlias'
-        locationAddress:
-          $ref: '#/components/schemas/locationAddressPatch'
-        pricingTemplate:
-          $ref: '#/components/schemas/pricingTemplate'
-        processingTemplate:
-          $ref: '#/components/schemas/ProcessingTemplate'
-        businessProfile:
-          $ref: '#/components/schemas/businessProfile'
-        projectedSalesInfo:
-          $ref: '#/components/schemas/projectedSalesInfo'
-        payoutAccount:
-          $ref: '#/components/schemas/payoutAccount'
-        merchantMetadataList:
-          $ref: '#/components/schemas/merchantMetadataList'
-        contactInfo:
-          $ref: '#/components/schemas/contactInfoPatch'
-        payoutTemplate:
-          $ref: '#/components/schemas/payoutTemplate'
-        enterprisePlatformIdentifier:
-          $ref: '#/components/schemas/enterprisePlatformIdentifier'
-    ProcessingTemplate:
-      description: The alternate label for a pre-defined format for a processing entity configuration.
+      minLength: 0
+      maxLength: 120
+      title: Website
+    onboardRequestStatus:
+      title: OnboardRequestStatus
+      description: "Indicates the onboarding status of the Enterprise Platform or Merchant Account for payment processing.\n | Status                   | Description                                                           |\n |:-------------------------|:-----------------------------------------------------------------------|\n | `DRAFT`                  | Create the request in draft status                                     |\n | `SUBMITTED`              | Update the request in Submit Status for further processing             |\n"
       type: string
-      title: ProcessingTemplate
-      pattern: ^[A-Za-z0-9!#$%&'()*+,./:;<=>?@$$$$ ^_`{|}~-]{0,50}$
-      minLength: 1
-      maxLength: 50
-    merchantManualKeyedTransactionsPercentage:
-      description: Percentage of transactions which will be keyed into the terminal with the card not present (i.e. Mail or Phone Order). User can manually type in the credit card number themselves with a keypad such as if the card stripe is damaged or if they take an order over the phone.
-      type: integer
-      pattern: ^(100|[1-9][0-9]?)$
-      minimum: 1
-      maximum: 100
-      title: MerchantManualKeyedTransactionsPercentage
+      enum:
+      - DRAFT
+      - SUBMITTED
+    deviceLanguageCode:
+      description: Indicates the method of communication, either spoken or written, consisting of the use of words in a structured and conventional way. The master set of values is defined by the International Organization for Standardization (ISO) standard 639-3.
+      type: string
+      pattern: ^[a-z]{2}-[A-Z]{2}$
+      maxLength: 5
+      title: DeviceLanguageCode
+    ErrorContext:
+      properties:
+        code:
+          type: string
+          maxLength: 5
+          minLength: 5
+          pattern: ^[0-9]+$
+          title: Code
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+        message:
+          type: string
+          maxLength: 99
+          minLength: 1
+          pattern: ^[\x20-\x7E\xA0-\uFFFF\r\n]+$
+          title: Message
+          description: Human readable textual description of the error
+        location:
+          $ref: '#/components/schemas/LocationType'
+          description: The location of the error occurred in the request.
+        field:
+          type: string
+          maxLength: 99
+          minLength: 1
+          pattern: ^\$?[0-9a-zA-Z-_.()\[\]{}]+$
+          title: Field
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+      type: object
+      required:
+      - message
+      title: ErrorContext
+      description: Error Context model
+      example:
+        code: '10001'
+        field: notificationId
+        location: BODY
+        message: Required field missing - ensure the path, body and headers matches the specification
     locationAddress:
       description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
       type: object
@@ -594,6 +605,39 @@ components:
           minLength: 0
           maxLength: 60
           pattern: ^(?=.*\S{1}).{1,60}$
+    payoutTemplate:
+      description: The label given to the Funds Transfer Instructions (FTI) provided on reports to the merchant.
+      type: string
+      pattern: ^[A-Za-z0-9!#$%&'()*+,./:;<=>?@$$$$ ^_`{|}~-]{0,50}$
+      minLength: 1
+      maxLength: 50
+      title: PayoutTemplate
+    contactInfo:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      title: ContactInfo
+      properties:
+        email:
+          description: A mail system that allows a party to send and receive messages electronically. An email address is composed of a local part and a domain part. The local part is unique to the individual while the domain or host name must meet specific standards required by the host that administers the email service.
+          type: string
+          minLength: 6
+          maxLength: 60
+        phone:
+          description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+          type: object
+          title: phone
+          properties:
+            phoneNumber:
+              $ref: '#/components/schemas/phoneNumber'
+            countryCode:
+              $ref: '#/components/schemas/countryCode'
+    ProcessingTemplate:
+      description: The alternate label for a pre-defined format for a processing entity configuration.
+      type: string
+      title: ProcessingTemplate
+      pattern: ^[A-Za-z0-9!#$%&'()*+,./:;<=>?@$$$$ ^_`{|}~-]{0,50}$
+      minLength: 1
+      maxLength: 50
     LocationType:
       type: string
       enum:
@@ -603,18 +647,90 @@ components:
       - HEADER
       title: LocationType
       description: Location where the error occurred in the request
-    terminalSales:
+    pricingTemplate:
+      description: The alternate label for a pre-defined format for a pricing configuration.
+      type: string
+      pattern: ^[A-Za-z0-9!#$%&'()*+,./:;<=>?@$$$$ ^_`{|}~-]{0,50}$
+      minLength: 1
+      maxLength: 50
+      title: PricingTemplate
+    businessProfile:
       description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
       type: object
-      title: TerminalSales
+      title: BusinessProfile
       properties:
-        usage:
-          description: Indicates the point of sale device is enabled to process payment transactions for the merchant with the Firm's payment transaction processing platform.
-          type: boolean
-        merchantManualKeyedTransactionsPercentage:
-          $ref: '#/components/schemas/merchantManualKeyedTransactionsPercentage'
-        deviceLanguageCode:
-          $ref: '#/components/schemas/deviceLanguageCode'
+        digitalSales:
+          $ref: '#/components/schemas/digitalSales'
+        terminalSales:
+          $ref: '#/components/schemas/terminalSales'
+        businessDescription:
+          description: The detailed description of  an item or service offered for sale by the Merchant.
+          type: string
+          minLength: 0
+          maxLength: 100
+    contactInfoPatch:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      type: object
+      title: ContactInfoPatch
+      properties:
+        email:
+          description: A mail system that allows a party to send and receive messages electronically. An email address is composed of a local part and a domain part. The local part is unique to the individual while the domain or host name must meet specific standards required by the host that administers the email service.
+          type: string
+          minLength: 6
+          maxLength: 60
+        phone:
+          description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+          type: object
+          title: phone
+          properties:
+            phoneNumber:
+              $ref: '#/components/schemas/phoneNumber'
+            countryCode:
+              $ref: '#/components/schemas/countryCode'
+    enterprisePlatformIdentifier:
+      description: A unique identifier representing the profile (configuration) for an external client or internal service of the Firm that facilitates how it interacts with the Firm's services such as onboarding, transaction processing, embedded banking, etc.
+      type: string
+      title: EnterprisePlatformIdentifier
+      pattern: ^[0-9]*$
+      minLength: 10
+      maxLength: 10
+    merchantOnboardingRequest:
+      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
+      title: MerchantOnboardingRequest
+      type: object
+      required:
+      - enterprisePlatformIdentifier
+      - clientId
+      - accountName
+      properties:
+        enterprisePlatformIdentifier:
+          $ref: '#/components/schemas/enterprisePlatformIdentifier'
+        onboardRequestStatus:
+          $ref: '#/components/schemas/onboardRequestStatus'
+        clientId:
+          $ref: '#/components/schemas/clientId'
+        accountName:
+          $ref: '#/components/schemas/accountName'
+        accountAlias:
+          $ref: '#/components/schemas/accountAlias'
+        locationAddress:
+          $ref: '#/components/schemas/locationAddress'
+        pricingTemplate:
+          $ref: '#/components/schemas/pricingTemplate'
+        processingTemplate:
+          $ref: '#/components/schemas/ProcessingTemplate'
+        businessProfile:
+          $ref: '#/components/schemas/businessProfile'
+        projectedSalesInfo:
+          $ref: '#/components/schemas/projectedSalesInfo'
+        payoutAccount:
+          $ref: '#/components/schemas/payoutAccount'
+        merchantMetadataList:
+          $ref: '#/components/schemas/merchantMetadataList'
+        contactInfo:
+          $ref: '#/components/schemas/contactInfo'
+        payoutTemplate:
+          $ref: '#/components/schemas/payoutTemplate'
     merchantOnboardingResponse:
       description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
       title: MerchantOnboardingResponse
@@ -656,61 +772,18 @@ components:
           $ref: '#/components/schemas/payoutTemplate'
         enterprisePlatformIdentifier:
           $ref: '#/components/schemas/enterprisePlatformIdentifier'
-    merchantMetadataList:
-      title: MerchantMetadataList
-      type: array
-      minItems: 0
-      description: This is used for specifying an attribute used on a model for collection object that will contain one or more attributes
-      items:
-        $ref: '#/components/schemas/merchantMetadata'
-    countryCode:
-      description: The telephone dialing prefix for a member country in the International Telecommunication Union (ITU) that is defined by the ITU-T E.164 standard. The code is a combination of one, two or three digits identifying a specific country, countries in an integrated numbering plan, or a specific geographic area.
-      type: string
-      minLength: 0
-      maxLength: 4
-      pattern: ^\+\d{1,3}$
-      title: CountryCode
-    digitalSales:
+    merchantManualKeyedTransactionsPercentage:
+      description: Percentage of transactions which will be keyed into the terminal with the card not present (i.e. Mail or Phone Order). User can manually type in the credit card number themselves with a keypad such as if the card stripe is damaged or if they take an order over the phone.
+      type: integer
+      pattern: ^(100|[1-9][0-9]?)$
+      minimum: 1
+      maximum: 100
+      title: MerchantManualKeyedTransactionsPercentage
+    merchantOnboardingPatchRequest:
       description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
       type: object
-      title: DigitalSales
+      title: MerchantOnboardingUpdate
       properties:
-        usage:
-          description: Indicates a merchant sells goods or services online and can process a payment transaction (card not present) over the internet between the cardholder and the merchant
-          type: boolean
-        website:
-          $ref: '#/components/schemas/website'
-    accountName:
-      description: The alias name given to a Merchant Account, labeled as D.B.A., that is different from the legal name.
-      type: string
-      title: AccountName
-      pattern: ^[ -~ -ÿ]{1,40}$
-      minLength: 1
-      maxLength: 40
-    payoutTemplate:
-      description: The label given to the Funds Transfer Instructions (FTI) provided on reports to the merchant.
-      type: string
-      pattern: ^[A-Za-z0-9!#$%&'()*+,./:;<=>?@$$$$ ^_`{|}~-]{0,50}$
-      minLength: 1
-      maxLength: 50
-      title: PayoutTemplate
-    phoneNumber:
-      description: 'A locator whose value identifies the formatted numeric address for routing voice or data communications via telephony, to reach a party. NOTE: Telephone number formats may vary; this field can include domestic and international telephone numbers.  This is the telephone number of the person to contact within the merchant''s business.'
-      type: string
-      pattern: ^[0-9]{10,10}$
-      maxLength: 10
-      title: PhoneNumber
-    merchantOnboardingRequest:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      title: MerchantOnboardingRequest
-      type: object
-      required:
-      - enterprisePlatformIdentifier
-      - clientId
-      - accountName
-      properties:
-        enterprisePlatformIdentifier:
-          $ref: '#/components/schemas/enterprisePlatformIdentifier'
         onboardRequestStatus:
           $ref: '#/components/schemas/onboardRequestStatus'
         clientId:
@@ -720,7 +793,7 @@ components:
         accountAlias:
           $ref: '#/components/schemas/accountAlias'
         locationAddress:
-          $ref: '#/components/schemas/locationAddress'
+          $ref: '#/components/schemas/locationAddressPatch'
         pricingTemplate:
           $ref: '#/components/schemas/pricingTemplate'
         processingTemplate:
@@ -734,84 +807,11 @@ components:
         merchantMetadataList:
           $ref: '#/components/schemas/merchantMetadataList'
         contactInfo:
-          $ref: '#/components/schemas/contactInfo'
+          $ref: '#/components/schemas/contactInfoPatch'
         payoutTemplate:
           $ref: '#/components/schemas/payoutTemplate'
-    contactInfo:
-      description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-      type: object
-      title: ContactInfo
-      properties:
-        email:
-          description: A mail system that allows a party to send and receive messages electronically. An email address is composed of a local part and a domain part. The local part is unique to the individual while the domain or host name must meet specific standards required by the host that administers the email service.
-          type: string
-          minLength: 6
-          maxLength: 60
-        phone:
-          description: This is used for specifying an attribute used on a model for object that will contain one or more attributes
-          type: object
-          title: phone
-          properties:
-            phoneNumber:
-              $ref: '#/components/schemas/phoneNumber'
-            countryCode:
-              $ref: '#/components/schemas/countryCode'
-    deviceLanguageCode:
-      description: Indicates the method of communication, either spoken or written, consisting of the use of words in a structured and conventional way. The master set of values is defined by the International Organization for Standardization (ISO) standard 639-3.
-      type: string
-      pattern: ^[a-z]{2}-[A-Z]{2}$
-      maxLength: 5
-      title: DeviceLanguageCode
-    onboardRequestStatus:
-      title: OnboardRequestStatus
-      description: "Indicates the onboarding status of the Enterprise Platform or Merchant Account for payment processing.\n | Status                   | Description                                                           |\n |:-------------------------|:-----------------------------------------------------------------------|\n | `DRAFT`                  | Create the request in draft status                                     |\n | `SUBMITTED`              | Update the request in Submit Status for further processing             |\n"
-      type: string
-      enum:
-      - DRAFT
-      - SUBMITTED
-    accountAlias:
-      description: The alias chosen by the customer to identify the account.
-      type: string
-      pattern: ^[ -~ -ÿ]{1,25}$
-      minLength: 1
-      maxLength: 25
-      title: AccountAlias
-    ErrorContext:
-      properties:
-        code:
-          type: string
-          maxLength: 5
-          minLength: 5
-          pattern: ^[0-9]+$
-          title: Code
-          description: JPMC Short code that identifies the error - publicly cataloged and documented
-        message:
-          type: string
-          maxLength: 99
-          minLength: 1
-          pattern: ^[\x20-\x7E\xA0-\uFFFF\r\n]+$
-          title: Message
-          description: Human readable textual description of the error
-        location:
-          $ref: '#/components/schemas/LocationType'
-          description: The location of the error occurred in the request.
-        field:
-          type: string
-          maxLength: 99
-          minLength: 1
-          pattern: ^\$?[0-9a-zA-Z-_.()\[\]{}]+$
-          title: Field
-          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
-      type: object
-      required:
-      - message
-      title: ErrorContext
-      description: Error Context model
-      example:
-        code: '10001'
-        field: notificationId
-        location: BODY
-        message: Required field missing - ensure the path, body and headers matches the specification
+        enterprisePlatformIdentifier:
+          $ref: '#/components/schemas/enterprisePlatformIdentifier'
   securitySchemes:
     BearerAuth:
       type: http

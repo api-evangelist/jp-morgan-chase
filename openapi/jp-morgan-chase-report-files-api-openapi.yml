@@ -107,14 +107,6 @@ paths:
                 $ref: '#/components/schemas/messages'
 components:
   schemas:
-    errorMessage:
-      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
-      type: string
-    responseMessage:
-      description: Long explanation of the response message.
-      type: string
-      readOnly: true
-      example: Request Accepted
     responseStatus:
       description: Request result status.
       type: string
@@ -123,49 +115,6 @@ components:
       enum:
       - SUCCESS
       - ERROR
-    code:
-      description: Short informative code about the error.
-      type: string
-    responseCode:
-      description: Short explanation of the response code.
-      type: string
-      readOnly: true
-      minLength: 2
-      maxLength: 50
-      example: ACCEPTED
-    messages:
-      description: A list of errors and warnings.
-      type: object
-      required:
-      - responseStatus
-      - responseCode
-      properties:
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        validationErrors:
-          type: array
-          minItems: 0
-          description: Information about errors occurred in transaction validation
-          items:
-            $ref: '#/components/schemas/validationMessage'
-    validationMessage:
-      description: Object containing information about transaction validation
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/errorMessage'
-        entity:
-          description: Information about the entity that experienced an error.
-          type: string
     adfsError:
       description: Object containing information in the file
       type: object
@@ -186,6 +135,57 @@ components:
           description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
           type: string
           example: the signature could not be verified
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
+      type: string
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in transaction validation
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    code:
+      description: Short informative code about the error.
+      type: string
     fileContent:
       description: Provide texual information about the values stored in a file
       type: string

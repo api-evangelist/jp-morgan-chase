@@ -232,23 +232,168 @@ paths:
                 $ref: '#/components/schemas/messages'
 components:
   schemas:
-    reportAttributeName:
-      description: The name of the attribute in the report.
+    scheduleFrequencyAdhoc:
+      title: adhocScheduleFrequency
+      description: 'Ad-hoc report generation frequency for one-time reports. Allowed values for ADHOC reports: adhoc.'
       type: string
+      enum:
+      - adhoc
+      example: adhoc
+    reportSection:
+      description: The label given as a header for the section.
+      type: object
+      required:
+      - sectionReportTypeName
+      properties:
+        sectionTitle:
+          description: The name of the section within the report.
+          type: string
+        sectionReportTypeName:
+          description: The report type name of the section within the report.
+          type: string
+        sectionSelectedFields:
+          type: array
+          minItems: 0
+          description: Section Selected Fields List
+          items:
+            $ref: '#/components/schemas/selectedFields'
+        sectionSortOrderList:
+          type: array
+          minItems: 0
+          description: Section Selected Fields List
+          items:
+            $ref: '#/components/schemas/sortOrder'
+        sectionFilterAttributeList:
+          type: array
+          minItems: 0
+          description: Section Selected Fields List
+          items:
+            $ref: '#/components/schemas/filterAttribute'
+        sectionReportTypeId:
+          description: The report type identifier of the section within the report.
+          type: string
+    filterAttribute:
+      description: Report Detail
+      type: object
+      required:
+      - reportAttributeName
+      - filterAttributeCode
+      properties:
+        reportAttributeName:
+          $ref: '#/components/schemas/reportAttributeName'
+        filterAttributeCode:
+          description: The filter criteria to filter the report. For example, filterAttributeCode=> Payment Submitted, Supported functions for filter=> =,!=, &lt;,&gt;, IN, and NOT IN
+          type: string
+    lastPage:
+      description: Indicates the BOOLEAN value to signify whether or not the response is the final page of results.
+      type: boolean
+      example: true
+    reportConfigurationName:
+      description: The merchant defined name of the report configuration.
+      type: string
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
+      type: string
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in transaction validation
+          items:
+            $ref: '#/components/schemas/validationMessage'
     reportFileName:
       description: The merchant defined name for report file. By default=> "Entity ID". "Report Type" . "frequency". "From Date YYYY-MM-DD". "To Date YYYY-MM-DD"
       type: string
-    sectionRowCountDisplayIndicator:
-      description: Indicates the BOOLEAN value to display row count for each report section. This field is only applicable when the report is generated in PDF format.
-      type: boolean
-    responseStatus:
-      description: Request result status.
+    reportTypeNames:
+      type: array
+      minItems: 0
+      description: The names of the report types.
+      items:
+        type: string
+    scheduleFrequencyScheduled:
+      title: scheduledFrequency
+      description: Recurring scheduled report generation frequency.
       type: string
-      readOnly: true
-      example: SUCCESS
       enum:
-      - SUCCESS
-      - ERROR
+      - daily
+      - weekly|mon
+      - monthly|12
+      - mtd
+      - monthly-fiscal
+      example: daily
+    csvColumnNameDisplayIndicator:
+      description: Indicates the BOOLEAN value to display column name in the report.
+      type: boolean
+    reportSections:
+      type: array
+      minItems: 0
+      description: The label given as a header for the section.
+      items:
+        $ref: '#/components/schemas/reportSection'
+    reportConfigurationList:
+      description: reportConfigurationList
+      type: object
+      properties:
+        next:
+          $ref: '#/components/schemas/next'
+        summarizedReportConfigurations:
+          type: array
+          minItems: 0
+          description: Array of reportConfiguration object.
+          items:
+            $ref: '#/components/schemas/reportConfiguration'
+        lastPage:
+          $ref: '#/components/schemas/lastPage'
+    entityType:
+      description: Codifies the level of the merchant relationship as it relates to the acquiring account.
+      type: string
+    reportFormatList:
+      type: array
+      minItems: 0
+      description: Format of the report. Default value is CSV
+      items:
+        $ref: '#/components/schemas/reportFormat'
+    sortOrder:
+      description: Sort Order
+      type: object
+      required:
+      - reportAttributeName
+      - sortOrderCode
+      properties:
+        reportAttributeName:
+          $ref: '#/components/schemas/reportAttributeName'
+        sortOrderCode:
+          description: 'Indicates the arrangement of items based on specified criteria such as alpabetical, numerical or organise data in a specific sequence. Allowed values: asc and desc'
+          type: string
+    validationMessage:
+      description: Object containing information about transaction validation
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
+          type: string
+    fileHeader:
+      description: The  textual information in the first row of a file. By default=> EntityId= "Entity ID",Frequency="frequency"
+      type: string
     reportConfigResponse:
       description: Report Configuration Response
       type: object
@@ -300,157 +445,21 @@ components:
           $ref: '#/components/schemas/reportConfigurationName'
         reportFormatList:
           $ref: '#/components/schemas/reportFormatList'
-    reportConfigurationList:
-      description: reportConfigurationList
-      type: object
-      properties:
-        next:
-          $ref: '#/components/schemas/next'
-        summarizedReportConfigurations:
-          type: array
-          minItems: 0
-          description: Array of reportConfiguration object.
-          items:
-            $ref: '#/components/schemas/reportConfiguration'
-        lastPage:
-          $ref: '#/components/schemas/lastPage'
-    reportSection:
-      description: The label given as a header for the section.
-      type: object
-      required:
-      - sectionReportTypeName
-      properties:
-        sectionTitle:
-          description: The name of the section within the report.
-          type: string
-        sectionReportTypeName:
-          description: The report type name of the section within the report.
-          type: string
-        sectionSelectedFields:
-          type: array
-          minItems: 0
-          description: Section Selected Fields List
-          items:
-            $ref: '#/components/schemas/selectedFields'
-        sectionSortOrderList:
-          type: array
-          minItems: 0
-          description: Section Selected Fields List
-          items:
-            $ref: '#/components/schemas/sortOrder'
-        sectionFilterAttributeList:
-          type: array
-          minItems: 0
-          description: Section Selected Fields List
-          items:
-            $ref: '#/components/schemas/filterAttribute'
-        sectionReportTypeId:
-          description: The report type identifier of the section within the report.
-          type: string
-    lastPage:
-      description: Indicates the BOOLEAN value to signify whether or not the response is the final page of results.
-      type: boolean
-      example: true
-    updateTimestamp:
-      description: Indicates the specific time of the day ( in hour, minute and second) when the configuration was most recently updated.
-      type: string
-    scheduleFrequencyScheduled:
-      title: scheduledFrequency
-      description: Recurring scheduled report generation frequency.
-      type: string
-      enum:
-      - daily
-      - weekly|mon
-      - monthly|12
-      - mtd
-      - monthly-fiscal
-      example: daily
-    errorMessage:
-      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
-      type: string
-    entityIds:
-      type: array
-      minItems: 0
-      description: Indicates the array of applicable processing entities for which the reporting data  is required.
-      items:
-        $ref: '#/components/schemas/transactionProcessingEntityIdentifier'
-    totalRowCountDisplayIndicator:
-      description: Indicates the BOOLEAN value to display total number of row count in the report for all sections. This field is only applicable when the report is generated in PDF format.
-      type: boolean
-    reportHeader:
-      description: The header of the report file. By default=> entityId= "Entity ID", ReportTypeName= "Report Type"  , Frequency="frequency", FromDate="From Date YYYY-MM-DD" , ToDate= "To Date YYYY-MM-DD " , GenerationDate= "Generation Date YYYY-MM-DD" , GenerationTime= "Generation Time HH:MM:SS"
-      type: string
     code:
       description: Short informative code about the error.
       type: string
-    validationMessage:
-      description: Object containing information about transaction validation
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/errorMessage'
-        entity:
-          description: Information about the entity that experienced an error.
-          type: string
-    frequencyConfig:
-      description: Frequency configuration.
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/frequencyConfigAdhoc'
-      - $ref: '#/components/schemas/frequencyConfigScheduled'
-      discriminator:
-        propertyName: scheduleFrequency
-        mapping:
-          adhoc: '#/components/schemas/frequencyConfigAdhoc'
-          daily: '#/components/schemas/frequencyConfigScheduled'
-          weekly|mon: '#/components/schemas/frequencyConfigScheduled'
-          monthly|12: '#/components/schemas/frequencyConfigScheduled'
-          mtd: '#/components/schemas/frequencyConfigScheduled'
-          monthly-fiscal: '#/components/schemas/frequencyConfigScheduled'
-    reportDescription:
-      description: The textual description of the report.
+    reportHeader:
+      description: The header of the report file. By default=> entityId= "Entity ID", ReportTypeName= "Report Type"  , Frequency="frequency", FromDate="From Date YYYY-MM-DD" , ToDate= "To Date YYYY-MM-DD " , GenerationDate= "Generation Date YYYY-MM-DD" , GenerationTime= "Generation Time HH:MM:SS"
       type: string
-    frequencyConfigScheduled:
-      description: Scheduled frequency configuration (Daily/Weekly|Mon/Monthly|12/MTD/Monthly Fiscal).
-      title: scheduled
-      type: object
-      required:
-      - scheduleFrequency
-      - reportFileScheduledTime
-      properties:
-        scheduleFrequency:
-          $ref: '#/components/schemas/scheduleFrequencyScheduled'
-        reportFileScheduledTime:
-          description: Designates the hour, minute, and second boundary to which the firm is expected to send the report file to customer.
-          type: string
-          example: 09:00:00
-        reportingPeriodStartTime:
-          description: Designates the beginning hour, minute, and second boundary to which the report data pertains.
-          type: string
-          example: '23:00:00'
-        reportLag:
-          description: 'Indicates the number of day(s) by which the report generation should be postponed. Allowed values: 1,2,3,4,5.'
-          type: string
-          example: '1'
-    fileDelimiter:
-      description: 'Indicates the demarcation operator to separate and distinguish individual data fields wthin a report, facilitating structred organization and retrieval of information. Allowed values: comma[,], pipe[|], and tab[->]'
+    totalRowCountDisplayIndicator:
+      description: Indicates the BOOLEAN value to display total number of row count in the report for all sections. This field is only applicable when the report is generated in PDF format.
+      type: boolean
+    reportConfigStatus:
+      description: The status of the report configuration.
       type: string
-    reportTypeNames:
-      type: array
-      minItems: 0
-      description: The names of the report types.
-      items:
-        type: string
-    responseMessage:
-      description: Long explanation of the response message.
-      type: string
-      readOnly: true
-      example: Request Accepted
+      enum:
+      - Active
+      - Inactive
     frequencyConfigAdhoc:
       description: Adhoc frequency configuration.
       title: adhoc
@@ -470,9 +479,6 @@ components:
           description: Indicates the end date and  time when the report activity begins basis merchant end of the day in standard UTC format.This field includes hour (hh), minute (mm), seconds (ss) and date (if timestamp) or year (YYYY), month (MM), and day (DD) (if date).
           type: string
           example: '2020-04-13 23:00:00'
-    fileHeader:
-      description: The  textual information in the first row of a file. By default=> EntityId= "Entity ID",Frequency="frequency"
-      type: string
     reportConfigPutRequest:
       description: reportConfigPutRequest
       type: object
@@ -509,18 +515,73 @@ components:
           $ref: '#/components/schemas/sectionRowCountDisplayIndicator'
         totalRowCountDisplayIndicator:
           $ref: '#/components/schemas/totalRowCountDisplayIndicator'
-    filterAttribute:
-      description: Report Detail
+    sectionRowCountDisplayIndicator:
+      description: Indicates the BOOLEAN value to display row count for each report section. This field is only applicable when the report is generated in PDF format.
+      type: boolean
+    reportTypeIds:
+      type: array
+      minItems: 0
+      description: The unique identifier of the types of reports
+      items:
+        type: string
+    transactionProcessingEntityIdentifier:
+      description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
+      type: string
+    reportDescription:
+      description: The textual description of the report.
+      type: string
+    reportConfigurationId:
+      description: A system generated unique identifier for  report configuration.
+      type: string
+    entityIds:
+      type: array
+      minItems: 0
+      description: Indicates the array of applicable processing entities for which the reporting data  is required.
+      items:
+        $ref: '#/components/schemas/transactionProcessingEntityIdentifier'
+    frequencyConfig:
+      description: Frequency configuration.
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/frequencyConfigAdhoc'
+      - $ref: '#/components/schemas/frequencyConfigScheduled'
+      discriminator:
+        propertyName: scheduleFrequency
+        mapping:
+          adhoc: '#/components/schemas/frequencyConfigAdhoc'
+          daily: '#/components/schemas/frequencyConfigScheduled'
+          weekly|mon: '#/components/schemas/frequencyConfigScheduled'
+          monthly|12: '#/components/schemas/frequencyConfigScheduled'
+          mtd: '#/components/schemas/frequencyConfigScheduled'
+          monthly-fiscal: '#/components/schemas/frequencyConfigScheduled'
+    responseStatus:
+      description: Request result status.
+      type: string
+      readOnly: true
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    adfsError:
+      description: Object containing information in the file
       type: object
       required:
-      - reportAttributeName
-      - filterAttributeCode
+      - errorSource
+      - errorCode
+      - errorDescription
       properties:
-        reportAttributeName:
-          $ref: '#/components/schemas/reportAttributeName'
-        filterAttributeCode:
-          description: The filter criteria to filter the report. For example, filterAttributeCode=> Payment Submitted, Supported functions for filter=> =,!=, &lt;,&gt;, IN, and NOT IN
+        errorSource:
+          description: The label of the component from where the error or warning is generating
           type: string
+          example: APG-EDGE
+        errorCode:
+          description: General status of all resources
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
+          type: string
+          example: the signature could not be verified
     responseCode:
       description: Short explanation of the response code.
       type: string
@@ -528,6 +589,9 @@ components:
       minLength: 2
       maxLength: 50
       example: ACCEPTED
+    fileDelimiter:
+      description: 'Indicates the demarcation operator to separate and distinguish individual data fields wthin a report, facilitating structred organization and retrieval of information. Allowed values: comma[,], pipe[|], and tab[->]'
+      type: string
     selectedFields:
       description: Section Selected Fields
       type: object
@@ -552,28 +616,53 @@ components:
         aggregateConditionText:
           description: Textual representation of the aggregate condition value.
           type: string
-    reportConfigStatus:
-      description: The status of the report configuration.
+    responseMessage:
+      description: Long explanation of the response message.
       type: string
+      readOnly: true
+      example: Request Accepted
+    reportFormat:
+      description: Codifies the document file format as text or binary file format for storing documents on a storage media, especially for use by computers.
+      type: string
+      default: CSV
       enum:
-      - Active
-      - Inactive
-    entityType:
-      description: Codifies the level of the merchant relationship as it relates to the acquiring account.
+      - CSV
+      - PDF
+      - XLSX
+    updateTimestamp:
+      description: Indicates the specific time of the day ( in hour, minute and second) when the configuration was most recently updated.
       type: string
-    csvColumnNameDisplayIndicator:
-      description: Indicates the BOOLEAN value to display column name in the report.
-      type: boolean
+    reportAttributeName:
+      description: The name of the attribute in the report.
+      type: string
     next:
       description: Indicates the reference for the next page for paginated response. Use the value of next to fetch the next batch of report configs. If the lastPage = TRUE; then the next attribute value is not populated.
       type: string
-    scheduleFrequencyAdhoc:
-      title: adhocScheduleFrequency
-      description: 'Ad-hoc report generation frequency for one-time reports. Allowed values for ADHOC reports: adhoc.'
+    fileTrailer:
+      description: The textual information in the last row of a file. By default=> EntityId= "Entity ID ",Frequency="frequency"
       type: string
-      enum:
-      - adhoc
-      example: adhoc
+    frequencyConfigScheduled:
+      description: Scheduled frequency configuration (Daily/Weekly|Mon/Monthly|12/MTD/Monthly Fiscal).
+      title: scheduled
+      type: object
+      required:
+      - scheduleFrequency
+      - reportFileScheduledTime
+      properties:
+        scheduleFrequency:
+          $ref: '#/components/schemas/scheduleFrequencyScheduled'
+        reportFileScheduledTime:
+          description: Designates the hour, minute, and second boundary to which the firm is expected to send the report file to customer.
+          type: string
+          example: 09:00:00
+        reportingPeriodStartTime:
+          description: Designates the beginning hour, minute, and second boundary to which the report data pertains.
+          type: string
+          example: '23:00:00'
+        reportLag:
+          description: 'Indicates the number of day(s) by which the report generation should be postponed. Allowed values: 1,2,3,4,5.'
+          type: string
+          example: '1'
     reportConfiguration:
       description: reportConfiguration
       type: object
@@ -597,95 +686,6 @@ components:
           $ref: '#/components/schemas/updateTimestamp'
         frequencyConfig:
           $ref: '#/components/schemas/frequencyConfig'
-    reportSections:
-      type: array
-      minItems: 0
-      description: The label given as a header for the section.
-      items:
-        $ref: '#/components/schemas/reportSection'
-    reportConfigurationName:
-      description: The merchant defined name of the report configuration.
-      type: string
-    sortOrder:
-      description: Sort Order
-      type: object
-      required:
-      - reportAttributeName
-      - sortOrderCode
-      properties:
-        reportAttributeName:
-          $ref: '#/components/schemas/reportAttributeName'
-        sortOrderCode:
-          description: 'Indicates the arrangement of items based on specified criteria such as alpabetical, numerical or organise data in a specific sequence. Allowed values: asc and desc'
-          type: string
-    fileTrailer:
-      description: The textual information in the last row of a file. By default=> EntityId= "Entity ID ",Frequency="frequency"
-      type: string
-    reportTypeIds:
-      type: array
-      minItems: 0
-      description: The unique identifier of the types of reports
-      items:
-        type: string
-    reportConfigurationId:
-      description: A system generated unique identifier for  report configuration.
-      type: string
-    reportFormat:
-      description: Codifies the document file format as text or binary file format for storing documents on a storage media, especially for use by computers.
-      type: string
-      default: CSV
-      enum:
-      - CSV
-      - PDF
-      - XLSX
-    reportFormatList:
-      type: array
-      minItems: 0
-      description: Format of the report. Default value is CSV
-      items:
-        $ref: '#/components/schemas/reportFormat'
-    messages:
-      description: A list of errors and warnings.
-      type: object
-      required:
-      - responseStatus
-      - responseCode
-      properties:
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        validationErrors:
-          type: array
-          minItems: 0
-          description: Information about errors occurred in transaction validation
-          items:
-            $ref: '#/components/schemas/validationMessage'
-    transactionProcessingEntityIdentifier:
-      description: Identifies a unique entity for transaction processing at the lowest level of the account hierarchy of the backend proprietary merchant acquiring processing platform. This level organizes transaction types for submission, funding, and reporting.
-      type: string
-    adfsError:
-      description: Object containing information in the file
-      type: object
-      required:
-      - errorSource
-      - errorCode
-      - errorDescription
-      properties:
-        errorSource:
-          description: The label of the component from where the error or warning is generating
-          type: string
-          example: APG-EDGE
-        errorCode:
-          description: General status of all resources
-          type: string
-          example: EDG00012
-        errorDescription:
-          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
-          type: string
-          example: the signature could not be verified
   securitySchemes:
     BearerAuth:
       type: http

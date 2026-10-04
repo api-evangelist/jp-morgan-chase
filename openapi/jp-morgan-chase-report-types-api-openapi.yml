@@ -131,52 +131,6 @@ paths:
                 $ref: '#/components/schemas/messages'
 components:
   schemas:
-    reportAttributeName:
-      description: The name of the attribute in the report.
-      type: string
-    errorMessage:
-      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
-      type: string
-    responseMessage:
-      description: Long explanation of the response message.
-      type: string
-      readOnly: true
-      example: Request Accepted
-    reportTypeFields:
-      description: An array containing Report Type Fields.
-      type: object
-      required:
-      - reportTypeFields
-      properties:
-        reportTypeFields:
-          type: array
-          minItems: 0
-          description: Report Type Field Array
-          items:
-            $ref: '#/components/schemas/defaultReportField'
-    responseStatus:
-      description: Request result status.
-      type: string
-      readOnly: true
-      example: SUCCESS
-      enum:
-      - SUCCESS
-      - ERROR
-    reportTypes:
-      description: An array containing Report Types.
-      type: object
-      required:
-      - reportTypes
-      properties:
-        reportTypes:
-          type: array
-          minItems: 0
-          description: Array of report type
-          items:
-            $ref: '#/components/schemas/reportType'
-    code:
-      description: Short informative code about the error.
-      type: string
     defaultReportField:
       description: Report Configuration Request
       type: object
@@ -196,49 +150,46 @@ components:
         attributeCategories:
           description: Defines the category of the attribute. Samples values are Card Present, Tax, MRPS, IBAN, 3DS.
           type: string
-    responseCode:
-      description: Short explanation of the response code.
+    responseStatus:
+      description: Request result status.
       type: string
       readOnly: true
-      minLength: 2
-      maxLength: 50
-      example: ACCEPTED
-    messages:
-      description: A list of errors and warnings.
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+    adfsError:
+      description: Object containing information in the file
       type: object
       required:
-      - responseStatus
-      - responseCode
+      - errorSource
+      - errorCode
+      - errorDescription
       properties:
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        validationErrors:
+        errorSource:
+          description: The label of the component from where the error or warning is generating
+          type: string
+          example: APG-EDGE
+        errorCode:
+          description: General status of all resources
+          type: string
+          example: EDG00012
+        errorDescription:
+          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
+          type: string
+          example: the signature could not be verified
+    reportTypeFields:
+      description: An array containing Report Type Fields.
+      type: object
+      required:
+      - reportTypeFields
+      properties:
+        reportTypeFields:
           type: array
           minItems: 0
-          description: Information about errors occurred in transaction validation
+          description: Report Type Field Array
           items:
-            $ref: '#/components/schemas/validationMessage'
-    validationMessage:
-      description: Object containing information about transaction validation
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/errorMessage'
-        entity:
-          description: Information about the entity that experienced an error.
-          type: string
-    reportTypeId:
-      description: Uniquely identifies the type of report being requested.
-      type: string
+            $ref: '#/components/schemas/defaultReportField'
     reportType:
       description: Report Type
       type: object
@@ -276,26 +227,75 @@ components:
         paymentMethodGroup:
           description: Codifies the category of payment method used for reporting purpose such as local payment method, global payment method.
           type: string
-    adfsError:
-      description: Object containing information in the file
+    responseCode:
+      description: Short explanation of the response code.
+      type: string
+      readOnly: true
+      minLength: 2
+      maxLength: 50
+      example: ACCEPTED
+    validationMessage:
+      description: Object containing information about transaction validation
       type: object
       required:
-      - errorSource
-      - errorCode
-      - errorDescription
+      - code
+      - message
       properties:
-        errorSource:
-          description: The label of the component from where the error or warning is generating
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/errorMessage'
+        entity:
+          description: Information about the entity that experienced an error.
           type: string
-          example: APG-EDGE
-        errorCode:
-          description: General status of all resources
-          type: string
-          example: EDG00012
-        errorDescription:
-          description: Long explanation of code returned by the computer system application that either indicates successful processing, or a given number that can be investigated by support staff for further resolution and troubleshooting.
-          type: string
-          example: the signature could not be verified
+    responseMessage:
+      description: Long explanation of the response message.
+      type: string
+      readOnly: true
+      example: Request Accepted
+    reportTypes:
+      description: An array containing Report Types.
+      type: object
+      required:
+      - reportTypes
+      properties:
+        reportTypes:
+          type: array
+          minItems: 0
+          description: Array of report type
+          items:
+            $ref: '#/components/schemas/reportType'
+    errorMessage:
+      description: Describes a message if  problem occurred or error preventing the system from completing a  task.
+      type: string
+    reportAttributeName:
+      description: The name of the attribute in the report.
+      type: string
+    messages:
+      description: A list of errors and warnings.
+      type: object
+      required:
+      - responseStatus
+      - responseCode
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in transaction validation
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    code:
+      description: Short informative code about the error.
+      type: string
+    reportTypeId:
+      description: Uniquely identifies the type of report being requested.
+      type: string
   securitySchemes:
     BearerAuth:
       type: http

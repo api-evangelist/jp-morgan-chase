@@ -60,21 +60,94 @@ paths:
         '503':
           $ref: '#/components/responses/503'
 components:
+  responses:
+    '503':
+      description: Service Unavailable - API Processing Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Service Unavailable
+            httpStatus: 503
+            context:
+            - message: Service unavailable.
+    '403':
+      description: Forbidden - Unauthorized Access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Forbidden
+            httpStatus: 403
+            context:
+            - message: Platform is not authorized to access client.
+    '401':
+      description: Unauthenticated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Unauthorized
+            httpStatus: 401
+            context:
+            - message: Provided token does not follow required JWT format. It may also be missing mandatory parts
+    '500':
+      description: Internal Server Error - Generic Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Internal Server Error
+            httpStatus: 500
+            context:
+            - message: Something went wrong. Please try again later.
+    '404':
+      description: No data found for the criteria specified
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-ApiError'
+          example:
+            title: Not Found
+            httpStatus: 404
+            context:
+            - message: Party with ID [2000000555] not found.
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: 'Client generated unique idempotency key used in recognizing consecutive retries of the same request
+
+        **Usage of V4 UUIDs is recommended.**'
+      required: false
+      schema:
+        title: Idempotency Key
+        description: 'A unique string that enables the API support idempotency by safely retrying requests without accidentally
+
+          performing the same operation twice.'
+        type: string
+        minLength: 1
+        maxLength: 36
+        example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
+    TokenInHeader:
+      name: token
+      in: header
+      description: JWT Client token
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 8192
   schemas:
     ResourceType:
       type: string
       description: Represents an ENUM value that helps determine which recommendation needs to be performed.
       enum:
       - NAICS_CODE
-    NaicsCodeResponse:
-      type: object
-      properties:
-        naicsCode:
-          type: string
-          description: NAICS code for the recommendation.
-        naicsDescription:
-          type: string
-          description: Description of the NAICS code.
     RecommendationsRequest:
       type: object
       properties:
@@ -85,34 +158,6 @@ components:
       required:
       - resourceType
       - values
-    schemas-ApiError:
-      description: An API error.
-      type: object
-      required:
-      - title
-      - httpStatus
-      properties:
-        title:
-          type: string
-          description: Short humanly-readable title of the error
-          example: BAD_REQUEST
-        httpStatus:
-          type: integer
-          description: HTTP status code
-          example: 422
-        traceId:
-          type: string
-          description: Internal assigned traced identifier
-        requestId:
-          type: string
-          description: Client provided request identifier
-        context:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorContext'
-          description: Provides additional context and detail on the errors
-          minItems: 0
-          maxItems: 100
     Resource:
       type: array
       minItems: 0
@@ -145,6 +190,34 @@ components:
           type: string
           example: The server can not find the requested resource.
           description: Message describing the reason.
+    schemas-ApiError:
+      description: An API error.
+      type: object
+      required:
+      - title
+      - httpStatus
+      properties:
+        title:
+          type: string
+          description: Short humanly-readable title of the error
+          example: BAD_REQUEST
+        httpStatus:
+          type: integer
+          description: HTTP status code
+          example: 422
+        traceId:
+          type: string
+          description: Internal assigned traced identifier
+        requestId:
+          type: string
+          description: Client provided request identifier
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorContext'
+          description: Provides additional context and detail on the errors
+          minItems: 0
+          maxItems: 100
     RecommendationsResponse:
       type: object
       properties:
@@ -157,6 +230,15 @@ components:
           description: Optional message providing additional information.
         resource:
           $ref: '#/components/schemas/Resource'
+    NaicsCodeResponse:
+      type: object
+      properties:
+        naicsCode:
+          type: string
+          description: NAICS code for the recommendation.
+        naicsDescription:
+          type: string
+          description: Description of the NAICS code.
     Values:
       type: array
       minItems: 0
@@ -173,16 +255,6 @@ components:
             example: Clean Energy LLC
       description: Contains key-value pairs providing additional context.
   examples:
-    RecommendationsRequest:
-      summary: Generate Recommendations
-      description: Generates recommendations based on the provided input.
-      value:
-        resourceType: NAICS_CODE
-        values:
-        - key: organizationName
-          value: The Cosmetics Company
-        - key: organizationDescription
-          value: Ernie Enterprises provides cosmetics and personal grooming products to its customers.
     RecommendationsResponse:
       summary: Generated Recommendations
       value:
@@ -197,88 +269,16 @@ components:
             Cross-References.
 
             '
-  parameters:
-    TokenInHeader:
-      name: token
-      in: header
-      description: JWT Client token
-      required: false
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 8192
-    IdempotencyKey:
-      name: Idempotency-Key
-      in: header
-      description: 'Client generated unique idempotency key used in recognizing consecutive retries of the same request
-
-        **Usage of V4 UUIDs is recommended.**'
-      required: false
-      schema:
-        title: Idempotency Key
-        description: 'A unique string that enables the API support idempotency by safely retrying requests without accidentally
-
-          performing the same operation twice.'
-        type: string
-        minLength: 1
-        maxLength: 36
-        example: 1b036f9c-8c84-4ce6-b1dd-5979472945a1
-  responses:
-    '403':
-      description: Forbidden - Unauthorized Access
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Forbidden
-            httpStatus: 403
-            context:
-            - message: Platform is not authorized to access client.
-    '404':
-      description: No data found for the criteria specified
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Not Found
-            httpStatus: 404
-            context:
-            - message: Party with ID [2000000555] not found.
-    '503':
-      description: Service Unavailable - API Processing Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Service Unavailable
-            httpStatus: 503
-            context:
-            - message: Service unavailable.
-    '401':
-      description: Unauthenticated
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Unauthorized
-            httpStatus: 401
-            context:
-            - message: Provided token does not follow required JWT format. It may also be missing mandatory parts
-    '500':
-      description: Internal Server Error - Generic Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/schemas-ApiError'
-          example:
-            title: Internal Server Error
-            httpStatus: 500
-            context:
-            - message: Something went wrong. Please try again later.
+    RecommendationsRequest:
+      summary: Generate Recommendations
+      description: Generates recommendations based on the provided input.
+      value:
+        resourceType: NAICS_CODE
+        values:
+        - key: organizationName
+          value: The Cosmetics Company
+        - key: organizationDescription
+          value: Ernie Enterprises provides cosmetics and personal grooming products to its customers.
   securitySchemes:
     BearerAuth:
       type: http

@@ -453,44 +453,193 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
+  examples:
+    SEPAPaymentRequestExample:
+      value:
+        data:
+          customer_id: 00ef7b8enca1elA1tm6bmyphhgk3
+          country_code: DE
+          provider_code: berliner_sparkasse_oauth_client_de
+          payee_description: MusicCorpDE
+          template_identifier: SEPA
+          return_to: https://www.musiccorp.com/pisp_oauth_callback
+          locale: de-DE
+          payment_attributes:
+            end_to_end_id: '20018300321270540'
+            creditor_name: MusicCorp
+            creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+            debtor_iban: DEXXXXXXXXXXXXXXXXXXXX
+            description: For goods
+            amount: '17.99'
+            currency_code: EUR
+            mode: Normal
+          connect_template: jpmorgan_musiccorp_v3
+    PispProvidersRequestExample:
+      value:
+        countryCode: XF
+    PaymentStatusRequestExample:
+      value:
+        customer_id: '1105291496237568999'
+        payment_id: '1104531176632095201'
+    PaymentAuthStatusResponseExample:
+      value:
+        data:
+          id: 1105291498426995700
+          provider_code: deutsche_bank_client_de
+          provider_name: Deutsche Bank
+          customer_id: 1105291496237569000
+          created_at: '2023-09-21T12:43:10Z'
+          updated_at: '2023-09-21T12:44:52Z'
+          status: accepted
+          payment_consent_id: 1105291498334721000
+          template_identifier: SEPA
+          payment_attributes:
+            mode: Normal
+            amount: 12.99
+            debtor_iban: DE75380707240330795600
+            description: NETFLIX
+            creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
+            creditor_name: NETFLIX
+            currency_code: EUR
+            end_to_end_id: 20043855508803784
+            customer_ip_address: 159.53.64.214
+          custom_fields: {}
+          stages:
+          - id: 1105291498368275500
+            name: initialize
+            created_at: '2023-09-21T12:43:10Z'
+          - id: 1105291670938719200
+            name: start
+            created_at: '2023-09-21T12:43:31Z'
+          - id: 1105291671400092700
+            name: received
+            created_at: '2023-09-21T12:43:31Z'
+          - id: 1105291678303917000
+            name: interactive
+            created_at: '2023-09-21T12:43:32Z'
+            interactive_html: null
+            interactive_fields_names: []
+            interactive_redirect_url: https://meine.deutsche-bank.de/taf/db/#/authorizepaymentorder?transaction-id=cce9323d-c57e-4e77-9f1e-c394368e4751&psu-id=9503307956&authorization-id=f8190b5f-f0ee-40c7-987d-3aa453e994aa
+            interactive_fields_options: null
+          - id: 1105292279280571400
+            name: submission
+            created_at: '2023-09-21T12:44:43Z'
+          - id: 1105292284808664000
+            name: pending
+            created_at: '2023-09-21T12:44:44Z'
+          - id: 1105292288801641500
+            name: completed
+            created_at: '2023-09-21T12:44:44Z'
+          - id: 1105292290093487100
+            name: finish
+            created_at: '2023-09-21T12:44:44Z'
+    PispProvidersResponseExample:
+      value:
+        data:
+        - id: '3094'
+          code: starlingbank_oauth_client_gb
+          name: Starling
+          mode: oauth
+          status: active
+          interactive: true
+          pisp_instruction: You will be securely redirected to your financial institution to authenticate
+          logo_url: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/gb/starlingbank_oauth_client_gb.svg
+          country_code: GB
+          created_at: '2018-04-12T14:27:32Z'
+          updated_at: '2023-07-12T15:33:52Z'
+          identification_codes: []
+          payment_templates:
+          - FPS
+        - id: '3830'
+          code: revolut_client_oauth_gb
+          name: Revolut
+          mode: oauth
+          status: active
+          interactive: false
+          pisp_instruction: You will be securely redirected to your financial institution to authenticate
+          logo_url: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/gb/revolut_gb.svg
+          country_code: GB
+          created_at: '2019-04-12T14:06:05Z'
+          updated_at: '2023-08-30T07:19:06Z'
+          identification_codes: []
+          payment_templates:
+          - FPS
+          - CHAPS
+          - BACS
+          - FPS_STANDING_ORDER
+          - SEPA
+          - SEPA_INSTANT
+          - SWIFT
+    UnauthorizedAccessExample:
+      value:
+        errorCode: PISP-006
+        errorMsg: Unauthorized access
+    CHAPSPaymentRequestExample:
+      value:
+        data:
+          customer_id: D310252
+          country_code: GB
+          provider_code: barclays_oauth_client_gb
+          payee_description: barclays PVT 10-25-23
+          template_identifier: CHAPS
+          return_to: https://sites.obtest.com/sites/cib
+          payment_attributes:
+            end_to_end_id: PISP_1025_PVT_002
+            creditor_name: John Smith
+            creditor_sort_code: XXX242
+            creditor_account_number: XXXXX035
+            description: For Goods
+            amount: '100.00'
+            currency_code: GBP
+    InvalidJSONFormatExample:
+      value:
+        errorCode: PISP-003
+        errorMsg: Invalid JSON format
+    PaymentAuthorizationRequestExample:
+      value:
+        paymentId: '1105291498426995690'
+        authToken: a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13&end_to_end_id=00000002
+    FPSPaymentRequestExample:
+      value:
+        data:
+          customer_id: D310252
+          country_code: GB
+          provider_code: barclays_oauth_client_gb
+          payee_description: barclays PVT 10-25-23
+          template_identifier: FPS
+          return_to: https://sites.obtest.com/sites/cib
+          payment_attributes:
+            end_to_end_id: PISP_1025_PVT_002
+            creditor_name: John Smith
+            creditor_sort_code: XXX242
+            creditor_account_number: XXXXX035
+            description: For Goods
+            amount: '100.00'
+            currency_code: GBP
+    BACSPaymentRequestExample:
+      value:
+        data:
+          customer_id: D310252
+          country_code: GB
+          provider_code: barclays_oauth_client_gb
+          payee_description: barclays PVT 10-25-23
+          template_identifier: BACS
+          return_to: https://sites.obtest.com/sites/cib
+          payment_attributes:
+            end_to_end_id: PISP_1025_PVT_002
+            creditor_name: John Smith
+            creditor_sort_code: XXX242
+            creditor_account_number: XXXXX035
+            description: For Goods
+            amount: '100.00'
+            currency_code: GBP
+    PaymentResponseExample:
+      value:
+        data:
+          payment_id: '1105048674708230671'
+          expires_at: '2023-09-21T04:56:43Z'
+          redirect_url: https://paymentservices.jpmorgan.com/payments/connect?token=a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13
   schemas:
-    PaymentAuthorizationRequest:
-      required:
-      - paymentId
-      - authToken
-      type: object
-      properties:
-        paymentId:
-          type: string
-          description: 'The unique payment identifier generated by J.P. Morgan.
-
-            This value is the same as the `payment_id` attribute in the
-
-            Payment Initiation API response body'
-        authToken:
-          type: string
-          description: 'One-time use token given by the provider to authorize the
-
-            payment. This token is obtained from the `redirect_url` field in
-
-            the Payment Initiation API response body and it must be
-
-            appended with “&” and the “end_to_end id” (e.g.
-
-            “code=95c…Ijo&end_to_end_id= 0002")'
-    PaymentStatusRequest:
-      type: object
-      properties:
-        customer_id:
-          type: string
-          description: The unique ID determined by the J.P. Morgan client for the PSU
-        payment_id:
-          type: string
-          description: 'The unique payment identifier generated by J.P. Morgan.
-
-            This value is the same as the `payment_id` attribute in the
-
-            Payment Initiation API response body'
     PispProvider:
       type: object
       description: PISP Provider
@@ -561,6 +710,39 @@ components:
               CHAPS:
                 type: string
           minItems: 0
+    PaymentAuthorizationRequest:
+      required:
+      - paymentId
+      - authToken
+      type: object
+      properties:
+        paymentId:
+          type: string
+          description: 'The unique payment identifier generated by J.P. Morgan.
+
+            This value is the same as the `payment_id` attribute in the
+
+            Payment Initiation API response body'
+        authToken:
+          type: string
+          description: 'One-time use token given by the provider to authorize the
+
+            payment. This token is obtained from the `redirect_url` field in
+
+            the Payment Initiation API response body and it must be
+
+            appended with “&” and the “end_to_end id” (e.g.
+
+            “code=95c…Ijo&end_to_end_id= 0002")'
+    Payment:
+      oneOf:
+      - $ref: '#/components/schemas/SepaPayment'
+      - $ref: '#/components/schemas/BacsChapsFpsPayment'
+      discriminator:
+        propertyName: template_identifier
+        mapping:
+          FPS: '#/components/schemas/BacsChapsFpsPayment'
+          SEPA: '#/components/schemas/SepaPayment'
     PispProvidersResponse:
       type: object
       properties:
@@ -570,22 +752,6 @@ components:
           items:
             $ref: '#/components/schemas/PispProvider'
           minItems: 1
-    Error:
-      type: object
-      description: "The error response object \n\n**Note: This error response format is used by all AISP and PISP endpoints except Refunds endpoint which adopted a better error strcuture**"
-      properties:
-        error:
-          type: array
-          items:
-            properties:
-              errorCode:
-                type: string
-                description: Unique error code
-              errorMsg:
-                type: string
-                description: Describes the details of the error occurred
-          minItems: 0
-          maxItems: 99
     SepaPayment:
       title: SEPA Payment
       type: object
@@ -715,15 +881,102 @@ components:
 
 
                 **Only applicable for certain merchants**'
-    Payment:
-      oneOf:
-      - $ref: '#/components/schemas/SepaPayment'
-      - $ref: '#/components/schemas/BacsChapsFpsPayment'
-      discriminator:
-        propertyName: template_identifier
-        mapping:
-          FPS: '#/components/schemas/BacsChapsFpsPayment'
-          SEPA: '#/components/schemas/SepaPayment'
+    PaymentResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            payment_id:
+              type: string
+              description: Internal payment ID for the submitted payment initiation request
+            expires_at:
+              type: string
+              description: Expiration date of the redirect URL
+            redirect_url:
+              type: string
+              description: Points to a page where the PSU can provide PISP access to make the payment
+    PaymentAuthStatusResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Payment ID for the submitted payment initiation request
+        provider_code:
+          type: string
+          description: Provider code for where the payment has been initiated
+        provider_name:
+          type: string
+          description: Provider's name
+        customer_id:
+          type: string
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        created_at:
+          type: string
+          description: Created timestamp in ISO 8601 date time format
+        updated_at:
+          type: string
+          description: Updated timestamp in ISO 8601 date time format
+        payment_consent_id:
+          type: string
+          description: Consent Id of the authorized payment.
+        status:
+          type: string
+          description: 'The status of the payment.
+
+
+            | Status     | Meaning                                                                                                                              |
+
+            | -----------|--------------------------------------------------------------------------------------------------------------------------------------|
+
+            | processing | The payment initiation is in process. Further detail can be found by looking at the “stages” attribute below                         |
+
+            | accepted   | The payment initiation has been accepted by the ASPSP                                                                                |
+
+            | rejected   | The payment was rejected by the ASPSP. An error code will be provided                                                                |
+
+            | failed     | he payment initiation has been rejected due to an unknown reason, such as the ASPSP being down or returning a generic error response |'
+          enum:
+          - processing
+          - accepted
+          - rejected
+          - failed
+        fundsAvailable:
+          type: boolean
+          description: 'Refer the table for the interpretation of the values
+
+            | FundsAvailable | Meaning                                                                                                                                                                                                     |
+
+            | -----------    |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+            | True           | Money will be debited. If the bank uses a batch process for SEPA processing and the PSU no longer have sufficient funds, the money will not be debited                                                      |
+
+            | False          | In combination with `noFundsRjctPreferred=TRUE`, the bank rejects the payment. If noFundsRjctPreferred is not supported for a specific bank, the default behavior is that the payment is rejected by the bank |'
+        template_identifier:
+          type: string
+          description: Identifiers of the payment templates that are supported by this provider such as FPS, SEPA, SEPA_INSTANT, BACS, CHAPS
+        payment_attributes:
+          type: object
+          description: 'The payment attributes object. These are the same attributes used to
+
+            initiate the payment, so will therefore vary depending on the payment template'
+        custom_fields:
+          type: object
+          description: The custom fields (optional) are not used currently but would be used for any additional fields that would be relevant to payments.
+        stages:
+          type: array
+          items:
+            type: object
+            description: "The stages that the payment request has completed. \n\n- Possible values for a payment with status `processing`are below:\n\n  | Stage Name | Meaning                                                                                                                              |\n  | -----------|--------------------------------------------------------------------------------------------------------------------------------------|\n  | initialize | The payment has been created, but the initiation process has not begun\n  | start      | The payment initiation process has begun|\n  | interactive| User interaction is required, such as authentication or redirection to the ASPSP|\n  | submission | The payment has been submitted to the ASPSP|\n  | settlement | The payment has been validated by the ASPSP|\n  | completed  | The payment lifecycle has been completed|\n  | finish     | The action has been completed|\n\n- Possible value for payments with status “accepted/rejected/failed” is `finish`"
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              created_at:
+                type: string
+                description: Created date time in ISO 8601 date time format
+          minItems: 0
     BacsChapsFpsPayment:
       type: object
       title: bacsChapsFpsPayment
@@ -847,102 +1100,22 @@ components:
                 currency_code:
                   type: string
                   description: Currency used for the Payment
-    PaymentAuthStatusResponse:
+    Error:
       type: object
+      description: "The error response object \n\n**Note: This error response format is used by all AISP and PISP endpoints except Refunds endpoint which adopted a better error strcuture**"
       properties:
-        id:
-          type: string
-          description: Payment ID for the submitted payment initiation request
-        provider_code:
-          type: string
-          description: Provider code for where the payment has been initiated
-        provider_name:
-          type: string
-          description: Provider's name
-        customer_id:
-          type: string
-          description: The unique identifier determined by the J.P. Morgan client for the PSU
-        created_at:
-          type: string
-          description: Created timestamp in ISO 8601 date time format
-        updated_at:
-          type: string
-          description: Updated timestamp in ISO 8601 date time format
-        payment_consent_id:
-          type: string
-          description: Consent Id of the authorized payment.
-        status:
-          type: string
-          description: 'The status of the payment.
-
-
-            | Status     | Meaning                                                                                                                              |
-
-            | -----------|--------------------------------------------------------------------------------------------------------------------------------------|
-
-            | processing | The payment initiation is in process. Further detail can be found by looking at the “stages” attribute below                         |
-
-            | accepted   | The payment initiation has been accepted by the ASPSP                                                                                |
-
-            | rejected   | The payment was rejected by the ASPSP. An error code will be provided                                                                |
-
-            | failed     | he payment initiation has been rejected due to an unknown reason, such as the ASPSP being down or returning a generic error response |'
-          enum:
-          - processing
-          - accepted
-          - rejected
-          - failed
-        fundsAvailable:
-          type: boolean
-          description: 'Refer the table for the interpretation of the values
-
-            | FundsAvailable | Meaning                                                                                                                                                                                                     |
-
-            | -----------    |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-
-            | True           | Money will be debited. If the bank uses a batch process for SEPA processing and the PSU no longer have sufficient funds, the money will not be debited                                                      |
-
-            | False          | In combination with `noFundsRjctPreferred=TRUE`, the bank rejects the payment. If noFundsRjctPreferred is not supported for a specific bank, the default behavior is that the payment is rejected by the bank |'
-        template_identifier:
-          type: string
-          description: Identifiers of the payment templates that are supported by this provider such as FPS, SEPA, SEPA_INSTANT, BACS, CHAPS
-        payment_attributes:
-          type: object
-          description: 'The payment attributes object. These are the same attributes used to
-
-            initiate the payment, so will therefore vary depending on the payment template'
-        custom_fields:
-          type: object
-          description: The custom fields (optional) are not used currently but would be used for any additional fields that would be relevant to payments.
-        stages:
+        error:
           type: array
           items:
-            type: object
-            description: "The stages that the payment request has completed. \n\n- Possible values for a payment with status `processing`are below:\n\n  | Stage Name | Meaning                                                                                                                              |\n  | -----------|--------------------------------------------------------------------------------------------------------------------------------------|\n  | initialize | The payment has been created, but the initiation process has not begun\n  | start      | The payment initiation process has begun|\n  | interactive| User interaction is required, such as authentication or redirection to the ASPSP|\n  | submission | The payment has been submitted to the ASPSP|\n  | settlement | The payment has been validated by the ASPSP|\n  | completed  | The payment lifecycle has been completed|\n  | finish     | The action has been completed|\n\n- Possible value for payments with status “accepted/rejected/failed” is `finish`"
             properties:
-              id:
+              errorCode:
                 type: string
-              name:
+                description: Unique error code
+              errorMsg:
                 type: string
-              created_at:
-                type: string
-                description: Created date time in ISO 8601 date time format
+                description: Describes the details of the error occurred
           minItems: 0
-    PaymentResponse:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            payment_id:
-              type: string
-              description: Internal payment ID for the submitted payment initiation request
-            expires_at:
-              type: string
-              description: Expiration date of the redirect URL
-            redirect_url:
-              type: string
-              description: Points to a page where the PSU can provide PISP access to make the payment
+          maxItems: 99
     PispProvidersRequest:
       type: object
       properties:
@@ -954,192 +1127,19 @@ components:
             the providers list. If no countryCode is provided, the API returns
 
             the full list of Providers'
-  examples:
-    PaymentStatusRequestExample:
-      value:
-        customer_id: '1105291496237568999'
-        payment_id: '1104531176632095201'
-    PaymentAuthStatusResponseExample:
-      value:
-        data:
-          id: 1105291498426995700
-          provider_code: deutsche_bank_client_de
-          provider_name: Deutsche Bank
-          customer_id: 1105291496237569000
-          created_at: '2023-09-21T12:43:10Z'
-          updated_at: '2023-09-21T12:44:52Z'
-          status: accepted
-          payment_consent_id: 1105291498334721000
-          template_identifier: SEPA
-          payment_attributes:
-            mode: Normal
-            amount: 12.99
-            debtor_iban: DE75380707240330795600
-            description: NETFLIX
-            creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
-            creditor_name: NETFLIX
-            currency_code: EUR
-            end_to_end_id: 20043855508803784
-            customer_ip_address: 159.53.64.214
-          custom_fields: {}
-          stages:
-          - id: 1105291498368275500
-            name: initialize
-            created_at: '2023-09-21T12:43:10Z'
-          - id: 1105291670938719200
-            name: start
-            created_at: '2023-09-21T12:43:31Z'
-          - id: 1105291671400092700
-            name: received
-            created_at: '2023-09-21T12:43:31Z'
-          - id: 1105291678303917000
-            name: interactive
-            created_at: '2023-09-21T12:43:32Z'
-            interactive_html: null
-            interactive_fields_names: []
-            interactive_redirect_url: https://meine.deutsche-bank.de/taf/db/#/authorizepaymentorder?transaction-id=cce9323d-c57e-4e77-9f1e-c394368e4751&psu-id=9503307956&authorization-id=f8190b5f-f0ee-40c7-987d-3aa453e994aa
-            interactive_fields_options: null
-          - id: 1105292279280571400
-            name: submission
-            created_at: '2023-09-21T12:44:43Z'
-          - id: 1105292284808664000
-            name: pending
-            created_at: '2023-09-21T12:44:44Z'
-          - id: 1105292288801641500
-            name: completed
-            created_at: '2023-09-21T12:44:44Z'
-          - id: 1105292290093487100
-            name: finish
-            created_at: '2023-09-21T12:44:44Z'
-    CHAPSPaymentRequestExample:
-      value:
-        data:
-          customer_id: D310252
-          country_code: GB
-          provider_code: barclays_oauth_client_gb
-          payee_description: barclays PVT 10-25-23
-          template_identifier: CHAPS
-          return_to: https://sites.obtest.com/sites/cib
-          payment_attributes:
-            end_to_end_id: PISP_1025_PVT_002
-            creditor_name: John Smith
-            creditor_sort_code: XXX242
-            creditor_account_number: XXXXX035
-            description: For Goods
-            amount: '100.00'
-            currency_code: GBP
-    InvalidJSONFormatExample:
-      value:
-        errorCode: PISP-003
-        errorMsg: Invalid JSON format
-    PispProvidersResponseExample:
-      value:
-        data:
-        - id: '3094'
-          code: starlingbank_oauth_client_gb
-          name: Starling
-          mode: oauth
-          status: active
-          interactive: true
-          pisp_instruction: You will be securely redirected to your financial institution to authenticate
-          logo_url: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/gb/starlingbank_oauth_client_gb.svg
-          country_code: GB
-          created_at: '2018-04-12T14:27:32Z'
-          updated_at: '2023-07-12T15:33:52Z'
-          identification_codes: []
-          payment_templates:
-          - FPS
-        - id: '3830'
-          code: revolut_client_oauth_gb
-          name: Revolut
-          mode: oauth
-          status: active
-          interactive: false
-          pisp_instruction: You will be securely redirected to your financial institution to authenticate
-          logo_url: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/gb/revolut_gb.svg
-          country_code: GB
-          created_at: '2019-04-12T14:06:05Z'
-          updated_at: '2023-08-30T07:19:06Z'
-          identification_codes: []
-          payment_templates:
-          - FPS
-          - CHAPS
-          - BACS
-          - FPS_STANDING_ORDER
-          - SEPA
-          - SEPA_INSTANT
-          - SWIFT
-    PaymentAuthorizationRequestExample:
-      value:
-        paymentId: '1105291498426995690'
-        authToken: a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13&end_to_end_id=00000002
-    PispProvidersRequestExample:
-      value:
-        countryCode: XF
-    SEPAPaymentRequestExample:
-      value:
-        data:
-          customer_id: 00ef7b8enca1elA1tm6bmyphhgk3
-          country_code: DE
-          provider_code: berliner_sparkasse_oauth_client_de
-          payee_description: MusicCorpDE
-          template_identifier: SEPA
-          return_to: https://www.musiccorp.com/pisp_oauth_callback
-          locale: de-DE
-          payment_attributes:
-            end_to_end_id: '20018300321270540'
-            creditor_name: MusicCorp
-            creditor_iban: DEXXXXXXXXXXXXXXXXXXXX
-            debtor_iban: DEXXXXXXXXXXXXXXXXXXXX
-            description: For goods
-            amount: '17.99'
-            currency_code: EUR
-            mode: Normal
-          connect_template: jpmorgan_musiccorp_v3
-    PaymentResponseExample:
-      value:
-        data:
-          payment_id: '1105048674708230671'
-          expires_at: '2023-09-21T04:56:43Z'
-          redirect_url: https://paymentservices.jpmorgan.com/payments/connect?token=a8a96b6fa3932885be4a46162fd7a0c1579e65a0803e4946a67dae5279dc0c13
-    BACSPaymentRequestExample:
-      value:
-        data:
-          customer_id: D310252
-          country_code: GB
-          provider_code: barclays_oauth_client_gb
-          payee_description: barclays PVT 10-25-23
-          template_identifier: BACS
-          return_to: https://sites.obtest.com/sites/cib
-          payment_attributes:
-            end_to_end_id: PISP_1025_PVT_002
-            creditor_name: John Smith
-            creditor_sort_code: XXX242
-            creditor_account_number: XXXXX035
-            description: For Goods
-            amount: '100.00'
-            currency_code: GBP
-    FPSPaymentRequestExample:
-      value:
-        data:
-          customer_id: D310252
-          country_code: GB
-          provider_code: barclays_oauth_client_gb
-          payee_description: barclays PVT 10-25-23
-          template_identifier: FPS
-          return_to: https://sites.obtest.com/sites/cib
-          payment_attributes:
-            end_to_end_id: PISP_1025_PVT_002
-            creditor_name: John Smith
-            creditor_sort_code: XXX242
-            creditor_account_number: XXXXX035
-            description: For Goods
-            amount: '100.00'
-            currency_code: GBP
-    UnauthorizedAccessExample:
-      value:
-        errorCode: PISP-006
-        errorMsg: Unauthorized access
+    PaymentStatusRequest:
+      type: object
+      properties:
+        customer_id:
+          type: string
+          description: The unique ID determined by the J.P. Morgan client for the PSU
+        payment_id:
+          type: string
+          description: 'The unique payment identifier generated by J.P. Morgan.
+
+            This value is the same as the `payment_id` attribute in the
+
+            Payment Initiation API response body'
   parameters:
     ContentType:
       name: Content-Type

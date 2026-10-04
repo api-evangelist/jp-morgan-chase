@@ -321,16 +321,10 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ideal:
-      description: Ideal is Netherland based payment method that allows customers to buy on the Internet using direct online transfers from their bank account.
-      type: object
-      properties:
-        internationalBusinessIdentifierCode:
-          description: A valid Bank Identification Code (BIC) according to ISO 9362 standards, that can only contain 8 or 11 alphanumeric characters.
-          type: string
-        fullName:
-          description: Name of accountholder or accoundholder business name.
-          type: string
+    tokenAuthenticationValue:
+      description: Contains authentication value received from Payment Networks for network token transactions
+      type: string
+      maxLength: 40
     googlePay:
       description: Use is for encrypted bundles for web or Internet acceptance of digital wallets such as Google Pay
       type: object
@@ -349,6 +343,263 @@ components:
           $ref: '#/components/schemas/paymentAccountReference'
         expiry:
           $ref: '#/components/schemas/expiry'
+    cardTypeIndicators:
+      description: Card type indicators.
+      type: object
+      properties:
+        durbinRegulated:
+          description: Indicates that a given issuer Bank Identification Number (BIN) or BIN range in the United States is subject to the Durbin Amendment of the Dodd-Frank Wall Street Reform and Consumer Protection Act of 2010, which limits the amount of interchange the issuer can charge for debit card based transactions.
+          type: boolean
+        level3Eligible:
+          description: Indicates whether the given card or Bank Identification Number (BIN) range is capable of handling transactions with Level 3 data on them. Level 3 data includes line item details as well as other relevant business-to-business transaction data.
+          type: boolean
+        issuanceCountry:
+          description: Codifies the country in which a given card has been issued. This information is provided in what is traditionally known as the Bank Identification Number (BIN) file. This is an International Organization for Standardization (ISO) assigned code to represent the Country, a Geographic Area, that is recognized as an independent political unit in world affairs.
+          type: string
+        cardTypeCategory:
+          description: Codifies the program associated with the physical card (e.g. SUA = Single Use Account, CC = Credit Card).
+          type: string
+        cardIssuerName:
+          description: The label given to the issuer of a card-based payment account. The term "issuer" may refer to either the payment brand itself, as for the American Express and Discover payment brands, or the issuer will be a financial institution authorized to issue cards with the payment brand logo, as is the case for Visa and MasterCard.
+          type: string
+        cardProductName:
+          description: 'Codifies issuer-supplied value assigned by Mastercard and Visa user to track card-level activity by card account number.  Sample Visa values: A - Visa Traditional/NA C - Visa Signature I - Visa Commerce L - Visa Corporate  Sample MasterCard values: MCF - MasterCard Fleet Card MCW - World MasterCard MDS - Debit MasterCard MCO - MasterCard Corporate'
+          type: string
+        cardProductType:
+          description: 'Denotes the primary processing network on which the account can make credit transactions. It also specifies the product types that VISA and MasterCard use to classify accounts for reporting. Note: There are some codes that are used only by Common Profit Book (CPB). Within the CPB, the existing code is replaced based on information from MasterCard and Visa. Formerly known as Association Product Code.'
+          type: array
+          minItems: 0
+          items:
+            type: string
+            enum:
+            - AFFLUENT_CATEGORY
+            - COMMERCIAL
+            - HEALTHCARE
+            - PAYROLL
+            - PREPAID
+            - PINLESS_DEBIT
+            - SIGNATURE_DEBIT
+            - PREPAID_RELOADABLE
+    paze:
+      description: Use is for encrypted bundles for web or Internet acceptance of digital device wallets PAZE
+      type: object
+      properties:
+        cardTypeName:
+          $ref: '#/components/schemas/cardTypeName'
+        cardTypeIndicators:
+          $ref: '#/components/schemas/cardTypeIndicators'
+        electronicCommerceIndicator:
+          $ref: '#/components/schemas/electronicCommerceIndicator'
+        tokenAuthenticationValue:
+          $ref: '#/components/schemas/tokenAuthenticationValue'
+        networkResponse:
+          $ref: '#/components/schemas/networkResponse'
+        paymentAccountReference:
+          $ref: '#/components/schemas/paymentAccountReference'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+    messages:
+      description: A list of errors and warnings
+      type: object
+      properties:
+        responseStatus:
+          $ref: '#/components/schemas/responseStatus'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+        validationErrors:
+          type: array
+          minItems: 0
+          description: Information about errors occurred in transaction validation
+          items:
+            $ref: '#/components/schemas/validationMessage'
+    ackMessagesResponse:
+      description: Since ack can result in a combination of successful and unsuccessful result, client should always check if there is any ack failed messages.
+      type: object
+      properties:
+        ackFailedMessages:
+          type: array
+          minItems: 0
+          description: List of ack failed messages information
+          items:
+            $ref: '#/components/schemas/ackFailedMessage'
+    electronicCheck:
+      description: Object for ACH (Automated Clearing House) payment method which occurs whenever someone instructs the ACH network to “push” money from their account to someone else's. This is mostly used in USA.
+      type: object
+      properties:
+        financialInstitutionRoutingNumber:
+          description: Identifies the routing and transit number assigned by an administrative body to formally identify a chartered financial institution (bank) within a given country or common financial market for performing domestic transfers of funds to or from that institution's client accounts. Within the United States, this is known as the American Bankers Association Routing Number, and within Australia, this is known as a Bank State Branch Number. This common data element will house those two examples, along with the equivalent for any other country or financial market.
+          type: string
+        accountNumber:
+          description: The card or token number.
+          type: string
+          writeOnly: true
+        accountType:
+          description: Codifies a bank account where funds are deposited or stored (e.g., checking and savings account). When shared with a financial institution as the client's primary automated payment mechanism for a debt, it may also be known as a DDA (Demand Deposit Account). A DDA can have funds withdrawn at any time from the depository institution, accessible by a teller, ATM or via online banking.
+          type: string
+          enum:
+          - CHECKING
+          - SAVING
+          - CORPORATE_CHECKING
+    money:
+      description: Represents a monetary amount with currency.
+      type: object
+      properties:
+        amount:
+          description: Specifies the monetary value of the transaction.
+          type: string
+        currencyCode:
+          description: The ISO 4217 currency code for the transaction amount.
+          type: string
+    networkResponse:
+      description: Provides response information from the payment network.
+      type: object
+      properties:
+        networkResponseCode:
+          description: Response code returned by the payment network.
+          type: string
+        networkResponseMessage:
+          description: Response message returned by the payment network.
+          type: string
+    wechatpay:
+      description: Wechatpay payment method is linked to consumer bank accounts and/or payment network cards.
+      type: object
+      properties:
+        paymentArrangementExpirationTimestamp:
+          description: Designates the hour (hh), minute (mm), seconds (ss) and date (if timestamp) or year (YYYY), month (MM), and day (DD) (if date) when the relationship expires. If there is no defined expiration date, the field will be blank.
+          type: string
+    consumerAcknowledgement:
+      description: Consumer acknowledgement information
+      type: object
+      properties:
+        mandates:
+          type: array
+          minItems: 0
+          description: Mandate
+          items:
+            $ref: '#/components/schemas/mandate'
+        consents:
+          type: array
+          minItems: 0
+          description: List of consents from consumer
+          items:
+            $ref: '#/components/schemas/consent'
+    authentication:
+      description: Indicates Strong Customer Authentication (SCA) requirements.
+      type: object
+      properties:
+        SCAExemptionReason:
+          description: Indicates the justification why a transaction does not have to meet Strong Customer Authentication (SCA) requirements.
+          type: string
+          enum:
+          - TRUSTED_MERCHANT
+          - SECURE_CORPORATE_PAYMENT
+          - TRANSACTION_RISK_ANALYSIS
+          - LOW_VALUE_PAYMENT
+          - MERCHANT_INITIATED_TRANSACTION
+          - RECURRING_PAYMENT
+          - SCA_DELEGATION
+    electronicCommerceIndicator:
+      description: Describes the Electronic Commerce Indicator used in cardholder authentication on a network token
+      type: string
+      maxLength: 2
+      minLength: 1
+      pattern: ^\d{1,2}$
+    validationMessage:
+      description: Information about errors occurred in transaction validation
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        entity:
+          description: The moniker given to the module or program where the error generated.
+          type: string
+    consent:
+      description: Consent for consumer profile
+      type: object
+      properties:
+        consentType:
+          description: Codifies the category of agreement with the consumer for a service provided by merchant or firm.
+          type: string
+        contractSigned:
+          description: Indicates whether the legal agreement between the customer and the Firm has been signed by the client.
+          type: boolean
+        agreementDescription:
+          description: Provides textual information containing the description of the agreement with the consumer for a service provided by merchant or firm.
+          type: string
+        presentationMode:
+          description: Codifies the method that was used to present the consent to the consumer such as explicit or implicit with the click of CTA.
+          type: string
+    message:
+      description: Provides textual description of a problem that has occurred and is preventing the system from completing a task. Messages can be a confirmation, warning or notification, and can trigger the system to apply a customized default value or override to a field, record or file, halt or postpone processing, skip or reject the entry generating the problem. Messages can be displayed on-screen in the user interface or in reporting.
+      type: string
+    code:
+      description: Codifies a raised exception encountered by an internal or external system, sub-system, interface, job, module, system component with which the web service application interfaces.  In this instance it refers to the error raised when reporting job failed.
+      type: string
+    paymentMethod:
+      description: Provides information about the payment method used.
+      type: object
+      properties:
+        paymentMethodType:
+          $ref: '#/components/schemas/paymentMethodTypeCode'
+        maskedAccountNumber:
+          description: Identifies a concealed number associated with the card number recognized by various payment systems. This is typically concealed by storing only the first 6 and/or last 4 digits of the payment account number or some variation.
+          type: string
+        approvalCode:
+          description: Approval code provided by the issuing bank.
+          type: string
+        card:
+          $ref: '#/components/schemas/card'
+        sepa:
+          $ref: '#/components/schemas/sepa'
+        paze:
+          $ref: '#/components/schemas/paze'
+        electronicCheck:
+          $ref: '#/components/schemas/electronicCheck'
+        applePay:
+          $ref: '#/components/schemas/applePay'
+        googlePay:
+          $ref: '#/components/schemas/googlePay'
+        ideal:
+          $ref: '#/components/schemas/ideal'
+        wechatpay:
+          $ref: '#/components/schemas/wechatpay'
+        payByBank:
+          $ref: '#/components/schemas/payByBank'
+    cardTypeName:
+      description: Provides name of the payment network
+      type: string
+    paymentMethodTypeCode:
+      description: Codifies the method the Applicant has used to Pay the good faith deposit or other fee paid at application.
+      type: string
+      enum:
+      - PAYMENT_METHOD_TYPE_CODE_CARD
+      - PAYMENT_METHOD_TYPE_CODE_ELECTRONIC_CHECK
+      - PAYMENT_METHOD_TYPE_CODE_APPLE_PAY
+      - PAYMENT_METHOD_TYPE_CODE_SEPA
+      - PAYMENT_METHOD_TYPE_CODE_GOOGLE_PAY
+      - PAYMENT_METHOD_TYPE_CODE_PAZE
+      - PAYMENT_METHOD_TYPE_CODE_WECHAT_PAY
+      - PAYMENT_METHOD_TYPE_CODE_IDEAL
+      - PAYMENT_METHOD_TYPE_CODE_PAY_PAL
+      - PAYMENT_METHOD_TYPE_CODE_ALI_PAY
+      - PAYMENT_METHOD_TYPE_CODE_TRUSTLY
+      - PAYMENT_METHOD_TYPE_CODE_KLARNA
+      - PAYMENT_METHOD_TYPE_CODE_PAY_BY_BANK
+      - PAYMENT_METHOD_TYPE_CODE_AFFIRM
+    payByBank:
+      description: Pay by Bank payment method information.
+      type: object
+      properties:
+        bankName:
+          description: The name of the bank used for the payment.
+          type: string
+        accountType:
+          description: The type of bank account used for the payment.
+          type: string
     applePay:
       description: Use is for encrypted bundles for web or Internet acceptance of digital device wallets such as Apple Pay
       type: object
@@ -367,128 +618,6 @@ components:
           $ref: '#/components/schemas/paymentAccountReference'
         expiry:
           $ref: '#/components/schemas/expiry'
-    sepa:
-      description: Object for SEPA (Single Euro Payments Area) payment method is a regulatory initiative to facilitate cross border cashless payments across euro-using countries. SEPA allows people doing business across borders in euros to do so with the same ease as domestic transactions within the countries subject to SEPA.
-      type: object
-      properties:
-        internationalBusinessIdentifierCode:
-          description: 'A valid Bank Identification Code (BIC) according to ISO 9362 standards, that can only contain 8 or 11 alphanumeric characters. Eg: For iDEAL issuer, one of valid BICs is RABONL2U.'
-          type: string
-        consumerEmail:
-          description: email provided by consumer for a transaction
-          type: string
-    responseStatus:
-      description: 'The label given to the state of a response to a request submitted by a consumer through the Firm''s Application Program Interface (API) that matches a test case. Valid Values: ERROR,SUCCESS, DENIED'
-      type: string
-      enum:
-      - DENIED
-      - ERROR
-      - SUCCESS
-    authentication:
-      description: Indicates Strong Customer Authentication (SCA) requirements.
-      type: object
-      properties:
-        SCAExemptionReason:
-          description: Indicates the justification why a transaction does not have to meet Strong Customer Authentication (SCA) requirements.
-          type: string
-          enum:
-          - TRUSTED_MERCHANT
-          - SECURE_CORPORATE_PAYMENT
-          - TRANSACTION_RISK_ANALYSIS
-          - LOW_VALUE_PAYMENT
-          - MERCHANT_INITIATED_TRANSACTION
-          - RECURRING_PAYMENT
-          - SCA_DELEGATION
-    ackMessagesResponse:
-      description: Since ack can result in a combination of successful and unsuccessful result, client should always check if there is any ack failed messages.
-      type: object
-      properties:
-        ackFailedMessages:
-          type: array
-          minItems: 0
-          description: List of ack failed messages information
-          items:
-            $ref: '#/components/schemas/ackFailedMessage'
-    tokenNotification:
-      description: Specifies card token information.
-      type: object
-      properties:
-        token:
-          description: The payment gateway token.
-          type: string
-        tokenType:
-          description: Defines possible types of token.
-          type: string
-          enum:
-          - TOKEN_TYPE_UNSPECIFIED
-          - TOKEN_TYPE_ACQUIRER
-          - TOKEN_TYPE_NETWORK
-        checkoutReference:
-          $ref: '#/components/schemas/checkoutReference'
-        merchantOrderNumber:
-          description: This attribute is deprecated. Please use messages.merchantOrderNumber.
-          deprecated: true
-          type: string
-        requestId:
-          description: This attribute is deprecated. Please use messages.requestId.
-          deprecated: true
-          type: string
-        fraudCheckStatus:
-          description: Specifies the result of transaction fraud check.
-          type: string
-          enum:
-          - FRAUD_CHECK_STATUS_UNSPECIFIED
-          - FRAUD_CHECK_STATUS_APPROVED
-          - FRAUD_CHECK_STATUS_DECLINED
-        status:
-          description: Codifies the current state of the notification.
-          type: string
-          enum:
-          - STATUS_SUCCESS
-          - STATUS_FAILURE
-          - STATUS_PENDING
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-    ackFailedMessage:
-      description: ack failed messages information
-      type: object
-      properties:
-        messageId:
-          description: Identifies a unique occurrence of a communication message received by the Firm.
-          type: string
-        receiptHandle:
-          description: Message receipt handle
-          type: string
-    ackMessagesRequest:
-      description: Ack Messages Request
-      type: object
-      required:
-      - messageInfos
-      properties:
-        messageInfos:
-          type: array
-          minItems: 1
-          description: List of Message Info
-          items:
-            $ref: '#/components/schemas/messageInfo'
-    electronicCommerceIndicator:
-      description: Describes the Electronic Commerce Indicator used in cardholder authentication on a network token
-      type: string
-      maxLength: 2
-      minLength: 1
-      pattern: ^\d{1,2}$
-    networkResponse:
-      description: Provides response information from the payment network.
-      type: object
-      properties:
-        networkResponseCode:
-          description: Response code returned by the payment network.
-          type: string
-        networkResponseMessage:
-          description: Response message returned by the payment network.
-          type: string
     orderNotification:
       description: Specifies order information.
       type: object
@@ -629,24 +758,52 @@ components:
           $ref: '#/components/schemas/threeDomainSecureTransaction'
         consumerAcknowledgement:
           $ref: '#/components/schemas/consumerAcknowledgement'
-    threeDomainSecureExemption:
-      description: EEA/UK Supported SCA exemptions
+    checkoutReference:
+      description: This attribute is deprecated. Please use merchantOrderNumber or requestId based on the use case.
+      type: string
+      deprecated: true
+    tokenNotification:
+      description: Specifies card token information.
       type: object
       properties:
-        authenticationExemptionReason:
-          description: EEA/UK Supported SCA exemptions
+        token:
+          description: The payment gateway token.
+          type: string
+        tokenType:
+          description: Defines possible types of token.
           type: string
           enum:
-          - LOW_VALUE_PAYMENT
-          - TRANSACTION_RISK_ANALYSIS
-          - NOT_EXEMPTED
-          - NOT_ENTITLED
-          - MERCHANT_INITIATED_TRANSACTION
-          - RECURRING_PAYMENT
-          - ONE_LEG_OUT
-        authenticationStatusReasonText:
-          description: Long explanation of the Authentication Status
+          - TOKEN_TYPE_UNSPECIFIED
+          - TOKEN_TYPE_ACQUIRER
+          - TOKEN_TYPE_NETWORK
+        checkoutReference:
+          $ref: '#/components/schemas/checkoutReference'
+        merchantOrderNumber:
+          description: This attribute is deprecated. Please use messages.merchantOrderNumber.
+          deprecated: true
           type: string
+        requestId:
+          description: This attribute is deprecated. Please use messages.requestId.
+          deprecated: true
+          type: string
+        fraudCheckStatus:
+          description: Specifies the result of transaction fraud check.
+          type: string
+          enum:
+          - FRAUD_CHECK_STATUS_UNSPECIFIED
+          - FRAUD_CHECK_STATUS_APPROVED
+          - FRAUD_CHECK_STATUS_DECLINED
+        status:
+          description: Codifies the current state of the notification.
+          type: string
+          enum:
+          - STATUS_SUCCESS
+          - STATUS_FAILURE
+          - STATUS_PENDING
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
     address:
       description: Specifies an address.
       type: object
@@ -680,119 +837,6 @@ components:
           type: string
           minLength: 3
           maxLength: 12
-    tokenAuthenticationValue:
-      description: Contains authentication value received from Payment Networks for network token transactions
-      type: string
-      maxLength: 40
-    merchantOrderNumber:
-      description: A unique identifier assigned by the merchant or on behalf of the merchant for the intention to purchase goods and/or services. The merchant order provides the merchant a reference to the prices, quantity and description of goods and/or services to be delivered for all transactions included in the sale.
-      type: string
-    consumerAcknowledgement:
-      description: Consumer acknowledgement information
-      type: object
-      properties:
-        mandates:
-          type: array
-          minItems: 0
-          description: Mandate
-          items:
-            $ref: '#/components/schemas/mandate'
-        consents:
-          type: array
-          minItems: 0
-          description: List of consents from consumer
-          items:
-            $ref: '#/components/schemas/consent'
-    messageInfo:
-      description: Message Info
-      type: object
-      required:
-      - messageId
-      properties:
-        messageId:
-          description: Identifies a unique occurrence of a communication message received by the Firm.
-          type: string
-        receiptHandle:
-          description: Message receipt handle. This field will be deprecated soon.
-          type: string
-    card:
-      description: Provides information about the card instrument
-      type: object
-      properties:
-        cardTypeIndicators:
-          $ref: '#/components/schemas/cardTypeIndicators'
-        last4CardNumber:
-          $ref: '#/components/schemas/last4CardNumber'
-        expiry:
-          $ref: '#/components/schemas/expiry'
-        cardType:
-          description: Provides abbreviation of payment network
-          type: string
-        cardTypeName:
-          $ref: '#/components/schemas/cardTypeName'
-        networkResponse:
-          $ref: '#/components/schemas/networkResponse'
-        paymentAccountReference:
-          $ref: '#/components/schemas/paymentAccountReference'
-    code:
-      description: Codifies a raised exception encountered by an internal or external system, sub-system, interface, job, module, system component with which the web service application interfaces.  In this instance it refers to the error raised when reporting job failed.
-      type: string
-    messagesResponse:
-      description: List of messages, if any
-      type: object
-      properties:
-        messageInfo:
-          $ref: '#/components/schemas/messageInfo'
-        createdAt:
-          description: Designates the hour, minute and second in a specific day when the record was created.
-          type: string
-        requestId:
-          $ref: '#/components/schemas/requestId'
-        merchantOrderNumber:
-          $ref: '#/components/schemas/merchantOrderNumber'
-        profileNotification:
-          $ref: '#/components/schemas/profileNotification'
-        tokenNotification:
-          $ref: '#/components/schemas/tokenNotification'
-        orderNotification:
-          $ref: '#/components/schemas/orderNotification'
-    requestId:
-      description: Value provided by the merchant to uniquely identify the checkout session. Alphanumerics only; max 22 chars. This will be used as the orderId/orderNumber in underlying processors.
-      type: string
-    validationMessage:
-      description: Information about errors occurred in transaction validation
-      type: object
-      properties:
-        code:
-          $ref: '#/components/schemas/code'
-        message:
-          $ref: '#/components/schemas/message'
-        entity:
-          description: The moniker given to the module or program where the error generated.
-          type: string
-    checkoutReference:
-      description: This attribute is deprecated. Please use merchantOrderNumber or requestId based on the use case.
-      type: string
-      deprecated: true
-    money:
-      description: Represents a monetary amount with currency.
-      type: object
-      properties:
-        amount:
-          description: Specifies the monetary value of the transaction.
-          type: string
-        currencyCode:
-          description: The ISO 4217 currency code for the transaction amount.
-          type: string
-    accountHolder:
-      description: Captures details of the account owner
-      type: object
-      properties:
-        billingAddress:
-          $ref: '#/components/schemas/address'
-    responseMessage:
-      description: Long explanation of response Message
-      type: string
     receiveMessagesResponse:
       description: Receive Messages Response
       type: object
@@ -809,6 +853,173 @@ components:
           description: List of ack failed messages information
           items:
             $ref: '#/components/schemas/ackFailedMessage'
+    sepa:
+      description: Object for SEPA (Single Euro Payments Area) payment method is a regulatory initiative to facilitate cross border cashless payments across euro-using countries. SEPA allows people doing business across borders in euros to do so with the same ease as domestic transactions within the countries subject to SEPA.
+      type: object
+      properties:
+        internationalBusinessIdentifierCode:
+          description: 'A valid Bank Identification Code (BIC) according to ISO 9362 standards, that can only contain 8 or 11 alphanumeric characters. Eg: For iDEAL issuer, one of valid BICs is RABONL2U.'
+          type: string
+        consumerEmail:
+          description: email provided by consumer for a transaction
+          type: string
+    ackMessagesRequest:
+      description: Ack Messages Request
+      type: object
+      required:
+      - messageInfos
+      properties:
+        messageInfos:
+          type: array
+          minItems: 1
+          description: List of Message Info
+          items:
+            $ref: '#/components/schemas/messageInfo'
+    ideal:
+      description: Ideal is Netherland based payment method that allows customers to buy on the Internet using direct online transfers from their bank account.
+      type: object
+      properties:
+        internationalBusinessIdentifierCode:
+          description: A valid Bank Identification Code (BIC) according to ISO 9362 standards, that can only contain 8 or 11 alphanumeric characters.
+          type: string
+        fullName:
+          description: Name of accountholder or accoundholder business name.
+          type: string
+    expiry:
+      description: Provides information about the expiry information for payment instrument
+      type: object
+      properties:
+        month:
+          description: The month of the expiration date
+          type: integer
+          format: int32
+        year:
+          description: The year of the expiration date
+          type: integer
+          format: int32
+    ackFailedMessage:
+      description: ack failed messages information
+      type: object
+      properties:
+        messageId:
+          description: Identifies a unique occurrence of a communication message received by the Firm.
+          type: string
+        receiptHandle:
+          description: Message receipt handle
+          type: string
+    requestId:
+      description: Value provided by the merchant to uniquely identify the checkout session. Alphanumerics only; max 22 chars. This will be used as the orderId/orderNumber in underlying processors.
+      type: string
+    responseStatus:
+      description: 'The label given to the state of a response to a request submitted by a consumer through the Firm''s Application Program Interface (API) that matches a test case. Valid Values: ERROR,SUCCESS, DENIED'
+      type: string
+      enum:
+      - DENIED
+      - ERROR
+      - SUCCESS
+    paymentAccountReference:
+      description: A unique identifier associated with a specific cardholder primary account number (PAN) used to link a payment account represented by that PAN to affiliated payment tokens. This 29 character identification number can be used in place of sensitive consumer identification fields, and transmitted across the payments ecosystem to facilitate consumer identification.
+      type: string
+    profileNotification:
+      description: Specifies shopper profile information.
+      type: object
+      properties:
+        profileId:
+          description: The payment gateway profile ID
+          type: string
+        paymentMethodId:
+          description: Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account.
+          type: string
+        checkoutReference:
+          $ref: '#/components/schemas/checkoutReference'
+        merchantOrderNumber:
+          description: This attribute is deprecated. Please use messages.merchantOrderNumber.
+          deprecated: true
+          type: string
+        requestId:
+          description: This attribute is deprecated. Please use messages.requestId.
+          deprecated: true
+          type: string
+        fraudCheckStatus:
+          description: Specifies the result of transaction fraud check.
+          type: string
+          enum:
+          - FRAUD_CHECK_STATUS_UNSPECIFIED
+          - FRAUD_CHECK_STATUS_APPROVED
+          - FRAUD_CHECK_STATUS_DECLINED
+        status:
+          description: Codifies the current state of the notification.
+          type: string
+          enum:
+          - STATUS_SUCCESS
+          - STATUS_FAILURE
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        responseMessage:
+          $ref: '#/components/schemas/responseMessage'
+    responseCode:
+      description: Short explanation of response Code
+      type: string
+    messageInfo:
+      description: Message Info
+      type: object
+      required:
+      - messageId
+      properties:
+        messageId:
+          description: Identifies a unique occurrence of a communication message received by the Firm.
+          type: string
+        receiptHandle:
+          description: Message receipt handle. This field will be deprecated soon.
+          type: string
+    last4CardNumber:
+      description: Identifies the last four digits of the primary account number of a credit, debit or pre-paid card.
+      type: string
+      deprecated: true
+    responseMessage:
+      description: Long explanation of response Message
+      type: string
+    merchantOrderNumber:
+      description: A unique identifier assigned by the merchant or on behalf of the merchant for the intention to purchase goods and/or services. The merchant order provides the merchant a reference to the prices, quantity and description of goods and/or services to be delivered for all transactions included in the sale.
+      type: string
+    accountHolder:
+      description: Captures details of the account owner
+      type: object
+      properties:
+        billingAddress:
+          $ref: '#/components/schemas/address'
+    mandate:
+      description: Demand deposit mandate information
+      type: object
+      properties:
+        referenceNumber:
+          description: Identifies a reference number for the direct debit mandate the creditor signed with the debtor.
+          type: string
+        mandateType:
+          description: Codifies the category of an agreement between the consumer, debtor bank (direct debit account of the consumer) and the merchant. This agreement (mandate) gives the merchant permission to withdraw funds from the consumer's bank account for some specific financial purpose. Typically mandates are used for recurring or installment payments; that is, a fixed amount to be withdrawn over a specific period of time (defined by the “Mandate Date”). One-time withdrawals are allowed. Mandates are specific to European programs such as Single Euro Payments Area (SEPA) Direct Debit (DD) scheme and Bankers' Automated Clearing System (BACS).
+          type: string
+        contractSigned:
+          description: Indicates whether the legal agreement between the customer and the Firm has been signed by the client.
+          type: boolean
+        agreementDescription:
+          description: Provides textual information containing the description of the agreement with the consumer for a service provided by merchant or firm.
+          type: string
+        presentationMode:
+          description: Codifies the method that was used to present the consent to the consumer such as explicit or implicit with the click of CTA.
+          type: string
+    listMessagesResponse:
+      description: Messages Responses
+      type: object
+      properties:
+        messages:
+          type: array
+          minItems: 0
+          description: This is used for specifying an attribute used on a model for collection object that will contain one or more attributes
+          items:
+            $ref: '#/components/schemas/messagesResponse'
+        nextPageToken:
+          description: To be used as is to get the next page of the request submitted earlier. If returned empty, it means there are no more pages to fetch for the given request.
+          type: string
     threeDomainSecureTransaction:
       description: Three Domain Secure Transaction Information
       type: object
@@ -899,273 +1110,62 @@ components:
         issuerAssignedAuthenticationFraudScore:
           description: Assigned by the card issuer this specifies the likelihood that an authorization will be fraudulent. The scale ranges from 0 to 99. The higher the score, the more likely the authorization will be fraudulent.
           type: string
-    consent:
-      description: Consent for consumer profile
+    messagesResponse:
+      description: List of messages, if any
       type: object
       properties:
-        consentType:
-          description: Codifies the category of agreement with the consumer for a service provided by merchant or firm.
+        messageInfo:
+          $ref: '#/components/schemas/messageInfo'
+        createdAt:
+          description: Designates the hour, minute and second in a specific day when the record was created.
           type: string
-        contractSigned:
-          description: Indicates whether the legal agreement between the customer and the Firm has been signed by the client.
-          type: boolean
-        agreementDescription:
-          description: Provides textual information containing the description of the agreement with the consumer for a service provided by merchant or firm.
-          type: string
-        presentationMode:
-          description: Codifies the method that was used to present the consent to the consumer such as explicit or implicit with the click of CTA.
-          type: string
-    responseCode:
-      description: Short explanation of response Code
-      type: string
-    last4CardNumber:
-      description: Identifies the last four digits of the primary account number of a credit, debit or pre-paid card.
-      type: string
-      deprecated: true
-    paze:
-      description: Use is for encrypted bundles for web or Internet acceptance of digital device wallets PAZE
+        requestId:
+          $ref: '#/components/schemas/requestId'
+        merchantOrderNumber:
+          $ref: '#/components/schemas/merchantOrderNumber'
+        profileNotification:
+          $ref: '#/components/schemas/profileNotification'
+        tokenNotification:
+          $ref: '#/components/schemas/tokenNotification'
+        orderNotification:
+          $ref: '#/components/schemas/orderNotification'
+    threeDomainSecureExemption:
+      description: EEA/UK Supported SCA exemptions
       type: object
       properties:
-        cardTypeName:
-          $ref: '#/components/schemas/cardTypeName'
+        authenticationExemptionReason:
+          description: EEA/UK Supported SCA exemptions
+          type: string
+          enum:
+          - LOW_VALUE_PAYMENT
+          - TRANSACTION_RISK_ANALYSIS
+          - NOT_EXEMPTED
+          - NOT_ENTITLED
+          - MERCHANT_INITIATED_TRANSACTION
+          - RECURRING_PAYMENT
+          - ONE_LEG_OUT
+        authenticationStatusReasonText:
+          description: Long explanation of the Authentication Status
+          type: string
+    card:
+      description: Provides information about the card instrument
+      type: object
+      properties:
         cardTypeIndicators:
           $ref: '#/components/schemas/cardTypeIndicators'
-        electronicCommerceIndicator:
-          $ref: '#/components/schemas/electronicCommerceIndicator'
-        tokenAuthenticationValue:
-          $ref: '#/components/schemas/tokenAuthenticationValue'
+        last4CardNumber:
+          $ref: '#/components/schemas/last4CardNumber'
+        expiry:
+          $ref: '#/components/schemas/expiry'
+        cardType:
+          description: Provides abbreviation of payment network
+          type: string
+        cardTypeName:
+          $ref: '#/components/schemas/cardTypeName'
         networkResponse:
           $ref: '#/components/schemas/networkResponse'
         paymentAccountReference:
           $ref: '#/components/schemas/paymentAccountReference'
-        expiry:
-          $ref: '#/components/schemas/expiry'
-    expiry:
-      description: Provides information about the expiry information for payment instrument
-      type: object
-      properties:
-        month:
-          description: The month of the expiration date
-          type: integer
-          format: int32
-        year:
-          description: The year of the expiration date
-          type: integer
-          format: int32
-    message:
-      description: Provides textual description of a problem that has occurred and is preventing the system from completing a task. Messages can be a confirmation, warning or notification, and can trigger the system to apply a customized default value or override to a field, record or file, halt or postpone processing, skip or reject the entry generating the problem. Messages can be displayed on-screen in the user interface or in reporting.
-      type: string
-    paymentAccountReference:
-      description: A unique identifier associated with a specific cardholder primary account number (PAN) used to link a payment account represented by that PAN to affiliated payment tokens. This 29 character identification number can be used in place of sensitive consumer identification fields, and transmitted across the payments ecosystem to facilitate consumer identification.
-      type: string
-    paymentMethodTypeCode:
-      description: Codifies the method the Applicant has used to Pay the good faith deposit or other fee paid at application.
-      type: string
-      enum:
-      - PAYMENT_METHOD_TYPE_CODE_CARD
-      - PAYMENT_METHOD_TYPE_CODE_ELECTRONIC_CHECK
-      - PAYMENT_METHOD_TYPE_CODE_APPLE_PAY
-      - PAYMENT_METHOD_TYPE_CODE_SEPA
-      - PAYMENT_METHOD_TYPE_CODE_GOOGLE_PAY
-      - PAYMENT_METHOD_TYPE_CODE_PAZE
-      - PAYMENT_METHOD_TYPE_CODE_WECHAT_PAY
-      - PAYMENT_METHOD_TYPE_CODE_IDEAL
-      - PAYMENT_METHOD_TYPE_CODE_PAY_PAL
-      - PAYMENT_METHOD_TYPE_CODE_ALI_PAY
-      - PAYMENT_METHOD_TYPE_CODE_TRUSTLY
-      - PAYMENT_METHOD_TYPE_CODE_KLARNA
-      - PAYMENT_METHOD_TYPE_CODE_PAY_BY_BANK
-      - PAYMENT_METHOD_TYPE_CODE_AFFIRM
-    listMessagesResponse:
-      description: Messages Responses
-      type: object
-      properties:
-        messages:
-          type: array
-          minItems: 0
-          description: This is used for specifying an attribute used on a model for collection object that will contain one or more attributes
-          items:
-            $ref: '#/components/schemas/messagesResponse'
-        nextPageToken:
-          description: To be used as is to get the next page of the request submitted earlier. If returned empty, it means there are no more pages to fetch for the given request.
-          type: string
-    cardTypeName:
-      description: Provides name of the payment network
-      type: string
-    payByBank:
-      description: Pay by Bank payment method information.
-      type: object
-      properties:
-        bankName:
-          description: The name of the bank used for the payment.
-          type: string
-        accountType:
-          description: The type of bank account used for the payment.
-          type: string
-    cardTypeIndicators:
-      description: Card type indicators.
-      type: object
-      properties:
-        durbinRegulated:
-          description: Indicates that a given issuer Bank Identification Number (BIN) or BIN range in the United States is subject to the Durbin Amendment of the Dodd-Frank Wall Street Reform and Consumer Protection Act of 2010, which limits the amount of interchange the issuer can charge for debit card based transactions.
-          type: boolean
-        level3Eligible:
-          description: Indicates whether the given card or Bank Identification Number (BIN) range is capable of handling transactions with Level 3 data on them. Level 3 data includes line item details as well as other relevant business-to-business transaction data.
-          type: boolean
-        issuanceCountry:
-          description: Codifies the country in which a given card has been issued. This information is provided in what is traditionally known as the Bank Identification Number (BIN) file. This is an International Organization for Standardization (ISO) assigned code to represent the Country, a Geographic Area, that is recognized as an independent political unit in world affairs.
-          type: string
-        cardTypeCategory:
-          description: Codifies the program associated with the physical card (e.g. SUA = Single Use Account, CC = Credit Card).
-          type: string
-        cardIssuerName:
-          description: The label given to the issuer of a card-based payment account. The term "issuer" may refer to either the payment brand itself, as for the American Express and Discover payment brands, or the issuer will be a financial institution authorized to issue cards with the payment brand logo, as is the case for Visa and MasterCard.
-          type: string
-        cardProductName:
-          description: 'Codifies issuer-supplied value assigned by Mastercard and Visa user to track card-level activity by card account number.  Sample Visa values: A - Visa Traditional/NA C - Visa Signature I - Visa Commerce L - Visa Corporate  Sample MasterCard values: MCF - MasterCard Fleet Card MCW - World MasterCard MDS - Debit MasterCard MCO - MasterCard Corporate'
-          type: string
-        cardProductType:
-          description: 'Denotes the primary processing network on which the account can make credit transactions. It also specifies the product types that VISA and MasterCard use to classify accounts for reporting. Note: There are some codes that are used only by Common Profit Book (CPB). Within the CPB, the existing code is replaced based on information from MasterCard and Visa. Formerly known as Association Product Code.'
-          type: array
-          minItems: 0
-          items:
-            type: string
-            enum:
-            - AFFLUENT_CATEGORY
-            - COMMERCIAL
-            - HEALTHCARE
-            - PAYROLL
-            - PREPAID
-            - PINLESS_DEBIT
-            - SIGNATURE_DEBIT
-            - PREPAID_RELOADABLE
-    profileNotification:
-      description: Specifies shopper profile information.
-      type: object
-      properties:
-        profileId:
-          description: The payment gateway profile ID
-          type: string
-        paymentMethodId:
-          description: Identifies a unique occurrence of the type of payment accepted by a level of the hierarchy of the merchant acquiring account.
-          type: string
-        checkoutReference:
-          $ref: '#/components/schemas/checkoutReference'
-        merchantOrderNumber:
-          description: This attribute is deprecated. Please use messages.merchantOrderNumber.
-          deprecated: true
-          type: string
-        requestId:
-          description: This attribute is deprecated. Please use messages.requestId.
-          deprecated: true
-          type: string
-        fraudCheckStatus:
-          description: Specifies the result of transaction fraud check.
-          type: string
-          enum:
-          - FRAUD_CHECK_STATUS_UNSPECIFIED
-          - FRAUD_CHECK_STATUS_APPROVED
-          - FRAUD_CHECK_STATUS_DECLINED
-        status:
-          description: Codifies the current state of the notification.
-          type: string
-          enum:
-          - STATUS_SUCCESS
-          - STATUS_FAILURE
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-    mandate:
-      description: Demand deposit mandate information
-      type: object
-      properties:
-        referenceNumber:
-          description: Identifies a reference number for the direct debit mandate the creditor signed with the debtor.
-          type: string
-        mandateType:
-          description: Codifies the category of an agreement between the consumer, debtor bank (direct debit account of the consumer) and the merchant. This agreement (mandate) gives the merchant permission to withdraw funds from the consumer's bank account for some specific financial purpose. Typically mandates are used for recurring or installment payments; that is, a fixed amount to be withdrawn over a specific period of time (defined by the “Mandate Date”). One-time withdrawals are allowed. Mandates are specific to European programs such as Single Euro Payments Area (SEPA) Direct Debit (DD) scheme and Bankers' Automated Clearing System (BACS).
-          type: string
-        contractSigned:
-          description: Indicates whether the legal agreement between the customer and the Firm has been signed by the client.
-          type: boolean
-        agreementDescription:
-          description: Provides textual information containing the description of the agreement with the consumer for a service provided by merchant or firm.
-          type: string
-        presentationMode:
-          description: Codifies the method that was used to present the consent to the consumer such as explicit or implicit with the click of CTA.
-          type: string
-    electronicCheck:
-      description: Object for ACH (Automated Clearing House) payment method which occurs whenever someone instructs the ACH network to “push” money from their account to someone else's. This is mostly used in USA.
-      type: object
-      properties:
-        financialInstitutionRoutingNumber:
-          description: Identifies the routing and transit number assigned by an administrative body to formally identify a chartered financial institution (bank) within a given country or common financial market for performing domestic transfers of funds to or from that institution's client accounts. Within the United States, this is known as the American Bankers Association Routing Number, and within Australia, this is known as a Bank State Branch Number. This common data element will house those two examples, along with the equivalent for any other country or financial market.
-          type: string
-        accountNumber:
-          description: The card or token number.
-          type: string
-          writeOnly: true
-        accountType:
-          description: Codifies a bank account where funds are deposited or stored (e.g., checking and savings account). When shared with a financial institution as the client's primary automated payment mechanism for a debt, it may also be known as a DDA (Demand Deposit Account). A DDA can have funds withdrawn at any time from the depository institution, accessible by a teller, ATM or via online banking.
-          type: string
-          enum:
-          - CHECKING
-          - SAVING
-          - CORPORATE_CHECKING
-    paymentMethod:
-      description: Provides information about the payment method used.
-      type: object
-      properties:
-        paymentMethodType:
-          $ref: '#/components/schemas/paymentMethodTypeCode'
-        maskedAccountNumber:
-          description: Identifies a concealed number associated with the card number recognized by various payment systems. This is typically concealed by storing only the first 6 and/or last 4 digits of the payment account number or some variation.
-          type: string
-        approvalCode:
-          description: Approval code provided by the issuing bank.
-          type: string
-        card:
-          $ref: '#/components/schemas/card'
-        sepa:
-          $ref: '#/components/schemas/sepa'
-        paze:
-          $ref: '#/components/schemas/paze'
-        electronicCheck:
-          $ref: '#/components/schemas/electronicCheck'
-        applePay:
-          $ref: '#/components/schemas/applePay'
-        googlePay:
-          $ref: '#/components/schemas/googlePay'
-        ideal:
-          $ref: '#/components/schemas/ideal'
-        wechatpay:
-          $ref: '#/components/schemas/wechatpay'
-        payByBank:
-          $ref: '#/components/schemas/payByBank'
-    messages:
-      description: A list of errors and warnings
-      type: object
-      properties:
-        responseStatus:
-          $ref: '#/components/schemas/responseStatus'
-        responseCode:
-          $ref: '#/components/schemas/responseCode'
-        responseMessage:
-          $ref: '#/components/schemas/responseMessage'
-        validationErrors:
-          type: array
-          minItems: 0
-          description: Information about errors occurred in transaction validation
-          items:
-            $ref: '#/components/schemas/validationMessage'
-    wechatpay:
-      description: Wechatpay payment method is linked to consumer bank accounts and/or payment network cards.
-      type: object
-      properties:
-        paymentArrangementExpirationTimestamp:
-          description: Designates the hour (hh), minute (mm), seconds (ss) and date (if timestamp) or year (YYYY), month (MM), and day (DD) (if date) when the relationship expires. If there is no defined expiration date, the field will be blank.
-          type: string
   securitySchemes:
     BearerAuth:
       type: http

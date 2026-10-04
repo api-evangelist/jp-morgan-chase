@@ -1008,118 +1008,166 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ConsentResponse:
+    Account:
       type: object
       properties:
-        redirectUrl:
+        accountId:
           type: string
-          description: 'URL to redirect the PSU to their online banking portal or mobile app to
+          description: Accounts unique identifier. This number has no other relevance or use to the PSU or provider; it is only used to identify the account in API requests and responses
+        balance:
+          type: number
+          description: Account's current balance
+        nature:
+          type: string
+          description: 'The type of the account. Note that for the ''credit_card'' nature, the
 
-            confirm the sharing of information. Additionally, the redirect URL will
+            balance represents the sum of all negative transactions; the
 
-            contain the access token needed in the Send Authorized Token API
-
-            request body'
-          format: URL
-    Error:
-      type: object
-      description: "The error response object \n\n**Note: This error response format is used by all AISP and PISP endpoints except Refunds endpoint which adopted a better error strcuture**"
-      properties:
-        error:
-          type: array
-          items:
-            properties:
-              errorCode:
+            positive ones do not count'
+          enum:
+          - account
+          - bonus
+          - card
+          - checking
+          - credit
+          - credit_card
+          - debit_card
+          - ewallet
+          - insurance
+          - investment
+          - loan
+          - mortgage
+          - savings
+        name:
+          type: string
+          description: Accounts unique name
+          example: Account100
+        currencyCode:
+          type: string
+          description: Accounts currency. ISO 4217 Alpha-3 Currency Code
+        extra:
+          type: object
+          description: Additional account related fields.
+          properties:
+            accountName:
+              type: string
+              description: Changeable name of the account
+            accountNumber:
+              type: string
+              description: Account number
+            lastPostedTransactionId:
+              type: string
+              description: The identifier of the last posted transaction
+            cards:
+              type: array
+              description: List of masked card numbers
+              items:
                 type: string
-                description: Unique error code
-              errorMsg:
+              minItems: 0
+            assets:
+              type: array
+              description: Array of crypto codes and their amounts assigned to an `investment` account
+              items:
                 type: string
-                description: Describes the details of the error occurred
-          minItems: 0
-          maxItems: 99
-    AccountsResponse:
-      type: array
-      description: Contains account(s) information
-      items:
-        $ref: '#/components/schemas/Account'
-      minItems: 0
-      maxItems: 100
-    AuthorizeResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Message that states whether the authorization was successful and a connection was established to the provider or not
-    TransactionsResponse:
-      type: array
-      description: Contains transaction details
-      items:
-        $ref: '#/components/schemas/Transaction'
-      minItems: 0
-      maxItems: 100
-    ConsentRequest:
-      type: object
-      required:
-      - customerId
-      - countryCode
-      - consentScopes
-      - providerCode
-      - returnToUrl
-      properties:
-        customerId:
-          type: string
-          description: The unique identifier determined by the J.P. Morgan client for the PSU
-        countryCode:
-          type: string
-          description: Code of provider's country in ISO 3166-1 alpha-2 format
-        providerCode:
-          type: string
-          description: Provider's unique reference code
-        consentScopes:
-          type: array
-          description: "Array of possible consent scopes for the PSU to consent to. \nYou must provide at least one of the below options"
-          items:
-            type: string
-            properties:
-              account_details:
-                type: string
-              transactions_details:
-                type: string
-              holder_information:
-                type: string
-          minItems: 0
-        consentDuration:
-          type: integer
-          description: 'Duration in days of the consent. Can be left blank or null for
+              minItems: 0
+            availableAmount:
+              type: number
+              description: Available amount in the accounts currency
+            units:
+              type: string
+              description: Amount of units owned (used with unit_price, available for `investment` account nature only)
+            nextPaymentDate:
+              type: string
+              description: Next payment date for loans or credits
+              format: date
+            closingBalance:
+              type: number
+              description: Account balance at the end of an accounting period
+            creditLimit:
+              type: number
+              description: Credit limit in the account?s currency
+            interestRate:
+              type: string
+              description: 'Interest rate paid on the account?s balance as a percentage
 
-            open-ended consent if the provider permits it'
-        returnToUrl:
-          type: string
-          description: 'URL to redirect the PSU once they have completed the
+                value'
+            openingBalance:
+              type: number
+              description: 'Account balance that is brought forward from the end of one
 
-            consent process. This URL must be fully qualified and
+                accounting period to the beginning of a new accounting period'
+            clientName:
+              type: string
+              description: Account's client owner
+            currentTime:
+              type: string
+              description: Time of Provider statement generation (applicable to banks)
+              format: timestamp
+            swift:
+              type: string
+              description: Account's SWIFT code
+            openDate:
+              type: string
+              description: Card open date
+              format: date
+            expiryDate:
+              type: string
+              description: Card expiry date
+              format: date
+            cardType:
+              type: string
+              description: Type of card account
+              enum:
+              - american_express
+              - china_unionpay
+              - diners_club
+              - jcb
+              - maestro
+              - master_card
+              - uatp
+              - visa
+              - mir
+            sortCode:
+              type: string
+              description: Routing number (US) / BSB code (Australia) / sort code (UK)
+            unitPrice:
+              type: number
+              description: 'Price per unit (used with units, available for `investment`
 
-            include the full path, as some providers will validate it.
-
-            Additionally, some providers only permit HTTPS redirect URLs'
-          format: URL
-    AuthorizeRequest:
-      type: object
-      required:
-      - customerId
-      - providerCode
-      - authToken
-      properties:
-        customerId:
-          type: string
-          description: The unique identifier determined by the J.P. Morgan client for the PSU
-        providerCode:
-          type: string
-          description: Providers unique reference code
-        authToken:
-          type: string
-          example: access_token=bc4521d3&state=Pd8b4d0eb
-          description: The authorization token given by the provider in the `redirectUrl` attribute in the Account Information Access Consent API response body
+                account nature only)'
+            totalPaymentAmount:
+              type: number
+              description: Total payment amount for loans or credits
+            currentDate:
+              type: string
+              description: Date of Provider statement generation (applicable to banks)
+              format: date
+            statementCutDate:
+              type: string
+              description: Date when the current statement becomes a previous one
+              format: date
+            iban:
+              type: string
+              description: Account's IBAN number
+            blockedAmount:
+              type: string
+              description: The amount currently blocked in the account?s currency
+            status:
+              type: string
+              description: States if the account is active or inactive
+            nextPaymentAmount:
+              type: string
+              description: Next payment amount for loans or credits
+            transactionsCount:
+              type: object
+              description: Number of transactions, separated by posted and pending
+              properties:
+                pending:
+                  type: integer
+                  description: Number of pending transactions
+                posted:
+                  type: integer
+                  description: Number of posted transactions
     Providers:
       type: object
       properties:
@@ -1170,18 +1218,63 @@ components:
           items:
             type: string
           minItems: 0
-    AccountsRequest:
+    ConsentRequest:
       type: object
       required:
       - customerId
+      - countryCode
+      - consentScopes
       - providerCode
+      - returnToUrl
       properties:
         customerId:
           type: string
           description: The unique identifier determined by the J.P. Morgan client for the PSU
+        countryCode:
+          type: string
+          description: Code of provider's country in ISO 3166-1 alpha-2 format
         providerCode:
           type: string
-          description: Providers unique reference code
+          description: Provider's unique reference code
+        consentScopes:
+          type: array
+          description: "Array of possible consent scopes for the PSU to consent to. \nYou must provide at least one of the below options"
+          items:
+            type: string
+            properties:
+              account_details:
+                type: string
+              transactions_details:
+                type: string
+              holder_information:
+                type: string
+          minItems: 0
+        consentDuration:
+          type: integer
+          description: 'Duration in days of the consent. Can be left blank or null for
+
+            open-ended consent if the provider permits it'
+        returnToUrl:
+          type: string
+          description: 'URL to redirect the PSU once they have completed the
+
+            consent process. This URL must be fully qualified and
+
+            include the full path, as some providers will validate it.
+
+            Additionally, some providers only permit HTTPS redirect URLs'
+          format: URL
+    ProvidersRequest:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          example: DE
+          description: 'ISO 3166-1 Alpha-2 code for the desired country from which to fetch
+
+            the Providers list. If no countryCode is given, then the API will
+
+            return the full list of Providers'
     HolderInfoRequest:
       type: object
       required:
@@ -1194,17 +1287,65 @@ components:
         providerCode:
           type: string
           description: Provider's unique reference code
-    ProvidersRequest:
+    TransactionsResponse:
+      type: array
+      description: Contains transaction details
+      items:
+        $ref: '#/components/schemas/Transaction'
+      minItems: 0
+      maxItems: 100
+    HolderInfoResponse:
       type: object
       properties:
-        countryCode:
+        names:
+          type: array
+          items:
+            type: string
+            description: Account holder name(s)
+          minItems: 0
+        emails:
+          type: array
+          format: email
+          items:
+            type: string
+            description: Account holder email(s)
+            format: email
+          minItems: 0
+        phoneNumbers:
+          type: array
+          items:
+            type: string
+            description: Account holder number(s)
+          minItems: 0
+        addresses:
+          type: array
+          items:
+            type: string
+            description: Account holder address(s)
+          minItems: 0
+    TransactionsRequest:
+      type: object
+      required:
+      - customerId
+      - providerCode
+      properties:
+        customerId:
           type: string
-          example: DE
-          description: 'ISO 3166-1 Alpha-2 code for the desired country from which to fetch
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        providerCode:
+          type: string
+          description: Provider's unique reference code
+        accountId:
+          type: string
+          description: 'Account''s unique identifier. If no identifier is provided,
 
-            the Providers list. If no countryCode is given, then the API will
-
-            return the full list of Providers'
+            transactions from all of the PSU''s available accounts will be retrieved'
+    AuthorizeResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message that states whether the authorization was successful and a connection was established to the provider or not
     Transaction:
       type: object
       properties:
@@ -1403,205 +1544,47 @@ components:
           type: string
           description: Date and time at which the transaction was updated
           format: date-time
-    ProvidersResponse:
+    AuthorizeRequest:
       type: object
-      description: Contains providers information
+      required:
+      - customerId
+      - providerCode
+      - authToken
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Providers'
-          minItems: 0
-    HolderInfoResponse:
+        customerId:
+          type: string
+          description: The unique identifier determined by the J.P. Morgan client for the PSU
+        providerCode:
+          type: string
+          description: Providers unique reference code
+        authToken:
+          type: string
+          example: access_token=bc4521d3&state=Pd8b4d0eb
+          description: The authorization token given by the provider in the `redirectUrl` attribute in the Account Information Access Consent API response body
+    Error:
       type: object
+      description: "The error response object \n\n**Note: This error response format is used by all AISP and PISP endpoints except Refunds endpoint which adopted a better error strcuture**"
       properties:
-        names:
+        error:
           type: array
           items:
-            type: string
-            description: Account holder name(s)
-          minItems: 0
-        emails:
-          type: array
-          format: email
-          items:
-            type: string
-            description: Account holder email(s)
-            format: email
-          minItems: 0
-        phoneNumbers:
-          type: array
-          items:
-            type: string
-            description: Account holder number(s)
-          minItems: 0
-        addresses:
-          type: array
-          items:
-            type: string
-            description: Account holder address(s)
-          minItems: 0
-    Account:
-      type: object
-      properties:
-        accountId:
-          type: string
-          description: Accounts unique identifier. This number has no other relevance or use to the PSU or provider; it is only used to identify the account in API requests and responses
-        balance:
-          type: number
-          description: Account's current balance
-        nature:
-          type: string
-          description: 'The type of the account. Note that for the ''credit_card'' nature, the
-
-            balance represents the sum of all negative transactions; the
-
-            positive ones do not count'
-          enum:
-          - account
-          - bonus
-          - card
-          - checking
-          - credit
-          - credit_card
-          - debit_card
-          - ewallet
-          - insurance
-          - investment
-          - loan
-          - mortgage
-          - savings
-        name:
-          type: string
-          description: Accounts unique name
-          example: Account100
-        currencyCode:
-          type: string
-          description: Accounts currency. ISO 4217 Alpha-3 Currency Code
-        extra:
-          type: object
-          description: Additional account related fields.
-          properties:
-            accountName:
-              type: string
-              description: Changeable name of the account
-            accountNumber:
-              type: string
-              description: Account number
-            lastPostedTransactionId:
-              type: string
-              description: The identifier of the last posted transaction
-            cards:
-              type: array
-              description: List of masked card numbers
-              items:
+            properties:
+              errorCode:
                 type: string
-              minItems: 0
-            assets:
-              type: array
-              description: Array of crypto codes and their amounts assigned to an `investment` account
-              items:
+                description: Unique error code
+              errorMsg:
                 type: string
-              minItems: 0
-            availableAmount:
-              type: number
-              description: Available amount in the accounts currency
-            units:
-              type: string
-              description: Amount of units owned (used with unit_price, available for `investment` account nature only)
-            nextPaymentDate:
-              type: string
-              description: Next payment date for loans or credits
-              format: date
-            closingBalance:
-              type: number
-              description: Account balance at the end of an accounting period
-            creditLimit:
-              type: number
-              description: Credit limit in the account?s currency
-            interestRate:
-              type: string
-              description: 'Interest rate paid on the account?s balance as a percentage
-
-                value'
-            openingBalance:
-              type: number
-              description: 'Account balance that is brought forward from the end of one
-
-                accounting period to the beginning of a new accounting period'
-            clientName:
-              type: string
-              description: Account's client owner
-            currentTime:
-              type: string
-              description: Time of Provider statement generation (applicable to banks)
-              format: timestamp
-            swift:
-              type: string
-              description: Account's SWIFT code
-            openDate:
-              type: string
-              description: Card open date
-              format: date
-            expiryDate:
-              type: string
-              description: Card expiry date
-              format: date
-            cardType:
-              type: string
-              description: Type of card account
-              enum:
-              - american_express
-              - china_unionpay
-              - diners_club
-              - jcb
-              - maestro
-              - master_card
-              - uatp
-              - visa
-              - mir
-            sortCode:
-              type: string
-              description: Routing number (US) / BSB code (Australia) / sort code (UK)
-            unitPrice:
-              type: number
-              description: 'Price per unit (used with units, available for `investment`
-
-                account nature only)'
-            totalPaymentAmount:
-              type: number
-              description: Total payment amount for loans or credits
-            currentDate:
-              type: string
-              description: Date of Provider statement generation (applicable to banks)
-              format: date
-            statementCutDate:
-              type: string
-              description: Date when the current statement becomes a previous one
-              format: date
-            iban:
-              type: string
-              description: Account's IBAN number
-            blockedAmount:
-              type: string
-              description: The amount currently blocked in the account?s currency
-            status:
-              type: string
-              description: States if the account is active or inactive
-            nextPaymentAmount:
-              type: string
-              description: Next payment amount for loans or credits
-            transactionsCount:
-              type: object
-              description: Number of transactions, separated by posted and pending
-              properties:
-                pending:
-                  type: integer
-                  description: Number of pending transactions
-                posted:
-                  type: integer
-                  description: Number of posted transactions
-    TransactionsRequest:
+                description: Describes the details of the error occurred
+          minItems: 0
+          maxItems: 99
+    AccountsResponse:
+      type: array
+      description: Contains account(s) information
+      items:
+        $ref: '#/components/schemas/Account'
+      minItems: 0
+      maxItems: 100
+    AccountsRequest:
       type: object
       required:
       - customerId
@@ -1612,41 +1595,33 @@ components:
           description: The unique identifier determined by the J.P. Morgan client for the PSU
         providerCode:
           type: string
-          description: Provider's unique reference code
-        accountId:
+          description: Providers unique reference code
+    ProvidersResponse:
+      type: object
+      description: Contains providers information
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Providers'
+          minItems: 0
+    ConsentResponse:
+      type: object
+      properties:
+        redirectUrl:
           type: string
-          description: 'Account''s unique identifier. If no identifier is provided,
+          description: 'URL to redirect the PSU to their online banking portal or mobile app to
 
-            transactions from all of the PSU''s available accounts will be retrieved'
+            confirm the sharing of information. Additionally, the redirect URL will
+
+            contain the access token needed in the Send Authorized Token API
+
+            request body'
+          format: URL
   examples:
-    TransactionsRequestExample:
-      value:
-        customerId: TestCustomer1
-        providerCode: fake_oauth_client_xf
-        accountId: '12000012'
     ConsentResponseExample:
       value:
         redirectUrl: https://www.abc.com/regulated_fake_providers/fake_oauth_client_xf?client_id=2886&fetch_scopes%5B%5D=accounts&fetch_scopes%5B%5D=holder_info&fetch_scopes%5B%5D=transactions&flow=ais&return_to=https%3A%2F%2Fwww.saltedge.com%2Fconnect%2Foauth_callback%2Faisp%2F2c58378dea8acbc899a4ef6be60e6f8462662615f2011e93de1625af8dcc6c3e&state=connect_token_2c58378dea8acbc899a4ef6be60e6f8462662615f2011e93de1625af8dcc6c3e
-    ConsentRequestExample:
-      value:
-        customerId: CUST_QA02103453A
-        countryCode: XF
-        providerCode: fake_oauth_client_xf
-        consentScopes:
-        - account_details
-        - transactions_details
-        - holder_information
-        consentDuration: 90
-        returnToUrl: https://sites.jpmchase.com/sites/cib
-    HolderInfoResponseExample:
-      value:
-        names:
-        - Engelbert Smith
-        emails:
-        - esmith@emailservice.com
-        phoneNumbers:
-        - '+440123123123'
-        addresses: []
     TransactionsResponseExample:
       value:
       - accountId: '12000012'
@@ -1685,6 +1660,47 @@ components:
           tags: []
         createdAt: '2018-12-19T17:38:13Z'
         updatedAt: '2019-08-05T17:38:13Z'
+    AuthorizeRequestExample:
+      value:
+        customerId: TestCustomer1
+        providerCode: fake_oauth_client_xf
+        authToken: access_token=bc4521d3&state=Pd8b4d0eb
+    AccountsRequestExample:
+      value:
+        customerId: TestCustomer1
+        providerCode: fake_oauth_client_xf
+    TransactionsRequestExample:
+      value:
+        customerId: TestCustomer1
+        providerCode: fake_oauth_client_xf
+        accountId: '12000012'
+    ProvidersResponseExample:
+      value:
+        data:
+        - providersCode: fakebank_image_xf
+          providersName: Fake Bank with Image
+          customerNotifiedOnSignIn: false
+          loginUrl: http://example.com/login
+          logoUrl: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/xf/placeholder_global.svg
+          countryCode: XF
+          supportedFetchScopes:
+          - accounts
+          - accounts_without_balance
+          - holder_info
+          - transactions
+          supportedAccountNatures:
+          - account
+          - card
+          - credit_card
+    HolderInfoResponseExample:
+      value:
+        names:
+        - Engelbert Smith
+        emails:
+        - esmith@emailservice.com
+        phoneNumbers:
+        - '+440123123123'
+        addresses: []
     AuthorizeResponseExample:
       value:
         message: Connection with provider forgerock_client_gb_xf established successfully
@@ -1704,41 +1720,25 @@ components:
           transactionsCount:
             pending: 0
             posted: 1098
-    HolderInfoRequestExample:
+    ConsentRequestExample:
       value:
-        customerId: TestCustomer1
+        customerId: CUST_QA02103453A
+        countryCode: XF
         providerCode: fake_oauth_client_xf
+        consentScopes:
+        - account_details
+        - transactions_details
+        - holder_information
+        consentDuration: 90
+        returnToUrl: https://sites.jpmchase.com/sites/cib
     InvalidJSONFormatExample:
       value:
         errorCode: PISP-003
         errorMsg: Invalid JSON format
-    ProvidersResponseExample:
-      value:
-        data:
-        - providersCode: fakebank_image_xf
-          providersName: Fake Bank with Image
-          customerNotifiedOnSignIn: false
-          loginUrl: http://example.com/login
-          logoUrl: https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/xf/placeholder_global.svg
-          countryCode: XF
-          supportedFetchScopes:
-          - accounts
-          - accounts_without_balance
-          - holder_info
-          - transactions
-          supportedAccountNatures:
-          - account
-          - card
-          - credit_card
-    AccountsRequestExample:
+    HolderInfoRequestExample:
       value:
         customerId: TestCustomer1
         providerCode: fake_oauth_client_xf
-    AuthorizeRequestExample:
-      value:
-        customerId: TestCustomer1
-        providerCode: fake_oauth_client_xf
-        authToken: access_token=bc4521d3&state=Pd8b4d0eb
   parameters:
     ContentType:
       name: Content-Type
