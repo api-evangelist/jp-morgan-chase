@@ -112,90 +112,6 @@ paths:
       description: MOCK
 components:
   schemas:
-    ErrorContext:
-      title: ErrorContext
-      x-tags:
-      - common-error-model
-      - common-components
-      type: object
-      required:
-      - message
-      properties:
-        code:
-          type: string
-          description: JPMC Short code that identifies the error - publicly cataloged and documented
-          minLength: 5
-          maxLength: 5
-          pattern: ^[0-9]+$
-        message:
-          type: string
-          description: Human readable textual description of the error
-          minLength: 1
-          maxLength: 99
-        location:
-          type: string
-          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
-          description: The location of the error occurred in the request.
-          minLength: 1
-          maxLength: 99
-          enum:
-          - BODY
-          - PATH
-          - QUERY
-          - HEADER
-        field:
-          type: string
-          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
-          minLength: 1
-          maxLength: 99
-          pattern: ^[\$0-9a-zA-Z-_.()\[\]{}'"\s@=><!?,]+$
-        additionalContext:
-          $ref: '#/components/schemas/AdditionalContext'
-      description: Error Context
-    HealthStatus:
-      type: object
-      title: HealthStatus
-      description: Health check response indicating the status of the service and its readiness.
-      properties:
-        status:
-          type: string
-          description: Overall health status of the service.
-          enum:
-          - UP
-          - DOWN
-          example: UP
-        isReady:
-          type: boolean
-          description: Indicates whether the service is ready to accept requests.
-          example: true
-        version:
-          type: string
-          description: The current version of the service.
-          example: 2.1.0
-          minLength: 1
-          maxLength: 50
-        applicationName:
-          type: string
-          description: The name of the application.
-          example: Example App
-          minLength: 1
-          maxLength: 200
-        statusUpdatedAt:
-          type: string
-          format: date-time
-          description: The date and time when the health status was last updated.
-          example: '2025-09-25T12:00:00Z'
-      required:
-      - status
-      - isReady
-    AdditionalContext:
-      title: Additional Context
-      type: array
-      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
-      items:
-        $ref: '#/components/schemas/StandardCodeContext'
-      minItems: 1
-      maxItems: 5
     Error:
       type: object
       x-tags:
@@ -236,6 +152,90 @@ components:
       required:
       - title
       readOnly: true
+    HealthStatus:
+      type: object
+      title: HealthStatus
+      description: Health check response indicating the status of the service and its readiness.
+      properties:
+        status:
+          type: string
+          description: Overall health status of the service.
+          enum:
+          - UP
+          - DOWN
+          example: UP
+        isReady:
+          type: boolean
+          description: Indicates whether the service is ready to accept requests.
+          example: true
+        version:
+          type: string
+          description: The current version of the service.
+          example: 2.1.0
+          minLength: 1
+          maxLength: 50
+        applicationName:
+          type: string
+          description: The name of the application.
+          example: Example App
+          minLength: 1
+          maxLength: 200
+        statusUpdatedAt:
+          type: string
+          format: date-time
+          description: The date and time when the health status was last updated.
+          example: '2025-09-25T12:00:00Z'
+      required:
+      - status
+      - isReady
+    ErrorContext:
+      title: ErrorContext
+      x-tags:
+      - common-error-model
+      - common-components
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]+$
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+        location:
+          type: string
+          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
+          description: The location of the error occurred in the request.
+          minLength: 1
+          maxLength: 99
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+        field:
+          type: string
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+          pattern: ^[\$0-9a-zA-Z-_.()\[\]{}'"\s@=><!?,]+$
+        additionalContext:
+          $ref: '#/components/schemas/AdditionalContext'
+      description: Error Context
+    AdditionalContext:
+      title: Additional Context
+      type: array
+      description: Additional details about the error based on a standard (e.g. ISO or Clearing codes)
+      items:
+        $ref: '#/components/schemas/StandardCodeContext'
+      minItems: 1
+      maxItems: 5
     StandardCodeContext:
       title: Standard Code Context
       description: Standard Code Context for error codes
@@ -275,37 +275,6 @@ components:
           description: Human readable textual description of the error
           minLength: 1
           maxLength: 99
-    HealthResponse:
-      properties:
-        status:
-          $ref: '#/components/schemas/HealthStatus_2'
-          description: Overall health status of the application
-        version:
-          type: string
-          maxLength: 50
-          minLength: 1
-          title: Version
-          description: Version of the application or service
-        applicationName:
-          type: string
-          title: Applicationname
-          description: Name of the application for which the health status is being reported
-        statusUpdatedAt:
-          type: string
-          title: Statusupdatedat
-          description: Timestamp of the last status update in ISO format
-      type: object
-      required:
-      - status
-      - version
-      - statusUpdatedAt
-      title: HealthResponse
-      description: Model for health check response
-      example:
-        status: UP
-        version: 1.0.0
-        applicationName: Merchant Onboarding API
-        statusUpdatedAt: '2025-10-24T12:00:00Z'
     LocationType:
       type: string
       enum:
@@ -315,49 +284,6 @@ components:
       - HEADER
       title: LocationType
       description: Location where the error occurred in the request
-    ErrorContext_2:
-      properties:
-        code:
-          type: string
-          maxLength: 5
-          minLength: 5
-          pattern: ^[0-9]+$
-          title: Code
-          description: JPMC Short code that identifies the error - publicly cataloged and documented
-        message:
-          type: string
-          maxLength: 99
-          minLength: 1
-          pattern: ^[\x20-\x7E\xA0-\uFFFF\r\n]+$
-          title: Message
-          description: Human readable textual description of the error
-        location:
-          $ref: '#/components/schemas/LocationType'
-          description: The location of the error occurred in the request.
-        field:
-          type: string
-          maxLength: 99
-          minLength: 1
-          pattern: ^\$?[0-9a-zA-Z-_.()\[\]{}]+$
-          title: Field
-          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
-      type: object
-      required:
-      - message
-      title: ErrorContext
-      description: Error Context model
-      example:
-        code: '10001'
-        field: notificationId
-        location: BODY
-        message: Required field missing - ensure the path, body and headers matches the specification
-    HealthStatus_2:
-      title: Healthstatus
-      type: string
-      enum:
-      - UP
-      - DOWN
-      description: Health status enumeration
     Error_2:
       properties:
         title:
@@ -408,6 +334,80 @@ components:
         requestId: trace-123456
         title: Invaliddata
         traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+    HealthResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/HealthStatus_2'
+          description: Overall health status of the application
+        version:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Version
+          description: Version of the application or service
+        applicationName:
+          type: string
+          title: Applicationname
+          description: Name of the application for which the health status is being reported
+        statusUpdatedAt:
+          type: string
+          title: Statusupdatedat
+          description: Timestamp of the last status update in ISO format
+      type: object
+      required:
+      - status
+      - version
+      - statusUpdatedAt
+      title: HealthResponse
+      description: Model for health check response
+      example:
+        status: UP
+        version: 1.0.0
+        applicationName: Merchant Onboarding API
+        statusUpdatedAt: '2025-10-24T12:00:00Z'
+    HealthStatus_2:
+      title: Healthstatus
+      type: string
+      enum:
+      - UP
+      - DOWN
+      description: Health status enumeration
+    ErrorContext_2:
+      properties:
+        code:
+          type: string
+          maxLength: 5
+          minLength: 5
+          pattern: ^[0-9]+$
+          title: Code
+          description: JPMC Short code that identifies the error - publicly cataloged and documented
+        message:
+          type: string
+          maxLength: 99
+          minLength: 1
+          pattern: ^[\x20-\x7E\xA0-\uFFFF\r\n]+$
+          title: Message
+          description: Human readable textual description of the error
+        location:
+          $ref: '#/components/schemas/LocationType'
+          description: The location of the error occurred in the request.
+        field:
+          type: string
+          maxLength: 99
+          minLength: 1
+          pattern: ^\$?[0-9a-zA-Z-_.()\[\]{}]+$
+          title: Field
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+      type: object
+      required:
+      - message
+      title: ErrorContext
+      description: Error Context model
+      example:
+        code: '10001'
+        field: notificationId
+        location: BODY
+        message: Required field missing - ensure the path, body and headers matches the specification
   securitySchemes:
     BearerAuth:
       type: http

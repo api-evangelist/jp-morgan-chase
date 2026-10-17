@@ -468,63 +468,107 @@ paths:
                 $ref: '#/components/schemas/Errors'
 components:
   schemas:
-    PhoneNumbers:
-      title: PhoneNumbers
-      type: array
-      minItems: 0
-      items:
-        $ref: '#/components/schemas/PhoneNumber'
-    EntityId:
-      required:
-      - id
-      - idType
+    Response:
       type: object
       properties:
-        idType:
+        codes:
+          $ref: '#/components/schemas/ResultCollection'
+        provider:
           type: string
-          description: "Entity Identification type required for entity and financial validation:\n\n- Individual entity possible values: \n  - *SSN* (Optional for US), \n  - *ITIN* (Optional for US), \n  - *DRIVERS_LICENSE_USA* (Optional for US), \n  - *PAN_CARD_INDIA* (Optional for IN), \n  - *NATIONAL_ID_CHINA*(Mandatory for CN), \n  - *DRIVERS_LICENSE* (Optional for IN), \n  - *VOTER_ID* (Optional for IN),\n  - TAX_ID (Mandatory for GR), \n  - *SOCIAL_SERVICE* (Optional for CA, IT, MX, PH), \n  - *NATIONAL_ID* (Mandatory for HK, SG, AE, VN, CR, DN, ID, MY, MT, KR, SE TW, TH. Optional for MX, AR, BR, CL, RO, ES)\n\n---\n\n- Business possible values: \n  - *FEIN* (Optional for US) ), \n  - *PAN_CARD_INDIA* (Optional for IN), \n  - *ORGANIZATION_ID_CHINA* (Optional for CN), \n  - *BUSINESS_REGISTRATION_NUMBER* (Mandatory for Brazil, Optional for all other countries), \n  - *TAX_ID* (Mandatory for FR, DE, LU, NL, GB, AT, BE, CZ, DK, FL, GR, ID, IE, IT, MT, PL, PT, RO, SK, ES, SE, CH, BG, HR, CY, EE, HU, LY, LT)"
-          enum:
-          - SSN
-          - DRIVERS_LICENSE_USA
-          - PAN_CARD_INDIA
-          - ITIN
-          - FEIN
-          - NATIONAL_ID_CHINA
-          - ORGANIZATION_ID_CHINA
-          - NATIONAL_ID
-          - DRIVERS_LICENSE
-          - VOTER_ID
-          - SOCIAL_SERVICE
-          - BUSINESS_REGISTRATION_NUMBER
-          - TAX_ID
-        id:
-          maxLength: 28
+          description: "- For Entity validation the following providers are applicable:\n    - **JPMC**, \n    - **JPMC_SCREENING**,\n    - **LEXISNEXIS** \n    - **LEXISNEXIS_INSTANT_ID**,\n    - **LEXISNEXIS_BUSINESS_V2, \n    - **GIACT_BUSINESS**, \n    - **GIACT_INDIVIDUAL**,\n    - **TRULIOO_INDIVIDUAL**,\n    - **TRULIOO_BUSINESS**\n- For Account validation the following providers are applicable:\n    - **JPMC**, \n    - **JPMC_BENE**, \n    - **JPMC_ACH**, \n    - **GIACT**, \n    - **MICRODEPOSITS**, \n    - **EWS**, \n    - **EWS_VA**,\n    - **PATTERN_MATCH**"
+        details:
+          type: object
+    OrganizationEntity:
+      title: Organization Entity
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 100
           minLength: 1
           type: string
-          description: 'The first identification ID of the individual.<br>In case of SSN, must contain either full SSN/ITIN or last four digits of SSN.
+          description: 'Indicates the organization’s name. <br>
 
-            i.e. Only four digits or nine digits will be accepted for SSN. <br>
-
-            In case of PAN ID, must be 10 characters: first five characters as letters, followed by four digits and then a letter.
-
-            Required for financial validation.'
-        issuer:
-          maxLength: 6
-          minLength: 2
+            This is a required field when authenticating an organization.'
+          example: Smith And Co
+        alternateName:
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9\s.\-?&:()`@,+/'%#!^>=]+$
           type: string
-          description: The state or place that issued the first identification ID.
-        issueDate:
-          maxLength: 8
-          minLength: 8
+          example: Smith And Co Products
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+        associatedCountries:
+          type: array
+          minItems: 0
+          items:
+            type: string
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+          description: List of comma-separated 2 character ISO 3166_1 Country Code.
+        identification:
+          type: array
+          minItems: 0
+          description: FEIN, PAN_CARD_INDIA, ORGANIZATION_ID_CHINA.
+          items:
+            $ref: '#/components/schemas/EntityId'
+        contactDetails:
+          type: object
+          properties:
+            email:
+              maxLength: 320
+              minLength: 1
+              type: string
+              description: The email address.
+            phoneNumbers:
+              $ref: '#/components/schemas/PhoneNumbers'
+        channel:
+          maxLength: 20
+          minLength: 1
+          pattern: Mail|PointOfSale|Kiosk|Internet|Branch|Telephonic|Other
+          type: string
+          description: 'Channel. Possible values: Mail, PointOfSale, Kiosk, Internet, Branch, Telephonic, Other'
+        authorizedIndividuals:
+          type: array
+          minItems: 0
+          description: Related parties such as the Beneficial Owners of the business and the authorized signer or the controller.
+          items:
+            $ref: '#/components/schemas/IndividualEntity'
+        device:
+          type: object
+          description: Device details
+          properties:
+            ipAddress:
+              maxLength: 39
+              minLength: 0
+              type: string
+              description: Device IP address
+    AccountScore:
+      type: object
+      title: Account Score
+      description: 'Account score information in coded message format being:
+
+
+        | code  | message              |
+
+        |-------|----------------------|
+
+        | 1109  | Information Found    |
+
+        | 1209  | No Information Found |'
+      properties:
+        code:
           type: integer
-          description: Structure that contains passport issue date elements, format = YYYYMMDD.
-          format: int32
-        expirationDate:
-          maxLength: 8
-          minLength: 8
-          type: integer
-          description: Structure that contains passport expiration date elements, format = YYYYMMDD.
-          format: int32
+          example: 1109
+        message:
+          type: string
+          example: Information Found
+      example:
+        code: 1209
+        message: No Information Found
     Result:
       type: object
       properties:
@@ -619,6 +663,55 @@ components:
               type: integer
               format: int32
           description: An array that contains the results for the authorized representative for a given business. The authorizedRepIds can be returned when using provider 'LEXISNEXIS_BUSINESS_V2'.
+    PhoneNumbers:
+      title: PhoneNumbers
+      type: array
+      minItems: 0
+      items:
+        $ref: '#/components/schemas/PhoneNumber'
+    PhoneNumber:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          maxLength: 15
+          description: Phone numberValues should match the pattern ^[0-9]{10,15}$<br>
+        phoneNumberType:
+          type: string
+          description: "<br> Allowable types for individuals are::\n *\thome\n *\twork\n *\tmobile\nAllowable types for organizations are:\n *\twork <br>"
+    Individual:
+      title: Individual
+      required:
+      - individual
+      type: object
+      properties:
+        individual:
+          $ref: '#/components/schemas/IndividualEntity'
+    ResultCollection:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Result'
+        verification:
+          $ref: '#/components/schemas/Result'
+        authentication:
+          $ref: '#/components/schemas/Result'
+        individualID:
+          $ref: '#/components/schemas/Result'
+        businessID:
+          $ref: '#/components/schemas/Result'
+        limitAmount:
+          $ref: '#/components/schemas/Result'
+        individualScreening:
+          $ref: '#/components/schemas/Result'
+        businessScreening:
+          $ref: '#/components/schemas/Result'
+        verificationMicrodeposit:
+          $ref: '#/components/schemas/Result'
+        authenticationMicrodeposit:
+          $ref: '#/components/schemas/Result'
+        accountScore:
+          $ref: '#/components/schemas/AccountScore'
     Organization:
       title: Organization
       required:
@@ -716,51 +809,6 @@ components:
           type: string
           description: The suburb or district within a town or a city.
           example: Citrus Park
-    Response:
-      type: object
-      properties:
-        codes:
-          $ref: '#/components/schemas/ResultCollection'
-        provider:
-          type: string
-          description: "- For Entity validation the following providers are applicable:\n    - **JPMC**, \n    - **JPMC_SCREENING**,\n    - **LEXISNEXIS** \n    - **LEXISNEXIS_INSTANT_ID**,\n    - **LEXISNEXIS_BUSINESS_V2, \n    - **GIACT_BUSINESS**, \n    - **GIACT_INDIVIDUAL**,\n    - **TRULIOO_INDIVIDUAL**,\n    - **TRULIOO_BUSINESS**\n- For Account validation the following providers are applicable:\n    - **JPMC**, \n    - **JPMC_BENE**, \n    - **JPMC_ACH**, \n    - **GIACT**, \n    - **MICRODEPOSITS**, \n    - **EWS**, \n    - **EWS_VA**,\n    - **PATTERN_MATCH**"
-        details:
-          type: object
-    ResultCollection:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Result'
-        verification:
-          $ref: '#/components/schemas/Result'
-        authentication:
-          $ref: '#/components/schemas/Result'
-        individualID:
-          $ref: '#/components/schemas/Result'
-        businessID:
-          $ref: '#/components/schemas/Result'
-        limitAmount:
-          $ref: '#/components/schemas/Result'
-        individualScreening:
-          $ref: '#/components/schemas/Result'
-        businessScreening:
-          $ref: '#/components/schemas/Result'
-        verificationMicrodeposit:
-          $ref: '#/components/schemas/Result'
-        authenticationMicrodeposit:
-          $ref: '#/components/schemas/Result'
-        accountScore:
-          $ref: '#/components/schemas/AccountScore'
-    PhoneNumber:
-      type: object
-      properties:
-        phoneNumber:
-          type: string
-          maxLength: 15
-          description: Phone numberValues should match the pattern ^[0-9]{10,15}$<br>
-        phoneNumberType:
-          type: string
-          description: "<br> Allowable types for individuals are::\n *\thome\n *\twork\n *\tmobile\nAllowable types for organizations are:\n *\twork <br>"
     ResponseCollection:
       title: Validation Response Collection
       description: A collection of validation responses
@@ -784,6 +832,72 @@ components:
           minItems: 0
           items:
             $ref: '#/components/schemas/Response'
+    EntityId:
+      required:
+      - id
+      - idType
+      type: object
+      properties:
+        idType:
+          type: string
+          description: "Entity Identification type required for entity and financial validation:\n\n- Individual entity possible values: \n  - *SSN* (Optional for US), \n  - *ITIN* (Optional for US), \n  - *DRIVERS_LICENSE_USA* (Optional for US), \n  - *PAN_CARD_INDIA* (Optional for IN), \n  - *NATIONAL_ID_CHINA*(Mandatory for CN), \n  - *DRIVERS_LICENSE* (Optional for IN), \n  - *VOTER_ID* (Optional for IN),\n  - TAX_ID (Mandatory for GR), \n  - *SOCIAL_SERVICE* (Optional for CA, IT, MX, PH), \n  - *NATIONAL_ID* (Mandatory for HK, SG, AE, VN, CR, DN, ID, MY, MT, KR, SE TW, TH. Optional for MX, AR, BR, CL, RO, ES)\n\n---\n\n- Business possible values: \n  - *FEIN* (Optional for US) ), \n  - *PAN_CARD_INDIA* (Optional for IN), \n  - *ORGANIZATION_ID_CHINA* (Optional for CN), \n  - *BUSINESS_REGISTRATION_NUMBER* (Mandatory for Brazil, Optional for all other countries), \n  - *TAX_ID* (Mandatory for FR, DE, LU, NL, GB, AT, BE, CZ, DK, FL, GR, ID, IE, IT, MT, PL, PT, RO, SK, ES, SE, CH, BG, HR, CY, EE, HU, LY, LT)"
+          enum:
+          - SSN
+          - DRIVERS_LICENSE_USA
+          - PAN_CARD_INDIA
+          - ITIN
+          - FEIN
+          - NATIONAL_ID_CHINA
+          - ORGANIZATION_ID_CHINA
+          - NATIONAL_ID
+          - DRIVERS_LICENSE
+          - VOTER_ID
+          - SOCIAL_SERVICE
+          - BUSINESS_REGISTRATION_NUMBER
+          - TAX_ID
+        id:
+          maxLength: 28
+          minLength: 1
+          type: string
+          description: 'The first identification ID of the individual.<br>In case of SSN, must contain either full SSN/ITIN or last four digits of SSN.
+
+            i.e. Only four digits or nine digits will be accepted for SSN. <br>
+
+            In case of PAN ID, must be 10 characters: first five characters as letters, followed by four digits and then a letter.
+
+            Required for financial validation.'
+        issuer:
+          maxLength: 6
+          minLength: 2
+          type: string
+          description: The state or place that issued the first identification ID.
+        issueDate:
+          maxLength: 8
+          minLength: 8
+          type: integer
+          description: Structure that contains passport issue date elements, format = YYYYMMDD.
+          format: int32
+        expirationDate:
+          maxLength: 8
+          minLength: 8
+          type: integer
+          description: Structure that contains passport expiration date elements, format = YYYYMMDD.
+          format: int32
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          minItems: 0
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                example: GCA-001
+              errorMsg:
+                type: string
+                example: Unauthorized Access
     IndividualEntity:
       title: Individual Entity
       description: An individual entity
@@ -922,54 +1036,6 @@ components:
               minLength: 0
               type: string
               description: Device IP address
-    Individual:
-      title: Individual
-      required:
-      - individual
-      type: object
-      properties:
-        individual:
-          $ref: '#/components/schemas/IndividualEntity'
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          minItems: 0
-          items:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                example: GCA-001
-              errorMsg:
-                type: string
-                example: Unauthorized Access
-    Payload:
-      $ref: '#/components/schemas/ResponseCollection'
-    AccountScore:
-      type: object
-      title: Account Score
-      description: 'Account score information in coded message format being:
-
-
-        | code  | message              |
-
-        |-------|----------------------|
-
-        | 1109  | Information Found    |
-
-        | 1209  | No Information Found |'
-      properties:
-        code:
-          type: integer
-          example: 1109
-        message:
-          type: string
-          example: Information Found
-      example:
-        code: 1209
-        message: No Information Found
     EntityDetails:
       required:
       - requestId
@@ -994,74 +1060,8 @@ components:
           oneOf:
           - $ref: '#/components/schemas/Individual'
           - $ref: '#/components/schemas/Organization'
-    OrganizationEntity:
-      title: Organization Entity
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 100
-          minLength: 1
-          type: string
-          description: 'Indicates the organization’s name. <br>
-
-            This is a required field when authenticating an organization.'
-          example: Smith And Co
-        alternateName:
-          maxLength: 100
-          minLength: 1
-          pattern: ^[A-Za-z0-9\s.\-?&:()`@,+/'%#!^>=]+$
-          type: string
-          example: Smith And Co Products
-        postalAddress:
-          $ref: '#/components/schemas/PostalAddress'
-        associatedCountries:
-          type: array
-          minItems: 0
-          items:
-            type: string
-            maxLength: 2
-            minLength: 2
-            pattern: ^[A-Z]{2}$
-          description: List of comma-separated 2 character ISO 3166_1 Country Code.
-        identification:
-          type: array
-          minItems: 0
-          description: FEIN, PAN_CARD_INDIA, ORGANIZATION_ID_CHINA.
-          items:
-            $ref: '#/components/schemas/EntityId'
-        contactDetails:
-          type: object
-          properties:
-            email:
-              maxLength: 320
-              minLength: 1
-              type: string
-              description: The email address.
-            phoneNumbers:
-              $ref: '#/components/schemas/PhoneNumbers'
-        channel:
-          maxLength: 20
-          minLength: 1
-          pattern: Mail|PointOfSale|Kiosk|Internet|Branch|Telephonic|Other
-          type: string
-          description: 'Channel. Possible values: Mail, PointOfSale, Kiosk, Internet, Branch, Telephonic, Other'
-        authorizedIndividuals:
-          type: array
-          minItems: 0
-          description: Related parties such as the Beneficial Owners of the business and the authorized signer or the controller.
-          items:
-            $ref: '#/components/schemas/IndividualEntity'
-        device:
-          type: object
-          description: Device details
-          properties:
-            ipAddress:
-              maxLength: 39
-              minLength: 0
-              type: string
-              description: Device IP address
+    Payload:
+      $ref: '#/components/schemas/ResponseCollection'
 x-jpmc-securityDefinitions:
   MutualTLS:
     type: x509

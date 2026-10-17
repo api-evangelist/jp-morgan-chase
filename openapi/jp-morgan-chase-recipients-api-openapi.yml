@@ -266,203 +266,131 @@ paths:
           $ref: '#/components/responses/503'
 components:
   schemas:
-    AccountValidationResponse:
-      type: object
-      properties:
-        requestId:
-          type: string
-          description: Unique identifier for a set of related requests
-          example: 53281d03-dfff-4094-a6d8-b43c29b92bef
-        profileName:
-          description: Profile name to identify account validation configuration
-          type: string
-        responses:
-          type: array
-          description: Account validation responses
-          items:
-            $ref: '#/components/schemas/Responses'
-          minItems: 0
-    RoutingCodeType:
+    RecipientType:
       type: string
       enum:
-      - USABA
-      description: Type of routing code.
-      example: USABA
-    Result:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Account validation response code
-          example: 1002
-        message:
-          type: string
-          description: Account validation response message, message is based on the code
-          example: Open Valid
-        description:
-          type: string
-          description: Account validation response description, description is based on the code
-          example: Multiple validations to the same account is restricted
-    RecipientIdentity:
-      type: object
-      required:
-      - idType
-      - idValue
-      properties:
-        idType:
-          type: string
-          enum:
-          - USCC
-          - ORGANIZATION_ID
-          - NATIONAL_ID
-          - TAX_ID
-          - SSN
-          description: Type of identification
-          example: USCC
-        idValue:
-          minLength: 1
-          maxLength: 255
-          type: string
-          description: Identification value
-          example: 91310000717860841G
-    UpdateRecipientRequest:
-      type: object
-      properties:
-        partyDetails:
-          $ref: '#/components/schemas/RecipientPartyDetails'
-        status:
-          $ref: '#/components/schemas/RecipientStatus'
-        account:
-          $ref: '#/components/schemas/RecipientAccount'
-        card:
-          $ref: '#/components/schemas/RecipientCardUpdate'
+      - RECIPIENT
+      - LINKED_ACCOUNT
+      - SETTLEMENT_ACCOUNT
+      example: RECIPIENT
+    PartyType:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - ORGANIZATION
+      example: INDIVIDUAL
     ProviderResponse:
       description: Contains additional, unstructured information from the provider.
       type: object
       additionalProperties: true
-    RecipientAccount:
+    PageMetaData:
+      type: object
+      properties:
+        page:
+          type: integer
+          minimum: 0
+          format: int32
+          example: 1
+          description: 'Page Number.
+
+            '
+        limit:
+          type: integer
+          minimum: 0
+          format: int32
+          example: 30
+          description: 'Number of records per page.
+
+            '
+        total_items:
+          type: integer
+          minimum: 0
+          format: int32
+          example: 1
+          description: 'Total number of items.
+
+            '
+    MicrodepositVerificationResponse:
       type: object
       required:
-      - number
-      - countryCode
-      description: Bank account details of the recipient.
+      - status
+      description: Microdeposit verification outcome
       properties:
-        number:
-          $ref: '#/components/schemas/AccountNumber'
-        type:
-          $ref: '#/components/schemas/AccountType'
-        routingInformation:
+        status:
+          type: string
+          enum:
+          - VERIFIED
+          - FAILED
+          - FAILED_MAX_ATTEMPTS_EXCEEDED
+    MicrodepositAmounts:
+      type: object
+      required:
+      - amounts
+      description: Microdeposit amount verification
+      properties:
+        amounts:
           type: array
-          description: Routing information.
           items:
-            $ref: '#/components/schemas/RoutingInformation'
-          minItems: 1
-          maxItems: 3
-        currencyCode:
-          $ref: '#/components/schemas/CurrencyCode'
-        countryCode:
-          $ref: '#/components/schemas/CountryCode'
-    Details:
+            type: number
+          example:
+          - 0.12
+          - 0.58
+          minItems: 0
+    ListRecipientsResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PageMetaData'
+      - type: object
+        properties:
+          metadata:
+            $ref: '#/components/schemas/PageMetaData'
+          recipients:
+            type: array
+            description: Recipients available in current page
+            items:
+              $ref: '#/components/schemas/Recipient'
+            minItems: 0
+    ClearingSystemId:
       type: object
       properties:
-        accountNumber:
+        id:
           type: string
-          description: Account number
-          example: XXXXXXXX052
-        financialInstitutionId:
-          $ref: '#/components/schemas/FinancialInstitutionId'
-        paymentCheckContributingStatus:
+          description: Routing number
+          example: '122199983'
+        idType:
           type: string
-          description: Payment Check Contributing Status
-          example: Participant
-        providerResponse:
-          $ref: '#/components/schemas/ProviderResponse'
-    ApiError:
+          description: Routing code
+          example: ABA
+    RecipientContact:
       type: object
       required:
-      - title
-      - httpStatus
-      - error
+      - contactType
+      - value
       properties:
-        title:
+        contactType:
+          type: string
+          enum:
+          - EMAIL
+          - WEBSITE
+          - PHONE
+          description: Type of contact information being provided
+          example: PHONE
+        countryCode:
+          type: string
+          pattern: ^\+[1-9]\d{0,2}$
+          description: 'E.164 format compatible telephone country code
+
+            Mandatory for contactType PHONE
+
+            '
+          example: '+1'
+        value:
           type: string
           minLength: 1
-          maxLength: 512
-          description: Short humanly-readable title of the error
-          example: BAD REQUEST
-        httpStatus:
-          type: integer
-          minimum: 100
-          maximum: 599
-          format: int32
-          description: HTTP status code
-          example: 422
-        traceId:
-          type: string
-          minLength: 0
-          maxLength: 512
-          description: Internal assigned traced identifier
-        requestId:
-          type: string
-          minLength: 0
-          maxLength: 512
-          description: Client provided request identifier
-        context:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorReasonV2'
-          description: Provides additional context and detail on the validation errors
-          minItems: 0
-          maxItems: 100
-    CardHolderName:
-      type: string
-      minLength: 1
-      maxLength: 30
-      example: M GELLAR
-      pattern: '^[A-Za-z]+(?: [A-Za-z]+)*$'
-      description: Name on the credit/debit card
-    AccountType:
-      type: string
-      enum:
-      - CHECKING
-      - IBAN
-      - SAVINGS
-      description: Type of bank account.
-      example: CHECKING
-    RecipientRequest:
-      type: object
-      properties:
-        partyDetails:
-          $ref: '#/components/schemas/RecipientPartyDetails'
-        partyId:
-          type: string
-          description: Related Party Identifier for Linked Accounts
-        account:
-          $ref: '#/components/schemas/RecipientAccount'
-        type:
-          $ref: '#/components/schemas/RecipientType'
-        clientId:
-          type: string
-          description: Client identifier
-          example: '0030000132'
-        card:
-          type: object
-          required:
-          - name
-          - pan
-          - expiryDate
-          properties:
-            name:
-              $ref: '#/components/schemas/CardHolderName'
-            pan:
-              type: string
-              minLength: 13
-              maxLength: 19
-              example: '123456789123456'
-              pattern: ^\d{13,19}$
-              description: A card Primary Account Number (PAN)
-            expiryDate:
-              $ref: '#/components/schemas/ExpiryDate'
+          maxLength: 2048
+          pattern: ^(.|\s)*\S(.|\s)*$
+          description: "Contact information corresponding to contactType: \nPHONE - E.164-compliant telephone number (excluding country code).\nEMAIL - Email address (addr-spec in Section 3.4 of RFC 5322).\nWEBSITE - URL starting with http:// or https://.\n"
+          example: '6316215110'
     Recipient:
       type: object
       required:
@@ -508,28 +436,6 @@ components:
           maxItems: 10
         card:
           $ref: '#/components/schemas/RecipientCard'
-    RoutingNumber:
-      type: string
-      minLength: 1
-      maxLength: 13
-      pattern: ^[A-Za-z0-9]([A-Za-z0-9\-]{0,11})[A-Za-z0-9]$
-      description: Routing number corresponding to the routing code type
-      example: '021000021'
-    Codes:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Result'
-        accountScore:
-          $ref: '#/components/schemas/Result'
-        verification:
-          $ref: '#/components/schemas/Result'
-        authentication:
-          $ref: '#/components/schemas/Result'
-        verificationMicroDeposit:
-          $ref: '#/components/schemas/Result'
-        authenticationMicroDeposit:
-          $ref: '#/components/schemas/Result'
     RoutingInformation:
       type: object
       required:
@@ -543,110 +449,104 @@ components:
           $ref: '#/components/schemas/RoutingInformationTransactionType'
         routingCodeType:
           $ref: '#/components/schemas/RoutingCodeType'
-    MicrodepositAmounts:
+    RecipientIdentity:
       type: object
       required:
-      - amounts
-      description: Microdeposit amount verification
+      - idType
+      - idValue
       properties:
-        amounts:
-          type: array
-          items:
-            type: number
-          example:
-          - 0.12
-          - 0.58
-          minItems: 0
-    CountryCode:
-      type: string
-      enum:
-      - US
-      description: Two letter country code based on ISO 3166 standard
-      example: US
-    CurrencyCode:
-      type: string
-      enum:
-      - USD
-      description: Three letter currency code based on ISO 4217 standard
-      example: USD
-    RecipientStatus:
-      description: Callback event type needs to send to notsub for correct status.
-      type: string
-      enum:
-      - ACTIVE
-      - INACTIVE
-      - MICRODEPOSITS_INITIATED
-      - READY_FOR_VALIDATION
-      - REJECTED
-      - PENDING
-      example: ACTIVE
-    ClearingSystemId:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Routing number
-          example: '122199983'
         idType:
           type: string
-          description: Routing code
-          example: ABA
-    RecipientContact:
+          enum:
+          - USCC
+          - ORGANIZATION_ID
+          - NATIONAL_ID
+          - TAX_ID
+          - SSN
+          description: Type of identification
+          example: USCC
+        idValue:
+          minLength: 1
+          maxLength: 255
+          type: string
+          description: Identification value
+          example: 91310000717860841G
+    RoutingNumber:
+      type: string
+      minLength: 1
+      maxLength: 13
+      pattern: ^[A-Za-z0-9]([A-Za-z0-9\-]{0,11})[A-Za-z0-9]$
+      description: Routing number corresponding to the routing code type
+      example: '021000021'
+    Details:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+          description: Account number
+          example: XXXXXXXX052
+        financialInstitutionId:
+          $ref: '#/components/schemas/FinancialInstitutionId'
+        paymentCheckContributingStatus:
+          type: string
+          description: Payment Check Contributing Status
+          example: Participant
+        providerResponse:
+          $ref: '#/components/schemas/ProviderResponse'
+    RecipientAddress:
+      description: Address details for the recipient. Mandatory for payments using the RTP payment type.
       type: object
       required:
-      - contactType
-      - value
+      - addressLine1
+      - city
+      - countryCode
       properties:
-        contactType:
+        addressType:
           type: string
-          enum:
-          - EMAIL
-          - WEBSITE
-          - PHONE
-          description: Type of contact information being provided
-          example: PHONE
-        countryCode:
-          type: string
-          pattern: ^\+[1-9]\d{0,2}$
-          description: 'E.164 format compatible telephone country code
-
-            Mandatory for contactType PHONE
-
-            '
-          example: '+1'
-        value:
+          example: Principal place of business
+          description: Type of address e.g. 'Primary Residence' | 'Principal place of business'.
+        addressLine1:
           type: string
           minLength: 1
-          maxLength: 2048
+          maxLength: 34
           pattern: ^(.|\s)*\S(.|\s)*$
-          description: "Contact information corresponding to contactType: \nPHONE - E.164-compliant telephone number (excluding country code).\nEMAIL - Email address (addr-spec in Section 3.4 of RFC 5322).\nWEBSITE - URL starting with http:// or https://.\n"
-          example: '6316215110'
-    RecipientCard:
-      type: object
-      required:
-      - name
-      - pan
-      - expiryDate
-      properties:
-        name:
-          $ref: '#/components/schemas/CardHolderName'
-        pan:
+          example: 90 Bedford Street
+          description: First line of address; required and must not be a PO Box.
+        addressLine2:
           type: string
-          minLength: 13
-          maxLength: 19
-          example: '*********0123'
-          pattern: ^\*{9,15}\d{4}$
-          description: A tokenized and masked card Primary Account Number (PAN)
-        expiryDate:
-          $ref: '#/components/schemas/ExpiryDate'
-    RoutingInformationTransactionType:
-      type: string
-      enum:
-      - ACH
-      - RTP
-      - WIRE
-      description: Type of transaction.
-      example: RTP
+          minLength: 0
+          maxLength: 34
+          example: Apt 2E
+          description: Second line of address; not required.
+        addressLine3:
+          type: string
+          minLength: 0
+          maxLength: 34
+          description: Third line of address; not required.
+        buildingNumber:
+          type: string
+          minLength: 0
+          maxLength: 16
+          description: Building name or number if address is in a building
+        city:
+          type: string
+          minLength: 1
+          maxLength: 34
+          pattern: ^(.|\s)*\S(.|\s)*$
+          example: New York
+          description: Address city.
+        state:
+          type: string
+          maxLength: 30
+          example: NY
+          description: State code in alpha-2 format. State is mandatory for countries like United States.
+        postalCode:
+          type: string
+          maxLength: 10
+          example: '10014'
+          description: Postal/ZIP code.
+        countryCode:
+          $ref: '#/components/schemas/CountryCode'
     RecipientPartyDetails:
       type: object
       required:
@@ -703,19 +603,32 @@ components:
           items:
             $ref: '#/components/schemas/RecipientIdentity'
           minItems: 0
-    RecipientType:
+    RoutingCodeType:
       type: string
       enum:
-      - RECIPIENT
-      - LINKED_ACCOUNT
-      - SETTLEMENT_ACCOUNT
-      example: RECIPIENT
-    PartyType:
+      - USABA
+      description: Type of routing code.
+      example: USABA
+    ExpiryDate:
       type: string
-      enum:
-      - INDIVIDUAL
-      - ORGANIZATION
-      example: INDIVIDUAL
+      description: Expiry date of card in the format MM-YY
+      example: '2205'
+      pattern: ^(?:[0-9]{2})(0[1-9]|1[0-2])$
+    Codes:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Result'
+        accountScore:
+          $ref: '#/components/schemas/Result'
+        verification:
+          $ref: '#/components/schemas/Result'
+        authentication:
+          $ref: '#/components/schemas/Result'
+        verificationMicroDeposit:
+          $ref: '#/components/schemas/Result'
+        authenticationMicroDeposit:
+          $ref: '#/components/schemas/Result'
     RecipientCardUpdate:
       type: object
       properties:
@@ -724,32 +637,133 @@ components:
         expiryDate:
           $ref: '#/components/schemas/ExpiryDate'
       additionalProperties: false
-    ExpiryDate:
+    CountryCode:
       type: string
-      description: Expiry date of card in the format MM-YY
-      example: '2205'
-      pattern: ^(?:[0-9]{2})(0[1-9]|1[0-2])$
-    FinancialInstitutionId:
+      enum:
+      - US
+      description: Two letter country code based on ISO 3166 standard
+      example: US
+    CardHolderName:
+      type: string
+      minLength: 1
+      maxLength: 30
+      example: M GELLAR
+      pattern: '^[A-Za-z]+(?: [A-Za-z]+)*$'
+      description: Name on the credit/debit card
+    Result:
       type: object
       properties:
-        clearingSystemId:
-          $ref: '#/components/schemas/ClearingSystemId'
-    AccountNumber:
-      type: string
-      pattern: ^[A-Z0-9]{1,35}$
-      description: Demand Deposit Account number or International Account Number (IBAN).
-      example: '021000021'
-    Responses:
-      type: object
-      properties:
-        codes:
-          $ref: '#/components/schemas/Codes'
-        provider:
+        code:
+          type: integer
+          description: Account validation response code
+          example: 1002
+        message:
           type: string
-          description: Name of the entity that provided the validation
-          example: EWS
-        details:
-          $ref: '#/components/schemas/Details'
+          description: Account validation response message, message is based on the code
+          example: Open Valid
+        description:
+          type: string
+          description: Account validation response description, description is based on the code
+          example: Multiple validations to the same account is restricted
+    RecipientCard:
+      type: object
+      required:
+      - name
+      - pan
+      - expiryDate
+      properties:
+        name:
+          $ref: '#/components/schemas/CardHolderName'
+        pan:
+          type: string
+          minLength: 13
+          maxLength: 19
+          example: '*********0123'
+          pattern: ^\*{9,15}\d{4}$
+          description: A tokenized and masked card Primary Account Number (PAN)
+        expiryDate:
+          $ref: '#/components/schemas/ExpiryDate'
+    UpdateRecipientRequest:
+      type: object
+      properties:
+        partyDetails:
+          $ref: '#/components/schemas/RecipientPartyDetails'
+        status:
+          $ref: '#/components/schemas/RecipientStatus'
+        account:
+          $ref: '#/components/schemas/RecipientAccount'
+        card:
+          $ref: '#/components/schemas/RecipientCardUpdate'
+    ApiError:
+      type: object
+      required:
+      - title
+      - httpStatus
+      - error
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: Short humanly-readable title of the error
+          example: BAD REQUEST
+        httpStatus:
+          type: integer
+          minimum: 100
+          maximum: 599
+          format: int32
+          description: HTTP status code
+          example: 422
+        traceId:
+          type: string
+          minLength: 0
+          maxLength: 512
+          description: Internal assigned traced identifier
+        requestId:
+          type: string
+          minLength: 0
+          maxLength: 512
+          description: Client provided request identifier
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorReasonV2'
+          description: Provides additional context and detail on the validation errors
+          minItems: 0
+          maxItems: 100
+    RecipientAccount:
+      type: object
+      required:
+      - number
+      - countryCode
+      description: Bank account details of the recipient.
+      properties:
+        number:
+          $ref: '#/components/schemas/AccountNumber'
+        type:
+          $ref: '#/components/schemas/AccountType'
+        routingInformation:
+          type: array
+          description: Routing information.
+          items:
+            $ref: '#/components/schemas/RoutingInformation'
+          minItems: 1
+          maxItems: 3
+        currencyCode:
+          $ref: '#/components/schemas/CurrencyCode'
+        countryCode:
+          $ref: '#/components/schemas/CountryCode'
+    RecipientStatus:
+      description: Callback event type needs to send to notsub for correct status.
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - MICRODEPOSITS_INITIATED
+      - READY_FOR_VALIDATION
+      - REJECTED
+      - PENDING
+      example: ACTIVE
     ApiErrorReasonV2:
       type: object
       description: Schema representing detailed reasons for an API error, including code, location, and message.
@@ -782,114 +796,225 @@ components:
           description: Message describing the reason. This message can typically be displayed to your platform's users, except in cases specified otherwise
           minLength: 0
           maxLength: 2048
-    PageMetaData:
+    AccountNumber:
+      type: string
+      pattern: ^[A-Z0-9]{1,35}$
+      description: Demand Deposit Account number or International Account Number (IBAN).
+      example: '021000021'
+    RecipientRequest:
       type: object
       properties:
-        page:
-          type: integer
-          minimum: 0
-          format: int32
-          example: 1
-          description: 'Page Number.
-
-            '
-        limit:
-          type: integer
-          minimum: 0
-          format: int32
-          example: 30
-          description: 'Number of records per page.
-
-            '
-        total_items:
-          type: integer
-          minimum: 0
-          format: int32
-          example: 1
-          description: 'Total number of items.
-
-            '
-    ListRecipientsResponse:
+        partyDetails:
+          $ref: '#/components/schemas/RecipientPartyDetails'
+        partyId:
+          type: string
+          description: Related Party Identifier for Linked Accounts
+        account:
+          $ref: '#/components/schemas/RecipientAccount'
+        type:
+          $ref: '#/components/schemas/RecipientType'
+        clientId:
+          type: string
+          description: Client identifier
+          example: '0030000132'
+        card:
+          type: object
+          required:
+          - name
+          - pan
+          - expiryDate
+          properties:
+            name:
+              $ref: '#/components/schemas/CardHolderName'
+            pan:
+              type: string
+              minLength: 13
+              maxLength: 19
+              example: '123456789123456'
+              pattern: ^\d{13,19}$
+              description: A card Primary Account Number (PAN)
+            expiryDate:
+              $ref: '#/components/schemas/ExpiryDate'
+    Responses:
       type: object
-      allOf:
-      - $ref: '#/components/schemas/PageMetaData'
-      - type: object
-        properties:
-          metadata:
-            $ref: '#/components/schemas/PageMetaData'
-          recipients:
-            type: array
-            description: Recipients available in current page
-            items:
-              $ref: '#/components/schemas/Recipient'
-            minItems: 0
-    RecipientAddress:
-      description: Address details for the recipient. Mandatory for payments using the RTP payment type.
-      type: object
-      required:
-      - addressLine1
-      - city
-      - countryCode
       properties:
-        addressType:
+        codes:
+          $ref: '#/components/schemas/Codes'
+        provider:
           type: string
-          example: Principal place of business
-          description: Type of address e.g. 'Primary Residence' | 'Principal place of business'.
-        addressLine1:
-          type: string
-          minLength: 1
-          maxLength: 34
-          pattern: ^(.|\s)*\S(.|\s)*$
-          example: 90 Bedford Street
-          description: First line of address; required and must not be a PO Box.
-        addressLine2:
-          type: string
-          minLength: 0
-          maxLength: 34
-          example: Apt 2E
-          description: Second line of address; not required.
-        addressLine3:
-          type: string
-          minLength: 0
-          maxLength: 34
-          description: Third line of address; not required.
-        buildingNumber:
-          type: string
-          minLength: 0
-          maxLength: 16
-          description: Building name or number if address is in a building
-        city:
-          type: string
-          minLength: 1
-          maxLength: 34
-          pattern: ^(.|\s)*\S(.|\s)*$
-          example: New York
-          description: Address city.
-        state:
-          type: string
-          maxLength: 30
-          example: NY
-          description: State code in alpha-2 format. State is mandatory for countries like United States.
-        postalCode:
-          type: string
-          maxLength: 10
-          example: '10014'
-          description: Postal/ZIP code.
-        countryCode:
-          $ref: '#/components/schemas/CountryCode'
-    MicrodepositVerificationResponse:
+          description: Name of the entity that provided the validation
+          example: EWS
+        details:
+          $ref: '#/components/schemas/Details'
+    CurrencyCode:
+      type: string
+      enum:
+      - USD
+      description: Three letter currency code based on ISO 4217 standard
+      example: USD
+    FinancialInstitutionId:
       type: object
-      required:
-      - status
-      description: Microdeposit verification outcome
       properties:
-        status:
+        clearingSystemId:
+          $ref: '#/components/schemas/ClearingSystemId'
+    RoutingInformationTransactionType:
+      type: string
+      enum:
+      - ACH
+      - RTP
+      - WIRE
+      description: Type of transaction.
+      example: RTP
+    AccountValidationResponse:
+      type: object
+      properties:
+        requestId:
           type: string
-          enum:
-          - VERIFIED
-          - FAILED
-          - FAILED_MAX_ATTEMPTS_EXCEEDED
+          description: Unique identifier for a set of related requests
+          example: 53281d03-dfff-4094-a6d8-b43c29b92bef
+        profileName:
+          description: Profile name to identify account validation configuration
+          type: string
+        responses:
+          type: array
+          description: Account validation responses
+          items:
+            $ref: '#/components/schemas/Responses'
+          minItems: 0
+    AccountType:
+      type: string
+      enum:
+      - CHECKING
+      - IBAN
+      - SAVINGS
+      description: Type of bank account.
+      example: CHECKING
+  responses:
+    '404':
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Not Found
+              summary: Not Found
+              value:
+                title: Not Found
+                httpStatus: 404
+                error: NOT_FOUND
+    '503':
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Service Unavailable
+              summary: Service Unavailable
+              value:
+                title: Service Unavailable
+                httpStatus: 503
+                error: SERVICE_UNAVAILABLE
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Unauthorized
+              summary: Unauthorized
+              value:
+                title: Unauthorized Request
+                httpStatus: 401
+                error: UNAUTHORIZED
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Forbidden
+              summary: Forbidden
+              value:
+                title: Forbidden
+                httpStatus: 403
+                error: FORBIDDEN
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Internal Server Error
+              summary: Internal Server Error
+              value:
+                title: Internal Server Error
+                httpStatus: 500
+                error: INTERNAL_SERVER_ERROR
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            Error:
+              description: Bad Request
+              summary: Bad Request
+              value:
+                title: Bad Request
+                httpStatus: 400
+                error: BAD_REQUEST
   examples:
+    GetRecipientRes:
+      summary: Get Recipient By Id - Sole Prop
+      description: Get Recipient By Id - Sole Prop
+      value:
+        clientId: '1000010400'
+        partyId: '2000000111'
+        id: 616d93a1-ce53-4c71-b03b-02a11396db28
+        partyDetails:
+          address:
+            addressLine1: 90 Bedford Street
+            addressLine2: Apt 2E
+            city: New York
+            countryCode: US
+            state: NY
+            postalCode: '10014'
+          type: ORGANIZATION
+          firstName: Monica
+          lastName: Gellar
+          businessName: Central Park Getaways
+          contacts:
+          - contactType: PHONE
+            countryCode: '+1'
+            value: '6316215110'
+        account:
+          number: 0182119492
+          type: CHECKING
+          routingInformation:
+          - routingNumber: '541798298'
+            transactionType: RTP
+            routingCodeType: USABA
+          countryCode: US
+        type: LINKED_ACCOUNT
+        status: ACTIVE
+        error:
+          title: Bad Request
+          httpStatus: 400
+          error: BAD_REQUEST
+          message: ABA routing number 541798298 not found
+          context:
+          - message: ABA routing number 541798298 not found
     UpdatePaymentIntentRecipientRes:
       summary: Update Recipient By Id - Payment Intent
       description: Update Recipient By Id - Payment Intent
@@ -906,6 +1031,23 @@ components:
             value: monica@cpgetaways.com
         type: RECIPIENT
         status: INACTIVE
+    GetPaymentIntentRecipientRes:
+      summary: Get Recipient By Id - Payment Intent
+      description: Get Recipient By Id - Payment Intent
+      value:
+        clientId: '1000010400'
+        partyId: '2000000111'
+        id: 616d93a1-ce53-4c71-b03b-02a11396db28
+        partyDetails:
+          type: INDIVIDUAL
+          firstName: Monica
+          lastName: Gellar
+          businessName: Central Park Getaways
+          contacts:
+          - contactType: EMAIL
+            value: monica@cpgetaways.com
+        type: RECIPIENT
+        status: ACTIVE
     UpdateRecipientRes:
       summary: Update Recipient By Id - Sole Prop
       description: Update Recipient By Id - Sole Prop
@@ -990,63 +1132,6 @@ components:
                 clearingSystemId:
                   id: '987654321'
                   idType: ABA
-    GetPaymentIntentRecipientRes:
-      summary: Get Recipient By Id - Payment Intent
-      description: Get Recipient By Id - Payment Intent
-      value:
-        clientId: '1000010400'
-        partyId: '2000000111'
-        id: 616d93a1-ce53-4c71-b03b-02a11396db28
-        partyDetails:
-          type: INDIVIDUAL
-          firstName: Monica
-          lastName: Gellar
-          businessName: Central Park Getaways
-          contacts:
-          - contactType: EMAIL
-            value: monica@cpgetaways.com
-        type: RECIPIENT
-        status: ACTIVE
-    GetRecipientRes:
-      summary: Get Recipient By Id - Sole Prop
-      description: Get Recipient By Id - Sole Prop
-      value:
-        clientId: '1000010400'
-        partyId: '2000000111'
-        id: 616d93a1-ce53-4c71-b03b-02a11396db28
-        partyDetails:
-          address:
-            addressLine1: 90 Bedford Street
-            addressLine2: Apt 2E
-            city: New York
-            countryCode: US
-            state: NY
-            postalCode: '10014'
-          type: ORGANIZATION
-          firstName: Monica
-          lastName: Gellar
-          businessName: Central Park Getaways
-          contacts:
-          - contactType: PHONE
-            countryCode: '+1'
-            value: '6316215110'
-        account:
-          number: 0182119492
-          type: CHECKING
-          routingInformation:
-          - routingNumber: '541798298'
-            transactionType: RTP
-            routingCodeType: USABA
-          countryCode: US
-        type: LINKED_ACCOUNT
-        status: ACTIVE
-        error:
-          title: Bad Request
-          httpStatus: 400
-          error: BAD_REQUEST
-          message: ABA routing number 541798298 not found
-          context:
-          - message: ABA routing number 541798298 not found
     CreatePaymentIntentRecipientRes:
       summary: Create Recipient - Payment Intent
       description: Create Recipient - Payment Intent
@@ -1062,103 +1147,7 @@ components:
         type: RECIPIENT
         status: ACTIVE
         createdAt: 2023-02-22T15:05:46.952+0000
-  responses:
-    '403':
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Forbidden
-              summary: Forbidden
-              value:
-                title: Forbidden
-                httpStatus: 403
-                error: FORBIDDEN
-    '400':
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Bad Request
-              summary: Bad Request
-              value:
-                title: Bad Request
-                httpStatus: 400
-                error: BAD_REQUEST
-    '401':
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Unauthorized
-              summary: Unauthorized
-              value:
-                title: Unauthorized Request
-                httpStatus: 401
-                error: UNAUTHORIZED
-    '404':
-      description: Service Unavailable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Not Found
-              summary: Not Found
-              value:
-                title: Not Found
-                httpStatus: 404
-                error: NOT_FOUND
-    '503':
-      description: Service Unavailable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Service Unavailable
-              summary: Service Unavailable
-              value:
-                title: Service Unavailable
-                httpStatus: 503
-                error: SERVICE_UNAVAILABLE
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            Error:
-              description: Internal Server Error
-              summary: Internal Server Error
-              value:
-                title: Internal Server Error
-                httpStatus: 500
-                error: INTERNAL_SERVER_ERROR
   parameters:
-    pageNo:
-      name: page
-      in: query
-      description: Page Number
-      schema:
-        type: integer
-        default: 0
-        minimum: 0
-        maximum: 1000000
-        format: int32
-      required: false
     pageSize:
       name: limit
       in: query
@@ -1170,14 +1159,6 @@ components:
         default: 25
         format: int32
       required: false
-    token:
-      name: token
-      in: header
-      description: JWT Client token
-      required: false
-      schema:
-        type: string
-        minLength: 0
     clientIdInQuery:
       name: clientId
       in: query
@@ -1189,6 +1170,25 @@ components:
         pattern: ^\d{10}$
         minLength: 10
         maxLength: 10
+    pageNo:
+      name: page
+      in: query
+      description: Page Number
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+        maximum: 1000000
+        format: int32
+      required: false
+    token:
+      name: token
+      in: header
+      description: JWT Client token
+      required: false
+      schema:
+        type: string
+        minLength: 0
 x-jpmc-securityDefinitions:
   MutualTLS:
     type: x509

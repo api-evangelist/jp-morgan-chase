@@ -149,11 +149,111 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    IdType:
+      type: string
+      description: The Id type of the Bank or Financial Institution
+      enum:
+      - BIC
     CursorId:
       type: string
       description: For selecting a cursor when using pagination
       minLength: 1
       maxLength: 50
+    Balance:
+      type: object
+      title: Balance
+      properties:
+        type:
+          type: string
+          description: "Balance types\n \n***Refer the section below for the supported balance types***   \n ***Account Types: BDA*** \n \n  Applicable balance types for historical balance requests\n - CLOSING_AVAILABLE\n  - CLOSING_BOOKED\n Applicable balance types for same day balance requests\n     \n- INTERIM_AVAILABLE\n    \n- INTERIM_BOOKED\n"
+        bookDate:
+          type: string
+          format: date
+          description: This is the date when the balance will be booked.
+        amount:
+          $ref: '#/components/schemas/SignedDecimal'
+      required:
+      - type
+      - bookDate
+      - amount
+    AccountBalances:
+      type: object
+      title: AccountBalances
+      properties:
+        accountBalances:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountBalance'
+          minItems: 0
+          maxItems: 99
+        metadata:
+          type: object
+          title: Metadata
+          properties:
+            cursor:
+              $ref: '#/components/schemas/Cursor'
+      required:
+      - accountBalances
+      - metadata
+    PageSize:
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 100
+      default: 25
+      description: For pagination, the total number of results to return
+    SignedDecimal:
+      description: "A String representation of a (potential) decimal number  \n  \n**Follows ISO 4217 standards to represent minor unit currencies**"
+      type: string
+      minLength: 1
+      maxLength: 100
+      pattern: ^[+-]?\d+(\.\d+)?$
+      example: '-123.45'
+    FinancialInstitution:
+      type: object
+      title: FinancialInstitution
+      description: Financial Institution identifier
+      required:
+      - id
+      - idType
+      properties:
+        id:
+          type: string
+          description: Bank or Financial Institution identifier
+          minLength: 8
+          maxLength: 11
+        name:
+          type: string
+          description: Name of the Bank or Financial Institution
+        idType:
+          $ref: '#/components/schemas/IdType'
+    AccountIdentifier:
+      type: object
+      description: Contains account number and financial institution to uniquely identify a customer account
+      properties:
+        number:
+          type: string
+          description: Account number
+          minLength: 1
+          maxLength: 10
+        financialInstitutionId:
+          type: object
+          title: FinancialInstitution
+          description: Financial institution identifier
+          required:
+          - id
+          - idType
+          properties:
+            id:
+              type: string
+              description: Bank or Financial institution identifier
+              minLength: 8
+              maxLength: 11
+            idType:
+              $ref: '#/components/schemas/IdType'
+      required:
+      - number
+      - financialInstitutionId
     AccountBalance:
       type: object
       title: AccountBalance
@@ -171,6 +271,42 @@ components:
       required:
       - account
       - balances
+    BalanceInquiry:
+      type: object
+      title: BalanceInquiry
+      description: Balance schema used to provide the inquiry criteria based on which balance information is retrieved
+      properties:
+        accountIdentifiers:
+          type: array
+          description: List of account numbers
+          items:
+            $ref: '#/components/schemas/AccountIdentifier'
+          minItems: 1
+          maxItems: 25
+        balanceTypes:
+          type: array
+          description: "Optional list of balance types for filtering balances\n  \n***Refer the section below for the supported balance types*** \n \n***Account Types: BDA***\n  \n Applicable balance types for historical balance requests\n  - CLOSING_AVAILABLE\n - CLOSING_BOOKED\n  Applicable balance types for same day balance requests\n - INTERIM_AVAILABLE\n  - INTERIM_BOOKED"
+          items:
+            type: string
+          minItems: 1
+          maxItems: 4
+        fromDate:
+          type: string
+          format: date
+          description: "The earliest date balances should be returned\n \n By default this will be the current business day of the location of an account\n   \n***MUST be used in combination with toDate. Where only fromDate is provided the toDate will be fromDate + 45days. Must follow ISO 8601 date format e.g YYYY-MM-DD***"
+        toDate:
+          type: string
+          format: date
+          description: "Used to specify the latest date balances should be returned \n \n By default this will be the current business day of the location of an account  \n \n***MUST be used in combination with fromDate. Where only toDate is provided the fromDate will be toDate - 45 days. Must follow ISO 8601 date format e.g YYYY-MM-DD***"
+      required:
+      - accountIdentifiers
+    ISOCurrencyCode:
+      description: ISO 4217 Alpha-3 Currency Code
+      type: string
+      minLength: 3
+      maxLength: 3
+      pattern: ^[A-Z]{3}$
+      example: USD
     Account:
       type: object
       title: Account
@@ -200,75 +336,6 @@ components:
             $ref: '#/components/schemas/FinancialInstitution'
           minItems: 1
           maxItems: 1
-    Balance:
-      type: object
-      title: Balance
-      properties:
-        type:
-          type: string
-          description: "Balance types\n \n***Refer the section below for the supported balance types***   \n ***Account Types: BDA*** \n \n  Applicable balance types for historical balance requests\n - CLOSING_AVAILABLE\n  - CLOSING_BOOKED\n Applicable balance types for same day balance requests\n     \n- INTERIM_AVAILABLE\n    \n- INTERIM_BOOKED\n"
-        bookDate:
-          type: string
-          format: date
-          description: This is the date when the balance will be booked.
-        amount:
-          $ref: '#/components/schemas/SignedDecimal'
-      required:
-      - type
-      - bookDate
-      - amount
-    IdType:
-      type: string
-      description: The Id type of the Bank or Financial Institution
-      enum:
-      - BIC
-    AccountBalances:
-      type: object
-      title: AccountBalances
-      properties:
-        accountBalances:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountBalance'
-          minItems: 0
-          maxItems: 99
-        metadata:
-          type: object
-          title: Metadata
-          properties:
-            cursor:
-              $ref: '#/components/schemas/Cursor'
-      required:
-      - accountBalances
-      - metadata
-    AccountType:
-      type: string
-      description: The type of account
-    SignedDecimal:
-      description: "A String representation of a (potential) decimal number  \n  \n**Follows ISO 4217 standards to represent minor unit currencies**"
-      type: string
-      minLength: 1
-      maxLength: 100
-      pattern: ^[+-]?\d+(\.\d+)?$
-      example: '-123.45'
-    FinancialInstitution:
-      type: object
-      title: FinancialInstitution
-      description: Financial Institution identifier
-      required:
-      - id
-      - idType
-      properties:
-        id:
-          type: string
-          description: Bank or Financial Institution identifier
-          minLength: 8
-          maxLength: 11
-        name:
-          type: string
-          description: Name of the Bank or Financial Institution
-        idType:
-          $ref: '#/components/schemas/IdType'
     Error:
       type: object
       title: Error
@@ -300,40 +367,6 @@ components:
           maxItems: 99
           items:
             $ref: '#/components/schemas/ErrorContext'
-    PageSize:
-      type: integer
-      format: int32
-      minimum: 1
-      maximum: 100
-      default: 25
-      description: For pagination, the total number of results to return
-    AccountIdentifier:
-      type: object
-      description: Contains account number and financial institution to uniquely identify a customer account
-      properties:
-        number:
-          type: string
-          description: Account number
-          minLength: 1
-          maxLength: 10
-        financialInstitutionId:
-          type: object
-          title: FinancialInstitution
-          description: Financial institution identifier
-          required:
-          - id
-          - idType
-          properties:
-            id:
-              type: string
-              description: Bank or Financial institution identifier
-              minLength: 8
-              maxLength: 11
-            idType:
-              $ref: '#/components/schemas/IdType'
-      required:
-      - number
-      - financialInstitutionId
     ErrorContext:
       type: object
       title: ErrorContext
@@ -388,6 +421,9 @@ components:
           - PATH
           - QUERY
           - HEADER
+    AccountType:
+      type: string
+      description: The type of account
     Cursor:
       type: object
       title: Cursor
@@ -406,42 +442,6 @@ components:
         goodUntil:
           type: string
           format: date-time
-    BalanceInquiry:
-      type: object
-      title: BalanceInquiry
-      description: Balance schema used to provide the inquiry criteria based on which balance information is retrieved
-      properties:
-        accountIdentifiers:
-          type: array
-          description: List of account numbers
-          items:
-            $ref: '#/components/schemas/AccountIdentifier'
-          minItems: 1
-          maxItems: 25
-        balanceTypes:
-          type: array
-          description: "Optional list of balance types for filtering balances\n  \n***Refer the section below for the supported balance types*** \n \n***Account Types: BDA***\n  \n Applicable balance types for historical balance requests\n  - CLOSING_AVAILABLE\n - CLOSING_BOOKED\n  Applicable balance types for same day balance requests\n - INTERIM_AVAILABLE\n  - INTERIM_BOOKED"
-          items:
-            type: string
-          minItems: 1
-          maxItems: 4
-        fromDate:
-          type: string
-          format: date
-          description: "The earliest date balances should be returned\n \n By default this will be the current business day of the location of an account\n   \n***MUST be used in combination with toDate. Where only fromDate is provided the toDate will be fromDate + 45days. Must follow ISO 8601 date format e.g YYYY-MM-DD***"
-        toDate:
-          type: string
-          format: date
-          description: "Used to specify the latest date balances should be returned \n \n By default this will be the current business day of the location of an account  \n \n***MUST be used in combination with fromDate. Where only toDate is provided the fromDate will be toDate - 45 days. Must follow ISO 8601 date format e.g YYYY-MM-DD***"
-      required:
-      - accountIdentifiers
-    ISOCurrencyCode:
-      description: ISO 4217 Alpha-3 Currency Code
-      type: string
-      minLength: 3
-      maxLength: 3
-      pattern: ^[A-Z]{3}$
-      example: USD
   examples:
     Account-Balances-Response-Historical-Day-US:
       value:
@@ -495,15 +495,6 @@ components:
             first: 9c0af3e7-0375-4343-a8bb-a2fc9ee51621
             this: 9c0af3e7-0375-4343-a8bb-a2fc9ee51621
             goodUntil: '2024-10-06T00:00:00.000Z'
-    BalanceInquiry-Historical-Day-Example-US:
-      value:
-        accountIdentifiers:
-        - number: '1234567890'
-          financialInstitutionId:
-            id: CHASUS33MCY
-            idType: BIC
-        fromDate: '2024-10-04'
-        toDate: '2024-10-05'
     BalanceInquiry-Current-Day-Example-US:
       value:
         accountIdentifiers:
@@ -518,6 +509,15 @@ components:
           cursor:
             first: 00000000-0000-0000-0000-000000000000
             this: 00000000-0000-0000-0000-000000000000
+    BalanceInquiry-Historical-Day-Example-US:
+      value:
+        accountIdentifiers:
+        - number: '1234567890'
+          financialInstitutionId:
+            id: CHASUS33MCY
+            idType: BIC
+        fromDate: '2024-10-04'
+        toDate: '2024-10-05'
   parameters:
     Cursor:
       name: cursor
@@ -527,13 +527,6 @@ components:
       schema:
         type: string
         format: uuid
-    PageSize:
-      name: pageSize
-      in: query
-      description: For pagination, the total number of results to return
-      required: false
-      schema:
-        $ref: '#/components/schemas/PageSize'
     RequestId:
       name: Request-Id
       in: header
@@ -543,6 +536,13 @@ components:
         type: string
         minLength: 1
         maxLength: 36
+    PageSize:
+      name: pageSize
+      in: query
+      description: For pagination, the total number of results to return
+      required: false
+      schema:
+        $ref: '#/components/schemas/PageSize'
   securitySchemes:
     BearerAuth:
       type: http

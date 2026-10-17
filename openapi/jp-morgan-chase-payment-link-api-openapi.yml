@@ -136,63 +136,163 @@ paths:
         '503':
           $ref: '#/components/responses/503-ServiceUnavailable'
 components:
+  examples:
+    ServiceUnavailableError:
+      value:
+        title: System Error
+        httpStatus: 503
+        traceId: d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4
+        requestId: UK202109202311354152
+        context:
+        - code: '12000'
+          message: Service Unavailable
+    PaymentLinkBR_DueDate:
+      value:
+        id: 55835a9c-180e-48ba-8373-b4d806c77962
+        alternateIdentifier: 98765
+        url: https://jpmorgan.net/pix/cobv/bad82b51-f16d-4273-a38c-3e094a8bb921
+        expirationType: DUE_DATE
+        country: BR
+        createdAt: '2024-10-21T14:19:51Z'
+    MethodNotAllowedError:
+      summary: Method not allowed
+      value:
+        title: Method not allowed
+        httpStatus: 405
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+    ErrorRateLimit:
+      summary: Too Many Requests
+      value:
+        title: Too Many Requests
+        httpStatus: 429
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        context:
+        - message: The agreed upon rate limit for this API has been exceeded
+    PaymentLinkDueDateRequest-BR:
+      value:
+        expirationType: DUE_DATE
+        country: BR
+    PaymentLinkImmediateRequest-BR:
+      value:
+        expirationType: IMMEDIATE
+        country: BR
+    PaymentLinkBR_Immediate:
+      value:
+        id: a901840f-2a0c-4f79-ae17-6d21ce75d58c
+        alternateIdentifier: 12345
+        expirationType: IMMEDIATE
+        country: BR
+        url: https://jpmorgan.net/pix/4a110822-9c0a-4e3f-a36b-7c6578cddd1f
+        createdAt: '2024-10-01T02:00:56Z'
+    Unauthorized:
+      value:
+        title: Unauthorized
+        httpStatus: 401
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - message: Unauthorized
+    MissingRequiredQueryParamError:
+      summary: Mandatory field missing - query parameter
+      value:
+        title: Mandatory field missing
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - code: '10001'
+          message: The query parameter toDate is mandatory when fromDate is provided.
+          field: toDate
+          location: QUERY
+    BadIdentifier:
+      value:
+        title: Bad format
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - code: '10103'
+          message: Invalid resource identifier format.
+          field: id
+          location: PATH
+    NotFound:
+      summary: Not Found
+      value:
+        title: Not Found
+        httpStatus: 404
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+    InvalidDataError:
+      summary: Mandatory field missing
+      value:
+        title: Mandatory field missing
+        httpStatus: 400
+        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
+        requestId: UK202109202311354152
+        context:
+        - code: '10001'
+          message: Property amount must be provided.
+          field: $.requestedPaymentAmount.amount
+          location: BODY
+    SecurityFailureError:
+      value:
+        title: Security Failure
+        httpStatus: 403
+        traceId: 5914f136-4544-4b1c-8004-6c2388ba76b4
+        requestId: UK202109202311354152
+        context:
+        - code: '14000'
+          message: Invalid client profile
+    PaymentLinksBR:
+      value:
+        paymentLinks:
+        - id: a901840f-2a0c-4f79-ae17-6d21ce75d58c
+          alternateIdentifier: 12345
+          expirationType: IMMEDIATE
+          country: BR
+          url: https://jpmorgan.net/pix/4a110822-9c0a-4e3f-a36b-7c6578cddd1f
+          createdAt: '2024-10-21T14:20:42Z'
+        - id: eb6411db-05b8-4496-b638-8414c85ee210
+          alternateIdentifier: 12346
+          expirationType: IMMEDIATE
+          country: BR
+          url: https://jpmorgan.net/pix/41d81d2f-41e2-40ec-a211-fc5d935ab78c
+          createdAt: '2024-10-21T14:20:42Z'
+        - id: 55835a9c-180e-48ba-8373-b4d806c77962
+          alternateIdentifier: 12347
+          expirationType: DUE_DATE
+          country: BR
+          url: https://jpmorgan.net/pix/cobv/bad82b51-f16d-4273-a38c-3e094a8bb921
+          createdAt: '2024-10-21T14:20:42Z'
+        metadata:
+          cursor:
+            first: MTB8MQ==
+            this: MTB8MQ==
+            goodUntil: '2024-10-21T14:20:42Z'
   schemas:
+    ISOCountryCode:
+      title: ISOCountryCode
+      type: string
+      description: 'ISO 3166-1 Alpha-2 country code
+
+
+        |Markets     |Country ISO Code     |Description                                                        |
+
+        |:----------|:--------------------|:------------------------------------------------------------------|
+
+        |Brazil     |BR                   |ISO Country Code for the Market |
+
+        |Singapore  |SG                   |ISO Country Code for the Market |
+
+        |Hong&nbsp;Kong   |HK                   |ISO Country Code for the Market |'
+      minLength: 2
+      maxLength: 2
+      pattern: ^[A-Z]{2}$
+      example: AU
     CursorId:
       type: string
       minLength: 1
       maxLength: 50
-    PaymentLinkAlternateIdentifier:
-      title: alternateIdentifier
-      type: integer
-      format: int64
-      description: 'Numeric identifier required by some markets
-
-
-        |MARKET | Description                               |
-
-        |:------|:------------------------------------------|
-
-        |BRAZIL | Requires generation of numeric identifier |
-
-        |SINGAPORE | Does not Apply |'
-      example: 12345
-    PaymentLinkId:
-      title: id
-      type: string
-      description: Unique payment link identifier generated by JPM
-      minLength: 0
-      maxLength: 128
-      example: 253f67f3-b640-44cb-aabd-2cc348b52678
-    Error:
-      type: object
-      title: Error
-      description: Common error model
-      properties:
-        title:
-          type: string
-          title: Short humanly-readable title of the error
-          minLength: 1
-          maxLength: 100
-        httpStatus:
-          type: integer
-          default: 400
-          title: ' HTTP Status Code'
-        traceId:
-          type: string
-          title: JPM Assigned traced identifier
-        requestId:
-          type: string
-          title: The 'client originated' requestId
-        context:
-          type: array
-          title: Provides additional context and detail on the validation errors
-          items:
-            $ref: '#/components/schemas/ErrorContext'
-          minItems: 0
-          maxItems: 100
-      required:
-      - title
-      readOnly: true
     PaymentRequestId:
       title: PaymentRequestId
       type: string
@@ -217,6 +317,13 @@ components:
       maximum: 99
       default: 10
       description: Pagination limit for normal sized payload elements
+    RequestMethodType:
+      title: RequestMethodType
+      description: "Payment Request method type \n\n| Value  | Description                                    |\n|:-----  |:-----------------------------------------------|\n|NONE    |QR code not required                            |\n|QR_CODE |Generate QR Code and associate to payment request|"
+      type: string
+      enum:
+      - NONE
+      - QR_CODE
     PaymentLinks:
       title: PaymentLinks
       type: object
@@ -241,41 +348,41 @@ components:
       required:
       - paymentLinks
       - metadata
-    ErrorContext:
-      title: ErrorContext
+    PaymentLinkRequest:
+      title: PaymentLinkRequest
       type: object
-      required:
-      - message
+      description: 'Payment link generation request from client '
       properties:
-        code:
-          type: string
-          description: JPM Short code that identifies the error - publicly cataloged and documented
-          minLength: 5
-          maxLength: 5
-          pattern: ^[0-9]+
-        message:
-          type: string
-          description: Human readable textual description of the error
-          minLength: 1
-          maxLength: 99
-        location:
-          type: string
-          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
-          description: The location of the error occurred in the request
-          minLength: 1
-          maxLength: 99
-          enum:
-          - BODY
-          - PATH
-          - QUERY
-          - HEADER
-        field:
-          type: string
-          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
-          minLength: 1
-          maxLength: 99
-          pattern: ^\$?[0-9a-zA-Z-_.()\[\]{}]+$
-      description: Error Context
+        expirationType:
+          $ref: '#/components/schemas/ExpirationType'
+        country:
+          description: Payment requested for country / market
+          $ref: '#/components/schemas/ISOCountryCode'
+    PaymentLinkId:
+      title: id
+      type: string
+      description: Unique payment link identifier generated by JPM
+      minLength: 0
+      maxLength: 128
+      example: 253f67f3-b640-44cb-aabd-2cc348b52678
+    ExpirationType:
+      title: ExpirationType
+      description: 'Payment request expiration type
+
+        |Markets                     |Description                                                        |
+
+        |:--------------------------|:------------------------------------------------------------------|
+
+        |Brazil                     |IMMEDIATE, DUE-DATE apply for Dynamic QR Codes                |
+
+        |Singapore                  |Provide SCHEDULED if expiry date/time is provided in expiresAt. Mandatory for Dynamic QR. Optional for Static QR.                             |
+
+        |Hong&nbsp;Kong                  |Provide SCHEDULED if expiry date/time is provided in expiresAt. Mandatory for Dynamic QR. Not supported for Static QR. |'
+      type: string
+      enum:
+      - IMMEDIATE
+      - DUE_DATE
+      - SCHEDULED
     PaymentLink:
       title: PaymentLink
       type: object
@@ -331,6 +438,86 @@ components:
             '
         paymentRequestId:
           $ref: '#/components/schemas/PaymentRequestId'
+    Error:
+      type: object
+      title: Error
+      description: Common error model
+      properties:
+        title:
+          type: string
+          title: Short humanly-readable title of the error
+          minLength: 1
+          maxLength: 100
+        httpStatus:
+          type: integer
+          default: 400
+          title: ' HTTP Status Code'
+        traceId:
+          type: string
+          title: JPM Assigned traced identifier
+        requestId:
+          type: string
+          title: The 'client originated' requestId
+        context:
+          type: array
+          title: Provides additional context and detail on the validation errors
+          items:
+            $ref: '#/components/schemas/ErrorContext'
+          minItems: 0
+          maxItems: 100
+      required:
+      - title
+      readOnly: true
+    ErrorContext:
+      title: ErrorContext
+      type: object
+      required:
+      - message
+      properties:
+        code:
+          type: string
+          description: JPM Short code that identifies the error - publicly cataloged and documented
+          minLength: 5
+          maxLength: 5
+          pattern: ^[0-9]+
+        message:
+          type: string
+          description: Human readable textual description of the error
+          minLength: 1
+          maxLength: 99
+        location:
+          type: string
+          title: The component of the request impacted, can either be 'body', 'query', 'header', or 'path'
+          description: The location of the error occurred in the request
+          minLength: 1
+          maxLength: 99
+          enum:
+          - BODY
+          - PATH
+          - QUERY
+          - HEADER
+        field:
+          type: string
+          description: The field which caused the error. Where the location of the error occurred is BODY, the field would contain the JSON Path expression
+          minLength: 1
+          maxLength: 99
+          pattern: ^\$?[0-9a-zA-Z-_.()\[\]{}]+$
+      description: Error Context
+    PaymentLinkAlternateIdentifier:
+      title: alternateIdentifier
+      type: integer
+      format: int64
+      description: 'Numeric identifier required by some markets
+
+
+        |MARKET | Description                               |
+
+        |:------|:------------------------------------------|
+
+        |BRAZIL | Requires generation of numeric identifier |
+
+        |SINGAPORE | Does not Apply |'
+      example: 12345
     Cursor:
       title: Cursor
       type: object
@@ -352,194 +539,42 @@ components:
           description: Cursor validity period. Format - `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
           type: string
           format: date-time
-    ExpirationType:
-      title: ExpirationType
-      description: 'Payment request expiration type
-
-        |Markets                     |Description                                                        |
-
-        |:--------------------------|:------------------------------------------------------------------|
-
-        |Brazil                     |IMMEDIATE, DUE-DATE apply for Dynamic QR Codes                |
-
-        |Singapore                  |Provide SCHEDULED if expiry date/time is provided in expiresAt. Mandatory for Dynamic QR. Optional for Static QR.                             |
-
-        |Hong&nbsp;Kong                  |Provide SCHEDULED if expiry date/time is provided in expiresAt. Mandatory for Dynamic QR. Not supported for Static QR. |'
-      type: string
-      enum:
-      - IMMEDIATE
-      - DUE_DATE
-      - SCHEDULED
-    RequestMethodType:
-      title: RequestMethodType
-      description: "Payment Request method type \n\n| Value  | Description                                    |\n|:-----  |:-----------------------------------------------|\n|NONE    |QR code not required                            |\n|QR_CODE |Generate QR Code and associate to payment request|"
-      type: string
-      enum:
-      - NONE
-      - QR_CODE
-    PaymentLinkRequest:
-      title: PaymentLinkRequest
-      type: object
-      description: 'Payment link generation request from client '
-      properties:
-        expirationType:
-          $ref: '#/components/schemas/ExpirationType'
-        country:
-          description: Payment requested for country / market
-          $ref: '#/components/schemas/ISOCountryCode'
-    ISOCountryCode:
-      title: ISOCountryCode
-      type: string
-      description: 'ISO 3166-1 Alpha-2 country code
-
-
-        |Markets     |Country ISO Code     |Description                                                        |
-
-        |:----------|:--------------------|:------------------------------------------------------------------|
-
-        |Brazil     |BR                   |ISO Country Code for the Market |
-
-        |Singapore  |SG                   |ISO Country Code for the Market |
-
-        |Hong&nbsp;Kong   |HK                   |ISO Country Code for the Market |'
-      minLength: 2
-      maxLength: 2
-      pattern: ^[A-Z]{2}$
-      example: AU
-  examples:
-    BadIdentifier:
-      value:
-        title: Bad format
-        httpStatus: 400
-        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
-        requestId: UK202109202311354152
-        context:
-        - code: '10103'
-          message: Invalid resource identifier format.
-          field: id
-          location: PATH
-    NotFound:
-      summary: Not Found
-      value:
-        title: Not Found
-        httpStatus: 404
-        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
-    PaymentLinkBR_Immediate:
-      value:
-        id: a901840f-2a0c-4f79-ae17-6d21ce75d58c
-        alternateIdentifier: 12345
-        expirationType: IMMEDIATE
-        country: BR
-        url: https://jpmorgan.net/pix/4a110822-9c0a-4e3f-a36b-7c6578cddd1f
-        createdAt: '2024-10-01T02:00:56Z'
-    MissingRequiredQueryParamError:
-      summary: Mandatory field missing - query parameter
-      value:
-        title: Mandatory field missing
-        httpStatus: 400
-        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
-        requestId: UK202109202311354152
-        context:
-        - code: '10001'
-          message: The query parameter toDate is mandatory when fromDate is provided.
-          field: toDate
-          location: QUERY
-    ServiceUnavailableError:
-      value:
-        title: System Error
-        httpStatus: 503
-        traceId: d3dd646b-1fd0-4389-b6b4-0c3ab486ccc4
-        requestId: UK202109202311354152
-        context:
-        - code: '12000'
-          message: Service Unavailable
-    MethodNotAllowedError:
-      summary: Method not allowed
-      value:
-        title: Method not allowed
-        httpStatus: 405
-        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
-        requestId: UK202109202311354152
-    PaymentLinkDueDateRequest-BR:
-      value:
-        expirationType: DUE_DATE
-        country: BR
-    ErrorRateLimit:
-      summary: Too Many Requests
-      value:
-        title: Too Many Requests
-        httpStatus: 429
-        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
-        context:
-        - message: The agreed upon rate limit for this API has been exceeded
-    PaymentLinkBR_DueDate:
-      value:
-        id: 55835a9c-180e-48ba-8373-b4d806c77962
-        alternateIdentifier: 98765
-        url: https://jpmorgan.net/pix/cobv/bad82b51-f16d-4273-a38c-3e094a8bb921
-        expirationType: DUE_DATE
-        country: BR
-        createdAt: '2024-10-21T14:19:51Z'
-    SecurityFailureError:
-      value:
-        title: Security Failure
-        httpStatus: 403
-        traceId: 5914f136-4544-4b1c-8004-6c2388ba76b4
-        requestId: UK202109202311354152
-        context:
-        - code: '14000'
-          message: Invalid client profile
-    PaymentLinkImmediateRequest-BR:
-      value:
-        expirationType: IMMEDIATE
-        country: BR
-    InvalidDataError:
-      summary: Mandatory field missing
-      value:
-        title: Mandatory field missing
-        httpStatus: 400
-        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
-        requestId: UK202109202311354152
-        context:
-        - code: '10001'
-          message: Property amount must be provided.
-          field: $.requestedPaymentAmount.amount
-          location: BODY
-    Unauthorized:
-      value:
-        title: Unauthorized
-        httpStatus: 401
-        traceId: 0eca2e1a-74b7-44b7-9e66-4a6ec8336eb9
-        requestId: UK202109202311354152
-        context:
-        - message: Unauthorized
-    PaymentLinksBR:
-      value:
-        paymentLinks:
-        - id: a901840f-2a0c-4f79-ae17-6d21ce75d58c
-          alternateIdentifier: 12345
-          expirationType: IMMEDIATE
-          country: BR
-          url: https://jpmorgan.net/pix/4a110822-9c0a-4e3f-a36b-7c6578cddd1f
-          createdAt: '2024-10-21T14:20:42Z'
-        - id: eb6411db-05b8-4496-b638-8414c85ee210
-          alternateIdentifier: 12346
-          expirationType: IMMEDIATE
-          country: BR
-          url: https://jpmorgan.net/pix/41d81d2f-41e2-40ec-a211-fc5d935ab78c
-          createdAt: '2024-10-21T14:20:42Z'
-        - id: 55835a9c-180e-48ba-8373-b4d806c77962
-          alternateIdentifier: 12347
-          expirationType: DUE_DATE
-          country: BR
-          url: https://jpmorgan.net/pix/cobv/bad82b51-f16d-4273-a38c-3e094a8bb921
-          createdAt: '2024-10-21T14:20:42Z'
-        metadata:
-          cursor:
-            first: MTB8MQ==
-            this: MTB8MQ==
-            goodUntil: '2024-10-21T14:20:42Z'
   responses:
+    400-BadRequest-GET-Entity:
+      description: "Bad Request. \n\n**List of error codes and descriptions**\n\n| Error Code      |          Description                               |\n| --------------  |------------------------------------------------|\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10199           | Other                                          |\n| 13000           | Uncategorized error                            |"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            BadIdentifier:
+              $ref: '#/components/examples/BadIdentifier'
+    403-Forbidden:
+      description: 'Forbidden
+
+        | Error Code    | Description                                |
+
+        |---------------|--------------------------------------------|
+
+        |  14000        | Security failure                           |     '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            SecurityFailureError:
+              $ref: '#/components/examples/SecurityFailureError'
+    201-PaymentLinkCreated:
+      description: Payment Link Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentLink'
+          examples:
+            ImmediatePaymentRequestBR:
+              $ref: '#/components/examples/PaymentLinkBR_Immediate'
+            DueDatePaymentRequestBR:
+              $ref: '#/components/examples/PaymentLinkBR_DueDate'
     400-BadRequest:
       description: 'Bad Request
 
@@ -579,35 +614,15 @@ components:
           examples:
             InvalidDataError:
               $ref: '#/components/examples/InvalidDataError'
-    400-BadRequest-GET-Entity:
-      description: "Bad Request. \n\n**List of error codes and descriptions**\n\n| Error Code      |          Description                               |\n| --------------  |------------------------------------------------|\n| 10002           | Minimum length violation                       |\n| 10003           | Maximum length violation                       |\n| 10100           | Minimum value violation                        |\n| 10101           | Maximum value violation                        |\n| 10102           | Range violation                                |\n| 10103           | Bad format                                     |\n| 10104           | Bad value                                      |\n| 10105           | Unexpected field                               |\n| 10199           | Other                                          |\n| 13000           | Uncategorized error                            |"
+    404-NotFound:
+      description: Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           examples:
-            BadIdentifier:
-              $ref: '#/components/examples/BadIdentifier'
-    201-PaymentLinkCreated:
-      description: Payment Link Created
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PaymentLink'
-          examples:
-            ImmediatePaymentRequestBR:
-              $ref: '#/components/examples/PaymentLinkBR_Immediate'
-            DueDatePaymentRequestBR:
-              $ref: '#/components/examples/PaymentLinkBR_DueDate'
-    429-TooManyRequests:
-      description: Too Many Requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            TooManyRequests:
-              $ref: '#/components/examples/ErrorRateLimit'
+            InvalidData:
+              $ref: '#/components/examples/NotFound'
     401-Unauthorized:
       description: Unauthorized
       content:
@@ -617,6 +632,44 @@ components:
           examples:
             UnauthorizedError:
               $ref: '#/components/examples/Unauthorized'
+    429-TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            TooManyRequests:
+              $ref: '#/components/examples/ErrorRateLimit'
+    200-PaymentLinksResponse:
+      description: Payment Link Details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentLinks'
+          examples:
+            PaymentLinksBR:
+              $ref: '#/components/examples/PaymentLinksBR'
+    405-MethodNotAllowed:
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            MethodNotAllowedError:
+              $ref: '#/components/examples/MethodNotAllowedError'
+    200-PaymentLinkResponse:
+      description: Payment Link Details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentLink'
+          examples:
+            ImmediatePaymentRequestBR:
+              $ref: '#/components/examples/PaymentLinkBR_Immediate'
+            DueDatePaymentRequestBR:
+              $ref: '#/components/examples/PaymentLinkBR_DueDate'
     400-BadRequest-GET-Collection:
       description: 'Bad Request
 
@@ -656,15 +709,6 @@ components:
           examples:
             MissingRequiredQueryParamError:
               $ref: '#/components/examples/MissingRequiredQueryParamError'
-    200-PaymentLinksResponse:
-      description: Payment Link Details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PaymentLinks'
-          examples:
-            PaymentLinksBR:
-              $ref: '#/components/examples/PaymentLinksBR'
     503-ServiceUnavailable:
       description: "Service Unavailable\n\n*List of error codes and descriptions* \n| Error Code    | Description       |\n|---------------|-------------------|\n|   12000       | System error      |"
       content:
@@ -674,62 +718,6 @@ components:
           examples:
             ServiceUnavailableError:
               $ref: '#/components/examples/ServiceUnavailableError'
-    404-NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            InvalidData:
-              $ref: '#/components/examples/NotFound'
-    403-Forbidden:
-      description: 'Forbidden
-
-        | Error Code    | Description                                |
-
-        |---------------|--------------------------------------------|
-
-        |  14000        | Security failure                           |     '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            SecurityFailureError:
-              $ref: '#/components/examples/SecurityFailureError'
-    405-MethodNotAllowed:
-      description: Method Not Allowed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            MethodNotAllowedError:
-              $ref: '#/components/examples/MethodNotAllowedError'
-    200-PaymentLinkResponse:
-      description: Payment Link Details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PaymentLink'
-          examples:
-            ImmediatePaymentRequestBR:
-              $ref: '#/components/examples/PaymentLinkBR_Immediate'
-            DueDatePaymentRequestBR:
-              $ref: '#/components/examples/PaymentLinkBR_DueDate'
-  requestBodies:
-    PaymentLinkRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PaymentLinkRequest'
-          examples:
-            ImmediatePaymentRequestBR:
-              $ref: '#/components/examples/PaymentLinkImmediateRequest-BR'
-            DueDatePaymentRequestBR:
-              $ref: '#/components/examples/PaymentLinkDueDateRequest-BR'
   parameters:
     Cursor:
       name: cursor
@@ -738,13 +726,6 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/CursorId'
-    PageSize:
-      name: pageSize
-      in: query
-      description: For pagination, total number of results to return per page
-      required: false
-      schema:
-        $ref: '#/components/schemas/PageSize'
     Id:
       name: id
       in: path
@@ -759,6 +740,32 @@ components:
         DueDatePaymentRequestBR:
           summary: Payment Link identifier with due date expiry - Brazil Market
           value: 55835a9c-180e-48ba-8373-b4d806c77962
+    ToDate:
+      name: toDate
+      in: query
+      description: Specify the date time until which you want to retrieve the Payment Links generated. Format expected- `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
+      required: false
+      schema:
+        type: string
+        format: date-time
+    PaymentLinkStatus:
+      name: paymentLinkStatus
+      in: query
+      description: Search by payment link status (whether the qr is linked to a payment link or not)
+      schema:
+        type: string
+        enum:
+        - LINKED
+        - NOT_LINKED
+      required: false
+    FromDate:
+      name: fromDate
+      in: query
+      description: Specify the date time from which you want to start retrieving the Payment Links
+      schema:
+        type: string
+        format: date-time
+      required: false
     RequestMethodType:
       name: requestMethodType
       in: query
@@ -773,32 +780,6 @@ components:
         QRCode:
           value: QR_CODE
           description: Associated to QR Code
-    ToDate:
-      name: toDate
-      in: query
-      description: Specify the date time until which you want to retrieve the Payment Links generated. Format expected- `YYYY-MM-DDThh:mm:ss`+/-time offset to UTC
-      required: false
-      schema:
-        type: string
-        format: date-time
-    FromDate:
-      name: fromDate
-      in: query
-      description: Specify the date time from which you want to start retrieving the Payment Links
-      schema:
-        type: string
-        format: date-time
-      required: false
-    PaymentLinkStatus:
-      name: paymentLinkStatus
-      in: query
-      description: Search by payment link status (whether the qr is linked to a payment link or not)
-      schema:
-        type: string
-        enum:
-        - LINKED
-        - NOT_LINKED
-      required: false
     ExpirationType:
       name: expirationType
       in: query
@@ -811,6 +792,25 @@ components:
           value: IMMEDIATE
         DueDatePaymentRequest:
           value: DUE_DATE
+    PageSize:
+      name: pageSize
+      in: query
+      description: For pagination, total number of results to return per page
+      required: false
+      schema:
+        $ref: '#/components/schemas/PageSize'
+  requestBodies:
+    PaymentLinkRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentLinkRequest'
+          examples:
+            ImmediatePaymentRequestBR:
+              $ref: '#/components/examples/PaymentLinkImmediateRequest-BR'
+            DueDatePaymentRequestBR:
+              $ref: '#/components/examples/PaymentLinkDueDateRequest-BR'
 x-jpmc-securityDefinitions:
   MutualTLS:
     type: x509
